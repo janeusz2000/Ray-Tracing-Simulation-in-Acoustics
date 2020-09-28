@@ -3,7 +3,7 @@
 
 #include <initializer_list>
 #include <iostream>
-#include "core/constants.h"
+#include "constants.h"
 
 namespace core
 {

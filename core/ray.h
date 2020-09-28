@@ -4,7 +4,7 @@
 #include <initializer_list>
 #include <iostream>
 #include "core/vec3.h"
-#include "core/constants.h"
+#include "constants.h"
 #include "core/exceptions.h"
 
 namespace core
