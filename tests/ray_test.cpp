@@ -38,9 +38,25 @@ namespace core
         ASSERT_EQ(s5.str(), "RAY origin: Vec3(1.41421, 1, 1), direction: Vec3(1, 0, 0), energy: 0");
     }
 
+    TEST(RAY_OPERATOR, Test_Operator_Equal_Equal)
+    {
+        ASSERT_EQ(Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)), Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)));
+        ASSERT_EQ(Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)), Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)));
+    }
+
     TEST(RAY_METHOD, test_Method_PhaseAt)
     {
-        //TODO: This test needs to check at which phase is wave within direction point
+        double freq1 = 1000;
+        double freq2 = 300;
+        double freq3 = 500;
+
+        Ray temp1(Vec3(0, 0, 0), Vec3(0, 0, 1));
+        Ray temp2(Vec3(0, 0, 0), Vec3(0, 1, 0));
+        Ray temp3(Vec3(0, 0, 0), Vec3(1, 0, 0));
+
+        ASSERT_NEAR(2 * kPi, temp1.phaseAt(freq1, 0.343216), kAccuracy);
+        ASSERT_NEAR(2 * kPi, temp2.phaseAt(freq2, 1.144053333), kAccuracy);
+        ASSERT_NEAR(2 * kPi, temp3.phaseAt(freq3, 0.686432), kAccuracy);
     }
 
     TEST(RAY_METHOD, Test_Method_At)
@@ -53,14 +69,44 @@ namespace core
         ASSERT_EQ(Vec3(0, 1, -10), temp2.at(-10));
     }
 
-    TEST(RAY_METHOD, Test_Method_Setters_Getters)
+    TEST(RAY_CONSTRUCTOR, Test_constructor_invalid)
     {
-        //TODO: TEST For getters
+        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, 0}), exception::invalidConstructor);
+        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, kAccuracy * 0.999}), exception::invalidConstructor);
     }
-
     TEST(RAY_CONSTRUCTOR, Test_All_Possible_Constructors)
     {
-        //TODO: TEST ALL POSSIBLE CONSTRUCTORS
+
+        Ray temp1;
+        Ray temp2(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
+        Ray temp3(Vec3(0, 0, 0), Vec3(0, 0, 1));
+        Ray temp4({0, 0, 0}, {0, 0, 1});
+        Ray temp5({0, 0, 0}, {0, 0, 1}, 0);
+        Ray temp6(temp1);
+
+        ASSERT_EQ(temp1, Ray(Vec3(0, 0, 0), Vec3(0, 0, 1)));
+        ASSERT_EQ(temp1, temp2);
+        ASSERT_EQ(temp2, temp3);
+        ASSERT_EQ(temp4, temp3);
+        ASSERT_EQ(temp4, temp5);
+        ASSERT_EQ(temp1, temp4);
+        ASSERT_EQ(temp1, temp6);
+        ASSERT_EQ(temp3, temp6);
+    }
+
+    TEST(RAY_METHOD, Test_Method_Setters_Getters)
+    {
+        Ray temp1;
+        Ray temp2(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
+        Ray temp3(Vec3(0, 0, 0), Vec3(0, 0, 1));
+        Ray temp4({0, 0, 0}, {0, 0, 1});
+        Ray temp5({0, 0, 0}, {0, 0, 1}, 0);
+        Ray temp6(temp1);
+
+        ASSERT_EQ(temp1.getDirection(), temp2.getDirection());
+        ASSERT_EQ(temp1.getOrigin(), temp2.getOrigin());
+        ASSERT_EQ(temp1.getEnergy(), temp4.getEnergy());
+        ASSERT_EQ(temp3.getDirection(), temp5.getDirection());
     }
 
 } // namespace core
