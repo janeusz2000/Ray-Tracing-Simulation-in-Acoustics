@@ -2,6 +2,38 @@
 
 namespace core
 {
+#pragma region CONSTRUCTORS
+
+    Ray::Ray(const Vec3 &origin, const Vec3 &direction, const double &energy)
+    {
+        if (direction == Vec3(0, 0, 0))
+        {
+            throw exception::invalidConstructor();
+        }
+
+        _origin = origin;
+        _direction = direction / direction.magnitude();
+        _energy = energy;
+    }
+
+    Ray::Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy)
+    {
+        if (origin.size() != 3 || dir.size() != 3 || dir == Vec3(0, 0, 0))
+            throw exception::invalidConstructor();
+
+        _origin = Vec3(origin);
+        _direction = Vec3(dir) / Vec3(dir).magnitude();
+        _energy = energy;
+    }
+
+    Ray::Ray(const Ray &other)
+    {
+        _origin = other.getOrigin();
+        _direction = other.getDirection();
+        _energy = other.getEnergy();
+    }
+
+#pragma endregion
 #pragma region METHODS
 
     Vec3 Ray::at(const double &time)
@@ -22,6 +54,11 @@ namespace core
     std::ostream &operator<<(std::ostream &os, const Ray &srcRay)
     {
         return os << "RAY origin: " << srcRay.getOrigin() << ", direction: " << srcRay.getDirection() << ", energy: " << srcRay.getEnergy();
+    }
+
+    bool operator==(const Ray &left, const Ray &right)
+    {
+        return (left.getOrigin() == right.getOrigin() && left.getDirection() == right.getDirection());
     }
 
 #pragma endregion
@@ -55,6 +92,14 @@ namespace core
     double Ray::getEnergy() const
     {
         return _energy;
+    }
+
+#pragma endregion
+#pragma region RAYHITDATA
+
+    bool RayHitData::operator==(const RayHitData &other)
+    {
+        return (other.time == time, other.collisionPoint == collisionPoint && other.direction == direction && other.normal == normal && other.energy == energy && other.phase == phase);
     }
 
 #pragma endregion

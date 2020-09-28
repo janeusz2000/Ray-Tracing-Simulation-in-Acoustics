@@ -5,6 +5,7 @@ namespace core
 {
 #pragma region CONSTRUCTOR
 
+  
     Vec3::Vec3(std::initializer_list<double> initList)
     {
         if (initList.size() != 3)
