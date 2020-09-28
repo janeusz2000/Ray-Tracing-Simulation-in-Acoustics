@@ -8,7 +8,7 @@ cc_library(
         "core/vec3.cpp",
     ],
     hdrs = [
-        "core/constants.h",
+        "constants.h",
         "core/exceptions.h",
         "core/ray.h",
         "core/vec3.h",
