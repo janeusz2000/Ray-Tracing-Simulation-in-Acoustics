@@ -4,8 +4,10 @@
 #include "core/vec3.h"
 #include "constants.h"
 #include "core/ray.h"
+
 #include <cmath>
 #include <memory>
+#include <algorithm>
 
 namespace objects
 {
@@ -13,26 +15,27 @@ namespace objects
     class Object
     {
     public:
-        virtual core::Vec3 normal(const core::Vec3 &surface_point) = 0;
-        virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) = 0;
+        virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
+        virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const = 0;
 
         //GETTERS_AND_SETTERS
-        void setOrigin(const Vec3 & or);
-        Vec3 getOrigin() const;
+        void setOrigin(const core::Vec3 & or);
+        core::Vec3 getOrigin() const;
 
-    protected:
+    private:
         core::Vec3 _origin;
     };
-
-    //===========================
 
     class Sphere : public Object
     {
     public:
-        Sphere() = delete;
-        Sphere::Sphere(const core::Vec3 & or, const double &rad) : _origin(or), _radius(rad){};
-        core::Vec3 normal(const core::Vec3 &surface_point) override;
-        std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) override;
+        Sphere() = default;
+        Sphere::Sphere(const core::Vec3 & or, const double &rad);
+        virtual core::Vec3 normal(const core::Vec3 &surface_point) const override;
+        virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
+
+        //OPERATORS
+        friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //GETTERS AND SETTERS
         void setRadius(const double &rad);
@@ -42,14 +45,12 @@ namespace objects
         double _radius;
     };
 
-    //===========================
-
     class SphereWall : public Sphere
     {
     public:
         SphereWall(const SphereWall &other) = default;
-        SphereWall() : Sphere(Vec3(0, 0, 0), kSimulationRadius){};
-    }
+        SphereWall();
+    };
 
 } // namespace objects
 

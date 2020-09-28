@@ -21,8 +21,8 @@ namespace core
         ~Ray() = default;
 
         //METHODS
-        Vec3 at(const double &time);
-        double phaseAt(const double &freq, const double &time);
+        Vec3 at(const double &time) const;
+        double phaseAt(const double &freq, const double &time) const;
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
@@ -48,9 +48,7 @@ namespace core
                    const Vec3 &norm, const Vec3 &dir,
                    const double &en, const double &ph) : time(t), collisionPoint(collision), direction(dir), normal(norm), energy(en), phase(ph){};
         ~RayHitData() = default;
-        RayHitData(const RayHitData &) = delete;
-
-        RayHitData &operator=(const RayHitData &) = delete;
+        RayHitData(const RayHitData &) = default;
         bool operator==(const RayHitData &other);
 
         // VARIABLES

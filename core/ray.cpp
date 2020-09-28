@@ -36,16 +36,16 @@ namespace core
 #pragma endregion
 #pragma region METHODS
 
-    Vec3 Ray::at(const double &time)
+    Vec3 Ray::at(const double &time) const
     {
         return _origin + time * _direction;
     }
 
-    double Ray::phaseAt(const double &freq, const double &time)
+    double Ray::phaseAt(const double &freq, const double &time) const
     {
-        double waveLength = kSoundSpeed / freq;
+        double waveLength = constants::kSoundSpeed / freq;
         double displacement = (_origin - at(time)).magnitude();
-        return displacement / waveLength * 2 * kPi;
+        return displacement / waveLength * 2 * constants::kPi;
     }
 
 #pragma endregion

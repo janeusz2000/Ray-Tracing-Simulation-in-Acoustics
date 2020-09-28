@@ -298,37 +298,37 @@ namespace core
     TEST(VEC3_OPERATOR_DIVISION, Test_Operator_Division_Throw_exception_division_by_zero)
     {
         ASSERT_THROW(Vec3(0, 0, 1) / 0, exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / (kAccuracy * 0.1), exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / (kAccuracy * 0.5), exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / (kAccuracy * 0.9), exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / kAccuracy, exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / (constants::kAccuracy * 0.1), exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / (constants::kAccuracy * 0.5), exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / (constants::kAccuracy * 0.9), exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / constants::kAccuracy, exception::divisionByZero);
     }
 
     TEST(VEC3_OPERATOR_DIVISION, Test_Operator_Division_Throw_exception_rvalue_division_by_zero_)
     {
         ASSERT_THROW(std::move(Vec3(0, 0, 1)) / 0, exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / (kAccuracy * 0.1), exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / (kAccuracy * 0.5), exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / (kAccuracy * 0.9), exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / kAccuracy, exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / (constants::kAccuracy * 0.1), exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / (constants::kAccuracy * 0.5), exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / (constants::kAccuracy * 0.9), exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / constants::kAccuracy, exception::divisionByZero);
     }
 
     TEST(VEC3_OPERATOR_DIVISION, Test_Operator_Division_Throw_exception_division_by_rvalue_zero)
     {
         ASSERT_THROW(Vec3(0, 0, 1) / std::move(0), exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / std::move(kAccuracy * 0.1), exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / std::move(kAccuracy * 0.5), exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / std::move(kAccuracy * 0.9), exception::divisionByZero);
-        ASSERT_THROW(Vec3(0, 0, 0) / std::move(kAccuracy), exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / std::move(constants::kAccuracy * 0.1), exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / std::move(constants::kAccuracy * 0.5), exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / std::move(constants::kAccuracy * 0.9), exception::divisionByZero);
+        ASSERT_THROW(Vec3(0, 0, 0) / std::move(constants::kAccuracy), exception::divisionByZero);
     }
 
     TEST(VEC3_OPERATOR_DIVISION, Test_Operator_Division_Throw_exception_rvalue_division_by_rvalue_zero)
     {
         ASSERT_THROW(std::move(Vec3(0, 0, 1)) / std::move(0), exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(kAccuracy * 0.1), exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(kAccuracy * 0.5), exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(kAccuracy * 0.9), exception::divisionByZero);
-        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(kAccuracy), exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(constants::kAccuracy * 0.1), exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(constants::kAccuracy * 0.5), exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(constants::kAccuracy * 0.9), exception::divisionByZero);
+        ASSERT_THROW(std::move(Vec3(0, 0, 0)) / std::move(constants::kAccuracy), exception::divisionByZero);
     }
 
     TEST(VEC3_OPERATOR_DIVISION, Test_Operator_division_Vec3_double)

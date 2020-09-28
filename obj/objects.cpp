@@ -4,11 +4,11 @@ namespace objects
 {
 #pragma region OBJECT
 
-    void Object::setOrigin(const Vec3 & or)
+    void Object::setOrigin(const core::Vec3 & or)
     {
         _origin = or ;
     }
-    Vec3 Object::getOrigin() const
+    core::Vec3 Object::getOrigin() const
     {
         return _origin;
     }
@@ -16,14 +16,20 @@ namespace objects
 #pragma endregion
 #pragma region SPHERE
 
-    virtual core::Vec3 Sphere::normal(const core::Vec3 &surface_point) override
+    core::Vec3 Sphere::normal(const core::Vec3 &surface_point) const
     {
-        return (surface_point - origin).normalize();
+        return (surface_point - getOrigin()).normalize();
     }
 
-    virtual std::unique_ptr<core::RayHitData> Sphere::hitObject(const core::Ray &ray, const double &freq) override
+    Sphere::Sphere(const core::Vec3 & or, const double &rad)
     {
-        core::Vec3 rVec3 = ray.getOrigin() - origin;
+        setOrigin(or);
+        _radius = rad;
+    }
+
+    std::unique_ptr<core::RayHitData> Sphere::hitObject(const core::Ray &ray, const double &freq) const
+    {
+        core::Vec3 rVec3 = ray.getOrigin() - this->Object::getOrigin();
 
         // this calculates variables that are neccesary to calculate times at which ray hits the object SphereWall.
         double beta = 2 * rVec3.scalar_product(ray.getDirection());
@@ -35,7 +41,7 @@ namespace objects
 
         if (discriminant < 0)
         {
-            return std::make_unique<core::RayHitData>(nullptr);
+            return std::unique_ptr<core::RayHitData>(nullptr);
         }
         else
         {
@@ -45,11 +51,11 @@ namespace objects
         }
         if (time1 < 0 && time2 < 0)
         {
-            return std::make_unique<core::RayHitData>(nullptr);
+            return std::unique_ptr<core::RayHitData>(nullptr);
         }
         else if (time1 < 0)
         {
-            return std::make_unique<core::RayHitData>(nullptr);
+            return std::unique_ptr<core::RayHitData>(nullptr);
         }
         else
         {
@@ -59,12 +65,17 @@ namespace objects
         }
     }
 
+    std::ostream &operator<<(std::ostream &os, const Sphere &sp)
+    {
+        return os << "Sphere origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
+    }
+
     // GETTERS AND SETTERS
     void Sphere::setRadius(const double &rad)
     {
         _radius = rad;
     }
-    double getRadius() const
+    double Sphere::getRadius() const
     {
         return _radius;
     }
@@ -72,9 +83,10 @@ namespace objects
 #pragma endregion
 #pragma region SPHEREWALL
 
-    static SphereWall &SphereWall::Get()
+    SphereWall::SphereWall()
     {
-        return _SphereWallInstance;
+        this->setOrigin(core::Vec3(0, 0, 0));
+        this->setRadius(constants::kSimulationRadius);
     }
 
 #pragma endregion

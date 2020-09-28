@@ -5,8 +5,7 @@ namespace core
 {
 #pragma region CONSTRUCTOR
 
-  
-    Vec3::Vec3(std::initializer_list<double> initList)
+      Vec3::Vec3(std::initializer_list<double> initList)
     {
         if (initList.size() != 3)
         {
@@ -32,7 +31,7 @@ namespace core
 
     bool operator==(const Vec3 &left, const Vec3 &right)
     {
-        return (std::abs(left.getX() - right.getX()) < kAccuracy && std::abs(left.getY() - right.getY()) < kAccuracy && std::abs(left.getZ() - right.getZ()) < kAccuracy);
+        return (std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
     }
 
     Vec3 operator+(const Vec3 &left, const Vec3 &right)
@@ -129,7 +128,7 @@ namespace core
 
     Vec3 operator/(const Vec3 &vec, const double &num)
     {
-        if (num <= kAccuracy)
+        if (num <= constants::kAccuracy)
             throw exception::divisionByZero();
         else
         {

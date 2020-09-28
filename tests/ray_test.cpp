@@ -54,9 +54,9 @@ namespace core
         Ray temp2(Vec3(0, 0, 0), Vec3(0, 1, 0));
         Ray temp3(Vec3(0, 0, 0), Vec3(1, 0, 0));
 
-        ASSERT_NEAR(2 * kPi, temp1.phaseAt(freq1, 0.343216), kAccuracy);
-        ASSERT_NEAR(2 * kPi, temp2.phaseAt(freq2, 1.144053333), kAccuracy);
-        ASSERT_NEAR(2 * kPi, temp3.phaseAt(freq3, 0.686432), kAccuracy);
+        ASSERT_NEAR(2 * constants::kPi, temp1.phaseAt(freq1, 0.343216), constants::kAccuracy);
+        ASSERT_NEAR(2 * constants::kPi, temp2.phaseAt(freq2, 1.144053333), constants::kAccuracy);
+        ASSERT_NEAR(2 * constants::kPi, temp3.phaseAt(freq3, 0.686432), constants::kAccuracy);
     }
 
     TEST(RAY_METHOD, Test_Method_At)
@@ -72,7 +72,7 @@ namespace core
     TEST(RAY_CONSTRUCTOR, Test_constructor_invalid)
     {
         ASSERT_THROW(Ray({0, 0, 0}, {0, 0, 0}), exception::invalidConstructor);
-        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, kAccuracy * 0.999}), exception::invalidConstructor);
+        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, constants::kAccuracy * 0.999}), exception::invalidConstructor);
     }
     TEST(RAY_CONSTRUCTOR, Test_All_Possible_Constructors)
     {
