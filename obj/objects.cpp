@@ -159,7 +159,7 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector)
     {
-        return os << "EnergyCollector ID: " << collector.getID() << "Energy collected: " << collector.getEnergy();
+        return os << "Energy Collector ID: " << collector.getID() << ", Energy collected: " << collector.getEnergy();
     }
 
     EnergyCollector operator+(const EnergyCollector &left, const EnergyCollector &right)
