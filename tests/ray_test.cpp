@@ -109,5 +109,54 @@ namespace core
         ASSERT_EQ(temp3.getDirection(), temp5.getDirection());
     }
 
+    TEST(RAYHITDATA_OPERATORS, Test_Operator_ostream)
+    {
+        std::stringstream ss1;
+        std::stringstream ss2;
+        std::stringstream ss3;
+
+        RayHitData temp1(50, Vec3(0, 1, 2), Vec3(0, 0, 1).normalize(), Vec3(1, 0, 0).normalize(), 50, 20);
+        RayHitData temp2(3, Vec3(4, 0, 1), Vec3(1, 0, 0).normalize(), Vec3(0, 1, 0).normalize(), 20, 10);
+        RayHitData temp3(-3, Vec3(0, 1, 2), Vec3(0, 1, 0).normalize(), Vec3(0, 0, 1).normalize(), 3, 5);
+
+        ss1 << temp1;
+        ss2 << temp2;
+        ss3 << temp3;
+
+        ASSERT_EQ(ss1.str(), "Collision point: Vec3(0, 1, 2), incoming ray direction: Vec3(1, 0, 0), normal: Vec3(0, 0, 1), time: 50, energy: 50, phase 20 [radians]");
+        ASSERT_EQ(ss2.str(), "Collision point: Vec3(4, 0, 1), incoming ray direction: Vec3(0, 1, 0), normal: Vec3(1, 0, 0), time: 3, energy: 20, phase 10 [radians]");
+        ASSERT_EQ(ss3.str(), "Collision point: Vec3(0, 1, 2), incoming ray direction: Vec3(0, 0, 1), normal: Vec3(0, 1, 0), time: -3, energy: 3, phase 5 [radians]");
+    }
+
+    TEST(RAYHITDATA_OPERATOR, Test_Operator_Equal_Equal)
+    {
+        RayHitData temp1(50, Vec3(0, 1, 2), Vec3(0, 0, 1).normalize(), Vec3(1, 0, 0).normalize(), 50, 20);
+        RayHitData temp2(3, Vec3(4, 0, 1), Vec3(1, 0, 0).normalize(), Vec3(0, 1, 0).normalize(), 20, 10);
+        RayHitData temp3(-3, Vec3(0, 1, 2), Vec3(0, 1, 0).normalize(), Vec3(0, 0, 1).normalize(), 3, 5);
+        RayHitData temp4(50, Vec3(0, 1, 2), Vec3(0, 0, 1).normalize(), Vec3(1, 0, 0).normalize(), 50, 20);
+        RayHitData temp5(3, Vec3(4, 0, 1), Vec3(1, 0, 0).normalize(), Vec3(0, 1, 0).normalize(), 20, 10);
+        RayHitData temp6(-3, Vec3(0, 1, 2), Vec3(0, 1, 0).normalize(), Vec3(0, 0, 1).normalize(), 3, 5);
+
+        ASSERT_EQ(temp1, temp4);
+        ASSERT_EQ(temp2, temp5);
+        ASSERT_EQ(temp6, temp3);
+    }
+
+    TEST(RAYHITDATA_OPERATORS, Test_Operator_equal)
+    {
+        RayHitData temp1(50, Vec3(0, 1, 2), Vec3(0, 0, 1).normalize(), Vec3(1, 0, 0).normalize(), 50, 20);
+        RayHitData temp2(3, Vec3(4, 0, 1), Vec3(1, 0, 0).normalize(), Vec3(0, 1, 0).normalize(), 20, 10);
+        RayHitData temp3(-3, Vec3(0, 1, 2), Vec3(0, 1, 0).normalize(), Vec3(0, 0, 1).normalize(), 3, 5);
+
+        RayHitData temp4 = temp1;
+        RayHitData temp5 = temp2;
+        RayHitData temp6 = temp3;
+
+        ASSERT_EQ(temp1, temp4);
+        ASSERT_EQ(temp2, temp5);
+        ASSERT_EQ(temp6, temp3);
+    }
+
+
 } // namespace core
 #endif

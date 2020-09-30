@@ -49,7 +49,11 @@ namespace core
                    const double &en, const double &ph) : time(t), collisionPoint(collision), direction(dir), normal(norm), energy(en), phase(ph){};
         ~RayHitData() = default;
         RayHitData(const RayHitData &) = default;
-        bool operator==(const RayHitData &other);
+
+        // OPERATORS
+        RayHitData &operator=(const RayHitData &) = default;
+        bool operator==(const RayHitData &other) const;
+        friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 
         // VARIABLES
         Vec3 collisionPoint, direction, normal;

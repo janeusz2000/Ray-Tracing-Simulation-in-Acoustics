@@ -97,10 +97,15 @@ namespace core
 #pragma endregion
 #pragma region RAYHITDATA
 
-    bool RayHitData::operator==(const RayHitData &other)
+    bool RayHitData::operator==(const RayHitData &other) const
     {
         return (other.time == time, other.collisionPoint == collisionPoint && other.direction == direction && other.normal == normal && other.energy == energy && other.phase == phase);
     }
 
+    std::ostream &operator<<(std::ostream &os, const RayHitData &rayData)
+    {
+        return os << "Collision point: " << rayData.collisionPoint << ", incoming ray direction: " << rayData.direction << ", normal: " << rayData.normal << ", time: " << rayData.time << ", energy: " << rayData.energy << ", phase " << rayData.phase << " [radians]";
+    }
+    
 #pragma endregion
 } // namespace core

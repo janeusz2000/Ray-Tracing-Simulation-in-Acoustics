@@ -29,7 +29,7 @@ namespace objects
 
     std::unique_ptr<core::RayHitData> Sphere::hitObject(const core::Ray &ray, const double &freq) const
     {
-        core::Vec3 rVec3 = ray.getOrigin() - this->Object::getOrigin();
+        core::Vec3 rVec3 = ray.getOrigin() - getOrigin();
 
         // this calculates variables that are neccesary to calculate times at which ray hits the object SphereWall.
         double beta = 2 * rVec3.scalar_product(ray.getDirection());
