@@ -26,6 +26,7 @@ namespace core
 
         friend std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3);
         friend bool operator==(const Vec3 &left, const Vec3 &right);
+        friend bool operator!=(const Vec3 &left, const Vec3 &right);
         friend Vec3 operator+(const Vec3 &left, const Vec3 &right);
         friend Vec3 operator+(const Vec3 &left, const double &right);
         friend Vec3 operator+(const double &left, const Vec3 &right);

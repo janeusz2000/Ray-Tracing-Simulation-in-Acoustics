@@ -5,7 +5,7 @@ namespace core
 {
 #pragma region CONSTRUCTOR
 
-      Vec3::Vec3(std::initializer_list<double> initList)
+    Vec3::Vec3(std::initializer_list<double> initList)
     {
         if (initList.size() != 3)
         {
@@ -28,11 +28,6 @@ namespace core
 
 #pragma endregion
 #pragma region OPERATORS_PLUS
-
-    bool operator==(const Vec3 &left, const Vec3 &right)
-    {
-        return (std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
-    }
 
     Vec3 operator+(const Vec3 &left, const Vec3 &right)
     {
@@ -166,6 +161,15 @@ namespace core
 #pragma endregion
 #pragma region SINGLE_OPERATORS
 
+    bool operator==(const Vec3 &left, const Vec3 &right)
+    {
+        return (std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
+    }
+
+    bool operator!=(const Vec3 &left, const Vec3 &right)
+    {
+        return (!(std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy));
+    }
     std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3)
     {
         return os << "Vec3(" << srcVec3.getX() << ", " << srcVec3.getY() << ", " << srcVec3.getZ() << ")";

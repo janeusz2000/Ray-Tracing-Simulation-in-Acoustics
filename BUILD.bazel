@@ -62,3 +62,18 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "energyCollector_test",
+    srcs = [
+        "tests/energyCollector_test.cpp",
+    ],
+    copts = [
+        "-Iexternal/gtest/include",
+        "/std:c++17",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
+)

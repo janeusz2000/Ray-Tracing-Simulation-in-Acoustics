@@ -4,8 +4,6 @@
 #include <exception>
 #include <sstream>
 
-#include "obj/objects.h"
-
 namespace exception
 {
     class invalidConstructor : public std::exception
@@ -53,28 +51,14 @@ namespace exception
         }
     };
 
-    class differentPosition : public std::exception
+    class differentPositions : public std::exception
     {
     public:
-        differentPosition(const object::EnergyCollector &collector1, const object::EnergyCollector &collector2)
-        {
-            _collector1 = collector1;
-            _collector2 = collector2;
-        }
-
         const char *what() const noexcept override
         {
-            _ss << "ERROR #006 at: " << _collector1 << " and " << _collector2 << " Collectors have different position \n"
-                << "ID " << _collector1.getID() << ": " << _collector1.getOrigin() << "\n"
-                << "ID " << _collector2.getID() << ": " << _collector2.getOrigin();
-            return _ss.str().c_str();
+            return "ERROR #006 : energy Collectors doesn't have the same origin positions";
         }
-
-    private:
-        object::EnergyCollector _collector1;
-        object::EnergyCollector _collector2;
-        std::stringStream _ss;
-    }
+    };
 } // namespace exception
 
 #endif

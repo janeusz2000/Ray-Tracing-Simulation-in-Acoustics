@@ -2,6 +2,7 @@
 
 namespace objects
 {
+    int EnergyCollector::population = 0;
 #pragma region OBJECT
 
     void Object::setOrigin(const core::Vec3 & or)
@@ -104,30 +105,54 @@ namespace objects
 
     // CONSTRUCTORS
 
-    EnergyCollector::EnergyCollector() : _origin(core::Vec3(0, 4, 0)), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
-                                         _id(_population), _energy(0) { _population += 1; };
+    EnergyCollector::EnergyCollector() : _id(population), _energy(0)
+    {
+        setOrigin(core::Vec3(0, 4, 0));
+        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        population++;
+    };
 
-    EnergyCollector::EnergyCollector(const core::Vec3 &origin) : _origin(origin), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
-                                                                 _id(_population), _energy(0) { _population += 1; };
+    EnergyCollector::EnergyCollector(const core::Vec3 &origin) : _id(population), _energy(0)
+    {
+        setOrigin(origin);
+        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        population++;
+    };
 
-    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy) : _origin(origin), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
-                                                                                       _id(_population), _energy(energy) { _population += 1; };
+    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy) : _id(population), _energy(energy)
+    {
+        setOrigin(origin);
+        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        population++;
+    };
 
-    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id) : _origin(origin), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
-                                                                                                      _id(id), _energy(energy) { _population += 1; };
+    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id)
+    {
+        setEnergy(energy);
+        setID(id);
+        setOrigin(origin);
+        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+    };
+
+    EnergyCollector::EnergyCollector(const EnergyCollector &other)
+    {
+        setRadius(other.getRadius());
+        setOrigin(other.getOrigin());
+        setEnergy(other.getEnergy());
+        setID(other.getID());
+    }
+
     // OPERATORS
     EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other)
     {
-        if (other == this)
+        if (other == *this)
         {
             return *this;
         }
 
-        _origin = other.getOrigin();
-        _radius = other.getRadius();
+        setOrigin(other.getOrigin());
+        setRadius(other.getRadius());
         _energy = other.getEnergy();
-        _id = other.getID();
-        decreasePopulation();
 
         return *this;
     }
@@ -141,7 +166,7 @@ namespace objects
     {
         if (left.getOrigin() != right.getOrigin())
         {
-            throw exception::differentPosition(left, right);
+            throw exception::differentPositions();
         }
         else
         {
@@ -149,14 +174,19 @@ namespace objects
         }
     }
 
+    bool objects::operator==(const EnergyCollector &left, const EnergyCollector &right)
+    {
+        return (left.getID() == right.getID() && left.getOrigin() == right.getOrigin() && left.getRadius() == right.getRadius() && left.getEnergy() == right.getEnergy());
+    }
+
     // METHODS
 
     double EnergyCollector::distanceAt(const core::Vec3 &positionHit) const
     {
-        return (_origin - positionHit).magnitude();
+        return (getOrigin() - positionHit).magnitude();
     }
 
-    void collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata)
+    void EnergyCollector::collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata)
     {
         _energy += hitdata->energy; // TODO: How energy is splitted between energycollectors
     }
@@ -181,10 +211,6 @@ namespace objects
     int EnergyCollector::getID() const
     {
         return _id;
-    }
-    void EnergyCollector::decreasePopulation()
-    {
-        _population -= 1;
     }
 
 #pragma endregion

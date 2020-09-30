@@ -62,14 +62,26 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
+        static int population;
+
         EnergyCollector();
         EnergyCollector(const core::Vec3 &origin);
         EnergyCollector(const core::Vec3 &origin, const double &energy);
-        EnergyCollector(const core::vec3 &origin, const double &energy, const int &id);
+
+        // This constructor is only used for passing copy of the objcect.
+        // It doesn't change any of the id, poplation or any paramterers.
+        EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id);
+
+        // Copy constructor copies all data except id of the Energy collector.
+        // it doesn't change population number.
+        EnergyCollector(const EnergyCollector &other);
 
         // OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector);
         friend EnergyCollector operator+(const EnergyCollector &left, const EnergyCollector &right);
+        friend bool operator==(const EnergyCollector &left, const EnergyCollector &right);
+
+        // This operator copies all data except Id. It doesn't change population number.
         EnergyCollector &operator=(const EnergyCollector &other);
 
         // METHODS
@@ -83,10 +95,7 @@ namespace objects
         void setID(const int &id);
         int getID() const;
 
-        void decreasePopulation();
-
     private:
-        static int _population = 1;
         int _id;
         double _energy;
     };
