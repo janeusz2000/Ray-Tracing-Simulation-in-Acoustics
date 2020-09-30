@@ -76,7 +76,6 @@ namespace core
     }
     TEST(RAY_CONSTRUCTOR, Test_All_Possible_Constructors)
     {
-
         Ray temp1;
         Ray temp2(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
         Ray temp3(Vec3(0, 0, 0), Vec3(0, 0, 1));
@@ -92,6 +91,8 @@ namespace core
         ASSERT_EQ(temp1, temp4);
         ASSERT_EQ(temp1, temp6);
         ASSERT_EQ(temp3, temp6);
+
+        // I really dont know what is going on here hahaha
     }
 
     TEST(RAY_METHOD, Test_Method_Setters_Getters)
@@ -156,7 +157,6 @@ namespace core
         ASSERT_EQ(temp2, temp5);
         ASSERT_EQ(temp6, temp3);
     }
-
 
 } // namespace core
 #endif

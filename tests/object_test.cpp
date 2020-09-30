@@ -98,7 +98,7 @@ namespace objects
         double radius3 = 0.4;
         Sphere object3(core::Vec3(1, 1, 20), radius3);
 
-        double rayNum = 10000000;
+        const double rayNum = 10000000;
 
         double hits1 = 0;
         double hits2 = 0;
@@ -133,24 +133,93 @@ namespace objects
         ASSERT_NEAR(reference3, hits3 / rayNum, 0.001);
     }
 
+    TEST(SPHERE_METHOD, Test_Method_Area)
+    {
+        Sphere object1;
+        Sphere object2(core::Vec3(0, 0, 0), 4);
+        Sphere object3(core::Vec3(0, 1, 1), 3);
+
+        ASSERT_EQ(constants::kPi, object1.area());
+        ASSERT_EQ(16 * constants::kPi, object2.area());
+        ASSERT_EQ(9 * constants::kPi, object3.area());
+    }
+
+    TEST(SPHERE_CONSTRUCTOR, Test_All_Possible_Constructors)
+    {
+        Sphere object1;
+
+        ASSERT_EQ(1, object1.getRadius());
+        ASSERT_EQ(core::Vec3(0, 0, 0), object1.getOrigin());
+
+        Sphere object2(core::Vec3(0, 0, 1), 4);
+
+        ASSERT_EQ(4, object2.getRadius());
+        ASSERT_EQ(core::Vec3(0, 0, 1), object2.getOrigin());
+    }
+
     TEST(SPHEREWALL_CONSTRUCTOR, Test_All_Possible_Constructors)
     {
-        //TODO: Test all possible constructors on Sphere Wall
+        SphereWall object1;
+
+        ASSERT_EQ(4.0, object1.getRadius());
+        ASSERT_EQ(core::Vec3(0, 0, 0), object1.getOrigin());
     }
 
     TEST(SPHEREWALL_METHOD, Test_HItObject)
     {
-        //TODO: Test Hit on Sphere wall with monte Carlo method
+        std::random_device rd;
+        std::mt19937_64 e2(rd());
+        std::uniform_real_distribution<double> dist(-8, 8);
+
+        SphereWall object1;
+
+        const double radius = constants::kSimulationRadius;
+        const double rayNum = 1000000;
+        double hits = 0;
+        const double freq = 1000;
+
+        const double referenceRatio = constants::kPi * radius * radius / 256;
+
+        for (double num = 0; num < rayNum; num++)
+        {
+            core::Ray tempRay(core::Vec3(dist(e2), dist(e2), -40), core::Vec3(0, 0, 1));
+            if (object1.hitObject(tempRay, freq))
+            {
+                hits++;
+            }
+        }
+        ASSERT_NEAR(referenceRatio, hits / rayNum, 0.001);
     }
 
     TEST(SPHEREWALL_METHOD, Test_Normal)
     {
-        //TODO: TEst normal method on Sphere wall Object
+        SphereWall tempSphere;
+
+        core::Vec3 normal1 = tempSphere.normal(core::Vec3(0, 0, -constants::kSimulationRadius));
+        core::Vec3 normal2 = tempSphere.normal(core::Vec3(0, 0, constants::kSimulationRadius));
+        core::Vec3 normal3 = tempSphere.normal(core::Vec3(0, constants::kSimulationRadius, 0));
+        core::Vec3 normal4 = tempSphere.normal(core::Vec3(0, -constants::kSimulationRadius, 0));
+
+        ASSERT_EQ(normal1, core::Vec3(0, 0, -1));
+        ASSERT_EQ(normal2, core::Vec3(0, 0, 1));
+        ASSERT_EQ(normal3, core::Vec3(0, 1, 0));
+        ASSERT_EQ(normal4, core::Vec3(0, -1, 0));
     }
 
     TEST(SPHEREWALL_METHOD, Test_Getters_and_Setters)
     {
-        //TODO: Test all getters and setters in spherewall
+        SphereWall object1;
+
+        ASSERT_EQ(core::Vec3(0, 0, 0), object1.getOrigin());
+        ASSERT_EQ(4, object1.getRadius());
+    }
+
+    TEST(SPHEREWALL_OPERATORS, Test_Operator_ostream)
+    {
+        std::stringstream ss1;
+        SphereWall temp1;
+        ss1 << temp1;
+        ASSERT_EQ(ss1.str(), "SphereWall origin: Vec3(0, 0, 0), radius: 4 [m]");
     }
 } // namespace objects
 #endif

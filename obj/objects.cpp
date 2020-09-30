@@ -65,6 +65,11 @@ namespace objects
         }
     }
 
+    double Sphere::area() const
+    {
+        return constants::kPi * _radius * _radius;
+    }
+
     std::ostream &operator<<(std::ostream &os, const Sphere &sp)
     {
         return os << "Sphere origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
@@ -87,6 +92,11 @@ namespace objects
     {
         this->setOrigin(core::Vec3(0, 0, 0));
         this->setRadius(constants::kSimulationRadius);
+    }
+
+    std::ostream &operator<<(std::ostream &os, const SphereWall &sp)
+    {
+        return os << "SphereWall origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
     }
 
 #pragma endregion
