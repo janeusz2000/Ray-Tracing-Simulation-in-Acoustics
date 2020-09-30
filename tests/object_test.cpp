@@ -113,15 +113,16 @@ namespace objects
         {
             core::Vec3 rayPosition(dist(e2), dist(e2), -50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, 1));
+
             if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            if (object2.hitObject(tempRay, tempFreq))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            if (object3.hitObject(tempRay, tempFreq))
             {
                 hits3++;
             }
