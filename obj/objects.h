@@ -4,6 +4,7 @@
 #include "core/vec3.h"
 #include "constants.h"
 #include "core/ray.h"
+#include "core/exceptions.h"
 
 #include <cmath>
 #include <memory>
@@ -62,7 +63,32 @@ namespace objects
     {
     public:
         EnergyCollector();
-        EnergyCollector(size_t num)
+        EnergyCollector(const core::Vec3 &origin);
+        EnergyCollector(const core::Vec3 &origin, const double &energy);
+        EnergyCollector(const core::vec3 &origin, const double &energy, const int &id);
+
+        // OPERATORS
+        friend std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector);
+        friend EnergyCollector operator+(const EnergyCollector &left, const EnergyCollector &right);
+        EnergyCollector &operator=(const EnergyCollector &other);
+
+        // METHODS
+        double distanceAt(const core::Vec3 &positionHit) const;
+        void collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata);
+
+        // GETTERS AND SETTERS
+        void setEnergy(const double &en);
+        double getEnergy() const;
+        void addEnergy(const double &en);
+        void setID(const int &id);
+        int getID() const;
+
+        void decreasePopulation();
+
+    private:
+        static int _population = 1;
+        int _id;
+        double _energy;
     };
 
 } // namespace objects

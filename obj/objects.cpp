@@ -100,4 +100,92 @@ namespace objects
     }
 
 #pragma endregion
+#pragma region ENERGY_COLLECTOR
+
+    // CONSTRUCTORS
+
+    EnergyCollector::EnergyCollector() : _origin(core::Vec3(0, 4, 0)), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
+                                         _id(_population), _energy(0) { _population += 1; };
+
+    EnergyCollector::EnergyCollector(const core::Vec3 &origin) : _origin(origin), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
+                                                                 _id(_population), _energy(0) { _population += 1; };
+
+    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy) : _origin(origin), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
+                                                                                       _id(_population), _energy(energy) { _population += 1; };
+
+    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id) : _origin(origin), _radius(2 * constants::kPi * constants::kSimulationRadius / constants::kPopulation),
+                                                                                                      _id(id), _energy(energy) { _population += 1; };
+    // OPERATORS
+    EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other)
+    {
+        if (other == this)
+        {
+            return *this;
+        }
+
+        _origin = other.getOrigin();
+        _radius = other.getRadius();
+        _energy = other.getEnergy();
+        _id = other.getID();
+        decreasePopulation();
+
+        return *this;
+    }
+
+    std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector)
+    {
+        return os << "EnergyCollector ID: " << collector.getID() << "Energy collected: " << collector.getEnergy();
+    }
+
+    EnergyCollector operator+(const EnergyCollector &left, const EnergyCollector &right)
+    {
+        if (left.getOrigin() != right.getOrigin())
+        {
+            throw exception::differentPosition(left, right);
+        }
+        else
+        {
+            return EnergyCollector(left.getOrigin(), left.getEnergy() + right.getEnergy());
+        }
+    }
+
+    // METHODS
+
+    double EnergyCollector::distanceAt(const core::Vec3 &positionHit) const
+    {
+        return (_origin - positionHit).magnitude();
+    }
+
+    void collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata)
+    {
+        _energy += hitdata->energy; // TODO: How energy is splitted between energycollectors
+    }
+
+    // GETTERS AND SETTERS
+    void EnergyCollector::setEnergy(const double &en)
+    {
+        _energy = en;
+    }
+    double EnergyCollector::getEnergy() const
+    {
+        return _energy;
+    }
+    void EnergyCollector::addEnergy(const double &en)
+    {
+        _energy += en;
+    }
+    void EnergyCollector::setID(const int &id)
+    {
+        _id = id;
+    }
+    int EnergyCollector::getID() const
+    {
+        return _id;
+    }
+    void EnergyCollector::decreasePopulation()
+    {
+        _population -= 1;
+    }
+
+#pragma endregion
 } // namespace objects
