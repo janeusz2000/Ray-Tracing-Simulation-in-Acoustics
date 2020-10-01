@@ -90,9 +90,42 @@ namespace objects
         ASSERT_EQ(ss5.str(), "Energy Collector ID: 9, Energy collected: 0");
     }
 
+    TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_Equal_Equal)
+    {
+        EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
+        EnergyCollector object2(core::Vec3(0, 0, 0), 0, 1);
+        ASSERT_EQ(object1, object2);
+
+        EnergyCollector object3(core::Vec3(1, 0, 2), 20, 1);
+        EnergyCollector object4(core::Vec3(1, 0, 2), 20, 1);
+        ASSERT_EQ(object3, object4);
+
+        EnergyCollector object5(core::Vec3(std::sqrt(2), 2, 1), 20, 1);
+        EnergyCollector object6(core::Vec3(std::sqrt(2), 2, 1), 20, 1);
+        ASSERT_EQ(object5, object6);
+
+        EnergyCollector object7(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
+        EnergyCollector object8(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
+        ASSERT_EQ(object7, object8);
+    }
+
     TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_equal)
     {
-        //TODO:Test Operator=
+        EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
+        EnergyCollector object2 = object1;
+        ASSERT_EQ(object1, object2);
+
+        EnergyCollector object3(core::Vec3(1, 0, 2), 20, 1);
+        EnergyCollector object4 = object3;
+        ASSERT_EQ(object3, object4);
+
+        EnergyCollector object5(core::Vec3(std::sqrt(2), 2, 1), 20, 1);
+        EnergyCollector object6 = object5;
+        ASSERT_EQ(object5, object6);
+
+        EnergyCollector object7(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
+        EnergyCollector object8 = object7;
+        ASSERT_EQ(object7, object8);
     }
 
     TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_plus)
@@ -108,24 +141,24 @@ namespace objects
         ASSERT_EQ(object15.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
     }
 
-    TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_Equal_Equal)
-    {
-        // TODO: Test Operator==
-    }
-
     TEST(ENERGYCOLLECTOR_METHODS, Test_Method_DistanceAt)
     {
-        // TODO: Test Method DistanceAt
+        EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
+
+        ASSERT_EQ(object1.distanceAt(core::Vec3(0, 0, 4)), 4);
+        ASSERT_EQ(object1.distanceAt(core::Vec3(3, 4, 0)), 5);
     }
 
     TEST(ENERGYCOLLECTOR_METHODS, Test_Method_CollectEnergy)
     {
-        // TODO: Test MEthod CollectEnergy
-    }
+        // TODO: Energy distribution between many collectors
+        // TODO: Phase impact on the given energy to the collector
 
-    TEST(ENERGYCOLLECTOR_METHODS, Test_Method_Getters_and_Setters)
-    {
-        // TODO: Test MEthod CollectEnergy
+        EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
+        auto pointer = std::make_unique<core::RayHitData>(core::RayHitData(40, core::Vec3(0, 0, 3), core::Vec3(0, 0, 1), core::Vec3(0, 0, -1), 50, 1));
+
+        object1.collectEnergy(pointer);
+        ASSERT_EQ(object1.getEnergy(), 50);
     }
 
 } // namespace objects
