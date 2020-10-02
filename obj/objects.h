@@ -9,6 +9,7 @@
 #include <cmath>
 #include <memory>
 #include <algorithm>
+#include <initializer_list>
 
 namespace objects
 {
@@ -104,6 +105,40 @@ namespace objects
         int _id;
         double _energy;
     };
+
+    class TriangleObj : public Object
+    {
+    public:
+        TriangleObj();
+        explicit TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate);
+        TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate);
+        TriangleObj(const TriangleObj &other);
+        ~TriangleObj() = default;
+
+        // OPERATORS
+        TriangleObj &operator=(const TriangleObj &other);
+        friend bool operator==(const TriangleObj &left, const TriangleObj &right);
+        friend std::ostream operator<<(std::ostream &os, const TriangleObj &object);
+
+        // METHODS
+        core::Vec3 normal(const core::Vec3 &surface_point) const override;
+        std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
+        bool doesHit(const core::Vec3 &point);
+
+        // GETTERS AND SETTERS
+        core::Vec3 getX() const;
+        void setX(const core::Vec3 &point);
+
+        core::Vec3 getY() const;
+        void setY(const core::Vec3 &point);
+
+        core::Vec3 getZ() const;
+        void setZ(const core::Vec3 &point);
+
+    private:
+        core::Vec3 _normal, _xCoordinate, _yCoordinate, _zCoordinate;
+        double _area;
+    }
 
 } // namespace objects
 

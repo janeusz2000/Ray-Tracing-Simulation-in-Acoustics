@@ -45,6 +45,12 @@ namespace object
     TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_All_Possible_Constructors)
     {
         // TODO: Test all possible constructors of the triangle obj
+
+        // LIST OF REQUIRED CONSTRUCTORS:
+        // - initializer_list<double>, initializer_list<double>, initializer_list<double>
+        // - core::Vec3, core::Vec3, COre::Vec3
+        // copy constructor
+        // default constructor
     }
 
     TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_invalid_COnstructors)
@@ -52,14 +58,41 @@ namespace object
         // TODO: constructor should throw exception::invalidConstructor() when one of the Vec3 is the same as other ones
     }
 
+    TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal)
+    {
+        // TODO: Test Operator=
+    }
+
+    TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal_Equal)
+    {
+        // TODO: Test Operator==
+    }
+
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Normal)
     {
         // TODO: This should return stored Vec3 calculated in constructor and override method normal from object,
     }
 
-    TEST(TRANGLEOBJ_METHOD, Test_Method_hitObject)
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit)
     {
-        // TODO: Monte Carlo test of if ray hits object
+        // ! VERY IMPORTANT TO WORK
+        // TODO: Monte Carlo test of if ray hits object properly
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_HitObject)
+    {
+        // TODO: THis method uses mainly method doesHit. This method is for making interface od the object easy to use
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_Area)
+    {
+        // TODO: Test Method Area - it should return are calculated in the constructor. IT SHOULD NOT CALCULATE ARE AON THE GO
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_Getters_And_Setters)
+    {
+        // TODO: Test method getX(), getY(), getZ(), setX(), setY(), setZ()
+        //  ! AFTER Changing one of te x, y, or z area and normal should be updated!
     }
 
 }; // namespace object
