@@ -49,9 +49,9 @@ cc_test(
 )
 
 cc_test(
-    name = "object_test",
+    name = "object_utils_test",
     srcs = [
-        "tests/object_test.cpp",
+        "tests/object_utils_test.cpp",
     ],
     copts = [
         "-Iexternal/gtest/include",
@@ -67,6 +67,21 @@ cc_test(
     name = "energyCollector_test",
     srcs = [
         "tests/energyCollector_test.cpp",
+    ],
+    copts = [
+        "-Iexternal/gtest/include",
+        "/std:c++17",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "triangleObj_test",
+    srcs = [
+        "tests/triangleObj_test.cpp",
     ],
     copts = [
         "-Iexternal/gtest/include",

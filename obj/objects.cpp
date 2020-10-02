@@ -188,7 +188,7 @@ namespace objects
 
     void EnergyCollector::collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata)
     {
-        _energy += hitdata->energy; // TODO: How energy is splitted between energycollectors
+        _energy += hitdata->energy; // TODO: Energy distribution between many collectors
     }
 
     // GETTERS AND SETTERS
