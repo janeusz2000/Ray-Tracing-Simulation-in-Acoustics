@@ -12,7 +12,7 @@
 #include <cmath>
 #include <iostream>
 
-namespace object
+namespace objects
 {
 
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_iostream)
@@ -42,30 +42,46 @@ namespace object
         ASSERT_EQ(ss5.str(), "Triangle object, vertex: Vec3(0, 0, 2), Vec3(0, 0, 3), Vec3(0, 4, 0)");
     }
 
+    TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal_Equal)
+    {
+        ASSERT_EQ(TriangleObj(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0)), TriangleObj(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0)));
+        ASSERT_EQ(TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)), TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)));
+        ASSERT_TRUE(TriangleObj(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0) != TriangleObj(core::Vec3(0, 0, 2), core::Vec3(0, 2, 0), core::Vec3(2, 0, 0)));
+
+        // TODO: TriangleObj(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0)) should be the same as TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1))
+    }
+
     TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_All_Possible_Constructors)
     {
-        // TODO: Test all possible constructors of the triangle obj
 
         // LIST OF REQUIRED CONSTRUCTORS:
         // - initializer_list<double>, initializer_list<double>, initializer_list<double>
         // - core::Vec3, core::Vec3, COre::Vec3
-        // copy constructor
-        // default constructor
+        // -  copy constructor
+        // - default constructor
+
+        TriangleObj object1({1, 0, 0}, {0, 1, 0}, {0, 1, 0});
+        TriangleObj object2(core::Vec3(1, 0, 0), core::Vec3(0, 1, 10), core::Vec3(0, 0, 1));
+        TriangleObj object3(object1);
+        TriangleObj object4;
+
+        ASSERT_EQ(object1, object2);
+        ASSERT_EQ(object2, object3);
+        ASSERT_EQ(object3, object1);
+        ASSERT_EQ(object4, object1);
+        ASSERT_EQ(object4, object2);
+        ASSERT_EQ(object4, object3);
     }
 
     TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_invalid_COnstructors)
     {
-        // TODO: constructor should throw exception::invalidConstructor() when one of the Vec3 is the same as other ones
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0, 1}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({0, 0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
     }
 
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal)
     {
         // TODO: Test Operator=
-    }
-
-    TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal_Equal)
-    {
-        // TODO: Test Operator==
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Normal)
@@ -95,6 +111,6 @@ namespace object
         //  ! AFTER Changing one of te x, y, or z area and normal should be updated!
     }
 
-}; // namespace object
+}; // namespace objects
 
 #ifndef

@@ -110,7 +110,7 @@ namespace objects
     {
     public:
         TriangleObj();
-        explicit TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate);
+        TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate);
         TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate);
         TriangleObj(const TriangleObj &other);
         ~TriangleObj() = default;

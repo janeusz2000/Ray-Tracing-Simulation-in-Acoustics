@@ -214,4 +214,16 @@ namespace objects
     }
 
 #pragma endregion
+#pragma region TRIANGLEOBJ
+
+    bool operator==(const TriangleObj &left, const TriangleObj &right)
+    {
+        return (left.getX() == right.getX() && right.getY() == left.getY() && left.getZ() == right.getZ());
+    }
+
+    friend bool operator!=(const TriangleObj &left, const TriangleObj &right)
+    {
+        return (!(left == right))
+    }
+#pragma endregion
 } // namespace objects
