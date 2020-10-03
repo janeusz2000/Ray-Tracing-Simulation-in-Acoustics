@@ -106,7 +106,7 @@ namespace objects
         // TODO: Monte Carlo test of if ray hits object properly
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_HitObject)
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_HitObject) // This is Monte Carlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         TriangleObj object1({1, 2, 1}, {1, 1, 1}, {2, 1, 1});
 
@@ -118,16 +118,16 @@ namespace objects
         double missed = 0;
         const double areaRatio = 0.5 / 9;
 
-        for (auto a = 0; a < 100000; a++)
+        for (auto a = 0; a < 100000; ++a)
         {
             core::Vec3 randomPoint(dist(e2), dist(e2), 1);
             if (object1.doesHit(randomPoint))
             {
-                hits++;
+                ++hits;
             }
             else
             {
-                missed++;
+                ++missed;
             }
         }
 
