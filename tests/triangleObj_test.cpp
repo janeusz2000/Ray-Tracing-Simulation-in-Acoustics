@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <random>
 
 namespace objects
 {
@@ -55,13 +56,13 @@ namespace objects
     {
         TriangleObj object1({1, 0, 0}, {0, 1, 0}, {0, 0, 1});
         TriangleObj object2(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1));
-        TriangleObj object3(object2);
+        TriangleObj object3(object1);
         TriangleObj object4;
 
-        // ASSERT_EQ(object1, object2);
+        ASSERT_EQ(object1, object2);
         ASSERT_EQ(object2, object3);
-        // ASSERT_EQ(object3, object1);
-        // ASSERT_EQ(object4, object1);
+        ASSERT_EQ(object3, object1);
+        ASSERT_EQ(object4, object1);
         ASSERT_EQ(object4, object2);
         ASSERT_EQ(object4, object3);
     }
@@ -82,13 +83,13 @@ namespace objects
         TriangleObj object2 = object1;
         ASSERT_EQ(object1, object2);
 
-        // TriangleObj object3(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0));
-        // TriangleObj object4 = object3;
-        // ASSERT_EQ(object3, object4);
+        TriangleObj object3(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0));
+        TriangleObj object4 = object3;
+        ASSERT_EQ(object3, object4);
 
-        // TriangleObj object5 = TriangleObj({0, 1, 1}, {1, 0, 0}, {5, 0, 0});
-        // TriangleObj object6 = object5;
-        // ASSERT_EQ(object5, object6);
+        TriangleObj object5 = TriangleObj({0, 1, 1}, {1, 0, 0}, {5, 0, 0});
+        TriangleObj object6 = object5;
+        ASSERT_EQ(object5, object6);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Normal)
@@ -107,18 +108,44 @@ namespace objects
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_HitObject)
     {
-        // TODO: THis method uses mainly method doesHit. This method is for making interface od the object easy to use
+        TriangleObj object1({1, 2, 1}, {1, 1, 1}, {2, 1, 1});
+
+        std::random_device rd;
+        std::mt19937_64 e2(rd());
+        std::uniform_real_distribution<double> dist(0, 3);
+
+        double hits = 0;
+        double missed = 0;
+        const double areaRatio = 0.5 / 9;
+
+        for (auto a = 0; a < 100000; a++)
+        {
+            core::Vec3 randomPoint(dist(e2), dist(e2), 1);
+            if (object1.doesHit(randomPoint))
+            {
+                hits++;
+            }
+            else
+            {
+                missed++;
+            }
+        }
+
+        double ratio = hits / (hits + missed);
+        std::cout << "Missed: " << missed << ", Hits: " << hits << ", RATIO: " << ratio << std::endl;
+        ASSERT_NEAR(ratio, areaRatio, 0.001);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Area)
     {
-        // TODO: Test Method Area - it should return are calculated in the constructor. IT SHOULD NOT CALCULATE ARE AON THE GO
+        ASSERT_EQ(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 1, 1}).area(), 0.5);
+        ASSERT_EQ(TriangleObj({0, 0, 0}, {0, 0, 2}, {0, 2, 2}).area(), 2);
+        ASSERT_EQ(TriangleObj({0, 0, 0}, {5, 0, 0}, {5, 5, 0}).area(), 12.5);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Getters_And_Setters)
     {
         // TODO: Test method getX(), getY(), getZ(), setX(), setY(), setZ()
-        //  ! AFTER Changing one of te x, y, or z area and normal should be updated!
     }
 
 }; // namespace objects

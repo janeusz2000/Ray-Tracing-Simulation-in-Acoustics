@@ -300,10 +300,26 @@ namespace objects
         return std::make_unique<core::RayHitData>(core::RayHitData(0, core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 0, 1), 20, 20));
     }
 
+    bool TriangleObj::doesHit(const core::Vec3 &point)
+    {
+        core::Vec3 vecA = _xCoordinate - point;
+        core::Vec3 vecB = _yCoordinate - point;
+        core::Vec3 vecC = _zCoordinate - point;
+
+        double alpha = vecB.cross_product(vecC).magnitude() / 2; //  Area of the triangle made with point and w triangle points.
+        double beta = vecC.cross_product(vecA).magnitude() / 2;
+        double gamma = vecA.cross_product(vecB).magnitude() / 2;
+
+        if ((alpha + beta + gamma) > _area + 0.001) // 0.001 is a accuracy for object hit
+        {
+            return false;
+        }
+        return true;
+    }
+
     double TriangleObj::area() const
     {
-        // TODO: make real calculation of the area
-        return 69;
+        return _area;
     }
 
     void TriangleObj::refreshAttributes()
@@ -316,8 +332,9 @@ namespace objects
 
     void TriangleObj::recalculateArea()
     {
-        // TODO: makereal recalculation of the Area
-        _area = 69;
+        core::Vec3 vecA = _xCoordinate - _yCoordinate;
+        core::Vec3 vecB = _xCoordinate - _zCoordinate;
+        _area = vecA.cross_product(vecB).magnitude() / 2;
     }
 
     void TriangleObj::recalculateNormal()
