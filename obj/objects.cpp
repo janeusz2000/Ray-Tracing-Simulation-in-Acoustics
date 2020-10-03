@@ -218,19 +218,14 @@ namespace objects
 
     // CONSTRUCTORS
 
-    TriangleObj::TriangleObj() : TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1))
-    {
-        this->recalculateArea();
-        this->recalculateNormal();
-    }
+    TriangleObj::TriangleObj() : TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1)){};
     TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
     {
-        if (_xCoordinate == _yCoordinate || _xCoordinate == _zCoordinate || _yCoordinate == _zCoordinate)
+        if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate)
         {
             throw exception::invalidConstructor();
         }
-        this->recalculateArea();
-        this->recalculateNormal();
+        this->refreshAttributes();
     }
 
     TriangleObj::TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate)
@@ -243,9 +238,7 @@ namespace objects
         {
             throw exception::invalidConstructor();
         }
-
-        this->recalculateArea();
-        this->recalculateNormal();
+        this->refreshAttributes();
     }
 
     TriangleObj::TriangleObj(const TriangleObj &other)
@@ -253,9 +246,7 @@ namespace objects
         this->setX(other.getX());
         this->setY(other.getY());
         this->setZ(other.getZ());
-
-        this->recalculateArea();
-        this->recalculateNormal();
+        this->refreshAttributes();
     }
 
     // OPERATORS
@@ -266,8 +257,7 @@ namespace objects
         this->setY(other.getY());
         this->setZ(other.getZ());
 
-        this->recalculateArea();
-        this->recalculateNormal();
+        this->refreshAttributes();
 
         return *this;
     }
@@ -305,8 +295,7 @@ namespace objects
 
     core::Vec3 TriangleObj::normal(const core::Vec3 &surface_point) const
     {
-        // TODO: add real calculation of the normal
-        return core::Vec3(0, 0, 1);
+        return _normal;
     }
 
     std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
@@ -321,6 +310,12 @@ namespace objects
         return 69;
     }
 
+    void TriangleObj::refreshAttributes()
+    {
+        this->recalculateArea();
+        this->recalculateNormal();
+    }
+
     // PRIVATE METHODS
 
     void TriangleObj::recalculateArea()
@@ -331,8 +326,10 @@ namespace objects
 
     void TriangleObj::recalculateNormal()
     {
-        // TODO: make real recalculation of the Normal
-        _normal = core::Vec3(69, 69, 69);
+        core::Vec3 vecA = _xCoordinate - _yCoordinate;
+        core::Vec3 vecB = _xCoordinate - _zCoordinate;
+        core::Vec3 perpendicular = vecA.cross_product(vecB);
+        _normal = perpendicular.normalize();
     }
 
     // GETTERS AND SETTERS
@@ -343,8 +340,6 @@ namespace objects
     void TriangleObj::setX(const core::Vec3 &point)
     {
         this->_xCoordinate = point;
-        this->recalculateArea();
-        this->recalculateNormal();
     }
 
     core::Vec3 TriangleObj::getY() const
@@ -354,8 +349,6 @@ namespace objects
     void TriangleObj::setY(const core::Vec3 &point)
     {
         this->_yCoordinate = point;
-        this->recalculateArea();
-        this->recalculateNormal();
     }
 
     core::Vec3 TriangleObj::getZ() const
@@ -365,8 +358,6 @@ namespace objects
     void TriangleObj::setZ(const core::Vec3 &point)
     {
         this->_zCoordinate = point;
-        this->recalculateArea();
-        this->recalculateNormal();
     }
 
 #pragma endregion

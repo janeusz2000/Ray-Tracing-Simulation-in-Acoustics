@@ -127,6 +127,7 @@ namespace objects
         std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
         bool doesHit(const core::Vec3 &point);
         double area() const override;
+        void refreshAttributes();
 
         // GETTERS AND SETTERS
         core::Vec3 getX() const;
