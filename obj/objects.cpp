@@ -107,39 +107,39 @@ namespace objects
 
     EnergyCollector::EnergyCollector() : _id(population), _energy(0)
     {
-        setOrigin(core::Vec3(0, 4, 0));
-        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        this->setOrigin(core::Vec3(0, 4, 0));
+        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         population++;
     };
 
     EnergyCollector::EnergyCollector(const core::Vec3 &origin) : _id(population), _energy(0)
     {
-        setOrigin(origin);
-        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        this->setOrigin(origin);
+        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         population++;
     };
 
     EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy) : _id(population), _energy(energy)
     {
-        setOrigin(origin);
-        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        this->setOrigin(origin);
+        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         population++;
     };
 
     EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id)
     {
-        setEnergy(energy);
-        setID(id);
-        setOrigin(origin);
-        setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        this->setEnergy(energy);
+        this->setID(id);
+        this->setOrigin(origin);
+        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
     };
 
     EnergyCollector::EnergyCollector(const EnergyCollector &other)
     {
-        setRadius(other.getRadius());
-        setOrigin(other.getOrigin());
-        setEnergy(other.getEnergy());
-        setID(other.getID());
+        this->setRadius(other.getRadius());
+        this->setOrigin(other.getOrigin());
+        this->setEnergy(other.getEnergy());
+        this->setID(other.getID());
     }
 
     // OPERATORS
@@ -150,8 +150,8 @@ namespace objects
             return *this;
         }
 
-        setOrigin(other.getOrigin());
-        setRadius(other.getRadius());
+        this->setOrigin(other.getOrigin());
+        this->setRadius(other.getRadius());
         _energy = other.getEnergy();
 
         return *this;
