@@ -225,6 +225,10 @@ namespace objects
     }
     TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
     {
+        if (_xCoordinate == _yCoordinate || _xCoordinate == _zCoordinate || _yCoordinate == _zCoordinate)
+        {
+            throw exception::invalidConstructor();
+        }
         this->recalculateArea();
         this->recalculateNormal();
     }
@@ -235,37 +239,56 @@ namespace objects
         this->setY(core::Vec3(yCoordinate));
         this->setZ(core::Vec3(zCoordinate));
 
+        if (_xCoordinate == _yCoordinate || _xCoordinate == _zCoordinate || _yCoordinate == _zCoordinate)
+        {
+            throw exception::invalidConstructor();
+        }
+
         this->recalculateArea();
         this->recalculateNormal();
     }
 
     TriangleObj::TriangleObj(const TriangleObj &other)
     {
-        setX(other.getX());
-        setY(other.getY());
-        setZ(other.getZ());
+        this->setX(other.getX());
+        this->setY(other.getY());
+        this->setZ(other.getZ());
 
-        recalculateArea();
-        recalculateNormal();
+        this->recalculateArea();
+        this->recalculateNormal();
     }
 
     // OPERATORS
 
     TriangleObj &TriangleObj::operator=(const TriangleObj &other)
     {
-        setX(other.getX());
-        setY(other.getY());
-        setZ(other.getZ());
+        this->setX(other.getX());
+        this->setY(other.getY());
+        this->setZ(other.getZ());
 
-        recalculateArea();
-        recalculateNormal();
+        this->recalculateArea();
+        this->recalculateNormal();
 
         return *this;
     }
 
     bool operator==(const TriangleObj &left, const TriangleObj &right)
     {
-        return (left.getX() == right.getX() && right.getY() == left.getY() && left.getZ() == right.getZ());
+        std::vector<core::Vec3> vertexVec({left.getX(), left.getY(), left.getZ()});
+        std::vector<core::Vec3> refVec({right.getX(), right.getY(), right.getZ()});
+
+        for (size_t ind = 0; ind < vertexVec.size(); ++ind)
+        {
+            if (std::find(vertexVec.begin(), vertexVec.end(), refVec.at(ind)) != vertexVec.end())
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     bool operator!=(const TriangleObj &left, const TriangleObj &right)
@@ -319,7 +342,9 @@ namespace objects
     }
     void TriangleObj::setX(const core::Vec3 &point)
     {
-        _xCoordinate = point;
+        this->_xCoordinate = point;
+        this->recalculateArea();
+        this->recalculateNormal();
     }
 
     core::Vec3 TriangleObj::getY() const
@@ -328,7 +353,9 @@ namespace objects
     }
     void TriangleObj::setY(const core::Vec3 &point)
     {
-        _yCoordinate = point;
+        this->_yCoordinate = point;
+        this->recalculateArea();
+        this->recalculateNormal();
     }
 
     core::Vec3 TriangleObj::getZ() const
@@ -337,7 +364,9 @@ namespace objects
     }
     void TriangleObj::setZ(const core::Vec3 &point)
     {
-        _zCoordinate = point;
+        this->_zCoordinate = point;
+        this->recalculateArea();
+        this->recalculateNormal();
     }
 
 #pragma endregion

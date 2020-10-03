@@ -48,13 +48,13 @@ namespace objects
         ASSERT_EQ(TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)), TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)));
         ASSERT_TRUE(TriangleObj(core::Vec3(0, 1, 0), core::Vec3(1, 0, 0), core::Vec3(0, 1, 1)) != TriangleObj(core::Vec3(0, 0, 2), core::Vec3(0, 2, 0), core::Vec3(2, 0, 0)));
 
-        // TODO: TriangleObj(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0)) should be the same as TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1))
+        ASSERT_EQ(TriangleObj(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0)), TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1)));
     }
 
     TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_All_Possible_Constructors)
     {
-        TriangleObj object1({1, 0, 0}, {0, 1, 0}, {0, 1, 0});
-        TriangleObj object2(core::Vec3(1, 0, 0), core::Vec3(0, 1, 10), core::Vec3(0, 0, 1));
+        TriangleObj object1({1, 0, 0}, {0, 1, 0}, {0, 0, 1});
+        TriangleObj object2(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1));
         TriangleObj object3(object1);
         TriangleObj object4;
 
@@ -70,7 +70,7 @@ namespace objects
     {
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 2}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 1}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
@@ -87,7 +87,7 @@ namespace objects
         ASSERT_EQ(object3, object4);
 
         TriangleObj object5 = TriangleObj({0, 1, 1}, {1, 0, 0}, {5, 0, 0});
-        TriangleObj object6 = object3;
+        TriangleObj object6 = object5;
         ASSERT_EQ(object5, object6);
     }
 

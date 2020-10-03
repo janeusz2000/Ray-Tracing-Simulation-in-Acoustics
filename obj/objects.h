@@ -10,6 +10,7 @@
 #include <memory>
 #include <algorithm>
 #include <initializer_list>
+#include <vector>
 
 namespace objects
 {
