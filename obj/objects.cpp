@@ -216,14 +216,129 @@ namespace objects
 #pragma endregion
 #pragma region TRIANGLEOBJ
 
+    // CONSTRUCTORS
+
+    TriangleObj::TriangleObj() : TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1))
+    {
+        this->recalculateArea();
+        this->recalculateNormal();
+    }
+    TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
+    {
+        this->recalculateArea();
+        this->recalculateNormal();
+    }
+
+    TriangleObj::TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate)
+    {
+        this->setX(core::Vec3(xCoordinate));
+        this->setY(core::Vec3(yCoordinate));
+        this->setZ(core::Vec3(zCoordinate));
+
+        this->recalculateArea();
+        this->recalculateNormal();
+    }
+
+    TriangleObj::TriangleObj(const TriangleObj &other)
+    {
+        setX(other.getX());
+        setY(other.getY());
+        setZ(other.getZ());
+
+        recalculateArea();
+        recalculateNormal();
+    }
+
+    // OPERATORS
+
+    TriangleObj &TriangleObj::operator=(const TriangleObj &other)
+    {
+        setX(other.getX());
+        setY(other.getY());
+        setZ(other.getZ());
+
+        recalculateArea();
+        recalculateNormal();
+
+        return *this;
+    }
+
     bool operator==(const TriangleObj &left, const TriangleObj &right)
     {
         return (left.getX() == right.getX() && right.getY() == left.getY() && left.getZ() == right.getZ());
     }
 
-    friend bool operator!=(const TriangleObj &left, const TriangleObj &right)
+    bool operator!=(const TriangleObj &left, const TriangleObj &right)
     {
-        return (!(left == right))
+        return (!(left == right));
     }
+
+    std::ostream &operator<<(std::ostream &os, const TriangleObj &object)
+    {
+        return os << "Triangle Object, vertex: " << object.getX() << ", " << object.getY() << ", " << object.getZ();
+    }
+
+    // METHODS
+
+    core::Vec3 TriangleObj::normal(const core::Vec3 &surface_point) const
+    {
+        // TODO: add real calculation of the normal
+        return core::Vec3(0, 0, 1);
+    }
+
+    std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
+    {
+        // TODO: add real calculation of the ray hit data
+        return std::make_unique<core::RayHitData>(core::RayHitData(0, core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 0, 1), 20, 20));
+    }
+
+    double TriangleObj::area() const
+    {
+        // TODO: make real calculation of the area
+        return 69;
+    }
+
+    // PRIVATE METHODS
+
+    void TriangleObj::recalculateArea()
+    {
+        // TODO: makereal recalculation of the Area
+        _area = 69;
+    }
+
+    void TriangleObj::recalculateNormal()
+    {
+        // TODO: make real recalculation of the Normal
+        _normal = core::Vec3(69, 69, 69);
+    }
+
+    // GETTERS AND SETTERS
+    core::Vec3 TriangleObj::getX() const
+    {
+        return _xCoordinate;
+    }
+    void TriangleObj::setX(const core::Vec3 &point)
+    {
+        _xCoordinate = point;
+    }
+
+    core::Vec3 TriangleObj::getY() const
+    {
+        return _yCoordinate;
+    }
+    void TriangleObj::setY(const core::Vec3 &point)
+    {
+        _yCoordinate = point;
+    }
+
+    core::Vec3 TriangleObj::getZ() const
+    {
+        return _zCoordinate;
+    }
+    void TriangleObj::setZ(const core::Vec3 &point)
+    {
+        _zCoordinate = point;
+    }
+
 #pragma endregion
 } // namespace objects

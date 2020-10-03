@@ -18,10 +18,10 @@ namespace objects
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_iostream)
     {
         TriangleObj object1(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0));
-        TriangleObj object1(core::Vec3(1, 0, 2), core::Vec3(1, 0, 1), core::Vec3(1, 1, 0));
-        TriangleObj object1(core::Vec3(0, 2, 0), core::Vec3(8, 0, 1), core::Vec3(0, 1, 3));
-        TriangleObj object1(core::Vec3(0, 0, 3), core::Vec3(0, 0, -5), core::Vec3(0, 1, 5));
-        TriangleObj object1(core::Vec3(0, 0, 2), core::Vec3(0, 0, 3), core::Vec3(0, 4, 0));
+        TriangleObj object2(core::Vec3(1, 0, 2), core::Vec3(1, 0, 1), core::Vec3(1, 1, 0));
+        TriangleObj object3(core::Vec3(0, 2, 0), core::Vec3(8, 0, 1), core::Vec3(0, 1, 3));
+        TriangleObj object4(core::Vec3(0, 0, 3), core::Vec3(0, 0, -5), core::Vec3(0, 1, 5));
+        TriangleObj object5(core::Vec3(0, 0, 2), core::Vec3(0, 0, 3), core::Vec3(0, 4, 0));
 
         std::stringstream ss1;
         std::stringstream ss2;
@@ -35,31 +35,24 @@ namespace objects
         ss4 << object4;
         ss5 << object5;
 
-        ASSERT_EQ(ss1.str(), "Triangle object, vertex: Vec3(0, 0, 0), Vec3(0, 0, 1), Vec3(0, 1, 0)");
-        ASSERT_EQ(ss2.str(), "Triangle object, vertex: Vec3(1, 0, 2), Vec3(1, 0, 1), Vec3(1, 1, 0)");
-        ASSERT_EQ(ss3.str(), "Triangle object, vertex: Vec3(0, 2, 0), Vec3(8, 0, 1), Vec3(0, 1, 3)");
-        ASSERT_EQ(ss4.str(), "Triangle object, vertex: Vec3(0, 0, 3), Vec3(0, 0, -5), Vec3(0, 1, 5)");
-        ASSERT_EQ(ss5.str(), "Triangle object, vertex: Vec3(0, 0, 2), Vec3(0, 0, 3), Vec3(0, 4, 0)");
+        ASSERT_EQ(ss1.str(), "Triangle Object, vertex: Vec3(0, 0, 0), Vec3(0, 0, 1), Vec3(0, 1, 0)");
+        ASSERT_EQ(ss2.str(), "Triangle Object, vertex: Vec3(1, 0, 2), Vec3(1, 0, 1), Vec3(1, 1, 0)");
+        ASSERT_EQ(ss3.str(), "Triangle Object, vertex: Vec3(0, 2, 0), Vec3(8, 0, 1), Vec3(0, 1, 3)");
+        ASSERT_EQ(ss4.str(), "Triangle Object, vertex: Vec3(0, 0, 3), Vec3(0, 0, -5), Vec3(0, 1, 5)");
+        ASSERT_EQ(ss5.str(), "Triangle Object, vertex: Vec3(0, 0, 2), Vec3(0, 0, 3), Vec3(0, 4, 0)");
     }
 
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal_Equal)
     {
         ASSERT_EQ(TriangleObj(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0)), TriangleObj(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0)));
         ASSERT_EQ(TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)), TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)));
-        ASSERT_TRUE(TriangleObj(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0) != TriangleObj(core::Vec3(0, 0, 2), core::Vec3(0, 2, 0), core::Vec3(2, 0, 0)));
+        ASSERT_TRUE(TriangleObj(core::Vec3(0, 1, 0), core::Vec3(1, 0, 0), core::Vec3(0, 1, 1)) != TriangleObj(core::Vec3(0, 0, 2), core::Vec3(0, 2, 0), core::Vec3(2, 0, 0)));
 
         // TODO: TriangleObj(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0)) should be the same as TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1))
     }
 
     TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_All_Possible_Constructors)
     {
-
-        // LIST OF REQUIRED CONSTRUCTORS:
-        // - initializer_list<double>, initializer_list<double>, initializer_list<double>
-        // - core::Vec3, core::Vec3, COre::Vec3
-        // -  copy constructor
-        // - default constructor
-
         TriangleObj object1({1, 0, 0}, {0, 1, 0}, {0, 1, 0});
         TriangleObj object2(core::Vec3(1, 0, 0), core::Vec3(0, 1, 10), core::Vec3(0, 0, 1));
         TriangleObj object3(object1);
@@ -77,7 +70,7 @@ namespace objects
     {
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 2}));
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 2}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 1}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
@@ -89,18 +82,19 @@ namespace objects
         TriangleObj object2 = object1;
         ASSERT_EQ(object1, object2);
 
-        TriangleObj object1(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0));
-        TriangleObj object2 = object1;
-        ASSERT_EQ(object1, object2);
-
-        TriangleObj object3 = TriangleObj({0, 1, 1}, {1, 0, 0}, {5, 0, 0});
+        TriangleObj object3(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0));
         TriangleObj object4 = object3;
         ASSERT_EQ(object3, object4);
+
+        TriangleObj object5 = TriangleObj({0, 1, 1}, {1, 0, 0}, {5, 0, 0});
+        TriangleObj object6 = object3;
+        ASSERT_EQ(object5, object6);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Normal)
     {
         // TODO: This should return stored Vec3 calculated in constructor and override method normal from object,
+        // TODO: after setting new cooordinate, normal should look different
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit)
@@ -127,4 +121,4 @@ namespace objects
 
 }; // namespace objects
 
-#ifndef
+#endif

@@ -118,12 +118,14 @@ namespace objects
         // OPERATORS
         TriangleObj &operator=(const TriangleObj &other);
         friend bool operator==(const TriangleObj &left, const TriangleObj &right);
-        friend std::ostream operator<<(std::ostream &os, const TriangleObj &object);
+        friend bool operator!=(const TriangleObj &left, const TriangleObj &right);
+        friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
 
         // METHODS
         core::Vec3 normal(const core::Vec3 &surface_point) const override;
         std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
         bool doesHit(const core::Vec3 &point);
+        double area() const override;
 
         // GETTERS AND SETTERS
         core::Vec3 getX() const;
@@ -136,9 +138,11 @@ namespace objects
         void setZ(const core::Vec3 &point);
 
     private:
+        void recalculateNormal();
+        void recalculateArea();
         core::Vec3 _normal, _xCoordinate, _yCoordinate, _zCoordinate;
         double _area;
-    }
+    };
 
 } // namespace objects
 
