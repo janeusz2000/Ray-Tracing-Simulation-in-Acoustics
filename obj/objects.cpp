@@ -269,11 +269,7 @@ namespace objects
 
         for (size_t ind = 0; ind < vertexVec.size(); ++ind)
         {
-            if (std::find(vertexVec.begin(), vertexVec.end(), refVec.at(ind)) != vertexVec.end())
-            {
-                continue;
-            }
-            else
+            if (std::find(vertexVec.begin(), vertexVec.end(), refVec.at(ind)) == vertexVec.end())
             {
                 return false;
             }
