@@ -77,11 +77,25 @@ namespace objects
     {
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 2}));
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({0, 0, 1}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
     }
 
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal)
     {
-        // TODO: Test Operator=
+        TriangleObj object1;
+        TriangleObj object2 = object1;
+        ASSERT_EQ(object1, object2);
+
+        TriangleObj object1(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0));
+        TriangleObj object2 = object1;
+        ASSERT_EQ(object1, object2);
+
+        TriangleObj object3 = TriangleObj({0, 1, 1}, {1, 0, 0}, {5, 0, 0});
+        TriangleObj object4 = object3;
+        ASSERT_EQ(object3, object4);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Normal)
