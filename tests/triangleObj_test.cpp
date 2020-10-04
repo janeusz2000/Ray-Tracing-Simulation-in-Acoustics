@@ -136,7 +136,7 @@ namespace objects
 
         double ratio = hits / (hits + missed);
         std::cout << "Missed: " << missed << ", Hits: " << hits << ", RATIO: " << ratio << std::endl;
-        ASSERT_NEAR(ratio, areaRatio, 0.001);
+        ASSERT_NEAR(ratio, areaRatio, constants::kHitAccuracy);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Area)

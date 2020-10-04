@@ -128,9 +128,9 @@ namespace objects
             }
         }
 
-        ASSERT_NEAR(reference1, hits1 / rayNum, 0.002);
-        ASSERT_NEAR(reference2, hits2 / rayNum, 0.002);
-        ASSERT_NEAR(reference3, hits3 / rayNum, 0.002);
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy);
     }
 
     TEST(SPHERE_METHOD, Test_Method_Area)

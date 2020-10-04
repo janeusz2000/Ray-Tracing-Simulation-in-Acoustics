@@ -289,11 +289,33 @@ namespace objects
 
     std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
     {
-        // TODO: add real calculation of the ray hit data
-        return std::make_unique<core::RayHitData>(core::RayHitData(0, core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 0, 1), 20, 20));
+        if (std::abs(ray.getDirection().scalar_product(_normal) <= constants::kAccuracy))
+        {
+            return std::unique_ptr<core::RayHitData>(nullptr);
+        }
+
+        // This calculates time at which ray is hitting surface where triangle is positioned
+        double time = (-1 * (ray.getOrigin() - _zCoordinate)).scalar_product(_normal) / (ray.getDirection().scalar_product(_normal));
+        //===============================
+
+        if (time < constants::kHitAccuracy)
+        {
+            return std::unique_ptr<core::RayHitData>(nullptr);
+        }
+
+        core::Vec3 surfaceHit = ray.at(time);
+
+        if (this->doesHit(surfaceHit))
+        {
+            return std::make_unique<core::RayHitData>(time, surfaceHit, _normal, ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time));
+        }
+        else
+        {
+            return std::unique_ptr<core::RayHitData>(nullptr);
+        }
     }
 
-    bool TriangleObj::doesHit(const core::Vec3 &point)
+    bool TriangleObj::doesHit(const core::Vec3 &point) const
     {
         core::Vec3 vecA = _xCoordinate - point;
         core::Vec3 vecB = _yCoordinate - point;
@@ -303,7 +325,7 @@ namespace objects
         double beta = vecC.cross_product(vecA).magnitude() / 2;
         double gamma = vecA.cross_product(vecB).magnitude() / 2;
 
-        if ((alpha + beta + gamma) > _area + 0.001) // 0.001 is a accuracy for object hit
+        if ((alpha + beta + gamma) > _area + constants::kHitAccuracy * 0.99) // 0.001 is a accuracy for object hit
         {
             return false;
         }

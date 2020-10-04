@@ -40,7 +40,7 @@ namespace objects
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //METHODS
-        virtual core::Vec3 normal(const core::Vec3 &surface_point) const override;
+        virtual core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
         virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
         virtual double area() const override;
 
@@ -123,9 +123,9 @@ namespace objects
         friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
 
         // METHODS
-        core::Vec3 normal(const core::Vec3 &surface_point) const override;
+        core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
         std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
-        bool doesHit(const core::Vec3 &point);
+        bool doesHit(const core::Vec3 &point) const;
         double area() const override;
         void refreshAttributes();
 

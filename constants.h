@@ -8,6 +8,7 @@ namespace constants
     const double kPi = 3.1415926535897932384626433832795;
     const double kSimulationRadius = 4; // [m]
     const int kPopulation = 37;
+    const double kHitAccuracy = 0.001;
 
 } // namespace constants
 
