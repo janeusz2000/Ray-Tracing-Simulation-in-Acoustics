@@ -142,6 +142,7 @@ namespace objects
     private:
         void recalculateNormal();
         void recalculateArea();
+        bool arePointsInvalid();
         core::Vec3 _normal, _xCoordinate, _yCoordinate, _zCoordinate;
         double _area;
     };

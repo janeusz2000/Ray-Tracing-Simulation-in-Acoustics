@@ -124,7 +124,7 @@ namespace core
     Vec3 operator/(const Vec3 &vec, const double &num)
     {
         if (num <= constants::kAccuracy)
-            throw exception::divisionByZero();
+            throw exception::divisionByZero(vec, num);
         else
         {
             return Vec3(vec.getX() / num, vec.getY() / num, vec.getZ() / num);

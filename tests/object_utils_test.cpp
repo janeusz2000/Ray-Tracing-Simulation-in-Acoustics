@@ -98,7 +98,7 @@ namespace objects
         double radius3 = 0.4;
         Sphere object3(core::Vec3(1, 1, 20), radius3);
 
-        const double rayNum = 10000000;
+        const double rayNum = 100000;
 
         double hits1 = 0;
         double hits2 = 0;
@@ -128,9 +128,9 @@ namespace objects
             }
         }
 
-        ASSERT_NEAR(reference1, hits1 / rayNum, 0.001);
-        ASSERT_NEAR(reference2, hits2 / rayNum, 0.001);
-        ASSERT_NEAR(reference3, hits3 / rayNum, 0.001);
+        ASSERT_NEAR(reference1, hits1 / rayNum, 0.002);
+        ASSERT_NEAR(reference2, hits2 / rayNum, 0.002);
+        ASSERT_NEAR(reference3, hits3 / rayNum, 0.002);
     }
 
     TEST(SPHERE_METHOD, Test_Method_Area)

@@ -218,28 +218,21 @@ namespace objects
 
     // CONSTRUCTORS
 
-    TriangleObj::TriangleObj() : TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1)){};
+    TriangleObj::TriangleObj() : TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1))
+    {
+        this->refreshAttributes();
+    }
     TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
     {
         if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate)
         {
             throw exception::invalidConstructor();
         }
+
         this->refreshAttributes();
     }
 
-    TriangleObj::TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate)
-    {
-        this->setX(core::Vec3(xCoordinate));
-        this->setY(core::Vec3(yCoordinate));
-        this->setZ(core::Vec3(zCoordinate));
-
-        if (_xCoordinate == _yCoordinate || _xCoordinate == _zCoordinate || _yCoordinate == _zCoordinate)
-        {
-            throw exception::invalidConstructor();
-        }
-        this->refreshAttributes();
-    }
+    TriangleObj::TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate) : TriangleObj(core::Vec3(xCoordinate), core::Vec3(yCoordinate), core::Vec3(zCoordinate)){};
 
     TriangleObj::TriangleObj(const TriangleObj &other)
     {
@@ -326,6 +319,7 @@ namespace objects
     {
         this->recalculateArea();
         this->recalculateNormal();
+        this->setOrigin((_xCoordinate + _yCoordinate + _zCoordinate) / 3);
     }
 
     // PRIVATE METHODS
@@ -343,6 +337,14 @@ namespace objects
         core::Vec3 vecB = _xCoordinate - _zCoordinate;
         core::Vec3 perpendicular = vecA.cross_product(vecB);
         _normal = perpendicular.normalize();
+    }
+
+    bool TriangleObj::arePointsInvalid()
+    {
+        core::Vec3 alpha = _xCoordinate - _yCoordinate;
+        core::Vec3 beta = _xCoordinate = _zCoordinate;
+
+        return (alpha.cross_product(beta) == core::Vec3(0, 0, 0));
     }
 
     // GETTERS AND SETTERS

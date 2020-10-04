@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <sstream>
+#include "vec3.h"
 
 namespace exception
 {
@@ -18,10 +19,22 @@ namespace exception
     class divisionByZero : public std::exception
     {
     public:
+        divisionByZero(const core::Vec3 &vec, const double &div)
+        {
+            std::stringstream ss;
+            ss << "ERROR #002 : Division by Zero or float close to zero!"
+               << "\n DETAILS: "
+               << vec << " / " << div << " = ERROR";
+            _msg = ss.str();
+        }
+
         const char *what() const noexcept override
         {
-            return "ERROR #002 : Division by Zero or float close to zero!";
+            return _msg.c_str();
         }
+
+    private:
+        std::string _msg;
     };
 
     class invalidArgumentSize : public std::exception

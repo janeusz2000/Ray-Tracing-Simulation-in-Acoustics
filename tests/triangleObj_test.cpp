@@ -75,6 +75,7 @@ namespace objects
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 1}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
+        // ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {3, 3, 3}), exception::invalidConstructor);
     }
 
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal)
@@ -145,7 +146,23 @@ namespace objects
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Getters_And_Setters)
     {
-        // TODO: Test method getX(), getY(), getZ(), setX(), setY(), setZ()
+        TriangleObj object1({0, 1, 1}, {2, 0, 2}, {3, 3, 0});
+
+        ASSERT_EQ(object1.getX(), core::Vec3(0, 1, 1));
+        ASSERT_EQ(object1.getY(), core::Vec3(2, 0, 2));
+        ASSERT_EQ(object1.getZ(), core::Vec3(3, 3, 0));
+
+        object1.setX(core::Vec3(0, 0, 0));
+        object1.setY(core::Vec3(1, 0, 0));
+        object1.setZ(core::Vec3(1, 1, 0));
+
+        object1.refreshAttributes();
+
+        ASSERT_EQ(object1.getX(), core::Vec3(0, 0, 0));
+        ASSERT_EQ(object1.getY(), core::Vec3(1, 0, 0));
+        ASSERT_EQ(object1.getZ(), core::Vec3(1, 1, 0));
+        ASSERT_EQ(object1.normal(core::Vec3()), core::Vec3(0, 0, 1));
+        ASSERT_EQ(object1.getOrigin(), core::Vec3((2.0 / 3.0), (1.0 / 3.0), 0));
     }
 
 }; // namespace objects
