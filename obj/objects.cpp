@@ -224,7 +224,7 @@ namespace objects
     }
     TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
     {
-        if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate)
+        if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate || this->arePointsInvalid())
         {
             throw exception::invalidConstructor();
         }
@@ -342,7 +342,7 @@ namespace objects
     bool TriangleObj::arePointsInvalid()
     {
         core::Vec3 alpha = _xCoordinate - _yCoordinate;
-        core::Vec3 beta = _xCoordinate = _zCoordinate;
+        core::Vec3 beta = _xCoordinate - _zCoordinate;
 
         return (alpha.cross_product(beta) == core::Vec3(0, 0, 0));
     }

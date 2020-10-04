@@ -75,7 +75,9 @@ namespace objects
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 1}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
-        // ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {3, 3, 3}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {3, 3, 3}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {4, 4, 4}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({3, 3, 3}, {2, 2, 2}, {4, 4, 4}), exception::invalidConstructor);
     }
 
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal)
