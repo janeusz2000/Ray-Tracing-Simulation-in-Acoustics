@@ -14,11 +14,11 @@ namespace generators
     class PointSource // This object is similar to Camera in graphics ray-tracer, that why name convension is simillar to camera
     {
     public:
-
-        PointSource();
-        PointSource(const core::Vec3 &dir);
-        PointSource(const core::Vec3 &dir, const core::Vec3 &pos);
-        PointSource(const std::initializer_list<double> &dir, const std::initializer_list<double> &pos);
+        PointSource() = delete;
+        PointSource(const double &freq);
+        PointSource(const double &freq, const core::Vec3 &dir);
+        PointSource(const double &freq, const core::Vec3 &dir, const core::Vec3 &pos);
+        PointSource(const double &freq, const std::initializer_list<double> &dir, const std::initializer_list<double> &pos);
         PointSource(const PointSource &) = default;
         ~PointSource() = default;
 
@@ -41,7 +41,7 @@ namespace generators
         void setUpperLeftCorner(const core::Vec3 &point);
 
     private:
-        double _aspectRatio, _focalLength;
+        double _aspectRatio, _focalLength, _frequency;
         core::Vec3 _origin, _upperLeftCorner;
     };
 }; // namespace generators
