@@ -24,13 +24,13 @@ namespace objects
 
     Sphere::Sphere(const core::Vec3 & or, const double &rad)
     {
-        setOrigin(or);
+        this->setOrigin(or);
         _radius = rad;
     }
 
     std::unique_ptr<core::RayHitData> Sphere::hitObject(const core::Ray &ray, const double &freq) const
     {
-        core::Vec3 rVec3 = ray.getOrigin() - getOrigin();
+        core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
 
         // this calculates variables that are neccesary to calculate times at which ray hits the object SphereWall.
         double beta = 2 * rVec3.scalar_product(ray.getDirection());
@@ -188,7 +188,8 @@ namespace objects
 
     void EnergyCollector::collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata)
     {
-        _energy += hitdata->energy; // TODO: Energy distribution between many collectors
+        // TODO: Energy distribution between many collectors
+        _energy += hitdata->energy;
     }
 
     // GETTERS AND SETTERS
@@ -305,14 +306,8 @@ namespace objects
 
         core::Vec3 surfaceHit = ray.at(time);
 
-        if (this->doesHit(surfaceHit))
-        {
-            return std::make_unique<core::RayHitData>(time, surfaceHit, _normal, ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time));
-        }
-        else
-        {
-            return std::unique_ptr<core::RayHitData>(nullptr);
-        }
+        return (this->doesHit(surfaceHit) ? std::make_unique<core::RayHitData>(time, surfaceHit, _normal, ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time))
+                                          : std::unique_ptr<core::RayHitData>(nullptr));
     }
 
     bool TriangleObj::doesHit(const core::Vec3 &point) const
@@ -325,11 +320,7 @@ namespace objects
         double beta = vecC.cross_product(vecA).magnitude() / 2;
         double gamma = vecA.cross_product(vecB).magnitude() / 2;
 
-        if ((alpha + beta + gamma) > _area + constants::kHitAccuracy * 0.99) // 0.001 is a accuracy for object hit
-        {
-            return false;
-        }
-        return true;
+        return (((alpha + beta + gamma) > _area + constants::kHitAccuracy * 0.99) ? false : true);
     }
 
     double TriangleObj::area() const

@@ -98,7 +98,7 @@ namespace objects
         double radius3 = 0.4;
         Sphere object3(core::Vec3(1, 1, 20), radius3);
 
-        const double rayNum = 100000;
+        const double rayNum = 1000000;
 
         double hits1 = 0;
         double hits2 = 0;
@@ -128,9 +128,9 @@ namespace objects
             }
         }
 
-        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy*10);
-        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy*10);
-        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy*10);
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
 
     TEST(SPHERE_METHOD, Test_Method_Area)
@@ -188,7 +188,7 @@ namespace objects
                 ++hits;
             }
         }
-        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy*10);
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
     TEST(SPHEREWALL_METHOD, Test_Normal)

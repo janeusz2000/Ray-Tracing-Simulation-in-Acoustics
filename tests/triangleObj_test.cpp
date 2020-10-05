@@ -140,7 +140,7 @@ namespace objects
         double missed = 0;
         const double areaRatio = 0.5 / 9;
 
-        for (auto a = 0; a < 100000; ++a)
+        for (auto a = 0; a < 10000000; ++a)
         {
             core::Vec3 randomPoint(dist(e2), dist(e2), 1);
             if (object1.doesHit(randomPoint))
