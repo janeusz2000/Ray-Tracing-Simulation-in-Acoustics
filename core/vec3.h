@@ -10,6 +10,9 @@ namespace core
 
     class Vec3
     {
+        // X cord: represents left to right coordinates
+        // Y cord: represents up to down coordinates
+        // Z cord: represents forward to backwards coordinates
     public:
         Vec3(double x, double y, double z) : _x(x), _y(y), _z(z){};
         Vec3() : _x(0), _y(0), _z(0){};
