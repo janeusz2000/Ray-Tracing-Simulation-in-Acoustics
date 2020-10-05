@@ -29,9 +29,9 @@ namespace generators
 
         // GETTERS AND SETTERS
         double getAspectRatio() const;
-        void setAspecRatio(const double &num);
+        void setAspectRatio(const double &num);
 
-        double setFocalLength() const;
+        double getFocalLength() const;
         void setFocalLength(double const &num);
 
         core::Vec3 getOrigin() const;

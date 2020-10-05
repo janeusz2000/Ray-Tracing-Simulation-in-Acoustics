@@ -17,8 +17,46 @@ namespace generators
     //     double _aspectRatio, _focalLength, _frequency;
     //     core::Vec3 _origin, _upperLeftCorner;
 
-    // TODO faceing directiin of the point source
-    PointSource::PointSource() : _freq(1000), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _upperLeftCorner(core::Vec3(0, 0, 0)){};
+    // TODO: faceing directiin of the point source
+    // PointSource::PointSource() : _freq(1000), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _upperLeftCorner(core::Vec3(0, 0, 0)){};
+
+    // GETTERS AND SETTERS
+
+    double PointSource::getAspectRatio() const
+    {
+        return _aspectRatio;
+    }
+    void PointSource::setAspectRatio(const double &num)
+    {
+        _aspectRatio = num;
+    }
+
+    double PointSource::getFocalLength() const
+    {
+        return _focalLength;
+    }
+    void PointSource::setFocalLength(const double &num)
+    {
+        _focalLength = num;
+    }
+
+    core::Vec3 PointSource::getOrigin() const
+    {
+        return _origin;
+    }
+    void PointSource::setOrigin(const core::Vec3 &point)
+    {
+        _origin = point;
+    }
+
+    core::Vec3 PointSource::getUpperLeftCorner() const
+    {
+        return _upperLeftCorner;
+    }
+    void PointSource::setUpperLeftCorner(const core::Vec3 &point)
+    {
+        _upperLeftCorner = point;
+    }
 
 #pragma endregion
 
