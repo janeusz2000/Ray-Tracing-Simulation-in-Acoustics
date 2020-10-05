@@ -6,6 +6,7 @@ cc_library(
     srcs = [
         "core/ray.cpp",
         "core/vec3.cpp",
+        "obj/generators.cpp",
         "obj/objects.cpp",
     ],
     hdrs = [
@@ -13,6 +14,7 @@ cc_library(
         "core/exceptions.h",
         "core/ray.h",
         "core/vec3.h",
+        "obj/generators.h",
         "obj/objects.h",
     ],
     copts = ["/std:c++17"],
@@ -82,6 +84,21 @@ cc_test(
     name = "triangleObj_test",
     srcs = [
         "tests/triangleObj_test.cpp",
+    ],
+    copts = [
+        "-Iexternal/gtest/include",
+        "/std:c++17",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "generators_test",
+    srcs = [
+        "tests/generators_test.cpp",
     ],
     copts = [
         "-Iexternal/gtest/include",
