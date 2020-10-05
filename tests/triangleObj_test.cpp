@@ -105,8 +105,27 @@ namespace objects
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit)
     {
-        // ! VERY IMPORTANT TO WORK
-        // TODO: Monte Carlo test of if ray hits object properly
+        TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 1, 0});
+
+        std::random_device rd;
+        std::mt19937_64 engine(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double hits = 0;
+        const double referenceRatio = 0.5 / 4;
+        const double rayNum = 1000000;
+        const double freq = 1000;
+
+        for (auto num = 0; num < rayNum; ++num)
+        {
+            core::Ray tempRay({dist(engine), dist(engine), -20}, {0, 0, 1});
+
+            if (object.hitObject(tempRay, freq))
+            {
+                ++hits;
+            }
+        }
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_HitObject) // This is Monte Carlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
@@ -136,7 +155,7 @@ namespace objects
 
         double ratio = hits / (hits + missed);
         std::cout << "Missed: " << missed << ", Hits: " << hits << ", RATIO: " << ratio << std::endl;
-        ASSERT_NEAR(ratio, areaRatio, constants::kHitAccuracy);
+        ASSERT_NEAR(ratio, areaRatio, constants::kHitAccuracy * 10);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Area)

@@ -128,9 +128,9 @@ namespace objects
             }
         }
 
-        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy);
-        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy);
-        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy);
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy*10);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy*10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy*10);
     }
 
     TEST(SPHERE_METHOD, Test_Method_Area)
@@ -185,10 +185,10 @@ namespace objects
             core::Ray tempRay(core::Vec3(dist(e2), dist(e2), -40), core::Vec3(0, 0, 1));
             if (object1.hitObject(tempRay, freq))
             {
-                hits++;
+                ++hits;
             }
         }
-        ASSERT_NEAR(referenceRatio, hits / rayNum, 0.001);
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy*10);
     }
 
     TEST(SPHEREWALL_METHOD, Test_Normal)
