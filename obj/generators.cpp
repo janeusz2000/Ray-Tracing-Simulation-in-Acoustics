@@ -10,13 +10,8 @@ namespace generators
 
     // CONSTRUCTORS
 
-    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize)
+    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 4, 0)), _leftCorner(core::Vec3(-diffusorSize / 2, 1, -diffusorSize / 2))
     {
-        _frequency = freq;
-        _rayNumPerRow = rayNumPerRow;
-        _diffusorSize = diffusorSize;
-        _origin = core::Vec3(0, 4, 0);
-        _leftCorner = core::Vec3(-0.5, 1, -0.5);
         this->updateDiffusorSize();
     }
 
