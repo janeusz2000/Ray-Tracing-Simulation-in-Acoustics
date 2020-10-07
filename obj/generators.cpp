@@ -10,9 +10,9 @@ namespace generators
 
     // CONSTRUCTORS
 
-    PointSource::PointSource(const double &freq, const size_t &rayNum, const double &sampleSize) : _frequency(freq), _sampleSize(sampleSize) _origin(core::Vec3(0, 4, 0))
+    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, const size_t &samplePerPixel) : _frequency(freq), _diffusorSize(diffusorSize) _origin(core::Vec3(0, 4, 0)), _rayNumPerRow(rayNumPerRow), _samplePerPixel(samplePerPixel);
     {
-        this->updateSampleSize();
+        this->updateDiffusorSize();
     };
 
     // OPERATORS
@@ -29,9 +29,22 @@ namespace generators
 
     // METHODS
 
-    void PointSource::updateSampleSize()
+    void PointSource::updatediffusorSize()
     {
-        _dirSquareReference = {core::Vec3(-1 * _sampleSize / 2, -1 * _sampleSize / 2, 1), core::Vec3(_sampleSize / 2, -1 * _sampleSize / 2, 1), core::Vec3(-1 * _sampleSize / 2, _sampleSize / 2, 1), core::Vec3(_sampleSize / 2, _sampleSize / 2, 1)};
+        _leftCorner = core::Vec3(-1 * _diffusorSize / 2, -1 * _diffusorSize / 2, 1);
+    }
+
+    core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter)
+    {
+        if (xIter >= _rayNumPerRow && yIter >= _rayNumPerRow)
+        {
+            throw exception::outOfSize(xIter, yIter, _rayNumPerRow);
+        }
+
+        double u = (static_cast<double>(xIter) + _dist(_engine)) / static_cast<double>(_rayNumPerRow - 1);
+        double v = (static_cast<double>(uIter) + _dist(_engine)) / static_cast<double>(_rayNumPerRow - 1);
+
+        return Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - _origin);
     }
 
     // GETTERS AND SETTERS
@@ -45,13 +58,13 @@ namespace generators
         _freq = freq;
     }
 
-    double PointSource::getSampleSize() const
+    double PointSource::getdiffusorSize() const
     {
-        return _sampleSize;
+        return _diffusorSize;
     }
-    void PointSource::setSampleSize(const double &sampleSize)
+    void PointSource::setdiffusorSize(const double &diffusorSize)
     {
-        _sampleSize = sampleSize;
+        _diffusorSize = diffusorSize;
     }
 
     core::Vec3 PointSource::getOrigin() const

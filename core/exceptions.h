@@ -72,6 +72,24 @@ namespace exception
             return "ERROR #006 : energy Collectors doesn't have the same origin positions";
         }
     };
+
+    class outOfSize : public std::exception
+    {
+    public:
+        outOfSize(const size_t &xIter, const size_t &yIter, const size_t &rayNumLimit)
+        {
+            std::stringstream ss;
+            ss << "ERROR: Out of index: xIter: " << xIter << " of:  " << rayNumLimit - 1 << ", yIter: " << yIter << " of: " << rayNumLimit - 1;
+            _msg = ss.str();
+        }
+        const char *what() const noexcept override
+        {
+            return _msg.c_str();
+        }
+
+    private:
+        std::string _msg;
+    }
 } // namespace exception
 
 #endif
