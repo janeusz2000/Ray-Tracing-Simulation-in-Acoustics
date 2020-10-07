@@ -8,24 +8,12 @@ namespace generators
 
 #pragma region POINTSOURCE
 
-    // PointSource(const double &freq);
-    //     PointSource(const double &freq, const core::Vec3 &dir);
-    //     PointSource(const double &freq, const core::Vec3 &dir, const core::Vec3 &pos);
-    //     PointSource(const double &freq, const std::initializer_list<double> &dir, const std::initializer_list<double> &pos);
-
-    // private:
-    //     double _aspectRatio, _focalLength, _frequency;
-    //     core::Vec3 _origin, _upperLeftCorner;
-
-    // TODO: faceing directiin of the point source
-    // PointSource::PointSource() : _freq(1000), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _upperLeftCorner(core::Vec3(0, 0, 0)){};
-
     // CONSTRUCTORS
 
-    PointSource::PointSource(const double &freq) : _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _dir(core::Vec3(0, 0, -1)){};
-    PointSource::PointSource(const double &freq, const core::Vec3 &dir) : _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _dir(dir){};
-    PointSource::PointSource(const double &freq, const core::Vec3 &dir, const core::Vec3 &origin) : _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(origin), _dir(dir){};
-    PointSource::PointSource(const double &freq, const std::initializer_list<double> &dir, const std::initializer_list<double> &pos) _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(origin)), _dir(core::Vec3(dir)){};
+    PointSource::PointSource(const double &freq, const size_t &rayNum, const double &sampleSize) : _frequency(freq), _sampleSize(sampleSize) _origin(core::Vec3(0, 4, 0))
+    {
+        this->updateSampleSize();
+    };
 
     // OPERATORS
 
@@ -39,6 +27,13 @@ namespace generators
         return os << "Point Source: origin: " << pointSource.getOrigin() << ", aspect ratio: " << pointSource.getAspectRatio() << ", direction: " << pointSource.getDirection() << ", frequency: " << pointSource.getFrequency();
     }
 
+    // METHODS
+
+    void PointSource::updateSampleSize()
+    {
+        _dirSquareReference = {core::Vec3(-1 * _sampleSize / 2, -1 * _sampleSize / 2, 1), core::Vec3(_sampleSize / 2, -1 * _sampleSize / 2, 1), core::Vec3(-1 * _sampleSize / 2, _sampleSize / 2, 1), core::Vec3(_sampleSize / 2, _sampleSize / 2, 1)};
+    }
+
     // GETTERS AND SETTERS
 
     double PointSource::getFrequency() const
@@ -48,6 +43,15 @@ namespace generators
     void PointSource::setFrequency(const double &freq)
     {
         _freq = freq;
+    }
+
+    double PointSource::getSampleSize() const
+    {
+        return _sampleSize;
+    }
+    void PointSource::setSampleSize(const double &sampleSize)
+    {
+        _sampleSize = sampleSize;
     }
 
     core::Vec3 PointSource::getOrigin() const

@@ -8,6 +8,7 @@
 
 #include <initializer_list>
 #include <iostream>
+#include <array>
 
 namespace generators
 {
@@ -15,9 +16,7 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        PointSource(const double &freq, const size_t &rayNum);
-        PointSource(const double &freq, const size_t &rayNum, const core::Vec3 &origin);
-        PointSource(const double &freq, const size_t &raynum, const std::initializer_list<double> &origin);
+        PointSource(const double &freq, const size_t &rayNum, const double &sampleSize);
         PointSource(const PointSource &) = default;
         ~PointSource() = default;
 
@@ -26,9 +25,16 @@ namespace generators
         bool operator==(const PointSource &other) const;
         friend std::ostream &operator<<(std::ostream &os, const PointSource &pointSource);
 
+        // METHODS
+
+        void updateSampleSize();
+
         // GETTERS AND SETTERS
         double getFrequency() const;
         void setFrequency(const double &freq);
+
+        double getSampleSize() const;
+        void setSampleSize(const double &sampleSize);
 
         size_t getRayNum() const;
         void setRayNum(const size_t &raynum);
@@ -38,7 +44,8 @@ namespace generators
 
     private:
         core::Vec3 _origin;
-        double _frequency;
+        std::array<core::Vec3, 4> _dirSquareReference;
+        double _frequency, _sampleSize;
         size_t _rayNum;
     };
 }; // namespace generators
