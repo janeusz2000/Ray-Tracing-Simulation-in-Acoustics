@@ -15,10 +15,9 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        PointSource(const double &freq);
-        PointSource(const double &freq, const core::Vec3 &dir);
-        PointSource(const double &freq, const core::Vec3 &dir, const core::Vec3 &pos);
-        PointSource(const double &freq, const std::initializer_list<double> &dir, const std::initializer_list<double> &pos);
+        PointSource(const double &freq, const size_t &rayNum);
+        PointSource(const double &freq, const size_t &rayNum, const core::Vec3 &origin);
+        PointSource(const double &freq, const size_t &raynum, const std::initializer_list<double> &origin);
         PointSource(const PointSource &) = default;
         ~PointSource() = default;
 
@@ -28,21 +27,19 @@ namespace generators
         friend std::ostream &operator<<(std::ostream &os, const PointSource &pointSource);
 
         // GETTERS AND SETTERS
-        double getAspectRatio() const;
-        void setAspectRatio(const double &num);
+        double getFrequency() const;
+        void setFrequency(const double &freq);
 
-        double getFocalLength() const;
-        void setFocalLength(double const &num);
+        size_t getRayNum() const;
+        void setRayNum(const size_t &raynum);
 
         core::Vec3 getOrigin() const;
         void setOrigin(const core::Vec3 &point);
 
-        core::Vec3 getUpperLeftCorner() const;
-        void setUpperLeftCorner(const core::Vec3 &point);
-
     private:
-        double _aspectRatio, _focalLength, _frequency;
-        core::Vec3 _origin, _upperLeftCorner;
+        core::Vec3 _origin;
+        double _frequency;
+        size_t _rayNum;
     };
 }; // namespace generators
 

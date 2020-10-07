@@ -20,24 +20,34 @@ namespace generators
     // TODO: faceing directiin of the point source
     // PointSource::PointSource() : _freq(1000), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _upperLeftCorner(core::Vec3(0, 0, 0)){};
 
+    // CONSTRUCTORS
+
+    PointSource::PointSource(const double &freq) : _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _dir(core::Vec3(0, 0, -1)){};
+    PointSource::PointSource(const double &freq, const core::Vec3 &dir) : _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(0, 4, 0)), _dir(dir){};
+    PointSource::PointSource(const double &freq, const core::Vec3 &dir, const core::Vec3 &origin) : _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(origin), _dir(dir){};
+    PointSource::PointSource(const double &freq, const std::initializer_list<double> &dir, const std::initializer_list<double> &pos) _frequency(freq), _aspectRatio(1), _focalLength(1), _origin(core::Vec3(origin)), _dir(core::Vec3(dir)){};
+
+    // OPERATORS
+
+    bool PointSource::operator==(const PointSource &other) const
+    {
+        return (_aspectRatio == other.getAspectRatio() && _focalLength == other.getFocalLength() && _origin == other.getOrigin() && _dir == other.getDirection() && _frequency == other.getFrequency());
+    }
+
+    std::ostream &operator<<(std::ostream &os, const PointSource &pointSource)
+    {
+        return os << "Point Source: origin: " << pointSource.getOrigin() << ", aspect ratio: " << pointSource.getAspectRatio() << ", direction: " << pointSource.getDirection() << ", frequency: " << pointSource.getFrequency();
+    }
+
     // GETTERS AND SETTERS
 
-    double PointSource::getAspectRatio() const
+    double PointSource::getFrequency() const
     {
-        return _aspectRatio;
+        return _frequency;
     }
-    void PointSource::setAspectRatio(const double &num)
+    void PointSource::setFrequency(const double &freq)
     {
-        _aspectRatio = num;
-    }
-
-    double PointSource::getFocalLength() const
-    {
-        return _focalLength;
-    }
-    void PointSource::setFocalLength(const double &num)
-    {
-        _focalLength = num;
+        _freq = freq;
     }
 
     core::Vec3 PointSource::getOrigin() const
@@ -49,13 +59,13 @@ namespace generators
         _origin = point;
     }
 
-    core::Vec3 PointSource::getUpperLeftCorner() const
+    size_t PointSource::getRayNum() const
     {
-        return _upperLeftCorner;
+        return _rayNum;
     }
-    void PointSource::setUpperLeftCorner(const core::Vec3 &point)
+    void PointSource::setRayNum(const size_t &rayNum)
     {
-        _upperLeftCorner = point;
+        _rayNum = rayNum;
     }
 
 #pragma endregion
