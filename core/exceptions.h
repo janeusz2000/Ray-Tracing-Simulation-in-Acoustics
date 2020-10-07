@@ -89,7 +89,7 @@ namespace exception
 
     private:
         std::string _msg;
-    }
+    };
 } // namespace exception
 
 #endif

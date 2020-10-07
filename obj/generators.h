@@ -8,7 +8,6 @@
 
 #include <initializer_list>
 #include <iostream>
-#include <array>
 #include <random>
 
 namespace generators
@@ -17,7 +16,7 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, const size_t &sample);
+        PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize);
         PointSource(const PointSource &) = default;
         ~PointSource() = default;
 
@@ -28,7 +27,7 @@ namespace generators
 
         // METHODS
         void updateDiffusorSize();
-        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter, const size_t &curSample);
+        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter);
 
         // GETTERS AND SETTERS
         double getFrequency() const;
@@ -40,21 +39,19 @@ namespace generators
         size_t getRayNumPerRow() const;
         void setRayNumPerRow(const size_t &raynum);
 
-        size_t getSample() const;
-        void setSample(const size_t &sample);
-
         core::Vec3 getOrigin() const;
         void setOrigin(const core::Vec3 &point);
 
-    private:
-        core::Vec3 _origin, _leftCorner;
-        double _frequency, _diffusorSize;
-        size_t _rayNumPerRow, _sample;
+        core::Vec3 PointSource::getLeftCorner() const;
+        void PointSource::setLeftCorner(const core::Vec3 &point);
 
-        std::random_device rd;
-        std::mt19937_64<double> engine(rd);
-        std::normal_distribution dist{0, 1};
+    private:
+    core::Vec3 _origin, _leftCorner;
+        double _frequency, _diffusorSize;
+        size_t _rayNumPerRow;
+        double getRandom() const;
     };
-}; // namespace generators
+
+} // namespace generators
 
 #endif
