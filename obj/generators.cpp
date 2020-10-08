@@ -31,7 +31,7 @@ namespace generators
 
     void PointSource::updateDiffusorSize()
     {
-        _leftCorner = core::Vec3(-1 * _diffusorSize / 2, -1 * _diffusorSize / 2, 1);
+        _leftCorner = core::Vec3(-1 * _diffusorSize / 2, 1, -1 * _diffusorSize / 2);
     }
 
     core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter)

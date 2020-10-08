@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "obj/generators.h"
+#include "obj/objects.h"
 
 #include <random>
 #include <cmath>
@@ -118,6 +119,61 @@ namespace generators
         ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 1));
         ASSERT_EQ(object2.getOrigin(), core::Vec3(1, 0, 2));
         ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 12, 2));
+    }
+
+    TEST(POINTSOURCE_METHODS, Test_Method_updateDiffusorSize)
+    {
+        PointSource object1(100, 1000, 100);
+        PointSource object2(200, 100, 1);
+
+        ASSERT_EQ(object1.getLeftCorner(), core::Vec3(-50, 1, -50));
+        ASSERT_EQ(object2.getLeftCorner(), core::Vec3(-0.5, 1, -0.5));
+    }
+
+    TEST(POINTSOURCE_METHODS, Test_GenerateRay_Test) // Monte Carlo Test
+    {
+        const size_t rayNumPerRow = 5000;
+        const double freq = 1000;
+        PointSource source(freq, rayNumPerRow, 1);
+
+        using pointer = std::unique_ptr<objects::TriangleObj>;
+        std::vector<pointer> objectsVec;
+        objectsVec.push_back(std::unique_ptr<objects::TriangleObj>(new objects::TriangleObj({-0.25, 1, -0.25}, {0.25, 1, -0.25}, {-0.25, 1, 0.25})));
+        objectsVec.push_back(std::unique_ptr<objects::TriangleObj>(new objects::TriangleObj({-0.25, 1, 0.25}, {0.25, 1, -0.25}, {0.25, 1, 0.25})));
+
+        double hits = 0, missed = 0;
+
+        for (size_t x = 0; x < rayNumPerRow; ++x)
+        {
+            for (size_t y = 0; y < rayNumPerRow; ++y)
+            {
+                core::Ray tempRay = source.GenerateRay(x, y);
+                double tempHits = hits, tempMissed = missed;
+
+                for (const auto &obj : objectsVec)
+                {
+                    if (obj->hitObject(tempRay, freq))
+                    {
+                        ++tempHits;
+                    }
+                    else
+                    {
+                        ++tempMissed;
+                    }
+                }
+
+                if (tempHits != hits)
+                {
+                    hits = tempHits;
+                }
+                else
+                {
+                    missed = tempMissed;
+                }
+            }
+        }
+
+        ASSERT_NEAR(hits / (hits + missed), 0.25, constants::kHitAccuracy * 100);
     }
 
 } // namespace generators
