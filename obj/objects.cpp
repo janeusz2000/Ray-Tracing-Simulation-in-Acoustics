@@ -294,7 +294,7 @@ namespace objects
         // checking if scalar_product of the ray.direction and normal is close or equal to zero.
         if (std::abs(ray.getDirection().scalar_product(_normal)) <= constants::kAccuracy)
         {
-            return std::unique_ptr<core::RayHitData>(nullptr);
+            return nullptr;
         }
 
         // Following code calculates time at which ray is hitting surface where triangle is positioned
@@ -303,13 +303,16 @@ namespace objects
         // Following code is making sure that ray doesn't hit the same object.
         if (time < constants::kHitAccuracy)
         {
-            return std::unique_ptr<core::RayHitData>(nullptr);
+            return nullptr;
         }
 
         core::Vec3 surfaceHit = ray.at(time);
 
-        return (this->doesHit(surfaceHit) ? std::make_unique<core::RayHitData>(time, surfaceHit, _normal, ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time))
-                                          : std::unique_ptr<core::RayHitData>(nullptr));
+        if (this->doesHit(surfaceHit))
+        {
+            return std::make_unique<core::RayHitData>(time, surfaceHit, _normal, ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time));
+        }
+        return nullptr;
     }
 
     bool TriangleObj::doesHit(const core::Vec3 &point) const
