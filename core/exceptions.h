@@ -1,9 +1,9 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
+#include "vec3.h"
 #include <exception>
 #include <sstream>
-#include "vec3.h"
 
 namespace exception
 {
@@ -12,10 +12,21 @@ namespace exception
     public:
         const char *what() const noexcept override
         {
+            // TODO: this message does not provide any useful debugging information. Add some,
+            // so that when reading the error massage later in the logs, you know what is
+            // going on.
+            //
+            // Please fix all the exceptions in this file.
             return "ERROR #001 : Invalid input for constructor!";
         }
     };
 
+    // TODO: this exception has a very generic name, yet it seems it is about vectors
+    // and normalization in the case of zero length, so please change the name to be
+    // more specific.
+    //
+    // Also: why this exception is not thrown from the Vec3 itself when the division
+    // happens?
     class divisionByZero : public std::exception
     {
     public:
@@ -73,6 +84,7 @@ namespace exception
         }
     };
 
+    // TODO: same here, generic name, yet specific usage. Please make names more specific.
     class outOfSize : public std::exception
     {
     public:

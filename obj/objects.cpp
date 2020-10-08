@@ -44,12 +44,14 @@ namespace objects
         {
             return std::unique_ptr<core::RayHitData>(nullptr);
         }
+        // TODO: Drop else. It will be easier to follow what is going on.
         else
         {
             double temp = std::sqrt(discriminant);
             time1 = (-beta - temp) / 2;
             time2 = (-beta + temp) / 2;
         }
+        // TODO: here we would need some comments, what each cases mean.
         if (time1 < 0 && time2 < 0)
         {
             return std::unique_ptr<core::RayHitData>(nullptr);
@@ -60,6 +62,7 @@ namespace objects
         }
         else
         {
+            // TODO: I think min() takes 2 params, no need to pack then in an initializer list.
             double time = std::min({time1, time2});
             core::Vec3 collision = ray.at(time);
             return std::make_unique<core::RayHitData>(time, collision, normal(collision), ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time));
@@ -68,6 +71,7 @@ namespace objects
 
     double Sphere::area() const
     {
+        // TODO: ಠ_ಠ This is wrong. Do you even use this method? If not, remove.
         return constants::kPi * _radius * _radius;
     }
 
@@ -107,6 +111,7 @@ namespace objects
 
     EnergyCollector::EnergyCollector() : _id(population), _energy(0)
     {
+        // TODO: Why not seting default params using these constants? You copied so much code in those 4 constructors.
         this->setOrigin(core::Vec3(0, 4, 0));
         this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         population++;
@@ -170,6 +175,9 @@ namespace objects
         }
         else
         {
+            // TODO: This may cause issues, when you want to keep collectors in a list of unique_ptrs.
+            // Since this one creates a new object and it seems that energy collectors are just data objects.
+            // My guess would be that you want to mutate collectors?
             return EnergyCollector(left.getOrigin(), left.getEnergy() + right.getEnergy());
         }
     }
@@ -225,6 +233,7 @@ namespace objects
     }
     TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
     {
+        // TODO: Why don't you hide the first part of the condition inside arePointsInvalid() ?
         if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate || this->arePointsInvalid())
         {
             throw exception::invalidConstructor();
@@ -290,8 +299,10 @@ namespace objects
 
     std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
     {
+        // TODO: "ray.getDirection().scalar_product(_normal)" is calculated 2x. Cache the result.
         // if ray direction is parpedicular to normal, there is no hit. It can be translated into
         // checking if scalar_product of the ray.direction and normal is close or equal to zero.
+        // TODO: What if ray points away of the triangle? Do you support hits from behind the triangle?
         if (std::abs(ray.getDirection().scalar_product(_normal)) <= constants::kAccuracy)
         {
             return std::unique_ptr<core::RayHitData>(nullptr);
@@ -322,6 +333,7 @@ namespace objects
         double beta = vecC.cross_product(vecA).magnitude() / 2;
         double gamma = vecA.cross_product(vecB).magnitude() / 2;
 
+        // TODO: Why do you multiply by 0.99? Consider making it a constant and using it here.
         return (((alpha + beta + gamma) > _area + constants::kHitAccuracy * 0.99) ? false : true);
     }
 
@@ -339,6 +351,8 @@ namespace objects
 
     // PRIVATE METHODS
 
+    // TODO: Why do you have all these separate methods recalculating some small parts,
+    // while you could just move all the code into refreshAttributes() and cache the results.
     void TriangleObj::recalculateArea()
     {
         core::Vec3 vecA = _xCoordinate - _yCoordinate;

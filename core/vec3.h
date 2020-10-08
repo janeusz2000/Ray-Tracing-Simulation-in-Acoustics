@@ -1,9 +1,9 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include "constants.h"
 #include <initializer_list>
 #include <iostream>
-#include "constants.h"
 
 namespace core
 {
@@ -15,7 +15,13 @@ namespace core
         // Z cord: represents forward to backwards coordinates
     public:
         Vec3(double x, double y, double z) : _x(x), _y(y), _z(z){};
+        // TODO:
+        //  better: reuse the constructor you already implemented, like Vec3(0, 0, 0)
+        //  best: just define the default values in the constructor above.
         Vec3() : _x(0), _y(0), _z(0){};
+        // TODO: add explicit keyword. You do not want random initlizer_list<double>
+        // to be convertiable to Vec3 whenever compiler thinks it can do that. Not using
+        // this leads to less readable code and bugs.
         Vec3(std::initializer_list<double> initList);
         Vec3(const Vec3 &other);
         ~Vec3() = default;
@@ -46,6 +52,8 @@ namespace core
         Vec3 normalize() const;
 
         //GETTERS & SETTERS
+        // TODO: use just x() and drop the get prefix; this x() is self explanatory
+        // and makes code more readable.
         double getX() const;
         void setX(const double &num);
         double getY() const;

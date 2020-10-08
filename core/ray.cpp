@@ -43,7 +43,10 @@ namespace core
 
     double Ray::phaseAt(const double &freq, const double &time) const
     {
+        // TODO: check for negative or zero frequency?
         double waveLength = constants::kSoundSpeed / freq;
+        // TODO: at() performs useless operation of adding origin while you need to remove it again
+        // Please optimize.
         double displacement = (_origin - at(time)).magnitude();
         return displacement / waveLength * 2 * constants::kPi;
     }
@@ -58,6 +61,7 @@ namespace core
 
     bool operator==(const Ray &left, const Ray &right)
     {
+        // TODO: this does not compare energy?
         return (left.getOrigin() == right.getOrigin() && left.getDirection() == right.getDirection());
     }
 
@@ -99,6 +103,7 @@ namespace core
 
     bool RayHitData::operator==(const RayHitData &other) const
     {
+        // TODO: this will likely be useless, because you check equality of floating point numbers.
         return (other.time == time, other.collisionPoint == collisionPoint && other.direction == direction && other.normal == normal && other.energy == energy && other.phase == phase);
     }
 
@@ -106,6 +111,6 @@ namespace core
     {
         return os << "Collision point: " << rayData.collisionPoint << ", incoming ray direction: " << rayData.direction << ", normal: " << rayData.normal << ", time: " << rayData.time << ", energy: " << rayData.energy << ", phase " << rayData.phase << " [radians]";
     }
-    
+
 #pragma endregion
 } // namespace core

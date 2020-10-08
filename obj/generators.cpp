@@ -12,8 +12,10 @@ namespace generators
 
     // CONSTRUCTORS
 
+    // TODO: You updateDiffusorSize() below so no need to set _leftCorner in the initializer list and duplicate the code.
     PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, -4, 0)), _leftCorner(core::Vec3(-diffusorSize / 2, 1, -diffusorSize / 2))
     {
+        // TODO: remove this. it is clear that you call it on this.
         this->updateDiffusorSize();
     }
 
@@ -44,6 +46,13 @@ namespace generators
         }
 
         double u, v;
+        // TODO: Using randomness in tests will make it very hard to debug them. Using two different paths,
+        // one in test one in real code means that there can be bugs that you will never see.
+        //
+        // The way it should be done is:
+        // 1. This class should take random number generator in constructor
+        // 2. in real code you create a real generator
+        // 3. in tests you pass a fake generator that you can precisely configure
         if (incldueRandom)
         {
             v = (static_cast<double>(xIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
@@ -58,6 +67,8 @@ namespace generators
     }
 
     // PRIVATE METHODS
+    // TODO: This function does not look like it belongs to this class. Move it outside to
+    // an unnamed namespace and move to the top of this file.
     double PointSource::getRandom() const
     {
         std::random_device rd;
@@ -84,6 +95,9 @@ namespace generators
     void PointSource::setDiffusorSize(const double &diffusorSize)
     {
         _diffusorSize = diffusorSize;
+        // TODO: Why update diffusor size is not called here? This is what setters and getters are for.
+        // If the only thing your getters and setters are doing is exporing variables, then I would not
+        // add them, but make variables public instead.
     }
 
     core::Vec3 PointSource::getOrigin() const

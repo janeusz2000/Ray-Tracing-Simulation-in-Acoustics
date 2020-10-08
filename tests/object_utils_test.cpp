@@ -1,14 +1,14 @@
 #ifndef OBJECT_TEST_H
 #define OBJECT_TEST_H
 
-#include "gtest/gtest.h"
 #include "constants.h"
 #include "core/exceptions.h"
 #include "obj/objects.h"
+#include "gtest/gtest.h"
 
 #include <cmath>
-#include <sstream>
 #include <random>
+#include <sstream>
 
 namespace objects
 {
@@ -182,6 +182,8 @@ namespace objects
         ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
+    // TODO: I do not see tests for all the cases (inside, outside but miss)
+    // TODO: Reuse code. There is so much code copied.
     TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_1_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;

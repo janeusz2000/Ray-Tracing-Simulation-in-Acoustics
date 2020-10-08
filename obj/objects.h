@@ -1,15 +1,15 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
 
-#include "core/vec3.h"
 #include "constants.h"
-#include "core/ray.h"
 #include "core/exceptions.h"
+#include "core/ray.h"
+#include "core/vec3.h"
 
-#include <cmath>
-#include <memory>
 #include <algorithm>
+#include <cmath>
 #include <initializer_list>
+#include <memory>
 #include <vector>
 
 namespace objects
@@ -19,10 +19,25 @@ namespace objects
     public:
         //METHODS
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
+        // TODO: Do not use unique_ptr with RayHitData. This is a data transfer object, that
+        // can be easily copied and no need to construct it on the heap. It will be also faster
+        // as you will not need to constantly allocate memory.
+        //
+        // You can change this to sth like:
+        //  virtual bool hitObject(const core::Ray &ray, const double &freq, RayHitData* out) const = 0;
+        //
+        // Then in the code you will have nicely readable pieces like:
+        //
+        //  RayHitData data:
+        //  if (object->hitObject(ray, freq, &data)) {
+        //    // object was hit!
+        //  }
+        //
         virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const = 0;
         virtual double area() const = 0;
 
         //GETTERS_AND_SETTERS
+        // TODO: make & formatting consistent.
         void setOrigin(const core::Vec3 & or);
         core::Vec3 getOrigin() const;
 
@@ -40,6 +55,7 @@ namespace objects
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //METHODS
+        // TODO: Why surface point is zero by default?
         virtual core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
         virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
         virtual double area() const override;
@@ -52,6 +68,7 @@ namespace objects
         double _radius;
     };
 
+    // TODO: Add a comment what this object is doing.
     class SphereWall : public Sphere
     {
     public:
@@ -64,6 +81,9 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
+        // TODO: Having static variables is a sign of bad design. If you want to keep track of this,
+        // you should create some kind of factory that makes those collectors, or maybe just keep
+        // them all in a vector somewhere.
         static int population;
 
         // These constructors changes static int population number
@@ -71,6 +91,7 @@ namespace objects
         EnergyCollector(const core::Vec3 &origin);
         EnergyCollector(const core::Vec3 &origin, const double &energy);
 
+        // TODO: in which circumstances you want to copy an EnergyCollector?
         // This constructor is only used for passing copy of the object.
         // It doesn't change any of the id, poplation or any paramterers.
         EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id);
@@ -89,6 +110,8 @@ namespace objects
 
         // METHODS
         double distanceAt(const core::Vec3 &positionHit) const;
+        // TODO: Do not pass unique_ptr to the method, unless you want to transfer ownership.
+        // You either want to pass RayHitData* or const RayHitData& if hitData cannot be ever null.
         void collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata);
 
         // GETTERS AND SETTERS
@@ -107,6 +130,7 @@ namespace objects
     {
     public:
         TriangleObj();
+        // TODO: I am confused by the parameter names, why vectors are called coordinates?
         TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate);
         TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate);
         TriangleObj(const TriangleObj &other);

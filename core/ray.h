@@ -1,11 +1,11 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include <initializer_list>
-#include <iostream>
-#include "core/vec3.h"
 #include "constants.h"
 #include "core/exceptions.h"
+#include "core/vec3.h"
+#include <initializer_list>
+#include <iostream>
 
 namespace core
 {
@@ -14,12 +14,22 @@ namespace core
     public:
         Ray() : Ray(Vec3(0, 0, 0), Vec3(0, 0, 1), 0){};
         Ray(const Vec3 &origin, const Vec3 &direction, const double &energy);
+        // TODO: Again, remove and use default value in the constructor just above.
+        //
+        // Issue here is that constructor above is defined in CPP file so presumably has
+        // some non trivial implementation, while this one is defined here yet the only
+        // difference is zero energy. Note that this constructor here does not throw an
+        // error if direction is zero, so you have a bug.
         Ray(const Vec3 &origin, const Vec3 &direction) : _origin(origin), _direction(direction.normalize()), _energy(0){};
+        // TODO: Why do you need those constructors? They are useless given how easy it is to create vectors.
         Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy);
         Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir) : Ray(origin, dir, 0){};
         Ray(const Ray &other);
         ~Ray() = default;
 
+        // TODO: do not pass simple types using const type&, as it does not make sense.
+        // They are quick to copy no need to use const references with floats, as it make
+        // the code harder to read.
         //METHODS
         Vec3 at(const double &time) const;
         double phaseAt(const double &freq, const double &time) const;
@@ -52,6 +62,7 @@ namespace core
 
         // OPERATORS
         RayHitData &operator=(const RayHitData &) = default;
+        // TODO: When is this operator useful?
         bool operator==(const RayHitData &other) const;
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 

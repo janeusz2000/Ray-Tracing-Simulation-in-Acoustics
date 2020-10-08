@@ -1,12 +1,12 @@
 #ifndef TRIANGLEOBJ_TEST_CPP
 #define TRIANGLEOBJ_TEST_CPP
 
-#include "gtest/gtest.h"
-#include "obj/objects.h"
-#include "core/vec3.h"
-#include "core/ray.h"
-#include "core/exceptions.h"
 #include "constants.h"
+#include "core/exceptions.h"
+#include "core/ray.h"
+#include "core/vec3.h"
+#include "obj/objects.h"
+#include "gtest/gtest.h"
 
 #include <algorithm>
 #include <cmath>
@@ -103,6 +103,8 @@ namespace objects
         ASSERT_EQ(object2.normal(core::Vec3()), core::Vec3(-1, 0, 0));
     }
 
+    // TODO: Hard to tell what this test checks for that the next one does not?
+    // Maybe remove if they are redundant?
     TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit)
     {
         TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 1, 0});
@@ -114,6 +116,8 @@ namespace objects
         double hits = 0;
         const double referenceRatio = 0.5 / 4;
         const double rayNum = 1000000;
+        // TODO: Why 1000? Is this important? If not, make sure to name it as such, like
+        // const double KIgnoreFrequency = 0;
         const double freq = 1000;
 
         for (auto num = 0; num < rayNum; ++num)

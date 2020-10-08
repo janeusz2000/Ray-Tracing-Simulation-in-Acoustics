@@ -41,6 +41,7 @@ namespace core
 
     Vec3 operator+(const double &left, const Vec3 &right)
     {
+        // TODO: why not just right + left? (same below)
         return Vec3(right.getX() + left, right.getY() + left, right.getZ() + left);
     }
 
@@ -53,6 +54,7 @@ namespace core
     }
     Vec3 operator-(const Vec3 &left, const double &num)
     {
+        // TODO: Why not just left + (-num)?
         return Vec3(left.getX() - num, left.getY() - num, left.getZ() - num);
     }
 
@@ -146,6 +148,7 @@ namespace core
 
     double Vec3::magnitude() const
     {
+        // TODO: why not std::sqrt(magnitudeSquared()) ?
         return std::sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
     }
 
@@ -155,6 +158,7 @@ namespace core
     }
     Vec3 Vec3::normalize() const
     {
+        // TODO: Why creating additional object? Why not just (*this) / magnitude() ?
         return Vec3(getX(), getY(), getZ()) / magnitude();
     }
 
@@ -163,11 +167,14 @@ namespace core
 
     bool operator==(const Vec3 &left, const Vec3 &right)
     {
+        // TODO: format so that the line is not going out of the screen.
+        // Normall these lines should have at most 80 chars.
         return (std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
     }
 
     bool operator!=(const Vec3 &left, const Vec3 &right)
     {
+        // TODO: code reuse.
         return (!(std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy));
     }
     std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3)
