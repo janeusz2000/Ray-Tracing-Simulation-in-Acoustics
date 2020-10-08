@@ -83,7 +83,7 @@ namespace objects
         ASSERT_EQ(0.3, object6.getRadius());
     }
 
-    TEST(SPHERE_METHOD, Test_HitObject) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_0_1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -113,6 +113,255 @@ namespace objects
         {
             core::Vec3 rayPosition(dist(e2), dist(e2), -50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, 1));
+
+            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            {
+                hits1++;
+            }
+            if (object2.hitObject(tempRay, tempFreq))
+            {
+                hits2++;
+            }
+            if (object3.hitObject(tempRay, tempFreq))
+            {
+                hits3++;
+            }
+        }
+
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_0_minus1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    {
+        std::random_device rd;
+        std::mt19937_64 e2(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double radius1 = 0.2;
+        Sphere object1(core::Vec3(1, 1, -20), radius1);
+
+        double radius2 = 0.3;
+        Sphere object2(core::Vec3(1, 1, -20), radius2);
+
+        double radius3 = 0.4;
+        Sphere object3(core::Vec3(1, 1, -20), radius3);
+
+        const double rayNum = 1000000;
+
+        double hits1 = 0;
+        double hits2 = 0;
+        double hits3 = 0;
+
+        const double reference1 = constants::kPi * radius1 * radius1 / 4;
+        const double reference2 = constants::kPi * radius2 * radius2 / 4;
+        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const double tempFreq = 1000;
+
+        for (size_t n = 0; n < rayNum; n++)
+        {
+            core::Vec3 rayPosition(dist(e2), dist(e2), 50);
+            core::Ray tempRay(rayPosition, core::Vec3(0, 0, -1));
+
+            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            {
+                hits1++;
+            }
+            if (object2.hitObject(tempRay, tempFreq))
+            {
+                hits2++;
+            }
+            if (object3.hitObject(tempRay, tempFreq))
+            {
+                hits3++;
+            }
+        }
+
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
+    }
+    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_1_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    {
+        std::random_device rd;
+        std::mt19937_64 e2(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double radius1 = 0.2;
+        Sphere object1(core::Vec3(1, 20, 1), radius1);
+
+        double radius2 = 0.3;
+        Sphere object2(core::Vec3(1, 20, 1), radius2);
+
+        double radius3 = 0.4;
+        Sphere object3(core::Vec3(1, 20, 1), radius3);
+
+        const double rayNum = 1000000;
+
+        double hits1 = 0;
+        double hits2 = 0;
+        double hits3 = 0;
+
+        const double reference1 = constants::kPi * radius1 * radius1 / 4;
+        const double reference2 = constants::kPi * radius2 * radius2 / 4;
+        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const double tempFreq = 1000;
+
+        for (size_t n = 0; n < rayNum; n++)
+        {
+            core::Vec3 rayPosition(dist(e2), -50, dist(e2));
+            core::Ray tempRay(rayPosition, core::Vec3(0, 1, 0));
+
+            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            {
+                hits1++;
+            }
+            if (object2.hitObject(tempRay, tempFreq))
+            {
+                hits2++;
+            }
+            if (object3.hitObject(tempRay, tempFreq))
+            {
+                hits3++;
+            }
+        }
+
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_minus1_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    {
+        std::random_device rd;
+        std::mt19937_64 e2(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double radius1 = 0.2;
+        Sphere object1(core::Vec3(1, -20, 1), radius1);
+
+        double radius2 = 0.3;
+        Sphere object2(core::Vec3(1, -20, 1), radius2);
+
+        double radius3 = 0.4;
+        Sphere object3(core::Vec3(1, -20, 1), radius3);
+
+        const double rayNum = 1000000;
+
+        double hits1 = 0;
+        double hits2 = 0;
+        double hits3 = 0;
+
+        const double reference1 = constants::kPi * radius1 * radius1 / 4;
+        const double reference2 = constants::kPi * radius2 * radius2 / 4;
+        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const double tempFreq = 1000;
+
+        for (size_t n = 0; n < rayNum; n++)
+        {
+            core::Vec3 rayPosition(dist(e2), 50, dist(e2));
+            core::Ray tempRay(rayPosition, core::Vec3(0, -1, 0));
+
+            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            {
+                hits1++;
+            }
+            if (object2.hitObject(tempRay, tempFreq))
+            {
+                hits2++;
+            }
+            if (object3.hitObject(tempRay, tempFreq))
+            {
+                hits3++;
+            }
+        }
+
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(SPHERE_METHOD, Test_HitObject_VEC3_1_0_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    {
+        std::random_device rd;
+        std::mt19937_64 e2(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double radius1 = 0.2;
+        Sphere object1(core::Vec3(20, 1, 1), radius1);
+
+        double radius2 = 0.3;
+        Sphere object2(core::Vec3(20, 1, 1), radius2);
+
+        double radius3 = 0.4;
+        Sphere object3(core::Vec3(20, 1, 1), radius3);
+
+        const double rayNum = 1000000;
+
+        double hits1 = 0;
+        double hits2 = 0;
+        double hits3 = 0;
+
+        const double reference1 = constants::kPi * radius1 * radius1 / 4;
+        const double reference2 = constants::kPi * radius2 * radius2 / 4;
+        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const double tempFreq = 1000;
+
+        for (size_t n = 0; n < rayNum; n++)
+        {
+            core::Vec3 rayPosition(-50, dist(e2), dist(e2));
+            core::Ray tempRay(rayPosition, core::Vec3(1, 0, 0));
+
+            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            {
+                hits1++;
+            }
+            if (object2.hitObject(tempRay, tempFreq))
+            {
+                hits2++;
+            }
+            if (object3.hitObject(tempRay, tempFreq))
+            {
+                hits3++;
+            }
+        }
+
+        ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(SPHERE_METHOD, Test_HitObject_VEC3_minus1_0_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    {
+        std::random_device rd;
+        std::mt19937_64 e2(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double radius1 = 0.2;
+        Sphere object1(core::Vec3(-20, 1, 1), radius1);
+
+        double radius2 = 0.3;
+        Sphere object2(core::Vec3(-20, 1, 1), radius2);
+
+        double radius3 = 0.4;
+        Sphere object3(core::Vec3(-20, 1, 1), radius3);
+
+        const double rayNum = 1000000;
+
+        double hits1 = 0;
+        double hits2 = 0;
+        double hits3 = 0;
+
+        const double reference1 = constants::kPi * radius1 * radius1 / 4;
+        const double reference2 = constants::kPi * radius2 * radius2 / 4;
+        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const double tempFreq = 1000;
+
+        for (size_t n = 0; n < rayNum; n++)
+        {
+            core::Vec3 rayPosition(50, dist(e2), dist(e2));
+            core::Ray tempRay(rayPosition, core::Vec3(-1, 0, 0));
 
             if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
             {
