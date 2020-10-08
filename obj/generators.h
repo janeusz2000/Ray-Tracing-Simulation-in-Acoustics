@@ -12,7 +12,7 @@
 
 namespace generators
 {
-    class PointSource // This object is similar to Camera in graphics ray-tracer, that why name convension is simillar to camera
+    class PointSource final // This object is similar to Camera in graphics ray-tracer, that why name convension is simillar to camera
     {
     public:
         PointSource() = delete;
@@ -46,7 +46,7 @@ namespace generators
         void PointSource::setLeftCorner(const core::Vec3 &point);
 
     private:
-    core::Vec3 _origin, _leftCorner;
+        core::Vec3 _origin, _leftCorner;
         double _frequency, _diffusorSize;
         size_t _rayNumPerRow;
         double getRandom() const;
