@@ -290,15 +290,17 @@ namespace objects
 
     std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
     {
-        if (std::abs(ray.getDirection().scalar_product(_normal) <= constants::kAccuracy))
+        // if ray direction is parpedicular to normal, there is no hit. It can be translated into
+        // checking if scalar_product of the ray.direction and normal is close or equal to zero.
+        if (std::abs(ray.getDirection().scalar_product(_normal)) <= constants::kAccuracy)
         {
             return std::unique_ptr<core::RayHitData>(nullptr);
         }
 
-        // This calculates time at which ray is hitting surface where triangle is positioned
+        // Following code calculates time at which ray is hitting surface where triangle is positioned
         double time = (-1 * (ray.getOrigin() - _zCoordinate)).scalar_product(_normal) / (ray.getDirection().scalar_product(_normal));
-        //===============================
 
+        // Following code is making sure that ray doesn't hit the same object.
         if (time < constants::kHitAccuracy)
         {
             return std::unique_ptr<core::RayHitData>(nullptr);

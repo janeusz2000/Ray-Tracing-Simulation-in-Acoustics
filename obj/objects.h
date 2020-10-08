@@ -66,13 +66,9 @@ namespace objects
     public:
         static int population;
 
-        // Change population number
+        // These constructors changes static int population number
         EnergyCollector();
-
-        // change population number
         EnergyCollector(const core::Vec3 &origin);
-
-        // Change population number
         EnergyCollector(const core::Vec3 &origin, const double &energy);
 
         // This constructor is only used for passing copy of the object.
@@ -80,7 +76,7 @@ namespace objects
         EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id);
 
         // Copy constructor copies all data except id of the Energy collector.
-        // it doesn't change population number.
+        // it doesn't change static int population number.
         EnergyCollector(const EnergyCollector &other);
 
         // OPERATORS
