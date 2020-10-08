@@ -54,9 +54,9 @@ namespace generators
         ss2 << object2;
         ss3 << object3;
 
-        ASSERT_EQ(ss1.str(), "Point Source: origin: Vec3(0, 4, 0), number of rays per row: 100, diffusor size: 100, frequency: 100");
-        ASSERT_EQ(ss2.str(), "Point Source: origin: Vec3(0, 4, 0), number of rays per row: 200, diffusor size: 100, frequency: 1000");
-        ASSERT_EQ(ss3.str(), "Point Source: origin: Vec3(0, 4, 0), number of rays per row: 100, diffusor size: 1.41421, frequency: 1.41421");
+        ASSERT_EQ(ss1.str(), "Point Source: origin: Vec3(0, -4, 0), number of rays per row: 100, diffusor size: 100, frequency: 100");
+        ASSERT_EQ(ss2.str(), "Point Source: origin: Vec3(0, -4, 0), number of rays per row: 200, diffusor size: 100, frequency: 1000");
+        ASSERT_EQ(ss3.str(), "Point Source: origin: Vec3(0, -4, 0), number of rays per row: 100, diffusor size: 1.41421, frequency: 1.41421");
     }
 
     TEST(POINTSOURCE_METHODS, Test_Getters)
@@ -77,9 +77,9 @@ namespace generators
         ASSERT_EQ(object2.getDiffusorSize(), 100);
         ASSERT_EQ(object3.getDiffusorSize(), std::sqrt(2));
 
-        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 4, 0));
-        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 4, 0));
-        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 4, 0));
+        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, -4, 0));
+        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, -4, 0));
+        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, -4, 0));
     }
 
     TEST(POINTSOURCE_METHODS, Test_Setters)
@@ -130,51 +130,51 @@ namespace generators
         ASSERT_EQ(object2.getLeftCorner(), core::Vec3(-0.5, 1, -0.5));
     }
 
-    TEST(POINTSOURCE_METHODS, Test_GenerateRay_Test) // Monte Carlo Test
+    TEST(POINTSOURCE_METHOD, Test_Single_rayHit)
     {
-        const size_t rayNumPerRow = 5000;
+
         const double freq = 1000;
+        const size_t rayNumPerRow = 1000;
+
         PointSource source(freq, rayNumPerRow, 1);
 
-        using pointer = std::unique_ptr<objects::TriangleObj>;
-        std::vector<pointer> objectsVec;
-        objectsVec.push_back(std::unique_ptr<objects::TriangleObj>(new objects::TriangleObj({-0.25, 1, -0.25}, {0.25, 1, -0.25}, {-0.25, 1, 0.25})));
-        objectsVec.push_back(std::unique_ptr<objects::TriangleObj>(new objects::TriangleObj({-0.25, 1, 0.25}, {0.25, 1, -0.25}, {0.25, 1, 0.25})));
+        std::vector<std::unique_ptr<objects::TriangleObj>> objectsVec;
+        auto object = std::make_unique<objects::TriangleObj>(objects::TriangleObj({-0.6, 1, -0.6}, {0.6, 1, -0.6}, {-0.6, 1, 0.6}));
 
-        double hits = 0, missed = 0;
+        core::Ray tempRay = source.GenerateRay(0, 0);
+        auto hitData = object->hitObject(tempRay, freq);
 
-        for (size_t x = 0; x < rayNumPerRow; ++x)
-        {
-            for (size_t y = 0; y < rayNumPerRow; ++y)
-            {
-                core::Ray tempRay = source.GenerateRay(x, y);
-                double tempHits = hits, tempMissed = missed;
-
-                for (const auto &obj : objectsVec)
-                {
-                    if (obj->hitObject(tempRay, freq))
-                    {
-                        ++tempHits;
-                    }
-                    else
-                    {
-                        ++tempMissed;
-                    }
-                }
-
-                if (tempHits != hits)
-                {
-                    hits = tempHits;
-                }
-                else
-                {
-                    missed = tempMissed;
-                }
-            }
-        }
-
-        ASSERT_NEAR(hits / (hits + missed), 0.25, constants::kHitAccuracy * 100);
+        ASSERT_EQ(core::Ray(hitData->collisionPoint, hitData->direction), core::Ray(core::Vec3(0, 4, 0), core::Vec3(-0.5, 3, -0.5).normalize()));
     }
+
+    // TEST(POINTSOURCE_METHODS, Test_GenerateRay_Test) // Monte Carlo Test
+    // {
+    //     const size_t rayNumPerRow = 1000;
+    //     const double freq = 1000;
+    //     const size_t samples = 3;
+    //     PointSource source(freq, rayNumPerRow, 1);
+
+    //     auto object = std::make_unique<objects::TriangleObj>(objects::TriangleObj({-0.25, 1, -0.25}, {0.25, 1, -0.25}, {-0.25, 1, 0.25}));
+    //     double hits = 0, missed = 0;
+
+    //     for (size_t x = 0; x < rayNumPerRow; ++x)
+    //     {
+    //         for (size_t y = 0; y < rayNumPerRow; ++y)
+    //         {
+    //             core::Ray tempRay = source.GenerateRay(x, y, true);
+    //             if (object->hitObject(tempRay, freq))
+    //             {
+    //                 ++hits;
+    //             }
+    //             else
+    //             {
+    //                 ++missed;
+    //             }
+    //         }
+    //     }
+
+    //     ASSERT_NEAR(hits / (hits + missed), 0.125, constants::kHitAccuracy * 100);
+    // } // namespace generators
 
 } // namespace generators
 #endif

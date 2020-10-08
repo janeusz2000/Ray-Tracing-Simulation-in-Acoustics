@@ -2,6 +2,8 @@
 #define GENERATORS_CPP
 
 #include "generators.h"
+#include <cmath>
+#include <iostream>
 
 namespace generators
 {
@@ -10,7 +12,7 @@ namespace generators
 
     // CONSTRUCTORS
 
-    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 4, 0)), _leftCorner(core::Vec3(-diffusorSize / 2, 1, -diffusorSize / 2))
+    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, -4, 0)), _leftCorner(core::Vec3(-diffusorSize / 2, 1, -diffusorSize / 2))
     {
         this->updateDiffusorSize();
     }
@@ -34,16 +36,24 @@ namespace generators
         _leftCorner = core::Vec3(-1 * _diffusorSize / 2, 1, -1 * _diffusorSize / 2);
     }
 
-    core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter)
+    core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter, bool incldueRandom)
     {
         if (xIter >= _rayNumPerRow && yIter >= _rayNumPerRow)
         {
             throw exception::outOfSize(xIter, yIter, _rayNumPerRow);
         }
 
-        double u = (static_cast<double>(xIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-        double v = (static_cast<double>(yIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-
+        double u, v;
+        if (incldueRandom)
+        {
+            v = (static_cast<double>(xIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+            u = (static_cast<double>(yIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+        }
+        else
+        {
+            v = (static_cast<double>(xIter)) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+            u = (static_cast<double>(yIter)) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+        }
         return core::Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 0, 1) - _origin);
     }
 

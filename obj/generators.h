@@ -27,7 +27,7 @@ namespace generators
 
         // METHODS
         void updateDiffusorSize();
-        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter);
+        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter, bool incldueRandom = false);
 
         // GETTERS AND SETTERS
         double getFrequency() const;
