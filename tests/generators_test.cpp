@@ -137,7 +137,6 @@ namespace generators
 
         PointSource source(freq, rayNumPerRow, 1);
 
-        std::vector<std::unique_ptr<objects::TriangleObj>> objectsVec;
         objects::TriangleObj object({-0.6, 1, -0.6}, {0.6, 1, -0.6}, {-0.6, 1, 0.6});
 
         core::Ray tempRay = source.GenerateRay(0, 0);
