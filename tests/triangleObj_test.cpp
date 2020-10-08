@@ -103,7 +103,7 @@ namespace objects
         ASSERT_EQ(object2.normal(core::Vec3()), core::Vec3(-1, 0, 0));
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit)
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_0_1)
     {
         TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 1, 0});
 
@@ -119,6 +119,131 @@ namespace objects
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), dist(engine), -20}, {0, 0, 1});
+
+            if (object.hitObject(tempRay, freq))
+            {
+                ++hits;
+            }
+        }
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_0_minus1)
+    {
+        TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 1, 0});
+
+        std::random_device rd;
+        std::mt19937_64 engine(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double hits = 0;
+        const double referenceRatio = 0.5 / 4;
+        const double rayNum = 1000000;
+        const double freq = 1000;
+
+        for (auto num = 0; num < rayNum; ++num)
+        {
+            core::Ray tempRay({dist(engine), dist(engine), 20}, {0, 0, -1});
+
+            if (object.hitObject(tempRay, freq))
+            {
+                ++hits;
+            }
+        }
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_1_0)
+    {
+        TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 0, 1});
+
+        std::random_device rd;
+        std::mt19937_64 engine(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double hits = 0;
+        const double referenceRatio = 0.5 / 4;
+        const double rayNum = 1000000;
+        const double freq = 1000;
+
+        for (auto num = 0; num < rayNum; ++num)
+        {
+            core::Ray tempRay({dist(engine), -20, dist(engine)}, {0, 1, 0});
+
+            if (object.hitObject(tempRay, freq))
+            {
+                ++hits;
+            }
+        }
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_minus1_0)
+    {
+        TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 0, 1});
+
+        std::random_device rd;
+        std::mt19937_64 engine(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double hits = 0;
+        const double referenceRatio = 0.5 / 4;
+        const double rayNum = 1000000;
+        const double freq = 1000;
+
+        for (auto num = 0; num < rayNum; ++num)
+        {
+            core::Ray tempRay({dist(engine), 20, dist(engine)}, {0, -1, 0});
+
+            if (object.hitObject(tempRay, freq))
+            {
+                ++hits;
+            }
+        }
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_1_0_0)
+    {
+        TriangleObj object({0, 0, 0}, {0, 1, 0}, {0, 0, 1});
+
+        std::random_device rd;
+        std::mt19937_64 engine(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double hits = 0;
+        const double referenceRatio = 0.5 / 4;
+        const double rayNum = 1000000;
+        const double freq = 1000;
+
+        for (auto num = 0; num < rayNum; ++num)
+        {
+            core::Ray tempRay({20, dist(engine), dist(engine)}, {-1, 0, 0});
+
+            if (object.hitObject(tempRay, freq))
+            {
+                ++hits;
+            }
+        }
+        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_minus1_0_0)
+    {
+        TriangleObj object({0, 0, 0}, {0, 1, 0}, {0, 0, 1});
+
+        std::random_device rd;
+        std::mt19937_64 engine(rd());
+        std::uniform_real_distribution<double> dist(0, 2);
+
+        double hits = 0;
+        const double referenceRatio = 0.5 / 4;
+        const double rayNum = 1000000;
+        const double freq = 1000;
+
+        for (auto num = 0; num < rayNum; ++num)
+        {
+            core::Ray tempRay({-20, dist(engine), dist(engine)}, {1, 0, 0});
 
             if (object.hitObject(tempRay, freq))
             {
