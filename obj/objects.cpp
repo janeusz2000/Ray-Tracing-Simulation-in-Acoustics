@@ -1,5 +1,5 @@
 #include "objects.h"
-
+#include <sstream>
 namespace objects
 {
     int EnergyCollector::population = 0;
@@ -228,9 +228,15 @@ namespace objects
     }
     TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
     {
-        if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate || this->arePointsInvalid())
+        if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate)
         {
-            throw exception::invalidConstructor();
+            std::stringstream ss;
+            ss << "TriangleObj couldn't be constructed. You cannot have duplications of the same point in constructor 1: " << xCoordinate << ", 2: " << yCoordinate << ", 3: " << zCoordinate;
+            throw std::invalid_argument(ss.str());
+        }
+        else if (!this->arePointsValid())
+        {
+            throw std::invalid_argument("Triangle object couldn't be constructed. You cannot have all points of the object linedup straight");
         }
 
         this->refreshAttributes();
@@ -360,12 +366,12 @@ namespace objects
         _normal = perpendicular.normalize();
     }
 
-    bool TriangleObj::arePointsInvalid()
+    bool TriangleObj::arePointsValid()
     {
         core::Vec3 alpha = _xCoordinate - _yCoordinate;
         core::Vec3 beta = _xCoordinate - _zCoordinate;
 
-        return (alpha.crossProduct(beta) == core::Vec3(0, 0, 0));
+        return (alpha.crossProduct(beta) != core::Vec3(0, 0, 0));
     }
 
     // GETTERS AND SETTERS

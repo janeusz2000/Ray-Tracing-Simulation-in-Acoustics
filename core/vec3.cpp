@@ -1,5 +1,7 @@
-#include "vec3.h"
 #include "exceptions.h"
+#include "vec3.h"
+
+#include <exception>
 
 namespace core
 {
@@ -9,7 +11,9 @@ namespace core
     {
         if (initList.size() != 3)
         {
-            throw exception::invalidConstructor();
+            std::stringstream ss1;
+            ss1 << "Vec3 could not ve constructed: initializer_list size: " << initList.size() << "When only allowed is size 3";
+            throw std::invalid_argument(ss1.str());
         }
         auto iterator = initList.begin();
         _x = *iterator;

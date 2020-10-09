@@ -1,21 +1,12 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
+#include "vec3.h"
 #include <exception>
 #include <sstream>
-#include "vec3.h"
 
 namespace exception
-{
-    class invalidConstructor : public std::exception
-    {
-    public:
-        const char *what() const noexcept override
-        {
-            return "ERROR #001 : Invalid input for constructor!";
-        }
-    };
-
+{   
     class divisionByZero : public std::exception
     {
     public:

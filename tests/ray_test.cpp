@@ -71,8 +71,8 @@ namespace core
 
     TEST(RAY_CONSTRUCTOR, Test_constructor_invalid)
     {
-        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, 0}), exception::invalidConstructor);
-        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, constants::kAccuracy * 0.999}), exception::invalidConstructor);
+        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, 0}), std::invalid_argument);
+        ASSERT_THROW(Ray({0, 0, 0}, {0, 0, constants::kAccuracy * 0.999}), std::invalid_argument);
     }
     TEST(RAY_CONSTRUCTOR, Test_All_Possible_Constructors)
     {

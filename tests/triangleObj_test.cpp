@@ -69,15 +69,15 @@ namespace objects
 
     TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_invalid_COnstructors)
     {
-        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0, 1}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({0, 0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({0, 0, 1}, {0, 0, 0}, {0, 0, 1}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 1}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {3, 3, 3}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {4, 4, 4}), exception::invalidConstructor);
-        ASSERT_THROW(TriangleObj({3, 3, 3}, {2, 2, 2}, {4, 4, 4}), exception::invalidConstructor);
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0, 1}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({0, 0, 0, 0}, {0, 0, 1}, {0, 0, 1}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 0}, {0, 0, 1}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({0, 0, 1}, {0, 0, 0}, {0, 0, 1}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 1}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {3, 3, 3}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({1, 1, 1}, {2, 2, 2}, {4, 4, 4}), std::invalid_argument);
+        ASSERT_THROW(TriangleObj({3, 3, 3}, {2, 2, 2}, {4, 4, 4}), std::invalid_argument);
     }
 
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal)

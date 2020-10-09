@@ -8,7 +8,7 @@ namespace core
     {
         if (direction == Vec3(0, 0, 0))
         {
-            throw exception::invalidConstructor();
+            throw std::invalid_argument("Ray object couldn't be constructed. You cannot have direction of the ray equal to Vec3(0, 0, 0)");
         }
 
         _origin = origin;
@@ -16,15 +16,7 @@ namespace core
         _energy = energy;
     }
 
-    Ray::Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy)
-    {
-        if (origin.size() != 3 || dir.size() != 3 || dir == Vec3(0, 0, 0))
-            throw exception::invalidConstructor();
-
-        _origin = Vec3(origin);
-        _direction = Vec3(dir) / Vec3(dir).magnitude();
-        _energy = energy;
-    }
+    Ray::Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy) : Ray(Vec3(origin), Vec3(dir), energy){};
 
     Ray::Ray(const Ray &other)
     {
@@ -106,6 +98,6 @@ namespace core
     {
         return os << "Collision point: " << rayData.collisionPoint << ", incoming ray direction: " << rayData.direction << ", normal: " << rayData.normal << ", time: " << rayData.time << ", energy: " << rayData.energy << ", phase " << rayData.phase << " [radians]";
     }
-    
+
 #pragma endregion
 } // namespace core
