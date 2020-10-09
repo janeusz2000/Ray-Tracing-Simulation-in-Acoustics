@@ -47,6 +47,8 @@ namespace core
         Vec3 normalize() const;
 
         //GETTERS & SETTERS
+        // TODO: use just x() and drop the get prefix; this x() is self explanatory
+        // and makes code more readable.
         double getX() const;
         void setX(const double &num);
         double getY() const;

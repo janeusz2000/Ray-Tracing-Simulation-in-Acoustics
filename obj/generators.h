@@ -1,10 +1,10 @@
 #ifndef GENERATORS_H
 #define GENERATORS_H
 
-#include "core/vec3.h"
-#include "core/ray.h"
 #include "constants.h"
 #include "core/exceptions.h"
+#include "core/ray.h"
+#include "core/vec3.h"
 
 #include <initializer_list>
 #include <iostream>
@@ -27,6 +27,7 @@ namespace generators
 
         // METHODS
         void updateDiffusorSize();
+        // TODO: Parameter names are not self explanatory. Please update.
         core::Ray GenerateRay(const size_t &xIter, const size_t &yIter, bool incldueRandom = false);
 
         // GETTERS AND SETTERS

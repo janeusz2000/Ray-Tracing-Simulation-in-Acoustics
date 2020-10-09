@@ -304,6 +304,12 @@ namespace objects
 
     std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
     {
+
+        // TODO: "ray.getDirection().scalar_product(_normal)" is calculated 2x. Cache the result.
+        // if ray direction is parpedicular to normal, there is no hit. It can be translated into
+        // checking if scalar_product of the ray.direction and normal is close or equal to zero.
+        // TODO: What if ray points away of the triangle? Do you support hits from behind the triangle?
+
         // if ray direction is parpedicular to normal, there is no hit. It can be translated into
         // checking if scalarProduct of the ray.direction and normal is close or equal to zero.
         if (std::abs(ray.getDirection().scalarProduct(_normal)) <= constants::kAccuracy)
@@ -339,6 +345,7 @@ namespace objects
         double beta = vecC.crossProduct(vecA).magnitude() / 2;
         double gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
+        // TODO: Why do you multiply by 0.99? Consider making it a constant and using it here.
         return (((alpha + beta + gamma) > _area + constants::kHitAccuracy * 0.99) ? false : true);
     }
 
@@ -356,6 +363,8 @@ namespace objects
 
     // PRIVATE METHODS
 
+    // TODO: Why do you have all these separate methods recalculating some small parts,
+    // while you could just move all the code into refreshAttributes() and cache the results.
     void TriangleObj::recalculateArea()
     {
         core::Vec3 vecA = _xCoordinate - _yCoordinate;

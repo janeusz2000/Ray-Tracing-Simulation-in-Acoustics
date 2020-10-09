@@ -1,15 +1,15 @@
 #ifndef ENERGYCOLLECTOR_TEST_CPP
 #define ENERGYCOLLECTOR_TEST_CPP
 
-#include "gtest/gtest.h"
-#include "obj/objects.h"
-#include "core/exceptions.h"
-#include "core/vec3.h"
-#include "core/ray.h"
 #include "constants.h"
+#include "core/exceptions.h"
+#include "core/ray.h"
+#include "core/vec3.h"
+#include "obj/objects.h"
+#include "gtest/gtest.h"
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
 namespace objects
 {
@@ -104,6 +104,9 @@ namespace objects
         EnergyCollector object6(core::Vec3(std::sqrt(2), 1, 2), 20, 1);
         ASSERT_EQ(object5, object6);
 
+        // TODO: Make tests more complicated. From the fact that you used sqrt(2) does not mean
+        // that you are testing against floating point issues. sqrt(2) will always return the same
+        // value. Issue arrises if you do some operations, and the order of operations matters.
         EnergyCollector object7(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
         EnergyCollector object8(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
         ASSERT_EQ(object7, object8);
@@ -136,6 +139,8 @@ namespace objects
         EnergyCollector object15 = object13 + object14;
 
         ASSERT_EQ(object15.getEnergy(), object13.getEnergy() + object14.getEnergy());
+        // TODO: If the other of those tests changes, all of them which check for IDs will fail.
+        // This shows how bad the design with static variables is.
         ASSERT_EQ(object15.getID(), 10);
         ASSERT_EQ(object15.getOrigin(), core::Vec3(0, 0, 0));
         ASSERT_EQ(object15.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
