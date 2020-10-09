@@ -33,8 +33,8 @@ namespace objects
         core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
 
         // this calculates variables that are neccesary to calculate times at which ray hits the object SphereWall.
-        double beta = 2 * rVec3.scalar_product(ray.getDirection());
-        double gamma = rVec3.scalar_product(rVec3) - _radius * _radius;
+        double beta = 2 * rVec3.scalarProduct(ray.getDirection());
+        double gamma = rVec3.scalarProduct(rVec3) - _radius * _radius;
         double discriminant = beta * beta - 4 * gamma;
         // ==================================================
 
@@ -294,14 +294,14 @@ namespace objects
     std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
     {
         // if ray direction is parpedicular to normal, there is no hit. It can be translated into
-        // checking if scalar_product of the ray.direction and normal is close or equal to zero.
-        if (std::abs(ray.getDirection().scalar_product(_normal)) <= constants::kAccuracy)
+        // checking if scalarProduct of the ray.direction and normal is close or equal to zero.
+        if (std::abs(ray.getDirection().scalarProduct(_normal)) <= constants::kAccuracy)
         {
             return nullptr;
         }
 
         // Following code calculates time at which ray is hitting surface where triangle is positioned
-        double time = (-1 * (ray.getOrigin() - _zCoordinate)).scalar_product(_normal) / (ray.getDirection().scalar_product(_normal));
+        double time = (-1 * (ray.getOrigin() - _zCoordinate)).scalarProduct(_normal) / (ray.getDirection().scalarProduct(_normal));
 
         // Following code is making sure that ray doesn't hit the same object.
         if (time < constants::kHitAccuracy)
@@ -324,9 +324,9 @@ namespace objects
         core::Vec3 vecB = _yCoordinate - point;
         core::Vec3 vecC = _zCoordinate - point;
 
-        double alpha = vecB.cross_product(vecC).magnitude() / 2; //  Area of the triangle made with point and w triangle points.
-        double beta = vecC.cross_product(vecA).magnitude() / 2;
-        double gamma = vecA.cross_product(vecB).magnitude() / 2;
+        double alpha = vecB.crossProduct(vecC).magnitude() / 2; //  Area of the triangle made with point and w triangle points.
+        double beta = vecC.crossProduct(vecA).magnitude() / 2;
+        double gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
         return (((alpha + beta + gamma) > _area + constants::kHitAccuracy * 0.99) ? false : true);
     }
@@ -349,14 +349,14 @@ namespace objects
     {
         core::Vec3 vecA = _xCoordinate - _yCoordinate;
         core::Vec3 vecB = _xCoordinate - _zCoordinate;
-        _area = vecA.cross_product(vecB).magnitude() / 2;
+        _area = vecA.crossProduct(vecB).magnitude() / 2;
     }
 
     void TriangleObj::recalculateNormal()
     {
         core::Vec3 vecA = _xCoordinate - _yCoordinate;
         core::Vec3 vecB = _xCoordinate - _zCoordinate;
-        core::Vec3 perpendicular = vecA.cross_product(vecB);
+        core::Vec3 perpendicular = vecA.crossProduct(vecB);
         _normal = perpendicular.normalize();
     }
 
@@ -365,7 +365,7 @@ namespace objects
         core::Vec3 alpha = _xCoordinate - _yCoordinate;
         core::Vec3 beta = _xCoordinate - _zCoordinate;
 
-        return (alpha.cross_product(beta) == core::Vec3(0, 0, 0));
+        return (alpha.crossProduct(beta) == core::Vec3(0, 0, 0));
     }
 
     // GETTERS AND SETTERS

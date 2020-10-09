@@ -134,12 +134,12 @@ namespace core
 #pragma endregion
 #pragma region METHODS
 
-    double Vec3::scalar_product(const Vec3 &other) const
+    double Vec3::scalarProduct(const Vec3 &other) const
     {
         return _x * other.getX() + _y * other.getY() + _z * other.getZ();
     }
 
-    Vec3 Vec3::cross_product(const Vec3 &other) const
+    Vec3 Vec3::crossProduct(const Vec3 &other) const
     {
         return Vec3(_y * other.getZ() - _z * other.getY(), _z * other.getX() - _x * other.getZ(), _x * other.getY() - _y * other.getX());
     }

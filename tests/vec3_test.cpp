@@ -363,18 +363,18 @@ namespace core
         ASSERT_EQ(Vec3(3, 5, 4), std::move(Vec3(15, 25, 20)) / std::move(5));
     }
 
-    TEST(VEC3_METHODS, Test_method_scalar_product)
+    TEST(VEC3_METHODS, Test_method_scalarProduct)
     {
-        ASSERT_EQ(Vec3(1, 1, 1).scalar_product(Vec3(1, 1, 1)), 3);
-        ASSERT_EQ(Vec3(1, 2, 3).scalar_product(Vec3(1, 5, 7)), 32);
-        ASSERT_EQ(Vec3(2, -1, 43).scalar_product(Vec3(0, 8, 0.3)), 4.9);
+        ASSERT_EQ(Vec3(1, 1, 1).scalarProduct(Vec3(1, 1, 1)), 3);
+        ASSERT_EQ(Vec3(1, 2, 3).scalarProduct(Vec3(1, 5, 7)), 32);
+        ASSERT_EQ(Vec3(2, -1, 43).scalarProduct(Vec3(0, 8, 0.3)), 4.9);
     }
 
-    TEST(VEC3_METHODS, Test_method_cross_product)
+    TEST(VEC3_METHODS, Test_method_crossProduct)
     {
-        ASSERT_EQ(Vec3(5, 0.3, 0.1).cross_product(Vec3(6, 3, 2)), Vec3(0.3, -9.4, 13.2));
-        ASSERT_EQ(Vec3(4, 8, 0.1).cross_product(Vec3(26, -5, 2)), Vec3(16.5, -5.4, -228));
-        ASSERT_EQ(Vec3(3, 0.18, 50).cross_product(Vec3(13, -8, 3)), Vec3(400.54, 641, -26.34));
+        ASSERT_EQ(Vec3(5, 0.3, 0.1).crossProduct(Vec3(6, 3, 2)), Vec3(0.3, -9.4, 13.2));
+        ASSERT_EQ(Vec3(4, 8, 0.1).crossProduct(Vec3(26, -5, 2)), Vec3(16.5, -5.4, -228));
+        ASSERT_EQ(Vec3(3, 0.18, 50).crossProduct(Vec3(13, -8, 3)), Vec3(400.54, 641, -26.34));
     }
 
     TEST(VEC3_METHODS, Test_method_magnitude)

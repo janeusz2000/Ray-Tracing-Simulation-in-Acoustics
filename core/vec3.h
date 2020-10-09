@@ -13,7 +13,7 @@ namespace core
         // X cord: represents left (-) to right (+) coordinates
         // Y cord: represents backwards (-) to forward (+) coordinates
         // Z cord: represents down (-) to up (+) coordinates
-        
+
     public:
         Vec3(double x, double y, double z) : _x(x), _y(y), _z(z){};
         Vec3() : _x(0), _y(0), _z(0){};
@@ -40,8 +40,8 @@ namespace core
         friend Vec3 operator*(const Vec3 &vec, const double &num);
         friend Vec3 operator/(const Vec3 &vec, const double &num);
 
-        double scalar_product(const Vec3 &other) const;
-        Vec3 cross_product(const Vec3 &other) const;
+        double scalarProduct(const Vec3 &other) const;
+        Vec3 crossProduct(const Vec3 &other) const;
         double magnitude() const;
         double magnitudeSquared() const;
         Vec3 normalize() const;
