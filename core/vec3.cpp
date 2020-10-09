@@ -45,7 +45,7 @@ namespace core
 
     Vec3 operator+(const double &left, const Vec3 &right)
     {
-        return Vec3(right.getX() + left, right.getY() + left, right.getZ() + left);
+        return right + left;
     }
 
 #pragma endregion
@@ -142,24 +142,21 @@ namespace core
     {
         return _x * other.getX() + _y * other.getY() + _z * other.getZ();
     }
-
     Vec3 Vec3::crossProduct(const Vec3 &other) const
     {
         return Vec3(_y * other.getZ() - _z * other.getY(), _z * other.getX() - _x * other.getZ(), _x * other.getY() - _y * other.getX());
     }
-
-    double Vec3::magnitude() const
-    {
-        return std::sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
-    }
-
     double Vec3::magnitudeSquared() const
     {
         return _x * _x + _y * _y + _z * _z;
     }
+    double Vec3::magnitude() const
+    {
+        return std::sqrt(this->magnitudeSquared());
+    }
     Vec3 Vec3::normalize() const
     {
-        return Vec3(getX(), getY(), getZ()) / magnitude();
+        return (*this) / magnitude();
     }
 
 #pragma endregion
@@ -167,11 +164,14 @@ namespace core
 
     bool operator==(const Vec3 &left, const Vec3 &right)
     {
+        // TODO: format so that the line is not going out of the screen.
+        // Normall these lines should have at most 80 chars.
         return (std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
     }
 
     bool operator!=(const Vec3 &left, const Vec3 &right)
     {
+        // TODO: code reuse.
         return (!(std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy));
     }
     std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3)

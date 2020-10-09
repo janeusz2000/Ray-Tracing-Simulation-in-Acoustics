@@ -35,6 +35,12 @@ namespace core
 
     double Ray::phaseAt(const double &freq, const double &time) const
     {
+        if (freq <= constants::kAccuracy || time <= constants::kAccuracy)
+        {
+            std::stringstream ss;
+            ss << "Could not calculate phase at, because input frequency or time is close or equal to zero. Values are: freq: " << freq << ", time: " << time;
+            throw std::invalid_argument(ss.str().c_str());
+        }
         double waveLength = constants::kSoundSpeed / freq;
         double displacement = (_origin - at(time)).magnitude();
         return displacement / waveLength * 2 * constants::kPi;
@@ -91,7 +97,7 @@ namespace core
 
     bool RayHitData::operator==(const RayHitData &other) const
     {
-        return (other.time == time, other.collisionPoint == collisionPoint && other.direction == direction && other.normal == normal && other.energy == energy && other.phase == phase);
+        return (std::abs(other.time - time) <= constants::kAccuracy && other.collisionPoint - collisionPoint == Vec3(0, 0, 0) && other.direction - direction == Vec3(0, 0, 0) && other.normal - normal == Vec3(0, 0, 0) && std::abs(other.energy - energy) <= constants::kAccuracy && std::abs(other.phase - phase) <= constants::kAccuracy);
     }
 
     std::ostream &operator<<(std::ostream &os, const RayHitData &rayData)

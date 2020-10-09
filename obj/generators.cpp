@@ -14,7 +14,7 @@ namespace generators
 
     PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4))
     {
-        this->updateDiffusorSize();
+        updateDiffusorSize();
     }
 
     // OPERATORS

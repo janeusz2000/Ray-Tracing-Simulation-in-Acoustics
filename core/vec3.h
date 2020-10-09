@@ -1,9 +1,9 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include "constants.h"
 #include <initializer_list>
 #include <iostream>
-#include "constants.h"
 
 namespace core
 {
@@ -15,9 +15,9 @@ namespace core
         // Z cord: represents down (-) to up (+) coordinates
 
     public:
-        Vec3(double x, double y, double z) : _x(x), _y(y), _z(z){};
-        Vec3() : _x(0), _y(0), _z(0){};
-        Vec3(std::initializer_list<double> initList);
+        explicit Vec3(double x, double y, double z) : _x(x), _y(y), _z(z){};
+        Vec3() : Vec3(0, 0, 0) {};
+        explicit Vec3(std::initializer_list<double> initList);
         Vec3(const Vec3 &other);
         ~Vec3() = default;
 

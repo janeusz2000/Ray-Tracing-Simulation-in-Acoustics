@@ -1,10 +1,12 @@
 #ifndef OBJECT_TEST_H
 #define OBJECT_TEST_H
 
-#include "gtest/gtest.h"
 #include "constants.h"
 #include "core/exceptions.h"
+#include "core/ray.h"
+#include "core/vec3.h"
 #include "obj/objects.h"
+#include "gtest/gtest.h"
 
 #include <cmath>
 #include <sstream>
@@ -257,6 +259,8 @@ namespace objects
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
         const double tempFreq = 1000;
+        // TODO: Why 1000? Is this important? If not, make sure to name it as such, like
+        // const double KIgnoreFrequency = 0;
 
         for (size_t n = 0; n < rayNum; n++)
         {

@@ -38,37 +38,6 @@ namespace core
         ASSERT_EQ(s5.str(), "RAY origin: Vec3(1.41421, 1, 1), direction: Vec3(1, 0, 0), energy: 0");
     }
 
-    TEST(RAY_OPERATOR, Test_Operator_Equal_Equal)
-    {
-        ASSERT_EQ(Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)), Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)));
-        ASSERT_EQ(Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)), Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)));
-    }
-
-    TEST(RAY_METHOD, test_Method_PhaseAt)
-    {
-        double freq1 = 1000;
-        double freq2 = 300;
-        double freq3 = 500;
-
-        Ray temp1(Vec3(0, 0, 0), Vec3(0, 0, 1));
-        Ray temp2(Vec3(0, 0, 0), Vec3(0, 1, 0));
-        Ray temp3(Vec3(0, 0, 0), Vec3(1, 0, 0));
-
-        ASSERT_NEAR(2 * constants::kPi, temp1.phaseAt(freq1, 0.343216), constants::kAccuracy);
-        ASSERT_NEAR(2 * constants::kPi, temp2.phaseAt(freq2, 1.144053333), constants::kAccuracy);
-        ASSERT_NEAR(2 * constants::kPi, temp3.phaseAt(freq3, 0.686432), constants::kAccuracy);
-    }
-
-    TEST(RAY_METHOD, Test_Method_At)
-    {
-        Ray temp1(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
-        Ray temp2(Vec3(0, 1, 0), Vec3(0, 0, 1), 0);
-        Ray temp3(Vec3(1, 1, 1), Vec3(1, 0, 1), 0);
-
-        ASSERT_EQ(Vec3(0, 0, 8), temp1.at(8));
-        ASSERT_EQ(Vec3(0, 1, -10), temp2.at(-10));
-    }
-
     TEST(RAY_CONSTRUCTOR, Test_constructor_invalid)
     {
         ASSERT_THROW(Ray({0, 0, 0}, {0, 0, 0}), std::invalid_argument);
@@ -91,9 +60,48 @@ namespace core
         ASSERT_EQ(temp1, temp4);
         ASSERT_EQ(temp1, temp6);
         ASSERT_EQ(temp3, temp6);
-
-        // I really dont know what is going on here hahaha
     }
+
+    TEST(RAY_OPERATOR, Test_Operator_Equal_Equal)
+    {
+        ASSERT_EQ(Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)), Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)));
+        ASSERT_EQ(Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)), Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)));
+    }
+
+    TEST(RAY_METHOD, test_Method_PhaseAt)
+    {
+        double freq1 = 1000;
+        double freq2 = 300;
+        double freq3 = 500;
+
+        Ray temp1(Vec3(0, 0, 0), Vec3(0, 0, 1));
+        Ray temp2(Vec3(0, 0, 0), Vec3(0, 1, 0));
+        Ray temp3(Vec3(0, 0, 0), Vec3(1, 0, 0));
+
+        ASSERT_NEAR(2 * constants::kPi, temp1.phaseAt(freq1, 0.343216), constants::kAccuracy);
+        ASSERT_NEAR(2 * constants::kPi, temp2.phaseAt(freq2, 1.144053333), constants::kAccuracy);
+        ASSERT_NEAR(2 * constants::kPi, temp3.phaseAt(freq3, 0.686432), constants::kAccuracy);
+    }
+
+    TEST(RAY_METHOD, Test_PhaseAt_catch_exception)
+    {
+        ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(0, 1), std::invalid_argument);
+        ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(1, 0), std::invalid_argument);
+        ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(constants::kAccuracy, 1), std::invalid_argument);
+        ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(1, constants::kAccuracy), std::invalid_argument);
+        ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(constants::kAccuracy, constants::kAccuracy), std::invalid_argument);
+    }
+
+    TEST(RAY_METHOD, Test_Method_At)
+    {
+        Ray temp1(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
+        Ray temp2(Vec3(0, 1, 0), Vec3(0, 0, 1), 0);
+        Ray temp3(Vec3(1, 1, 1), Vec3(1, 0, 1), 0);
+
+        ASSERT_EQ(Vec3(0, 0, 8), temp1.at(8));
+        ASSERT_EQ(Vec3(0, 1, -10), temp2.at(-10));
+    }
+
 
     TEST(RAY_METHOD, Test_Method_Setters_Getters)
     {

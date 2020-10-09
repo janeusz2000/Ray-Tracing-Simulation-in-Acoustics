@@ -38,19 +38,15 @@ namespace objects
         double discriminant = beta * beta - 4 * gamma;
         // ==================================================
 
-        double time1, time2;
-
         // If object is at opposite direction than ray is:
         if (discriminant < 0)
         {
             return nullptr;
         }
-        else
-        {
-            double temp = std::sqrt(discriminant);
-            time1 = (-beta - temp) / 2;
-            time2 = (-beta + temp) / 2;
-        }
+
+        double temp = std::sqrt(discriminant);
+        double time1 = (-beta - temp) / 2;
+        double time2 = (-beta + temp) / 2;
 
         // if both objects are at opposite direction then ray is:
         if (time1 < 0)
@@ -64,6 +60,7 @@ namespace objects
         else
         {
             double time = std::min({time1, time2});
+            // TODO: I think min() takes 2 params, no need to pack then in an initializer list.
             core::Vec3 collision = ray.at(time);
             return std::make_unique<core::RayHitData>(time, normal(collision), ray, freq);
         }
@@ -71,6 +68,7 @@ namespace objects
 
     double Sphere::area() const
     {
+        // TODO: ಠ_ಠ This is wrong. Do you even use this method? If not, remove.
         return constants::kPi * _radius * _radius;
     }
 
@@ -110,6 +108,7 @@ namespace objects
 
     EnergyCollector::EnergyCollector() : _id(population), _energy(0)
     {
+        // TODO: Why not seting default params using these constants? You copied so much code in those 4 constructors.
         this->setOrigin(core::Vec3(0, 0, 4));
         this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         population++;
@@ -176,6 +175,9 @@ namespace objects
         else
         {
             return EnergyCollector(left.getOrigin(), left.getEnergy() + right.getEnergy());
+            // TODO: This may cause issues, when you want to keep collectors in a list of unique_ptrs.
+            // Since this one creates a new object and it seems that energy collectors are just data objects.
+            // My guess would be that you want to mutate collectors?
         }
     }
 
@@ -238,6 +240,7 @@ namespace objects
         }
         else if (!this->arePointsValid())
         {
+            // TODO: Why don't you hide the first part of the condition inside arePointsInvalid() ?
             throw std::invalid_argument("Triangle object couldn't be constructed. You cannot have all points of the object linedup straight");
         }
 
