@@ -155,7 +155,7 @@ namespace objects
         // TODO: Phase impact on the given energy to the collector
 
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
-        auto pointer = std::make_unique<core::RayHitData>(core::RayHitData(40, core::Vec3(0, 3, 0), core::Vec3(0, 1, 0), core::Vec3(0, -1, 0), 50, 1));
+        auto pointer = std::make_unique<core::RayHitData>(core::RayHitData(50, core::Vec3(0, 1, 0).normalize(), core::Ray({0, 1, 0}, {1, 0, 0}, 50), 1000));
 
         object1.collectEnergy(pointer);
         ASSERT_EQ(object1.getEnergy(), 50);

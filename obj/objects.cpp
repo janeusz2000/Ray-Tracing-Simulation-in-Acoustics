@@ -40,9 +40,10 @@ namespace objects
 
         double time1, time2;
 
+        // If object is at opposite direction than ray is:
         if (discriminant < 0)
         {
-            return std::unique_ptr<core::RayHitData>(nullptr);
+            return nullptr;
         }
         else
         {
@@ -50,19 +51,21 @@ namespace objects
             time1 = (-beta - temp) / 2;
             time2 = (-beta + temp) / 2;
         }
-        if (time1 < 0 && time2 < 0)
+
+        // if both objects are at opposite direction then ray is:
+        if (time1 < 0)
         {
-            return std::unique_ptr<core::RayHitData>(nullptr);
+            return nullptr;
         }
-        else if (time1 < 0)
+        else if (time1 < 0 && time2 < 0)
         {
-            return std::unique_ptr<core::RayHitData>(nullptr);
+            return nullptr;
         }
         else
         {
             double time = std::min({time1, time2});
             core::Vec3 collision = ray.at(time);
-            return std::make_unique<core::RayHitData>(time, collision, normal(collision), ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time));
+            return std::make_unique<core::RayHitData>(time, normal(collision), ray, freq);
         }
     }
 
@@ -310,7 +313,7 @@ namespace objects
 
         if (this->doesHit(surfaceHit))
         {
-            return std::make_unique<core::RayHitData>(time, surfaceHit, _normal, ray.getDirection(), ray.getEnergy(), ray.phaseAt(freq, time));
+            return std::make_unique<core::RayHitData>(time, _normal, ray, freq);
         }
         return nullptr;
     }

@@ -44,9 +44,13 @@ namespace core
     struct RayHitData
     {
         RayHitData() = delete;
-        RayHitData(const double &t, const Vec3 &collision,
-                   const Vec3 &norm, const Vec3 &dir,
-                   const double &en, const double &ph) : time(t), collisionPoint(collision), direction(dir), normal(norm), energy(en), phase(ph){};
+        RayHitData(const double &t, const Vec3 &norm, const Ray &ray, const double &freq) : time(t), normal(norm), frequency(freq)
+        {
+            collisionPoint = ray.at(time);
+            direction = ray.getDirection();
+            energy = ray.getEnergy();
+            phase = ray.phaseAt(frequency, time);
+        }
         ~RayHitData() = default;
         RayHitData(const RayHitData &) = default;
 
@@ -57,7 +61,7 @@ namespace core
 
         // VARIABLES
         Vec3 collisionPoint, direction, normal;
-        double time, energy, phase;
+        double time, energy, phase, frequency;
     };
 } // namespace core
 
