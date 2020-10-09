@@ -54,9 +54,9 @@ namespace generators
         ss2 << object2;
         ss3 << object3;
 
-        ASSERT_EQ(ss1.str(), "Point Source: origin: Vec3(0, -4, 0), number of rays per row: 100, diffusor size: 100, frequency: 100");
-        ASSERT_EQ(ss2.str(), "Point Source: origin: Vec3(0, -4, 0), number of rays per row: 200, diffusor size: 100, frequency: 1000");
-        ASSERT_EQ(ss3.str(), "Point Source: origin: Vec3(0, -4, 0), number of rays per row: 100, diffusor size: 1.41421, frequency: 1.41421");
+        ASSERT_EQ(ss1.str(), "Point Source: origin: Vec3(0, 0, 4), number of rays per row: 100, diffusor size: 100, frequency: 100");
+        ASSERT_EQ(ss2.str(), "Point Source: origin: Vec3(0, 0, 4), number of rays per row: 200, diffusor size: 100, frequency: 1000");
+        ASSERT_EQ(ss3.str(), "Point Source: origin: Vec3(0, 0, 4), number of rays per row: 100, diffusor size: 1.41421, frequency: 1.41421");
     }
 
     TEST(POINTSOURCE_METHODS, Test_Getters)
@@ -77,9 +77,9 @@ namespace generators
         ASSERT_EQ(object2.getDiffusorSize(), 100);
         ASSERT_EQ(object3.getDiffusorSize(), std::sqrt(2));
 
-        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, -4, 0));
-        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, -4, 0));
-        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, -4, 0));
+        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 4));
+        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 0, 4));
+        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 0, 4));
     }
 
     TEST(POINTSOURCE_METHODS, Test_Setters)
@@ -126,8 +126,8 @@ namespace generators
         PointSource object1(100, 1000, 100);
         PointSource object2(200, 100, 1);
 
-        ASSERT_EQ(object1.getLeftCorner(), core::Vec3(-50, -1, -50));
-        ASSERT_EQ(object2.getLeftCorner(), core::Vec3(-0.5, -1, -0.5));
+        ASSERT_EQ(object1.getLeftCorner(), core::Vec3(-50, -50, 1));
+        ASSERT_EQ(object2.getLeftCorner(), core::Vec3(-0.5, -0.5, 1));
     }
 
     TEST(POINTSOURCE_METHOD, Test_Single_rayHit)
@@ -138,13 +138,13 @@ namespace generators
         PointSource source(freq, rayNumPerRow, 1);
 
         std::vector<std::unique_ptr<objects::TriangleObj>> objectsVec;
-        objects::TriangleObj object({-0.6, -1, -0.6}, {0.6, -1, -0.6}, {-0.6, -1, 0.6});
+        objects::TriangleObj object({-0.6, -0.6, 1}, {0.6, -0.6, 1}, {-0.6, 0.6, 1});
 
         core::Ray tempRay = source.GenerateRay(0, 0);
         auto hitData = object.hitObject(tempRay, freq);
 
         ASSERT_TRUE(hitData);
-        ASSERT_EQ(core::Ray(source.getOrigin(), hitData->direction), core::Ray(core::Vec3(0, -4, 0), core::Vec3(-0.5, 3, -0.5).normalize()));
+        ASSERT_EQ(core::Ray(source.getOrigin(), hitData->direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
     }
 
     TEST(POINTSOURCE_METHODS, Test_GenerateRay_Test) // Monte Carlo Test
@@ -154,7 +154,7 @@ namespace generators
         const size_t samples = 3;
         PointSource source(freq, rayNumPerRow, 1);
 
-        objects::TriangleObj object({-0.25, -1, -0.25}, {0.25, -1, -0.25}, {-0.25, -1, 0.25});
+        objects::TriangleObj object({-0.25, -0.25, 1}, {0.25, -0.25, 1}, {-0.25, 0.25, 1});
         double hits = 0, missed = 0;
 
         for (size_t x = 0; x < rayNumPerRow; ++x)

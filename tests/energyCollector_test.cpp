@@ -18,47 +18,47 @@ namespace objects
         EnergyCollector object1;
 
         ASSERT_EQ(object1.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 4, 0));
+        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 4));
         ASSERT_EQ(object1.getID(), 0);
         ASSERT_EQ(object1.getEnergy(), 0);
 
         EnergyCollector object2;
 
         ASSERT_EQ(object2.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 4, 0));
+        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 0, 4));
         ASSERT_EQ(object2.getID(), 1);
         ASSERT_EQ(object2.getEnergy(), 0);
 
-        EnergyCollector object3(core::Vec3(0, -1, 0));
+        EnergyCollector object3(core::Vec3(0, 0, -1));
 
         ASSERT_EQ(object3.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, -1, 0));
+        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 0, -1));
         ASSERT_EQ(object3.getID(), 2);
         ASSERT_EQ(object3.getEnergy(), 0);
 
-        EnergyCollector object4(core::Vec3(0, -1, 0), 50);
+        EnergyCollector object4(core::Vec3(0, 0, -1), 50);
 
         ASSERT_EQ(object4.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object4.getOrigin(), core::Vec3(0, -1, 0));
+        ASSERT_EQ(object4.getOrigin(), core::Vec3(0, 0, -1));
         ASSERT_EQ(object4.getID(), 3);
         ASSERT_EQ(object4.getEnergy(), 50);
 
-        EnergyCollector object5(core::Vec3(0, -1, 0), 50, 80);
+        EnergyCollector object5(core::Vec3(0, 0, -1), 50, 80);
 
         ASSERT_EQ(object5.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object5.getOrigin(), core::Vec3(0, -1, 0));
+        ASSERT_EQ(object5.getOrigin(), core::Vec3(0, 0, -1));
         ASSERT_EQ(object5.getID(), 80);
         ASSERT_EQ(object5.getEnergy(), 50);
 
         EnergyCollector object6(object2);
         ASSERT_EQ(object6.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object6.getOrigin(), core::Vec3(0, 4, 0));
+        ASSERT_EQ(object6.getOrigin(), core::Vec3(0, 0, 4));
         ASSERT_EQ(object6.getID(), 1);
         ASSERT_EQ(object6.getEnergy(), 0);
 
         EnergyCollector object7;
         ASSERT_EQ(object7.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object7.getOrigin(), core::Vec3(0, 4, 0));
+        ASSERT_EQ(object7.getOrigin(), core::Vec3(0, 0, 4));
         ASSERT_EQ(object7.getID(), 4);
         ASSERT_EQ(object7.getEnergy(), 0);
     }
@@ -96,12 +96,12 @@ namespace objects
         EnergyCollector object2(core::Vec3(0, 0, 0), 0, 1);
         ASSERT_EQ(object1, object2);
 
-        EnergyCollector object3(core::Vec3(1, 0, 2), 20, 1);
-        EnergyCollector object4(core::Vec3(1, 0, 2), 20, 1);
+        EnergyCollector object3(core::Vec3(1, 2, 0), 20, 1);
+        EnergyCollector object4(core::Vec3(1, 2, 0), 20, 1);
         ASSERT_EQ(object3, object4);
 
-        EnergyCollector object5(core::Vec3(std::sqrt(2), 2, 1), 20, 1);
-        EnergyCollector object6(core::Vec3(std::sqrt(2), 2, 1), 20, 1);
+        EnergyCollector object5(core::Vec3(std::sqrt(2), 1, 2), 20, 1);
+        EnergyCollector object6(core::Vec3(std::sqrt(2), 1, 2), 20, 1);
         ASSERT_EQ(object5, object6);
 
         EnergyCollector object7(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
@@ -115,15 +115,15 @@ namespace objects
         EnergyCollector object2 = object1;
         ASSERT_EQ(object1, object2);
 
-        EnergyCollector object3(core::Vec3(1, 0, 2), 20, 1);
+        EnergyCollector object3(core::Vec3(1, 2, 0), 20, 1);
         EnergyCollector object4 = object3;
         ASSERT_EQ(object3, object4);
 
-        EnergyCollector object5(core::Vec3(std::sqrt(2), 2, 1), 20, 1);
+        EnergyCollector object5(core::Vec3(std::sqrt(2), 1, 2), 20, 1);
         EnergyCollector object6 = object5;
         ASSERT_EQ(object5, object6);
 
-        EnergyCollector object7(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
+        EnergyCollector object7(core::Vec3(std::sqrt(3), 0, std::sqrt(2)), std::sqrt(2), 1);
         EnergyCollector object8 = object7;
         ASSERT_EQ(object7, object8);
     }
@@ -145,8 +145,8 @@ namespace objects
     {
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
 
-        ASSERT_EQ(object1.distanceAt(core::Vec3(0, 0, 4)), 4);
-        ASSERT_EQ(object1.distanceAt(core::Vec3(3, 4, 0)), 5);
+        ASSERT_EQ(object1.distanceAt(core::Vec3(0, 4, 0)), 4);
+        ASSERT_EQ(object1.distanceAt(core::Vec3(3, 0, 4)), 5);
     }
 
     TEST(ENERGYCOLLECTOR_METHODS, Test_Method_CollectEnergy)
@@ -155,7 +155,7 @@ namespace objects
         // TODO: Phase impact on the given energy to the collector
 
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
-        auto pointer = std::make_unique<core::RayHitData>(core::RayHitData(40, core::Vec3(0, 0, 3), core::Vec3(0, 0, 1), core::Vec3(0, 0, -1), 50, 1));
+        auto pointer = std::make_unique<core::RayHitData>(core::RayHitData(40, core::Vec3(0, 3, 0), core::Vec3(0, 1, 0), core::Vec3(0, -1, 0), 50, 1));
 
         object1.collectEnergy(pointer);
         ASSERT_EQ(object1.getEnergy(), 50);

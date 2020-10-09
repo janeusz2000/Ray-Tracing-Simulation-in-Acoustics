@@ -12,7 +12,7 @@ namespace generators
 
     // CONSTRUCTORS
 
-    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, -4, 0)), _leftCorner(core::Vec3(-diffusorSize / 2, 1, -diffusorSize / 2))
+    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4))
     {
         this->updateDiffusorSize();
     }
@@ -33,7 +33,7 @@ namespace generators
 
     void PointSource::updateDiffusorSize()
     {
-        _leftCorner = core::Vec3(-1 * _diffusorSize / 2, -1, -1 * _diffusorSize / 2);
+        _leftCorner = core::Vec3(-1 * _diffusorSize / 2, -1 * _diffusorSize / 2, 1);
     }
 
     core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter, bool incldueRandom)
@@ -54,7 +54,7 @@ namespace generators
             v = (static_cast<double>(xIter)) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
             u = (static_cast<double>(yIter)) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
         }
-        return core::Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 0, 1) - _origin);
+        return core::Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - _origin);
     }
 
     // PRIVATE METHODS

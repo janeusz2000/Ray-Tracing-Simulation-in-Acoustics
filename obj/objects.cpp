@@ -107,7 +107,7 @@ namespace objects
 
     EnergyCollector::EnergyCollector() : _id(population), _energy(0)
     {
-        this->setOrigin(core::Vec3(0, 4, 0));
+        this->setOrigin(core::Vec3(0, 0, 4));
         this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         population++;
     };
