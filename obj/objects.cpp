@@ -169,7 +169,9 @@ namespace objects
     {
         if (left.getOrigin() != right.getOrigin())
         {
-            throw exception::differentPositions();
+            std::stringstream ss;
+            ss << "Energy Collectors doesn't have the same origin positions. Positions are left: " << left.getOrigin() << ", right: " << right.getOrigin();
+            throw exception::differentPositions(ss.str());
         }
         else
         {

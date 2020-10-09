@@ -40,7 +40,9 @@ namespace generators
     {
         if (xIter >= _rayNumPerRow && yIter >= _rayNumPerRow)
         {
-            throw exception::outOfSize(xIter, yIter, _rayNumPerRow);
+            std::stringstream ss;
+            ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << _rayNumPerRow - 1 << ", y: " << yIter << " / " << _rayNumPerRow;
+            throw std::out_of_range(ss.str().c_str());
         }
 
         double u, v;
