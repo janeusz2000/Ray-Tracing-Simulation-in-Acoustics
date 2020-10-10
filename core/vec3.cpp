@@ -121,7 +121,11 @@ namespace core
     Vec3 operator/(const Vec3 &vec, const double &num)
     {
         if (num <= constants::kAccuracy)
-            throw exception::divisionByZero(vec, num);
+        {
+            std::stringstream ss;
+            ss << "Divider of the Vec3 object can't be close or equal to 0. Object: " << vec << ", divider: " << num;
+            throw std::logic_error(ss.str().c_str());
+        }
         else
         {
             return Vec3(vec.getX() / num, vec.getY() / num, vec.getZ() / num);
@@ -157,8 +161,6 @@ namespace core
 
     bool operator==(const Vec3 &left, const Vec3 &right)
     {
-        // TODO: format so that the line is not going out of the screen.
-        // Normall these lines should have at most 80 chars.
         return (std::abs(left.getX() - right.getX()) < constants::kAccuracy &&
                 std::abs(left.getY() - right.getY()) < constants::kAccuracy &&
                 std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
