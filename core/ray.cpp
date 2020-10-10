@@ -16,15 +16,6 @@ namespace core
         _energy = energy;
     }
 
-    Ray::Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy) : Ray(Vec3(origin), Vec3(dir), energy){};
-
-    Ray::Ray(const Ray &other)
-    {
-        _origin = other.getOrigin();
-        _direction = other.getDirection();
-        _energy = other.getEnergy();
-    }
-
 #pragma endregion
 #pragma region METHODS
 

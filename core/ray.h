@@ -14,18 +14,9 @@ namespace core
     {
     public:
         Ray() : Ray(Vec3(0, 0, 0), Vec3(0, 0, 1), 0){};
-        Ray(const Vec3 &origin, const Vec3 &direction, const double &energy);
-        // TODO: Again, remove and use default value in the constructor just above.
-        //
-        // Issue here is that constructor above is defined in CPP file so presumably has
-        // some non trivial implementation, while this one is defined here yet the only
-        // difference is zero energy. Note that this constructor here does not throw an
-        // error if direction is zero, so you have a bug.
-        Ray(const Vec3 &origin, const Vec3 &direction) : _origin(origin), _direction(direction.normalize()), _energy(0){};
-        // TODO: Why do you need those constructors? They are useless given how easy it is to create vectors.
-        Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy);
-        Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir) : Ray(origin, dir, 0){};
-        Ray(const Ray &other);
+        explicit Ray(const Vec3 &origin, const Vec3 &direction, const double &energy = 0);
+        explicit Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy = 0) : Ray(Vec3(origin), Vec3(dir), energy){};
+        Ray(const Ray &other) = default;
         ~Ray() = default;
 
         // TODO: do not pass simple types using const type&, as it does not make sense.
