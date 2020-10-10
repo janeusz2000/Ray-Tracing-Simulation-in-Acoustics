@@ -53,6 +53,7 @@ namespace generators
         // 1. This class should take random number generator in constructor
         // 2. in real code you create a real generator
         // 3. in tests you pass a fake generator that you can precisely configure
+        
         if (incldueRandom)
         {
             v = (static_cast<double>(xIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;

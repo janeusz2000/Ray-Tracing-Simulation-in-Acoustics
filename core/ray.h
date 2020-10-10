@@ -13,11 +13,7 @@ namespace core
     class Ray
     {
     public:
-        Ray() : Ray(Vec3(0, 0, 0), Vec3(0, 0, 1), 0){};
-        explicit Ray(const Vec3 &origin, const Vec3 &direction, const double &energy = 0);
-        explicit Ray(const std::initializer_list<double> &origin, const std::initializer_list<double> &dir, const double &energy = 0) : Ray(Vec3(origin), Vec3(dir), energy){};
-        Ray(const Ray &other) = default;
-        ~Ray() = default;
+        Ray(const Vec3 &origin= Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), const double &energy = 0);
 
         // TODO: do not pass simple types using const type&, as it does not make sense.
         // They are quick to copy no need to use const references with floats, as it make
@@ -57,9 +53,6 @@ namespace core
         RayHitData(const RayHitData &) = default;
 
         // OPERATORS
-        RayHitData &operator=(const RayHitData &) = default;
-        // TODO: When is this operator useful?
-
         bool operator==(const RayHitData &other) const;
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 
