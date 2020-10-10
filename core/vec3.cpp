@@ -28,12 +28,12 @@ namespace core
 
     Vec3 operator+(const Vec3 &left, const Vec3 &right)
     {
-        return Vec3(left.getX() + right.getX(), left.getY() + right.getY(), left.getZ() + right.getZ());
+        return Vec3(left.x() + right.x(), left.y() + right.y(), left.z() + right.z());
     }
 
     Vec3 operator+(const Vec3 &left, const double &right)
     {
-        return Vec3(left.getX() + right, left.getY() + right, left.getZ() + right);
+        return Vec3(left.x() + right, left.y() + right, left.z() + right);
     }
 
     Vec3 operator+(const double &left, const Vec3 &right)
@@ -46,11 +46,11 @@ namespace core
 
     Vec3 operator-(const Vec3 &left, const Vec3 &right)
     {
-        return Vec3(left.getX() - right.getX(), left.getY() - right.getY(), left.getZ() - right.getZ());
+        return Vec3(left.x() - right.x(), left.y() - right.y(), left.z() - right.z());
     }
     Vec3 operator-(const Vec3 &left, const double &num)
     {
-        return Vec3(left.getX() - num, left.getY() - num, left.getZ() - num);
+        return Vec3(left.x() - num, left.y() - num, left.z() - num);
     }
 
 #pragma endregion
@@ -58,9 +58,9 @@ namespace core
 
     Vec3 &Vec3::operator+=(const Vec3 &other)
     {
-        _x += other.getX();
-        _y += other.getY();
-        _z += other.getZ();
+        _x += other.x();
+        _y += other.y();
+        _z += other.z();
         return *this;
     }
 
@@ -77,9 +77,9 @@ namespace core
 
     Vec3 &Vec3::operator-=(const Vec3 &other)
     {
-        _x -= other.getX();
-        _y -= other.getY();
-        _z -= other.getZ();
+        _x -= other.x();
+        _y -= other.y();
+        _z -= other.z();
         return *this;
     }
 
@@ -96,12 +96,12 @@ namespace core
 
     Vec3 operator*(const double &num, const Vec3 &vec)
     {
-        return Vec3(vec.getX() * num, vec.getY() * num, vec.getZ() * num);
+        return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
     }
 
     Vec3 operator*(const Vec3 &vec, const double &num)
     {
-        return Vec3(vec.getX() * num, vec.getY() * num, vec.getZ() * num);
+        return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
     }
 
 #pragma endregion
@@ -128,7 +128,7 @@ namespace core
         }
         else
         {
-            return Vec3(vec.getX() / num, vec.getY() / num, vec.getZ() / num);
+            return Vec3(vec.x() / num, vec.y() / num, vec.z() / num);
         }
     }
 
@@ -137,11 +137,11 @@ namespace core
 
     double Vec3::scalarProduct(const Vec3 &other) const
     {
-        return _x * other.getX() + _y * other.getY() + _z * other.getZ();
+        return _x * other.x() + _y * other.y() + _z * other.z();
     }
     Vec3 Vec3::crossProduct(const Vec3 &other) const
     {
-        return Vec3(_y * other.getZ() - _z * other.getY(), _z * other.getX() - _x * other.getZ(), _x * other.getY() - _y * other.getX());
+        return Vec3(_y * other.z() - _z * other.y(), _z * other.x() - _x * other.z(), _x * other.y() - _y * other.x());
     }
     double Vec3::magnitudeSquared() const
     {
@@ -161,9 +161,9 @@ namespace core
 
     bool operator==(const Vec3 &left, const Vec3 &right)
     {
-        return (std::abs(left.getX() - right.getX()) < constants::kAccuracy &&
-                std::abs(left.getY() - right.getY()) < constants::kAccuracy &&
-                std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
+        return (std::abs(left.x() - right.x()) < constants::kAccuracy &&
+                std::abs(left.y() - right.y()) < constants::kAccuracy &&
+                std::abs(left.z() - right.z()) < constants::kAccuracy);
     }
 
     bool operator!=(const Vec3 &left, const Vec3 &right)
@@ -172,14 +172,14 @@ namespace core
     }
     std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3)
     {
-        return os << "Vec3(" << srcVec3.getX() << ", " << srcVec3.getY() << ", " << srcVec3.getZ() << ")";
+        return os << "Vec3(" << srcVec3.x() << ", " << srcVec3.y() << ", " << srcVec3.z() << ")";
     }
 
     Vec3 &Vec3::operator=(const Vec3 &other)
     {
-        _x = other.getX();
-        _y = other.getY();
-        _z = other.getZ();
+        _x = other.x();
+        _y = other.y();
+        _z = other.z();
         return *this;
     }
 
@@ -190,7 +190,7 @@ namespace core
     {
         _x = num;
     }
-    double Vec3::getX() const
+    double Vec3::x() const
     {
         return _x;
     }
@@ -198,7 +198,7 @@ namespace core
     {
         _y = num;
     }
-    double Vec3::getY() const
+    double Vec3::y() const
     {
         return _y;
     }
@@ -206,7 +206,7 @@ namespace core
     {
         _z = num;
     }
-    double Vec3::getZ() const
+    double Vec3::z() const
     {
         return _z;
     }

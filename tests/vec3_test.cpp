@@ -405,9 +405,9 @@ namespace core
 
     TEST(VEC3_METHODS, Test_Getters_Setters)
     {
-        ASSERT_EQ(Vec3(0, 1, 0).getX(), 0);
-        ASSERT_EQ(Vec3(0.543, std::sqrt(2), std::sqrt(3)).getY(), std::sqrt(2));
-        ASSERT_EQ(Vec3(0.2, 0.1, 0.12312453214).getZ(), 0.12312453214);
+        ASSERT_EQ(Vec3(0, 1, 0).x(), 0);
+        ASSERT_EQ(Vec3(0.543, std::sqrt(2), std::sqrt(3)).y(), std::sqrt(2));
+        ASSERT_EQ(Vec3(0.2, 0.1, 0.12312453214).z(), 0.12312453214);
 
         Vec3 temp1 = Vec3(0, 12, 0);
         temp1.setY(0);
