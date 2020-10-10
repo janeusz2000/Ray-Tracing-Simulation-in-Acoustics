@@ -159,13 +159,14 @@ namespace core
     {
         // TODO: format so that the line is not going out of the screen.
         // Normall these lines should have at most 80 chars.
-        return (std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
+        return (std::abs(left.getX() - right.getX()) < constants::kAccuracy &&
+                std::abs(left.getY() - right.getY()) < constants::kAccuracy &&
+                std::abs(left.getZ() - right.getZ()) < constants::kAccuracy);
     }
 
     bool operator!=(const Vec3 &left, const Vec3 &right)
     {
-        // TODO: code reuse.
-        return (!(std::abs(left.getX() - right.getX()) < constants::kAccuracy && std::abs(left.getY() - right.getY()) < constants::kAccuracy && std::abs(left.getZ() - right.getZ()) < constants::kAccuracy));
+        return !(left == right);
     }
     std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3)
     {
