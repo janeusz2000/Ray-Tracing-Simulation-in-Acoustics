@@ -23,13 +23,6 @@ namespace core
         _z = *iterator;
     }
 
-    Vec3::Vec3(const Vec3 &other)
-    {
-        _x = other.getX();
-        _y = other.getY();
-        _z = other.getZ();
-    }
-
 #pragma endregion
 #pragma region OPERATORS_PLUS
 

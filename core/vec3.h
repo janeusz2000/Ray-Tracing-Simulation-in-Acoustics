@@ -15,10 +15,9 @@ namespace core
         // Z cord: represents down (-) to up (+) coordinates
 
     public:
-        explicit Vec3(double x, double y, double z) : _x(x), _y(y), _z(z){};
-        Vec3() : Vec3(0, 0, 0) {};
+        explicit Vec3(double x = 0, double y = 0, double z = 0) : _x(x), _y(y), _z(z){};
         explicit Vec3(std::initializer_list<double> initList);
-        Vec3(const Vec3 &other);
+        Vec3(const Vec3 &other) = default;
         ~Vec3() = default;
 
         Vec3 &operator=(const Vec3 &other);
