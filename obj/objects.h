@@ -20,7 +20,6 @@ namespace objects
         //METHODS
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
         virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const = 0;
-        virtual double area() const = 0;
 
         //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 & or);
@@ -58,7 +57,6 @@ namespace objects
         //  }
         //
         virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
-        virtual double area() const override;
 
         //GETTERS AND SETTERS
         // TODO: make & formatting consistent.
@@ -147,7 +145,7 @@ namespace objects
         core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
         std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
         bool doesHit(const core::Vec3 &point) const;
-        double area() const override;
+        double area() const;
         void refreshAttributes();
 
         // GETTERS AND SETTERS

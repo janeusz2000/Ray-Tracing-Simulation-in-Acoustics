@@ -386,17 +386,6 @@ namespace objects
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(SPHERE_METHOD, Test_Method_Area)
-    {
-        Sphere object1;
-        Sphere object2(core::Vec3(0, 0, 0), 4);
-        Sphere object3(core::Vec3(0, 1, 1), 3);
-
-        ASSERT_EQ(constants::kPi, object1.area());
-        ASSERT_EQ(16 * constants::kPi, object2.area());
-        ASSERT_EQ(9 * constants::kPi, object3.area());
-    }
-
     TEST(SPHERE_CONSTRUCTOR, Test_All_Possible_Constructors)
     {
         Sphere object1;

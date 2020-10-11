@@ -66,12 +66,6 @@ namespace objects
         }
     }
 
-    double Sphere::area() const
-    {
-        // TODO: ಠ_ಠ This is wrong. Do you even use this method? If not, remove.
-        return 4 * constants::kPi * _radius * _radius;
-    }
-
     std::ostream &operator<<(std::ostream &os, const Sphere &sp)
     {
         return os << "Sphere origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
