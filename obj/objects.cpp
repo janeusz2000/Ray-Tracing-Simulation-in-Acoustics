@@ -59,7 +59,7 @@ namespace objects
         }
         else
         {
-            double time = std::min({time1, time2});
+            double time = std::min(time1, time2);
             // TODO: I think min() takes 2 params, no need to pack then in an initializer list.
             core::Vec3 collision = ray.at(time);
             return std::make_unique<core::RayHitData>(time, normal(collision), ray, freq);
