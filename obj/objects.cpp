@@ -60,7 +60,6 @@ namespace objects
         else
         {
             double time = std::min(time1, time2);
-            // TODO: I think min() takes 2 params, no need to pack then in an initializer list.
             core::Vec3 collision = ray.at(time);
             return std::make_unique<core::RayHitData>(time, normal(collision), ray, freq);
         }
@@ -224,24 +223,11 @@ namespace objects
     {
         this->refreshAttributes();
     }
-    TriangleObj::TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate) : _xCoordinate(xCoordinate), _yCoordinate(yCoordinate), _zCoordinate(zCoordinate)
+    TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2, const core::Vec3 &point3) : _point1(point1), _point2(point2), _point3(point3)
     {
-        if (xCoordinate == yCoordinate || xCoordinate == zCoordinate || yCoordinate == zCoordinate)
-        {
-            std::stringstream ss;
-            ss << "TriangleObj couldn't be constructed. You cannot have duplications of the same point in constructor 1: " << xCoordinate << ", 2: " << yCoordinate << ", 3: " << zCoordinate;
-            throw std::invalid_argument(ss.str());
-        }
-        else if (!this->arePointsValid())
-        {
-            // TODO: Why don't you hide the first part of the condition inside arePointsInvalid() ?
-            throw std::invalid_argument("Triangle object couldn't be constructed. You cannot have all points of the object linedup straight");
-        }
-
+        this->arePointsValid();
         this->refreshAttributes();
     }
-
-    TriangleObj::TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate) : TriangleObj(core::Vec3(xCoordinate), core::Vec3(yCoordinate), core::Vec3(zCoordinate)){};
 
     TriangleObj::TriangleObj(const TriangleObj &other)
     {
@@ -312,7 +298,7 @@ namespace objects
         }
 
         // Following code calculates time at which ray is hitting surface where triangle is positioned
-        double time = (-1 * (ray.getOrigin() - _zCoordinate)).scalarProduct(_normal) / (ray.getDirection().scalarProduct(_normal));
+        double time = (-1 * (ray.getOrigin() - _point3)).scalarProduct(_normal) / (ray.getDirection().scalarProduct(_normal));
 
         // Following code is making sure that ray doesn't hit the same object.
         if (time < constants::kHitAccuracy)
@@ -331,9 +317,9 @@ namespace objects
 
     bool TriangleObj::doesHit(const core::Vec3 &point) const
     {
-        core::Vec3 vecA = _xCoordinate - point;
-        core::Vec3 vecB = _yCoordinate - point;
-        core::Vec3 vecC = _zCoordinate - point;
+        core::Vec3 vecA = _point1 - point;
+        core::Vec3 vecB = _point2 - point;
+        core::Vec3 vecC = _point3 - point;
 
         double alpha = vecB.crossProduct(vecC).magnitude() / 2; //  Area of the triangle made with point and w triangle points.
         double beta = vecC.crossProduct(vecA).magnitude() / 2;
@@ -352,7 +338,7 @@ namespace objects
     {
         this->recalculateArea();
         this->recalculateNormal();
-        this->setOrigin((_xCoordinate + _yCoordinate + _zCoordinate) / 3);
+        this->setOrigin((_point1 + _point2 + _point3) / 3);
     }
 
     // PRIVATE METHODS
@@ -361,53 +347,64 @@ namespace objects
     // while you could just move all the code into refreshAttributes() and cache the results.
     void TriangleObj::recalculateArea()
     {
-        core::Vec3 vecA = _xCoordinate - _yCoordinate;
-        core::Vec3 vecB = _xCoordinate - _zCoordinate;
+        core::Vec3 vecA = _point1 - _point2;
+        core::Vec3 vecB = _point1 - _point3;
         _area = vecA.crossProduct(vecB).magnitude() / 2;
     }
 
     void TriangleObj::recalculateNormal()
     {
-        core::Vec3 vecA = _xCoordinate - _yCoordinate;
-        core::Vec3 vecB = _xCoordinate - _zCoordinate;
+        core::Vec3 vecA = _point1 - _point2;
+        core::Vec3 vecB = _point1 - _point3;
         core::Vec3 perpendicular = vecA.crossProduct(vecB);
         _normal = perpendicular.normalize();
     }
 
     bool TriangleObj::arePointsValid()
     {
-        core::Vec3 alpha = _xCoordinate - _yCoordinate;
-        core::Vec3 beta = _xCoordinate - _zCoordinate;
+        if (_point1 == _point2 || _point1 == _point3 || _point2 == _point3)
+        {
+            std::stringstream ss;
+            ss << "TriangleObj arguments error. You cannot have duplications of the same point in constructor 1: " << _point1 << ", 2: " << _point2 << ", 3: " << _point3;
+            throw std::invalid_argument(ss.str());
+        }
 
-        return (alpha.crossProduct(beta) != core::Vec3(0, 0, 0));
+        core::Vec3 alpha = _point1 - _point2;
+        core::Vec3 beta = _point1 - _point3;
+
+        if (alpha.crossProduct(beta) == core::Vec3(0, 0, 0))
+        {
+            throw std::invalid_argument("Triangle object couldn't be constructed. You cannot have all points of the object linedup straight");
+        }
+        return true;
     }
 
     // GETTERS AND SETTERS
     core::Vec3 TriangleObj::getX() const
     {
-        return _xCoordinate;
+        return _point1;
     }
     void TriangleObj::setX(const core::Vec3 &point)
     {
-        this->_xCoordinate = point;
+        this->_point1 = point;
     }
 
     core::Vec3 TriangleObj::getY() const
     {
-        return _yCoordinate;
+        return _point2;
     }
     void TriangleObj::setY(const core::Vec3 &point)
     {
-        this->_yCoordinate = point;
+        this->_point2 = point;
     }
 
     core::Vec3 TriangleObj::getZ() const
     {
-        return _zCoordinate;
+        return _point3;
     }
     void TriangleObj::setZ(const core::Vec3 &point)
     {
-        this->_zCoordinate = point;
+        this->_point3 = point;
     }
 
 #pragma endregion

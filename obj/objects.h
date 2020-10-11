@@ -129,9 +129,7 @@ namespace objects
     {
     public:
         TriangleObj();
-        // TODO: I am confused by the parameter names, why vectors are called coordinates?
-        TriangleObj(const core::Vec3 &xCoordinate, const core::Vec3 &yCoordinate, const core::Vec3 &zCoordinate);
-        TriangleObj(const std::initializer_list<double> &xCoordinate, const std::initializer_list<double> &yCoordinate, const std::initializer_list<double> &zCoordinate);
+        TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2, const core::Vec3 &point3);
         TriangleObj(const TriangleObj &other);
         ~TriangleObj() = default;
 
@@ -162,7 +160,7 @@ namespace objects
         void recalculateNormal();
         void recalculateArea();
         bool arePointsValid();
-        core::Vec3 _normal, _xCoordinate, _yCoordinate, _zCoordinate;
+        core::Vec3 _normal, _point1, _point2, _point3;
         double _area;
     };
 
