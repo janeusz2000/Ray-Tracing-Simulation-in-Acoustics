@@ -24,7 +24,7 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, double(*gen)());
+        PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, const std::function<double(void)> &generator);
         PointSource(const PointSource &) = default;
         ~PointSource() = default;
 
@@ -59,7 +59,7 @@ namespace generators
         double _frequency, _diffusorSize;
         size_t _rayNumPerRow;
         
-        std::function<double()> _gen;
+        std::function<double(double, double)> _generator;
 
     };
 

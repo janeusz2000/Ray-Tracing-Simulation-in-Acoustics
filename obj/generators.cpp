@@ -11,14 +11,14 @@ namespace generators
     {
         std::random_device rd;
         std::mt19937_64 engine(rd);
-        std::uniform_real_distribution<double> dist{0, 1};
+        std::uniform_real_distribution<double> dist(0, 1);
         return dist(engine);
     }
     double EngineGaussianRandom()
     {
         std::random_device rd;
         std::mt19937_64 engine(rd);
-        std::normal_distribution<double> dist{0, 1};
+        std::normal_distribution<double> dist(0, 1);
         return dist(engine);
     }
     double EngineZero()
@@ -31,9 +31,11 @@ namespace generators
 
     // CONSTRUCTORS
 
-    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, double (*gen)() = EngineGaussianRandom) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4))
+    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow,
+                             const double &diffusorSize,
+                             const std::function<double(void)> &generator) : _frequency(freq), _rayNumPerRow(rayNumPerRow),
+                                                                             _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4)), _generator(generator)
     {
-        _gen = gen;
         updateDiffusorSize();
     }
 
