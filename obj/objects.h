@@ -68,7 +68,9 @@ namespace objects
         double _radius;
     };
 
-    // TODO: Add a comment what this object is doing.
+    // When this object has two purposes: first - when ray hit this object, there is no longer need 
+    // to continue ray traceing. Second - the collision point is passed to energy collector, and after that specific
+    // amount of energy from ray is collected depends on the distance from collision point to the sphere collectors;
     class SphereWall : public Sphere
     {
     public:
@@ -81,24 +83,12 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        // TODO: Having static variables is a sign of bad design. If you want to keep track of this,
-        // you should create some kind of factory that makes those collectors, or maybe just keep
-        // them all in a vector somewhere.
-        static int population;
 
-        // These constructors changes static int population number
-        EnergyCollector();
-        EnergyCollector(const core::Vec3 &origin);
-        EnergyCollector(const core::Vec3 &origin, const double &energy);
-
-        // This constructor is only used for passing copy of the object.
-        // It doesn't change any of the id, poplation or any paramterers.
-        EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id);
-
-        // Copy constructor copies all data except id of the Energy collector.
-        // it doesn't change static int population number.
-        // TODO: in which circumstances you want to copy an EnergyCollector?
-        EnergyCollector(const EnergyCollector &other);
+        EnergyCollector(const core::Vec3 &origin = core::Vec3(0, 0, 2), const double &energy = 0, const int &id = 0) : _id(id), _energy(energy)
+        {
+            setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+            setOrigin(origin);
+        }
 
         // OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector);
@@ -109,10 +99,8 @@ namespace objects
         EnergyCollector &operator=(const EnergyCollector &other);
 
         // METHODS
-        // TODO: Do not pass unique_ptr to the method, unless you want to transfer ownership.
-        // You either want to pass RayHitData* or const RayHitData& if hitData cannot be ever null.
         double distanceAt(const core::Vec3 &positionHit) const;
-        void collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata);
+        void collectEnergy(const core::RayHitData &hitdata);
 
         // GETTERS AND SETTERS
         void setEnergy(const double &en);

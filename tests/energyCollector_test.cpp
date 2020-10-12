@@ -18,29 +18,29 @@ namespace objects
         EnergyCollector object1;
 
         ASSERT_EQ(object1.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 4));
+        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 2));
         ASSERT_EQ(object1.getID(), 0);
         ASSERT_EQ(object1.getEnergy(), 0);
 
         EnergyCollector object2;
 
         ASSERT_EQ(object2.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 0, 4));
-        ASSERT_EQ(object2.getID(), 1);
+        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 0, 2));
+        ASSERT_EQ(object2.getID(), 0);
         ASSERT_EQ(object2.getEnergy(), 0);
 
         EnergyCollector object3(core::Vec3(0, 0, -1));
 
         ASSERT_EQ(object3.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 0, -1));
-        ASSERT_EQ(object3.getID(), 2);
+        ASSERT_EQ(object3.getID(), 0);
         ASSERT_EQ(object3.getEnergy(), 0);
 
         EnergyCollector object4(core::Vec3(0, 0, -1), 50);
 
         ASSERT_EQ(object4.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
         ASSERT_EQ(object4.getOrigin(), core::Vec3(0, 0, -1));
-        ASSERT_EQ(object4.getID(), 3);
+        ASSERT_EQ(object4.getID(), 0);
         ASSERT_EQ(object4.getEnergy(), 50);
 
         EnergyCollector object5(core::Vec3(0, 0, -1), 50, 80);
@@ -52,14 +52,14 @@ namespace objects
 
         EnergyCollector object6(object2);
         ASSERT_EQ(object6.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object6.getOrigin(), core::Vec3(0, 0, 4));
-        ASSERT_EQ(object6.getID(), 1);
+        ASSERT_EQ(object6.getOrigin(), core::Vec3(0, 0, 2));
+        ASSERT_EQ(object6.getID(), 0);
         ASSERT_EQ(object6.getEnergy(), 0);
 
         EnergyCollector object7;
         ASSERT_EQ(object7.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        ASSERT_EQ(object7.getOrigin(), core::Vec3(0, 0, 4));
-        ASSERT_EQ(object7.getID(), 4);
+        ASSERT_EQ(object7.getOrigin(), core::Vec3(0, 0, 2));
+        ASSERT_EQ(object7.getID(), 0);
         ASSERT_EQ(object7.getEnergy(), 0);
     }
 
@@ -83,11 +83,11 @@ namespace objects
         ss4 << object11;
         ss5 << object12;
 
-        ASSERT_EQ(ss1.str(), "Energy Collector ID: 5, Energy collected: 0");
-        ASSERT_EQ(ss2.str(), "Energy Collector ID: 6, Energy collected: 0");
-        ASSERT_EQ(ss3.str(), "Energy Collector ID: 7, Energy collected: 0");
-        ASSERT_EQ(ss4.str(), "Energy Collector ID: 8, Energy collected: 0");
-        ASSERT_EQ(ss5.str(), "Energy Collector ID: 9, Energy collected: 0");
+        ASSERT_EQ(ss1.str(), "Energy Collector ID: 0, Energy collected: 0");
+        ASSERT_EQ(ss2.str(), "Energy Collector ID: 0, Energy collected: 0");
+        ASSERT_EQ(ss3.str(), "Energy Collector ID: 0, Energy collected: 0");
+        ASSERT_EQ(ss4.str(), "Energy Collector ID: 0, Energy collected: 0");
+        ASSERT_EQ(ss5.str(), "Energy Collector ID: 0, Energy collected: 0");
     }
 
     TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_Equal_Equal)
@@ -106,7 +106,7 @@ namespace objects
 
         // TODO: Make tests more complicated. From the fact that you used sqrt(2) does not mean
         // that you are testing against floating point issues. sqrt(2) will always return the same
-        // value. Issue arrises if you do some operations, and the order of operations matters.
+        // value. Issue arises if you do some operations, and the order of operations matters.
         EnergyCollector object7(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
         EnergyCollector object8(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
         ASSERT_EQ(object7, object8);
@@ -139,9 +139,7 @@ namespace objects
         EnergyCollector object15 = object13 + object14;
 
         ASSERT_EQ(object15.getEnergy(), object13.getEnergy() + object14.getEnergy());
-        // TODO: If the other of those tests changes, all of them which check for IDs will fail.
-        // This shows how bad the design with static variables is.
-        ASSERT_EQ(object15.getID(), 10);
+        ASSERT_EQ(object15.getID(), 0);
         ASSERT_EQ(object15.getOrigin(), core::Vec3(0, 0, 0));
         ASSERT_EQ(object15.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
     }
@@ -160,9 +158,9 @@ namespace objects
         // TODO: Phase impact on the given energy to the collector
 
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
-        auto pointer = std::make_unique<core::RayHitData>(core::RayHitData(50, core::Vec3(0, 1, 0).normalize(), core::Ray({0, 1, 0}, {1, 0, 0}, 50), 1000));
+        core::RayHitData temp(core::RayHitData(50, core::Vec3(0, 1, 0).normalize(), core::Ray({0, 1, 0}, {1, 0, 0}, 50), 1000));
 
-        object1.collectEnergy(pointer);
+        object1.collectEnergy(temp);
         ASSERT_EQ(object1.getEnergy(), 50);
     }
 

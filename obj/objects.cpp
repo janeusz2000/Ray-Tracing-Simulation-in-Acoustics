@@ -2,7 +2,6 @@
 #include <sstream>
 namespace objects
 {
-    int EnergyCollector::population = 0;
 #pragma region OBJECT
 
     void Object::setOrigin(const core::Vec3 & or)
@@ -98,46 +97,6 @@ namespace objects
 #pragma endregion
 #pragma region ENERGY_COLLECTOR
 
-    // CONSTRUCTORS
-
-    EnergyCollector::EnergyCollector() : _id(population), _energy(0)
-    {
-        // TODO: Why not seting default params using these constants? You copied so much code in those 4 constructors.
-        this->setOrigin(core::Vec3(0, 0, 4));
-        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        population++;
-    };
-
-    EnergyCollector::EnergyCollector(const core::Vec3 &origin) : _id(population), _energy(0)
-    {
-        this->setOrigin(origin);
-        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        population++;
-    };
-
-    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy) : _id(population), _energy(energy)
-    {
-        this->setOrigin(origin);
-        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-        population++;
-    };
-
-    EnergyCollector::EnergyCollector(const core::Vec3 &origin, const double &energy, const int &id)
-    {
-        this->setEnergy(energy);
-        this->setID(id);
-        this->setOrigin(origin);
-        this->setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-    };
-
-    EnergyCollector::EnergyCollector(const EnergyCollector &other)
-    {
-        this->setRadius(other.getRadius());
-        this->setOrigin(other.getOrigin());
-        this->setEnergy(other.getEnergy());
-        this->setID(other.getID());
-    }
-
     // OPERATORS
     EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other)
     {
@@ -187,10 +146,10 @@ namespace objects
         return (getOrigin() - positionHit).magnitude();
     }
 
-    void EnergyCollector::collectEnergy(const std::unique_ptr<core::RayHitData> &hitdata)
+    void EnergyCollector::collectEnergy(const core::RayHitData &hitdata)
     {
         // TODO: Energy distribution between many collectors
-        _energy += hitdata->energy;
+        _energy += hitdata.energy;
     }
 
     // GETTERS AND SETTERS

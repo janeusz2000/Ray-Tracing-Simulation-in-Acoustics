@@ -16,6 +16,8 @@
 namespace objects
 {
 
+    const double kSkipFreq = 1000;
+
     TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_iostream)
     {
         TriangleObj object1(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0));
@@ -114,13 +116,12 @@ namespace objects
         double hits = 0;
         const double referenceRatio = 0.5 / 4;
         const double rayNum = 1000000;
-        const double freq = 1000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), dist(engine), -20}, {0, 0, 1});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, freq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, hitData))
             {
                 ++hits;
             }
@@ -139,13 +140,12 @@ namespace objects
         double hits = 0;
         const double referenceRatio = 0.5 / 4;
         const double rayNum = 1000000;
-        const double freq = 1000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), dist(engine), 20}, {0, 0, -1});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, freq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, hitData))
             {
                 ++hits;
             }
@@ -164,13 +164,12 @@ namespace objects
         double hits = 0;
         const double referenceRatio = 0.5 / 4;
         const double rayNum = 1000000;
-        const double freq = 1000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), -20, dist(engine)}, {0, 1, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, freq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, hitData))
             {
                 ++hits;
             }
@@ -189,13 +188,12 @@ namespace objects
         double hits = 0;
         const double referenceRatio = 0.5 / 4;
         const double rayNum = 1000000;
-        const double freq = 1000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), 20, dist(engine)}, {0, -1, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, freq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, hitData))
             {
                 ++hits;
             }
@@ -214,13 +212,12 @@ namespace objects
         double hits = 0;
         const double referenceRatio = 0.5 / 4;
         const double rayNum = 1000000;
-        const double freq = 1000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({20, dist(engine), dist(engine)}, {-1, 0, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, freq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, hitData))
             {
                 ++hits;
             }
@@ -239,13 +236,12 @@ namespace objects
         double hits = 0;
         const double referenceRatio = 0.5 / 4;
         const double rayNum = 1000000;
-        const double freq = 1000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({-20, dist(engine), dist(engine)}, {1, 0, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, freq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, hitData))
             {
                 ++hits;
             }

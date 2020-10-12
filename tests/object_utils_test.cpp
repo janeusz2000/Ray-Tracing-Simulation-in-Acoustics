@@ -110,22 +110,21 @@ namespace objects
         const double reference1 = constants::kPi * radius1 * radius1 / 4;
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
-        const double tempFreq = 1000;
 
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(dist(e2), dist(e2), -50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, 1));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, tempFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
             {
                 hits3++;
             }
@@ -167,15 +166,15 @@ namespace objects
             core::Vec3 rayPosition(dist(e2), dist(e2), 50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, -1));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, tempFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
             {
                 hits3++;
             }
@@ -209,22 +208,21 @@ namespace objects
         const double reference1 = constants::kPi * radius1 * radius1 / 4;
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
-        const double tempFreq = 1000;
 
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(dist(e2), -50, dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(0, 1, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, tempFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
             {
                 hits3++;
             }
@@ -259,7 +257,6 @@ namespace objects
         const double reference1 = constants::kPi * radius1 * radius1 / 4;
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
-        const double tempFreq = 1000;
         // TODO: Why 1000? Is this important? If not, make sure to name it as such, like
         // const double KIgnoreFrequency = 0;
 
@@ -268,15 +265,15 @@ namespace objects
             core::Vec3 rayPosition(dist(e2), 50, dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(0, -1, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, tempFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
             {
                 hits3++;
             }
@@ -311,21 +308,20 @@ namespace objects
         const double reference1 = constants::kPi * radius1 * radius1 / 4;
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
-        const double tempFreq = 1000;
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(-50, dist(e2), dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(1, 0, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, tempFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
             {
                 hits3++;
             }
@@ -360,21 +356,20 @@ namespace objects
         const double reference1 = constants::kPi * radius1 * radius1 / 4;
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
-        const double tempFreq = 1000;
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(50, dist(e2), dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(-1, 0, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, tempFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
             {
                 hits3++;
             }
@@ -430,14 +425,13 @@ namespace objects
         const double radius = constants::kSimulationRadius;
         const double rayNum = 1000000;
         double hits = 0;
-        const double freq = 1000;
 
         const double referenceRatio = constants::kPi * radius * radius / 256;
         for (double num = 0; num < rayNum; num++)
         {
             core::Ray tempRay(core::Vec3(dist(e2), dist(e2), -40), core::Vec3(0, 0, 1));
             core::RayHitData hitData;
-            if (object1.hitObject(tempRay, freq, hitData))
+            if (object1.hitObject(tempRay, kSkipFreq, hitData))
             {
                 ++hits;
             }
