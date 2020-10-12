@@ -15,16 +15,37 @@
 
 namespace generators
 {
+    struct RandomGen {
+        virtual ~RandomGen() {};
+        virtual double getNext()  = 0;
+    };
 
-    double EngineUniformRandom();
-    double EngineGaussianRandom();
-    double EngineZero();
+    struct UniformRandomGen : public RandomGen {
+        UniformRandomGen(double min, double max) : _engine(std::random_device()()), _dist(min, max) {};
+        double getNext() override {
+            return _dist(_engine);
+        }
+
+        std::random_device _rd;
+        std::mt19937_64 _engine;
+        std::uniform_real_distribution<double> _dist;
+    };
+
+    struct FakeRandomGen : public RandomGen {
+        double getNext() override 
+        {
+            return 0;
+        }
+    };
 
     class PointSource final // This object is similar to Camera in graphics ray-tracer, that why name convension is simillar to camera
     {
     public:
         PointSource() = delete;
-        PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, const std::function<double(void)> &generator);
+        PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, RandomGen* randomGen) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen)
+        {
+        updateDiffusorSize();
+        }
         PointSource(const PointSource &) = default;
         ~PointSource() = default;
 
@@ -59,7 +80,7 @@ namespace generators
         double _frequency, _diffusorSize;
         size_t _rayNumPerRow;
         
-        std::function<double(double, double)> _generator;
+        RandomGen* _randomGen;
 
     };
 

@@ -2,42 +2,17 @@
 #define GENERATORS_CPP
 
 #include "generators.h"
-
+#include <random>
 namespace generators
 {
 #pragma region RANDOMGENERATORS
 
-    double EngineUniformRandom()
-    {
-        std::random_device rd;
-        std::mt19937_64 engine(rd);
-        std::uniform_real_distribution<double> dist(0, 1);
-        return dist(engine);
-    }
-    double EngineGaussianRandom()
-    {
-        std::random_device rd;
-        std::mt19937_64 engine(rd);
-        std::normal_distribution<double> dist(0, 1);
-        return dist(engine);
-    }
-    double EngineZero()
-    {
-        return 0;
-    }
+    // double EngineUniformRandom(double min, double max);
+    // double EngineGaussianRandom(double mean, double standDev);
+    // double EngineZero(double passA, double passB);
 
 #pragma endregion
 #pragma region POINTSOURCE
-
-    // CONSTRUCTORS
-
-    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow,
-                             const double &diffusorSize,
-                             const std::function<double(void)> &generator) : _frequency(freq), _rayNumPerRow(rayNumPerRow),
-                                                                             _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4)), _generator(generator)
-    {
-        updateDiffusorSize();
-    }
 
     // OPERATORS
 
@@ -66,8 +41,8 @@ namespace generators
             ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << _rayNumPerRow - 1 << ", y: " << yIter << " / " << _rayNumPerRow;
             throw std::out_of_range(ss.str().c_str());
         }
-        double v = (static_cast<double>(xIter) + _gen()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-        double u = (static_cast<double>(yIter) + _gen()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+        double v = (static_cast<double>(xIter) + _randomGen->getNext()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+        double u = (static_cast<double>(yIter) + _randomGen->getNext()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
         return core::Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - _origin);
     }
 
