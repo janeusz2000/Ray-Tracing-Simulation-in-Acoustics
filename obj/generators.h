@@ -42,15 +42,12 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, RandomGen* randomGen) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen)
-        {
-        updateDiffusorSize();
-        }
-        PointSource(const PointSource &) = default;
-        ~PointSource() = default;
+        explicit PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, \
+                                        const double &diffusorSize, RandomGen* randomGen) : _frequency(freq),\
+                                        _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), \
+                                        _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen) {updateDiffusorSize();}
 
         // OPERATORS
-        PointSource &operator=(const PointSource &) = default;
         bool operator==(const PointSource &other) const;
         friend std::ostream &operator<<(std::ostream &os, const PointSource &pointSource);
 

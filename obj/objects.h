@@ -18,6 +18,7 @@ namespace objects
     {
     public:
         //METHODS
+        virtual ~Object() {};
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
         virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)  = 0;
 
