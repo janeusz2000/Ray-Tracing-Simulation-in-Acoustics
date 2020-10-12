@@ -6,19 +6,25 @@
 #include "core/ray.h"
 #include "core/vec3.h"
 
+#include <cmath>
+#include <functional>
 #include <initializer_list>
 #include <iostream>
 #include <random>
 
+
 namespace generators
 {
 
-    double getRandom();
+    double EngineUniformRandom();
+    double EngineGaussianRandom();
+    double EngineZero();
+
     class PointSource final // This object is similar to Camera in graphics ray-tracer, that why name convension is simillar to camera
     {
     public:
         PointSource() = delete;
-        PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize);
+        PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, double(*gen)());
         PointSource(const PointSource &) = default;
         ~PointSource() = default;
 
@@ -53,6 +59,8 @@ namespace generators
         double _frequency, _diffusorSize;
         size_t _rayNumPerRow;
         
+        std::function<double()> _gen;
+
     };
 
 } // namespace generators

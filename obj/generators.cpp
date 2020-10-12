@@ -2,19 +2,28 @@
 #define GENERATORS_CPP
 
 #include "generators.h"
-#include <cmath>
-#include <iostream>
 
 namespace generators
 {
-#pragma region GLOBALMETHODS
+#pragma region RANDOMGENERATORS
 
-    double getRandom()
+    double EngineUniformRandom()
     {
         std::random_device rd;
-        std::mt19937_64 engine(rd());
+        std::mt19937_64 engine(rd);
+        std::uniform_real_distribution<double> dist{0, 1};
+        return dist(engine);
+    }
+    double EngineGaussianRandom()
+    {
+        std::random_device rd;
+        std::mt19937_64 engine(rd);
         std::normal_distribution<double> dist{0, 1};
-        return dist(rd);
+        return dist(engine);
+    }
+    double EngineZero()
+    {
+        return 0;
     }
 
 #pragma endregion
@@ -22,8 +31,9 @@ namespace generators
 
     // CONSTRUCTORS
 
-    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4))
+    PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, const double &diffusorSize, double (*gen)() = EngineGaussianRandom) : _frequency(freq), _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), _origin(core::Vec3(0, 0, 4))
     {
+        _gen = gen;
         updateDiffusorSize();
     }
 
@@ -46,7 +56,7 @@ namespace generators
         _leftCorner = core::Vec3(-1 * _diffusorSize / 2, -1 * _diffusorSize / 2, 1);
     }
 
-    core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter, bool incldueRandom)
+    core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter)
     {
         if (xIter >= _rayNumPerRow && yIter >= _rayNumPerRow)
         {
@@ -54,32 +64,10 @@ namespace generators
             ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << _rayNumPerRow - 1 << ", y: " << yIter << " / " << _rayNumPerRow;
             throw std::out_of_range(ss.str().c_str());
         }
-
-        double u, v;
-        // TODO: Using randomness in tests will make it very hard to debug them. Using two different paths,
-        // one in test one in real code means that there can be bugs that you will never see.
-        //
-        // The way it should be done is:
-        // 1. This class should take random number generator in constructor
-        // 2. in real code you create a real generator
-        // 3. in tests you pass a fake generator that you can precisely configure
-
-        if (incldueRandom)
-        {
-            v = (static_cast<double>(xIter) + getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-            u = (static_cast<double>(yIter) + getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-        }
-        else
-        {
-            v = (static_cast<double>(xIter)) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-            u = (static_cast<double>(yIter)) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-        }
+        double v = (static_cast<double>(xIter) + _gen()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+        double u = (static_cast<double>(yIter) + _gen()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
         return core::Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - _origin);
     }
-
-    // PRIVATE METHODS
-    // TODO: This function does not look like it belongs to this class. Move it outside to
-    // an unnamed namespace and move to the top of this file.
 
     // GETTERS AND SETTERS
 
