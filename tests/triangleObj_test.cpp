@@ -119,8 +119,8 @@ namespace objects
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), dist(engine), -20}, {0, 0, 1});
-
-            if (object.hitObject(tempRay, freq))
+            core::RayHitData hitData;
+            if (object.hitObject(tempRay, freq, hitData))
             {
                 ++hits;
             }
@@ -144,8 +144,8 @@ namespace objects
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), dist(engine), 20}, {0, 0, -1});
-
-            if (object.hitObject(tempRay, freq))
+            core::RayHitData hitData;
+            if (object.hitObject(tempRay, freq, hitData))
             {
                 ++hits;
             }
@@ -169,8 +169,8 @@ namespace objects
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), -20, dist(engine)}, {0, 1, 0});
-
-            if (object.hitObject(tempRay, freq))
+            core::RayHitData hitData;
+            if (object.hitObject(tempRay, freq, hitData))
             {
                 ++hits;
             }
@@ -194,8 +194,8 @@ namespace objects
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({dist(engine), 20, dist(engine)}, {0, -1, 0});
-
-            if (object.hitObject(tempRay, freq))
+            core::RayHitData hitData;
+            if (object.hitObject(tempRay, freq, hitData))
             {
                 ++hits;
             }
@@ -219,8 +219,8 @@ namespace objects
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({20, dist(engine), dist(engine)}, {-1, 0, 0});
-
-            if (object.hitObject(tempRay, freq))
+            core::RayHitData hitData;
+            if (object.hitObject(tempRay, freq, hitData))
             {
                 ++hits;
             }
@@ -244,8 +244,8 @@ namespace objects
         for (auto num = 0; num < rayNum; ++num)
         {
             core::Ray tempRay({-20, dist(engine), dist(engine)}, {1, 0, 0});
-
-            if (object.hitObject(tempRay, freq))
+            core::RayHitData hitData;
+            if (object.hitObject(tempRay, freq, hitData))
             {
                 ++hits;
             }

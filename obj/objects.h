@@ -19,7 +19,8 @@ namespace objects
     public:
         //METHODS
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
-        virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const = 0;
+        // TODO: make sure that pointer to RayHitData  is nullptr. otherwise throw memory leak exception
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)  = 0;
 
         //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 & or);
@@ -56,7 +57,7 @@ namespace objects
         //  object was hit!
         //  }
         //
-        virtual std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData  &hitData) override;
 
         //GETTERS AND SETTERS
         // TODO: make & formatting consistent.
@@ -141,7 +142,7 @@ namespace objects
 
         // METHODS
         core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
-        std::unique_ptr<core::RayHitData> hitObject(const core::Ray &ray, const double &freq) const override;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData) override;
         bool doesHit(const core::Vec3 &point) const;
         double area() const;
         void refreshAttributes();

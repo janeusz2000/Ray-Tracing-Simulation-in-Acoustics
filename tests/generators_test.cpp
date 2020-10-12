@@ -141,10 +141,10 @@ namespace generators
         objects::TriangleObj object({-0.6, -0.6, 1}, {0.6, -0.6, 1}, {-0.6, 0.6, 1});
 
         core::Ray tempRay = source.GenerateRay(0, 0);
-        auto hitData = object.hitObject(tempRay, freq);
-
-        ASSERT_TRUE(hitData);
-        ASSERT_EQ(core::Ray(source.getOrigin(), hitData->direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
+        core::RayHitData hitData;
+        ASSERT_TRUE(object.hitObject(tempRay, freq, hitData));
+        std::cout << hitData << std::endl;
+        ASSERT_EQ(core::Ray(source.getOrigin(), hitData.direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
     }
 
     TEST(POINTSOURCE_METHODS, Test_GenerateRay_Test) // Monte Carlo Test
@@ -156,13 +156,13 @@ namespace generators
 
         objects::TriangleObj object({-0.25, -0.25, 1}, {0.25, -0.25, 1}, {-0.25, 0.25, 1});
         double hits = 0, missed = 0;
-
+        core::RayHitData hitData;
         for (size_t x = 0; x < rayNumPerRow; ++x)
         {
             for (size_t y = 0; y < rayNumPerRow; ++y)
             {
                 core::Ray tempRay = source.GenerateRay(x, y, true);
-                if (object.hitObject(tempRay, freq))
+                if (object.hitObject(tempRay, freq, hitData))
                 {
                     ++hits;
                 }

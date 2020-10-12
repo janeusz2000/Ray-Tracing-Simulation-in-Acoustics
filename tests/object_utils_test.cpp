@@ -14,6 +14,7 @@
 
 namespace objects
 {
+    const double kSkipFreq = 1000;
 
     TEST(SPHERE_OPERATORS, Test_Operator_ostream)
     {
@@ -115,16 +116,16 @@ namespace objects
         {
             core::Vec3 rayPosition(dist(e2), dist(e2), -50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, 1));
-
-            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            core::RayHitData hitData1, hitData2, hitData3;
+            if (object1.hitObject(tempRay, tempFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq))
+            if (object2.hitObject(tempRay, tempFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq))
+            if (object3.hitObject(tempRay, tempFreq, hitData3))
             {
                 hits3++;
             }
@@ -165,16 +166,16 @@ namespace objects
         {
             core::Vec3 rayPosition(dist(e2), dist(e2), 50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, -1));
-
-            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            core::RayHitData hitData1, hitData2, hitData3;
+            if (object1.hitObject(tempRay, tempFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq))
+            if (object2.hitObject(tempRay, tempFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq))
+            if (object3.hitObject(tempRay, tempFreq, hitData3))
             {
                 hits3++;
             }
@@ -214,16 +215,16 @@ namespace objects
         {
             core::Vec3 rayPosition(dist(e2), -50, dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(0, 1, 0));
-
-            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            core::RayHitData hitData1, hitData2, hitData3;
+            if (object1.hitObject(tempRay, tempFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq))
+            if (object2.hitObject(tempRay, tempFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq))
+            if (object3.hitObject(tempRay, tempFreq, hitData3))
             {
                 hits3++;
             }
@@ -266,16 +267,16 @@ namespace objects
         {
             core::Vec3 rayPosition(dist(e2), 50, dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(0, -1, 0));
-
-            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            core::RayHitData hitData1, hitData2, hitData3;
+            if (object1.hitObject(tempRay, tempFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq))
+            if (object2.hitObject(tempRay, tempFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq))
+            if (object3.hitObject(tempRay, tempFreq, hitData3))
             {
                 hits3++;
             }
@@ -311,21 +312,20 @@ namespace objects
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
         const double tempFreq = 1000;
-
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(-50, dist(e2), dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(1, 0, 0));
-
-            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            core::RayHitData hitData1, hitData2, hitData3;
+            if (object1.hitObject(tempRay, tempFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq))
+            if (object2.hitObject(tempRay, tempFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq))
+            if (object3.hitObject(tempRay, tempFreq, hitData3))
             {
                 hits3++;
             }
@@ -361,21 +361,20 @@ namespace objects
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
         const double tempFreq = 1000;
-
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(50, dist(e2), dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(-1, 0, 0));
-
-            if (object1.hitObject(tempRay, tempFreq)) // if std::unique_ptr is not nullptr
+            core::RayHitData hitData1, hitData2, hitData3;
+            if (object1.hitObject(tempRay, tempFreq, hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, tempFreq))
+            if (object2.hitObject(tempRay, tempFreq, hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, tempFreq))
+            if (object3.hitObject(tempRay, tempFreq, hitData3))
             {
                 hits3++;
             }
@@ -384,6 +383,19 @@ namespace objects
         ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
         ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
+    }
+
+    TEST(SPHERE_METHODS, Test_Ray_hit_Data_Properties)
+    {
+        core::Ray tempRay(core::Vec3(0, 0, 5), core::Vec3(0, 0, -1));
+        Sphere object1(core::Vec3(0, 0, 0), 1);
+        core::RayHitData hitData;
+
+        object1.hitObject(tempRay, kSkipFreq, hitData);
+        ASSERT_EQ(core::Vec3(0, 0, -1), hitData.direction);
+        ASSERT_EQ(core::Vec3(0, 0, 1), hitData.collisionPoint);
+        ASSERT_EQ(core::Vec3(0, 0, 5), hitData.origin);
+        ASSERT_EQ(4, hitData.time);
     }
 
     TEST(SPHERE_CONSTRUCTOR, Test_All_Possible_Constructors)
@@ -421,11 +433,11 @@ namespace objects
         const double freq = 1000;
 
         const double referenceRatio = constants::kPi * radius * radius / 256;
-
         for (double num = 0; num < rayNum; num++)
         {
             core::Ray tempRay(core::Vec3(dist(e2), dist(e2), -40), core::Vec3(0, 0, 1));
-            if (object1.hitObject(tempRay, freq))
+            core::RayHitData hitData;
+            if (object1.hitObject(tempRay, freq, hitData))
             {
                 ++hits;
             }

@@ -18,6 +18,7 @@ namespace core
         // TODO: do not pass simple types using const type&, as it does not make sense.
         // They are quick to copy no need to use const references with floats, as it make
         // the code harder to read.
+
         //METHODS
         Vec3 at(const double &time) const;
         double phaseAt(const double &freq, const double &time) const;
@@ -41,13 +42,14 @@ namespace core
 
     struct RayHitData
     {
-        RayHitData() = delete;
+        RayHitData() = default;
         RayHitData(const double &t, const Vec3 &norm, const Ray &ray, const double &freq) : time(t), normal(norm), frequency(freq)
         {
             collisionPoint = ray.at(time);
             direction = ray.getDirection();
             energy = ray.getEnergy();
             phase = ray.phaseAt(frequency, time);
+            origin = ray.getOrigin();
         }
         ~RayHitData() = default;
         RayHitData(const RayHitData &) = default;
@@ -57,7 +59,7 @@ namespace core
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 
         // VARIABLES
-        Vec3 collisionPoint, direction, normal;
+        Vec3 collisionPoint, direction, normal, origin;
         double time, energy, phase, frequency;
     };
 } // namespace core

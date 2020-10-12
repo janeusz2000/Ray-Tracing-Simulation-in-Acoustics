@@ -28,7 +28,7 @@ namespace objects
         _radius = rad;
     }
 
-    std::unique_ptr<core::RayHitData> Sphere::hitObject(const core::Ray &ray, const double &freq) const
+    bool Sphere::hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)
     {
         core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
 
@@ -41,7 +41,7 @@ namespace objects
         // If object is at opposite direction than ray is:
         if (discriminant < 0)
         {
-            return nullptr;
+            return false;
         }
 
         double temp = std::sqrt(discriminant);
@@ -51,17 +51,18 @@ namespace objects
         // if both objects are at opposite direction then ray is:
         if (time1 < 0)
         {
-            return nullptr;
+            return false;
         }
         else if (time1 < 0 && time2 < 0)
         {
-            return nullptr;
+            return false;
         }
         else
         {
             double time = std::min(time1, time2);
             core::Vec3 collision = ray.at(time);
-            return std::make_unique<core::RayHitData>(time, normal(collision), ray, freq);
+            hitData = core::RayHitData(time, normal(collision), ray, freq);
+            return true;
         }
     }
 
@@ -282,37 +283,33 @@ namespace objects
         return _normal;
     }
 
-    std::unique_ptr<core::RayHitData> TriangleObj::hitObject(const core::Ray &ray, const double &freq) const
+    bool TriangleObj::hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)
     {
-
-        // TODO: "ray.getDirection().scalar_product(_normal)" is calculated 2x. Cache the result.
-        // if ray direction is parpedicular to normal, there is no hit. It can be translated into
-        // checking if scalar_product of the ray.direction and normal is close or equal to zero.
-        // TODO: What if ray points away of the triangle? Do you support hits from behind the triangle?
-
         // if ray direction is parpedicular to normal, there is no hit. It can be translated into
         // checking if scalarProduct of the ray.direction and normal is close or equal to zero.
-        if (std::abs(ray.getDirection().scalarProduct(_normal)) <= constants::kAccuracy)
+        double parpCoeff = ray.getDirection().scalarProduct(_normal);
+        if (std::abs(parpCoeff) <= constants::kAccuracy)
         {
-            return nullptr;
+            return false;
         }
 
         // Following code calculates time at which ray is hitting surface where triangle is positioned
-        double time = (-1 * (ray.getOrigin() - _point3)).scalarProduct(_normal) / (ray.getDirection().scalarProduct(_normal));
+        double time = (-1 * (ray.getOrigin() - _point3)).scalarProduct(_normal) / parpCoeff;
 
         // Following code is making sure that ray doesn't hit the same object.
         if (time < constants::kHitAccuracy)
         {
-            return nullptr;
+            return false;
         }
 
         core::Vec3 surfaceHit = ray.at(time);
 
         if (this->doesHit(surfaceHit))
         {
-            return std::make_unique<core::RayHitData>(time, _normal, ray, freq);
+            hitData = core::RayHitData(time, _normal, ray, freq);
+            return true;
         }
-        return nullptr;
+        return false;
     }
 
     bool TriangleObj::doesHit(const core::Vec3 &point) const
