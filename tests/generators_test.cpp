@@ -11,10 +11,6 @@
 
 namespace generators
 {
-    double genZero()
-    {
-        return 0;
-    };
 
 } // namespace generators
 TEST(POINTSOURCE_CONSTRUCTOR, Test_All_Possible_Constructors)

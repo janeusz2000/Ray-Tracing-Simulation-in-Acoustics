@@ -36,7 +36,7 @@ namespace generators
         // METHODS
         void updateDiffusorSize();
         // TODO: Parameter names are not self explanatory. Please update.
-        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter, bool incldueRandom = false);
+        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter);
 
         // GETTERS AND SETTERS
         double getFrequency() const;
