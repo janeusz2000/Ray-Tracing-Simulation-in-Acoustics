@@ -15,10 +15,6 @@ namespace core
     public:
         Ray(const Vec3 &origin= Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), const double &energy = 0);
 
-        // TODO: do not pass simple types using const type&, as it does not make sense.
-        // They are quick to copy no need to use const references with floats, as it make
-        // the code harder to read.
-
         //METHODS
         Vec3 at(const double &time) const;
         double phaseAt(const double &freq, const double &time) const;

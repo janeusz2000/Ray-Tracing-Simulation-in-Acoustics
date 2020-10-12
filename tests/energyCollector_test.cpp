@@ -104,11 +104,8 @@ namespace objects
         EnergyCollector object6(core::Vec3(std::sqrt(2), 1, 2), 20, 1);
         ASSERT_EQ(object5, object6);
 
-        // TODO: Make tests more complicated. From the fact that you used sqrt(2) does not mean
-        // that you are testing against floating point issues. sqrt(2) will always return the same
-        // value. Issue arises if you do some operations, and the order of operations matters.
-        EnergyCollector object7(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
-        EnergyCollector object8(core::Vec3(std::sqrt(3), std::sqrt(2), 0), std::sqrt(2), 1);
+        EnergyCollector object7(core::Vec3(std::sqrt(3) * std::sqrt(3), std::sqrt(2) * std::sqrt(2), 0), 2, 1);
+        EnergyCollector object8(core::Vec3(3, 2, 0), 2, 1);
         ASSERT_EQ(object7, object8);
     }
 

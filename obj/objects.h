@@ -19,7 +19,6 @@ namespace objects
     public:
         //METHODS
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
-        // TODO: make sure that pointer to RayHitData  is nullptr. otherwise throw memory leak exception
         virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)  = 0;
 
         //GETTERS_AND_SETTERS
@@ -40,29 +39,12 @@ namespace objects
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //METHODS
-        // TODO: Why surface point is zero by default?
-        virtual core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
-        // TODO: Do not use unique_ptr with RayHitData. This is a data transfer object, that
-
-        // can be easily copied and no need to construct it on the heap. It will be also faster
-        // as you will not need to constantly allocate memory.
-        //
-        // You can change this to sth like:
-        //  virtual bool hitObject(const core::Ray &ray, const double &freq, RayHitData* out) const = 0;
-        //
-        // Then in the code you will have nicely readable pieces like:
-        //
-        //  RayHitData data:
-        //  if (object->hitObject(ray, freq, &data)) {
-        //  object was hit!
-        //  }
-        //
+        virtual core::Vec3 normal(const core::Vec3 &surface_point) const override;
         virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData  &hitData) override;
 
         //GETTERS AND SETTERS
-        // TODO: make & formatting consistent.
-        void setRadius(const double &rad);
         double getRadius() const;
+        void setRadius(const double &rad);
 
     protected:
         double _radius;

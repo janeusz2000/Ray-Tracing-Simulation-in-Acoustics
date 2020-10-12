@@ -7,7 +7,17 @@
 
 namespace generators
 {
+#pragma region GLOBALMETHODS
 
+    double getRandom()
+    {
+        std::random_device rd;
+        std::mt19937_64 engine(rd());
+        std::normal_distribution<double> dist{0, 1};
+        return dist(rd);
+    }
+
+#pragma endregion
 #pragma region POINTSOURCE
 
     // CONSTRUCTORS
@@ -53,11 +63,11 @@ namespace generators
         // 1. This class should take random number generator in constructor
         // 2. in real code you create a real generator
         // 3. in tests you pass a fake generator that you can precisely configure
-        
+
         if (incldueRandom)
         {
-            v = (static_cast<double>(xIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-            u = (static_cast<double>(yIter) + this->getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+            v = (static_cast<double>(xIter) + getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+            u = (static_cast<double>(yIter) + getRandom()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
         }
         else
         {
@@ -70,13 +80,6 @@ namespace generators
     // PRIVATE METHODS
     // TODO: This function does not look like it belongs to this class. Move it outside to
     // an unnamed namespace and move to the top of this file.
-    double PointSource::getRandom() const
-    {
-        std::random_device rd;
-        std::mt19937_64 engine(rd());
-        std::normal_distribution<double> dist{0, 1};
-        return dist(rd);
-    }
 
     // GETTERS AND SETTERS
 

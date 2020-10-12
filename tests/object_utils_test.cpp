@@ -257,8 +257,6 @@ namespace objects
         const double reference1 = constants::kPi * radius1 * radius1 / 4;
         const double reference2 = constants::kPi * radius2 * radius2 / 4;
         const double reference3 = constants::kPi * radius3 * radius3 / 4;
-        // TODO: Why 1000? Is this important? If not, make sure to name it as such, like
-        // const double KIgnoreFrequency = 0;
 
         for (size_t n = 0; n < rayNum; n++)
         {
