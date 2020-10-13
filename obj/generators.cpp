@@ -18,37 +18,37 @@ namespace generators
 
     bool PointSource::operator==(const PointSource &other) const
     {
-        return (_frequency == other.getFrequency() && _rayNumPerRow == other.getRayNumPerRow() && _origin == other.getOrigin() && _diffusorSize == other.getDiffusorSize() && _leftCorner == other.getLeftCorner());
+        return (_frequency == other.frequency() && _numOfRaysPerRow == other.numOfRaysPerRow() && _origin == other.origin() && _sampleSize == other.sampleSize() && _leftCorner == other.getLeftCorner());
     }
 
     std::ostream &operator<<(std::ostream &os, const PointSource &pointSource)
     {
-        return os << "Point Source: origin: " << pointSource.getOrigin() << ", number of rays per row: " << pointSource.getRayNumPerRow() << ", diffusor size: " << pointSource.getDiffusorSize() << ", frequency: " << pointSource.getFrequency();
+        return os << "Point Source: origin: " << pointSource.origin() << ", number of rays per row: " << pointSource.numOfRaysPerRow() << ", diffusor size: " << pointSource.sampleSize() << ", frequency: " << pointSource.frequency();
     }
 
     // METHODS
 
-    void PointSource::updateDiffusorSize()
+    void PointSource::updateSampleSize()
     {
-        _leftCorner = core::Vec3(-1 * _diffusorSize / 2, -1 * _diffusorSize / 2, 1);
+        _leftCorner = core::Vec3(-1 * _sampleSize / 2, -1 * _sampleSize / 2, 1);
     }
 
     core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter)
     {
-        if (xIter >= _rayNumPerRow && yIter >= _rayNumPerRow)
+        if (xIter >= _numOfRaysPerRow && yIter >= _numOfRaysPerRow)
         {
             std::stringstream ss;
-            ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << _rayNumPerRow - 1 << ", y: " << yIter << " / " << _rayNumPerRow;
+            ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << _numOfRaysPerRow - 1 << ", y: " << yIter << " / " << _numOfRaysPerRow;
             throw std::out_of_range(ss.str().c_str());
         }
-        double v = (static_cast<double>(xIter) + _randomGen->getNext()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
-        double u = (static_cast<double>(yIter) + _randomGen->getNext()) / static_cast<double>(_rayNumPerRow - 1) * _diffusorSize;
+        double v = (static_cast<double>(xIter) + _randomGen->getNext()) / static_cast<double>(_numOfRaysPerRow - 1) * _sampleSize;
+        double u = (static_cast<double>(yIter) + _randomGen->getNext()) / static_cast<double>(_numOfRaysPerRow - 1) * _sampleSize;
         return core::Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - _origin);
     }
 
     // GETTERS AND SETTERS
 
-    double PointSource::getFrequency() const
+    double PointSource::frequency() const
     {
         return _frequency;
     }
@@ -57,19 +57,17 @@ namespace generators
         _frequency = freq;
     }
 
-    double PointSource::getDiffusorSize() const
+    double PointSource::sampleSize() const
     {
-        return _diffusorSize;
+        return _sampleSize;
     }
     void PointSource::setDiffusorSize(const double &diffusorSize)
     {
-        _diffusorSize = diffusorSize;
-        // TODO: Why update diffusor size is not called here? This is what setters and getters are for.
-        // If the only thing your getters and setters are doing is exporing variables, then I would not
-        // add them, but make variables public instead.
+        _sampleSize = diffusorSize;
+        updateSampleSize();
     }
 
-    core::Vec3 PointSource::getOrigin() const
+    core::Vec3 PointSource::origin() const
     {
         return _origin;
     }
@@ -78,13 +76,13 @@ namespace generators
         _origin = point;
     }
 
-    size_t PointSource::getRayNumPerRow() const
+    size_t PointSource::numOfRaysPerRow() const
     {
-        return _rayNumPerRow;
+        return _numOfRaysPerRow;
     }
-    void PointSource::setRayNumPerRow(const size_t &rayNum)
+    void PointSource::setNumOfRaysPerRow(const size_t &rayNum)
     {
-        _rayNumPerRow = rayNum;
+        _numOfRaysPerRow = rayNum;
     }
 
     core::Vec3 PointSource::getLeftCorner() const

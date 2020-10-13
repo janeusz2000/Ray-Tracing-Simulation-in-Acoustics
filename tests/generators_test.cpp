@@ -66,21 +66,21 @@ namespace generators
         PointSource object2(1000, 200, 100, &fakeEngine);
         PointSource object3(std::sqrt(2), 100, std::sqrt(2), &fakeEngine);
 
-        ASSERT_EQ(object1.getFrequency(), 100);
-        ASSERT_EQ(object2.getFrequency(), 1000);
-        ASSERT_EQ(object3.getFrequency(), std::sqrt(2));
+        ASSERT_EQ(object1.frequency(), 100);
+        ASSERT_EQ(object2.frequency(), 1000);
+        ASSERT_EQ(object3.frequency(), std::sqrt(2));
 
-        ASSERT_EQ(object1.getRayNumPerRow(), 100);
-        ASSERT_EQ(object2.getRayNumPerRow(), 200);
-        ASSERT_EQ(object3.getRayNumPerRow(), 100);
+        ASSERT_EQ(object1.numOfRaysPerRow(), 100);
+        ASSERT_EQ(object2.numOfRaysPerRow(), 200);
+        ASSERT_EQ(object3.numOfRaysPerRow(), 100);
 
-        ASSERT_EQ(object1.getDiffusorSize(), 100);
-        ASSERT_EQ(object2.getDiffusorSize(), 100);
-        ASSERT_EQ(object3.getDiffusorSize(), std::sqrt(2));
+        ASSERT_EQ(object1.sampleSize(), 100);
+        ASSERT_EQ(object2.sampleSize(), 100);
+        ASSERT_EQ(object3.sampleSize(), std::sqrt(2));
 
-        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 4));
-        ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 0, 4));
-        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 0, 4));
+        ASSERT_EQ(object1.origin(), core::Vec3(0, 0, 4));
+        ASSERT_EQ(object2.origin(), core::Vec3(0, 0, 4));
+        ASSERT_EQ(object3.origin(), core::Vec3(0, 0, 4));
     }
 
     TEST(POINTSOURCE_METHODS, Test_Setters)
@@ -93,33 +93,33 @@ namespace generators
         object2.setFrequency(std::sqrt(3));
         object3.setFrequency(std::sqrt(5));
 
-        ASSERT_EQ(object1.getFrequency(), 1000);
-        ASSERT_EQ(object2.getFrequency(), std::sqrt(3));
-        ASSERT_EQ(object3.getFrequency(), std::sqrt(5));
+        ASSERT_EQ(object1.frequency(), 1000);
+        ASSERT_EQ(object2.frequency(), std::sqrt(3));
+        ASSERT_EQ(object3.frequency(), std::sqrt(5));
 
-        object1.setRayNumPerRow(200);
-        object2.setRayNumPerRow(800);
-        object3.setRayNumPerRow(2);
+        object1.setNumOfRaysPerRow(200);
+        object2.setNumOfRaysPerRow(800);
+        object3.setNumOfRaysPerRow(2);
 
-        ASSERT_EQ(object1.getRayNumPerRow(), 200);
-        ASSERT_EQ(object2.getRayNumPerRow(), 800);
-        ASSERT_EQ(object3.getRayNumPerRow(), 2);
+        ASSERT_EQ(object1.numOfRaysPerRow(), 200);
+        ASSERT_EQ(object2.numOfRaysPerRow(), 800);
+        ASSERT_EQ(object3.numOfRaysPerRow(), 2);
 
         object1.setDiffusorSize(std::sqrt(2));
         object2.setDiffusorSize(std::sqrt(13));
         object3.setDiffusorSize(std::sqrt(21));
 
-        ASSERT_EQ(object1.getDiffusorSize(), std::sqrt(2));
-        ASSERT_EQ(object2.getDiffusorSize(), std::sqrt(13));
-        ASSERT_EQ(object3.getDiffusorSize(), std::sqrt(21));
+        ASSERT_EQ(object1.sampleSize(), std::sqrt(2));
+        ASSERT_EQ(object2.sampleSize(), std::sqrt(13));
+        ASSERT_EQ(object3.sampleSize(), std::sqrt(21));
 
         object1.setOrigin(core::Vec3(0, 0, 1));
         object2.setOrigin(core::Vec3(1, 0, 2));
         object3.setOrigin(core::Vec3(0, 12, 2));
 
-        ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 1));
-        ASSERT_EQ(object2.getOrigin(), core::Vec3(1, 0, 2));
-        ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 12, 2));
+        ASSERT_EQ(object1.origin(), core::Vec3(0, 0, 1));
+        ASSERT_EQ(object2.origin(), core::Vec3(1, 0, 2));
+        ASSERT_EQ(object3.origin(), core::Vec3(0, 12, 2));
     }
 
     TEST(POINTSOURCE_METHODS, Test_Method_updateDiffusorSize)
@@ -145,7 +145,7 @@ namespace generators
         core::RayHitData hitData;
         ASSERT_TRUE(object.hitObject(tempRay, freq, hitData));
         std::cout << hitData << std::endl;
-        ASSERT_EQ(core::Ray(source.getOrigin(), hitData.direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
+        ASSERT_EQ(core::Ray(source.origin(), hitData.direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
     }
 
     TEST(POINTSOURCE_METHODS, Test_GenerateRay_Test) // Monte Carlo Test

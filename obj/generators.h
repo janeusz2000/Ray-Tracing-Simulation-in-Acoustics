@@ -38,44 +38,46 @@ namespace generators
         }
     };
 
-    class PointSource final // This object is similar to Camera in graphics ray-tracer, that why name convension is simillar to camera
+    class PointSource final // This object is generating rays with the origin 
+                            // of the point source position and direction calculated
+                            // from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0)
+                            // and origin of the source position
     {
     public:
         PointSource() = delete;
-        explicit PointSource::PointSource(const double &freq, const size_t &rayNumPerRow, \
+        explicit PointSource::PointSource(const double &freq, const size_t &numOfRaysPerRow, \
                                         const double &diffusorSize, RandomGen* randomGen) : _frequency(freq),\
-                                        _rayNumPerRow(rayNumPerRow), _diffusorSize(diffusorSize), \
-                                        _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen) {updateDiffusorSize();}
+                                        _numOfRaysPerRow(numOfRaysPerRow), _sampleSize(diffusorSize), \
+                                        _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen) {updateSampleSize();}
 
         // OPERATORS
         bool operator==(const PointSource &other) const;
         friend std::ostream &operator<<(std::ostream &os, const PointSource &pointSource);
 
         // METHODS
-        void updateDiffusorSize();
-        // TODO: Parameter names are not self explanatory. Please update.
+        void updateSampleSize();
         core::Ray GenerateRay(const size_t &xIter, const size_t &yIter);
 
         // GETTERS AND SETTERS
-        double getFrequency() const;
+        double frequency() const;
         void setFrequency(const double &freq);
 
-        double getDiffusorSize() const;
+        double sampleSize() const;
         void setDiffusorSize(const double &diffusorSize);
 
-        size_t getRayNumPerRow() const;
-        void setRayNumPerRow(const size_t &raynum);
+        size_t numOfRaysPerRow() const;
+        void setNumOfRaysPerRow(const size_t &raynum);
 
-        core::Vec3 getOrigin() const;
+        core::Vec3 origin() const;
         void setOrigin(const core::Vec3 &point);
 
-        core::Vec3 PointSource::getLeftCorner() const;
+        core::Vec3 PointSource::getLeftCorner() const; 
         void PointSource::setLeftCorner(const core::Vec3 &point);
 
     private:
         core::Vec3 _origin, _leftCorner;
-        double _frequency, _diffusorSize;
-        size_t _rayNumPerRow;
+        double _frequency, _sampleSize;
+        size_t _numOfRaysPerRow;
         
         RandomGen* _randomGen;
 
