@@ -13,7 +13,7 @@ namespace core
     class Ray
     {
     public:
-        Ray(const Vec3 &origin= Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), const double &energy = 0);
+        Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), const double &energy = 0);
 
         //METHODS
         Vec3 at(const double &time) const;
@@ -51,7 +51,7 @@ namespace core
         // OPERATORS
         bool operator==(const RayHitData &other) const;
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
-        
+
         // METHODS
         void swap(RayHitData *other) noexcept;  
 

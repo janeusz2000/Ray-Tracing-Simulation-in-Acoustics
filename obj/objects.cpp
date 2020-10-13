@@ -292,7 +292,6 @@ namespace objects
         core::Vec3 perpendicular = vecA.crossProduct(vecB);
         _normal = perpendicular.normalize();
     }
-    // while you could just move all the code into refreshAttributes() and cache the results.
 
     bool TriangleObj::arePointsValid()
     {
