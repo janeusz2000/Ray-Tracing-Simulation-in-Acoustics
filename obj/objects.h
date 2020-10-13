@@ -20,7 +20,7 @@ namespace objects
         //METHODS
         virtual ~Object() {};
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)  = 0;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData* hitData)  = 0;
 
         //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 & or);
@@ -41,7 +41,7 @@ namespace objects
 
         //METHODS
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const override;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData) override;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData* hitData) override;
 
         //GETTERS AND SETTERS
         double getRadius() const;
@@ -111,7 +111,7 @@ namespace objects
 
         // METHODS
         core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData) override;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData* hitData) override;
         bool doesHit(const core::Vec3 &point) const;
         double area() const;
         void refreshAttributes();

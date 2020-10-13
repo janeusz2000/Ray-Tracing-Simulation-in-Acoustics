@@ -27,7 +27,7 @@ namespace objects
         _radius = rad;
     }
 
-    bool Sphere::hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)
+    bool Sphere::hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData)
     {
         core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
 
@@ -60,7 +60,7 @@ namespace objects
         {
             double time = std::min(time1, time2);
             core::Vec3 collision = ray.at(time);
-            hitData = core::RayHitData(time, normal(collision), ray, freq);
+            hitData->swap(&core::RayHitData(time, normal(collision), ray, freq));
             return true;
         }
     }
@@ -223,7 +223,7 @@ namespace objects
         return _normal;
     }
 
-    bool TriangleObj::hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData)
+    bool TriangleObj::hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData)
     {
         // if ray direction is parpedicular to normal, there is no hit. It can be translated into
         // checking if scalarProduct of the ray.direction and normal is close or equal to zero.
@@ -246,7 +246,7 @@ namespace objects
 
         if (this->doesHit(surfaceHit))
         {
-            hitData = core::RayHitData(time, _normal, ray, freq);
+            hitData->swap(&core::RayHitData(time, _normal, ray, freq));
             return true;
         }
         return false;

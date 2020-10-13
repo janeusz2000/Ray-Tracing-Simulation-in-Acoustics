@@ -116,15 +116,15 @@ namespace objects
             core::Vec3 rayPosition(dist(e2), dist(e2), -50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, 1));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, &hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, &hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, &hitData3))
             {
                 hits3++;
             }
@@ -166,15 +166,15 @@ namespace objects
             core::Vec3 rayPosition(dist(e2), dist(e2), 50);
             core::Ray tempRay(rayPosition, core::Vec3(0, 0, -1));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, &hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, &hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, &hitData3))
             {
                 hits3++;
             }
@@ -214,15 +214,15 @@ namespace objects
             core::Vec3 rayPosition(dist(e2), -50, dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(0, 1, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, &hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, &hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, &hitData3))
             {
                 hits3++;
             }
@@ -263,15 +263,15 @@ namespace objects
             core::Vec3 rayPosition(dist(e2), 50, dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(0, -1, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, &hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, &hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, &hitData3))
             {
                 hits3++;
             }
@@ -311,15 +311,15 @@ namespace objects
             core::Vec3 rayPosition(-50, dist(e2), dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(1, 0, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, &hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, &hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, &hitData3))
             {
                 hits3++;
             }
@@ -359,15 +359,15 @@ namespace objects
             core::Vec3 rayPosition(50, dist(e2), dist(e2));
             core::Ray tempRay(rayPosition, core::Vec3(-1, 0, 0));
             core::RayHitData hitData1, hitData2, hitData3;
-            if (object1.hitObject(tempRay, kSkipFreq, hitData1))
+            if (object1.hitObject(tempRay, kSkipFreq, &hitData1))
             {
                 hits1++;
             }
-            if (object2.hitObject(tempRay, kSkipFreq, hitData2))
+            if (object2.hitObject(tempRay, kSkipFreq, &hitData2))
             {
                 hits2++;
             }
-            if (object3.hitObject(tempRay, kSkipFreq, hitData3))
+            if (object3.hitObject(tempRay, kSkipFreq, &hitData3))
             {
                 hits3++;
             }
@@ -384,7 +384,7 @@ namespace objects
         Sphere object1(core::Vec3(0, 0, 0), 1);
         core::RayHitData hitData;
 
-        object1.hitObject(tempRay, kSkipFreq, hitData);
+        object1.hitObject(tempRay, kSkipFreq, &hitData);
         ASSERT_EQ(core::Vec3(0, 0, -1), hitData.direction);
         ASSERT_EQ(core::Vec3(0, 0, 1), hitData.collisionPoint);
         ASSERT_EQ(core::Vec3(0, 0, 5), hitData.origin);
@@ -429,7 +429,7 @@ namespace objects
         {
             core::Ray tempRay(core::Vec3(dist(e2), dist(e2), -40), core::Vec3(0, 0, 1));
             core::RayHitData hitData;
-            if (object1.hitObject(tempRay, kSkipFreq, hitData))
+            if (object1.hitObject(tempRay, kSkipFreq, &hitData))
             {
                 ++hits;
             }

@@ -121,7 +121,7 @@ namespace objects
         {
             core::Ray tempRay({dist(engine), dist(engine), -20}, {0, 0, 1});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, kSkipFreq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, &hitData))
             {
                 ++hits;
             }
@@ -145,7 +145,7 @@ namespace objects
         {
             core::Ray tempRay({dist(engine), dist(engine), 20}, {0, 0, -1});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, kSkipFreq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, &hitData))
             {
                 ++hits;
             }
@@ -169,7 +169,7 @@ namespace objects
         {
             core::Ray tempRay({dist(engine), -20, dist(engine)}, {0, 1, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, kSkipFreq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, &hitData))
             {
                 ++hits;
             }
@@ -193,7 +193,7 @@ namespace objects
         {
             core::Ray tempRay({dist(engine), 20, dist(engine)}, {0, -1, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, kSkipFreq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, &hitData))
             {
                 ++hits;
             }
@@ -217,7 +217,7 @@ namespace objects
         {
             core::Ray tempRay({20, dist(engine), dist(engine)}, {-1, 0, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, kSkipFreq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, &hitData))
             {
                 ++hits;
             }
@@ -241,7 +241,7 @@ namespace objects
         {
             core::Ray tempRay({-20, dist(engine), dist(engine)}, {1, 0, 0});
             core::RayHitData hitData;
-            if (object.hitObject(tempRay, kSkipFreq, hitData))
+            if (object.hitObject(tempRay, kSkipFreq, &hitData))
             {
                 ++hits;
             }

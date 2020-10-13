@@ -143,7 +143,7 @@ namespace generators
 
         core::Ray tempRay = source.GenerateRay(0, 0);
         core::RayHitData hitData;
-        ASSERT_TRUE(object.hitObject(tempRay, freq, hitData));
+        ASSERT_TRUE(object.hitObject(tempRay, freq, &hitData));
         std::cout << hitData << std::endl;
         ASSERT_EQ(core::Ray(source.origin(), hitData.direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
     }
@@ -163,7 +163,7 @@ namespace generators
             for (size_t y = 0; y < rayNumPerRow; ++y)
             {
                 core::Ray tempRay = source.GenerateRay(x, y);
-                if (object.hitObject(tempRay, freq, hitData))
+                if (object.hitObject(tempRay, freq, &hitData))
                 {
                     ++hits;
                 }

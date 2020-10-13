@@ -39,13 +39,11 @@ namespace core
     struct RayHitData
     {
         RayHitData() = default;
-        RayHitData(const double &t, const Vec3 &norm, const Ray &ray, const double &freq) : time(t), normal(norm), frequency(freq)
+        RayHitData(const double &t, const Vec3 &norm, const Ray &ray, const double &freq) : \
+                     time(t),normal(norm), frequency(freq), collisionPoint(ray.at(t)), \
+                      direction(ray.getDirection()),energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
         {
-            collisionPoint = ray.at(time);
-            direction = ray.getDirection();
-            energy = ray.getEnergy();
-            phase = ray.phaseAt(frequency, time);
-            origin = ray.getOrigin();
+             origin = ray.getOrigin();
         }
         ~RayHitData() = default;
         RayHitData(const RayHitData &) = default;
@@ -53,6 +51,9 @@ namespace core
         // OPERATORS
         bool operator==(const RayHitData &other) const;
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
+        
+        // METHODS
+        void swap(RayHitData *other) noexcept;  
 
         // VARIABLES
         Vec3 collisionPoint, direction, normal, origin;
