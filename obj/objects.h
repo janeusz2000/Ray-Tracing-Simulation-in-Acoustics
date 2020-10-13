@@ -1,15 +1,15 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
 
-#include "core/vec3.h"
 #include "constants.h"
-#include "core/ray.h"
 #include "core/exceptions.h"
+#include "core/ray.h"
+#include "core/vec3.h"
 
-#include <cmath>
-#include <memory>
 #include <algorithm>
+#include <cmath>
 #include <initializer_list>
+#include <memory>
 #include <vector>
 
 namespace objects
@@ -18,9 +18,9 @@ namespace objects
     {
     public:
         //METHODS
-        virtual ~Object() {};
+        virtual ~Object(){};
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData* hitData)  = 0;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) = 0;
 
         //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 & or);
@@ -33,7 +33,7 @@ namespace objects
     class Sphere : public Object
     {
     public:
-        Sphere() :_radius(1) {};
+        Sphere() : _radius(1){};
         Sphere(const core::Vec3 & or, const double &rad = 1);
 
         //OPERATORS
@@ -41,7 +41,7 @@ namespace objects
 
         //METHODS
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const override;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData* hitData) override;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
 
         //GETTERS AND SETTERS
         double getRadius() const;
@@ -51,7 +51,7 @@ namespace objects
         double _radius;
     };
 
-    // When this object has two purposes: first - when ray hit this object, there is no longer need 
+    // When this object has two purposes: first - when ray hit this object, there is no longer need
     // to continue ray traceing. Second - the collision point is passed to energy collector, and after that specific
     // amount of energy from ray is collected depends on the distance from collision point to the sphere collectors;
     class SphereWall : public Sphere
@@ -66,7 +66,6 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-
         EnergyCollector(const core::Vec3 &origin = core::Vec3(0, 0, 2), const double &energy = 0, const int &id = 0) : _id(id), _energy(energy)
         {
             setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
@@ -97,8 +96,8 @@ namespace objects
     class TriangleObj : public Object
     {
     public:
-        TriangleObj(const core::Vec3 &point1 = {1, 0, 0}, \
-                    const core::Vec3 &point2 = {0, 1 ,0}, \
+        TriangleObj(const core::Vec3 &point1 = {1, 0, 0},
+                    const core::Vec3 &point2 = {0, 1, 0},
                     const core::Vec3 &point3 = {0, 0, 1});
         TriangleObj(const TriangleObj &other);
         ~TriangleObj() = default;
@@ -111,7 +110,8 @@ namespace objects
 
         // METHODS
         core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData* hitData) override;
+        // https://en.cppreference.com/w/cpp/language/attributes/nodiscard
+        [[nodiscard]] bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
         bool doesHit(const core::Vec3 &point) const;
         double area() const;
         void refreshAttributes();

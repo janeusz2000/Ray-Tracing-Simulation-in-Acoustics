@@ -39,23 +39,26 @@ namespace core
     struct RayHitData
     {
         RayHitData() = default;
-        RayHitData(const double &t, const Vec3 &norm, const Ray &ray, const double &freq) : \
-                     time(t),normal(norm), frequency(freq), collisionPoint(ray.at(t)), \
-                      direction(ray.getDirection()),energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
+        RayHitData(const double &t, const Vec3 &norm, const Ray &ray, const double &freq) : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)),
+                                                                                            direction(ray.getDirection()), energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
         {
-             origin = ray.getOrigin();
+            origin = ray.getOrigin();
         }
         ~RayHitData() = default;
         RayHitData(const RayHitData &) = default;
 
+        // Operators? No kidding!
+        // These comments are just visual clutter. I would remove them. It is more important to e.g
+        // describe what this does if the impl. is somehow not really self explanatory (e.g skips some params).
         // OPERATORS
         bool operator==(const RayHitData &other) const;
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 
         // METHODS
-        void swap(RayHitData *other) noexcept;  
+        void swap(RayHitData *other) noexcept;
 
         // VARIABLES
+        // Why do you store the members of the Ray separately?
         Vec3 collisionPoint, direction, normal, origin;
         double time, energy, phase, frequency;
     };

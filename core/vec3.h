@@ -26,6 +26,10 @@ namespace core
         Vec3 &operator-=(const Vec3 &other);
         Vec3 &operator-=(const double &num);
         Vec3 &operator*=(const double &num);
+        Vec3 operator-()
+        {
+            return *this * -1;
+        }
 
         friend std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3);
         friend bool operator==(const Vec3 &left, const Vec3 &right);

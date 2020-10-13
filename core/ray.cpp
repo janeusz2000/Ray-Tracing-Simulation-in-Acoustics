@@ -8,6 +8,9 @@ namespace core
     {
         if (direction == Vec3(0, 0, 0))
         {
+            // This is kind of a mouthful. Why not simply:
+            // throw std::invalid_argument(absl::Substitute("Invalid direction $0", direction));
+            // Learn how to format text nicely with absl :)
             throw std::invalid_argument("Ray object couldn't be constructed. You cannot have direction of the ray equal to Vec3(0, 0, 0)");
         }
 

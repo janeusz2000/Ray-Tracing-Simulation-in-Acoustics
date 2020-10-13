@@ -1,18 +1,24 @@
 #ifndef TRIANGLEOBJ_TEST_CPP
 #define TRIANGLEOBJ_TEST_CPP
 
-#include "gtest/gtest.h"
-#include "obj/objects.h"
-#include "core/vec3.h"
-#include "core/ray.h"
-#include "core/exceptions.h"
 #include "constants.h"
+#include "core/exceptions.h"
+#include "core/ray.h"
+#include "core/vec3.h"
+#include "obj/objects.h"
+#include "gtest/gtest.h"
 
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <random>
 #include <vector>
+
+// Define what you are using at the top of the file.
+// https://google.github.io/styleguide/cppguide.html#Namespaces
+using core::Ray;
+using core::RayHitData;
+using core::Vec3;
 
 namespace objects
 {
@@ -287,20 +293,38 @@ namespace objects
         ASSERT_EQ(TriangleObj({0, 0, 0}, {5, 0, 0}, {5, 5, 0}).area(), 12.5);
     }
 
+    // NOTE: Name of the test does not explain well what the test is doing.
+    // It seems that you are trying to verify that rays with origin inside the triangle, do not generate a hit (I guess?)
+    // but you are not really testing for that!
+    //
+    // Why do you need this Vec_0_1_0? Why is it important, looks like a special case? (but we know that it is clearly not)
+    //
+    // Better name would be something like: RayWithOriginInsideDoNotHit
     TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_Inside_Object_Vec_0_1_0)
     {
+        // NOTE: Just don't. https://google.github.io/styleguide/cppguide.html#Namespaces
         using namespace core;
 
+        // Move this right just before it is used. Forward declarations were required in C.
         RayHitData hitData;
         Ray tempRay(Vec3(0.25, 0, 0.25), Vec3(0, 1, 0)); // Ray has origin inside object1
 
+        // NOTE: Why there are 2 objects in the list? Why there is a second one given that ray hits the first one?
+        // (at least that is what the comment says).
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
 
+        // Do not use auto if it does not improve the readability.
+        // Use const references. Almost always.
         for (auto &obj : objectList)
         {
+            // Why you are not checking the return value here?
             obj.hitObject(tempRay, kSkipFreq, &hitData);
+            // Why are you not asserting on the results of hitData?
+            // What if the first object got hit? This way you would get bonkers results below.
         }
 
+        // Where are those numbers coming from? If calculations are hard, add them in the comment to explain.
+        // This way future you while reading the code will be sure that the test itself is correct.
         ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 4, 0.25));
         ASSERT_EQ(hitData.direction, tempRay.getDirection());
         ASSERT_EQ(hitData.origin, tempRay.getOrigin());
@@ -370,6 +394,7 @@ namespace objects
 
         for (auto &obj : objectList)
         {
+            // Assert false? RTFM
             ASSERT_TRUE(!obj.hitObject(tempRay, kSkipFreq, &hitData));
         }
     }
@@ -462,6 +487,116 @@ namespace objects
         ASSERT_EQ(object1.point3(), core::Vec3(1, 1, 0));
         ASSERT_EQ(object1.normal(core::Vec3()), core::Vec3(0, 0, 1));
         ASSERT_EQ(object1.getOrigin(), core::Vec3((2.0 / 3.0), (1.0 / 3.0), 0));
+    }
+
+    // This test is kind of useless anyway, but hey...
+    TEST(TriangleObjTest, Printing)
+    {
+        {
+            std::stringstream ss;
+            ss << TriangleObj(core::Vec3(std::sqrt(2), 0, 0), core::Vec3(1, 2, 3), core::Vec3(-4, -5, -6));
+            ASSERT_EQ(ss.str(), "Triangle Object, vertex: Vec3(1.41421, 0, 0), Vec3(1, 2, 3), Vec3(-4, -5, -6)");
+        }
+
+        // This test is useless, it is here just for demonstration purposes that with braces I could reuse "ss".
+        {
+            std::stringstream ss;
+            ss << TriangleObj();
+            ASSERT_EQ(ss.str(), "Triangle Object, vertex: Vec3(1, 0, 0), Vec3(0, 1, 0), Vec3(0, 0, 1)");
+        }
+    }
+
+    // If ray has an origin inside the triangle then it never hits, as we try to
+    // avoid hitting the same object twice.
+    TEST(TriangleObjectTest, RayWithOriginInsideDoNotHit)
+    {
+        // 1. Define some constant data points and name them nicely, so that you can just
+        // reuse them but not rewrite them every time. What if you make a mistake in the
+        // numbers and then you spend hours trying to figure out where is the error?
+        //
+        // 2. Try to define variables just before you use them.
+        // https://stackoverflow.com/questions/17386326/what-downsides-is-declaring-variables-just-before-first-time-use-it
+        // https://wiki.c2.com/?DeclareVariablesAtFirstUse
+        Vec3 kA(1, 2, 3);
+        Vec3 kB(4, 5, 2);
+        Vec3 kC(-2, -2, 1);
+        TriangleObj triangle(kA, kB, kC);
+
+        // Naming is key, this way the asserts below read nicely.
+        // Alternatively, allow to pass nullptr in hitObject.
+        RayHitData ignore;
+
+        // Group the code so that it has:
+        // 1. Data preparation
+        // 2. Call method under test
+        // 3. Asserts (all you need for this specific test).
+        //
+        // This way you can focus on this one specific test case, as opposed to first read
+        // all the data you prepare for all other tests, and then see the methods under test and then
+        // asserts you, and then you need to jump back and fourth between data and checks to make sure it works...
+        // Nightmare.
+        //
+        // The worst example of this is the first test with ostream opeartor.
+        //
+        // References:
+        // https://blogs.agilefaqs.com/2010/11/14/single-assert-per-unit-test-myth/
+        // https://www.agilealliance.org/glossary/gwt/
+        //
+        // Side note: Thanks to my clever initialization, I am sure this is inside the triangle
+        // regardless of what is A, B, C. I am not limited to simple cases!
+        //
+        // This defines just the center of the triangle, but more general you have Barycentric coordinates [1],
+        // so you could just generate A, B, C, and generate random point on a triangle and always check if this
+        // is true.
+        //
+        // [1] https://en.wikipedia.org/wiki/Barycentric_coordinate_system#Barycentric_coordinates_on_triangles
+        Ray rayOppositeNormal((kA + kB + kC) / 3.0, -triangle.normal());
+        ASSERT_FALSE(triangle.hitObject(rayOppositeNormal, kSkipFreq, &ignore));
+
+        // Here I am constructing this object in a non trivial way so I need to also check if
+        // my assumption that this ray has a perperpendicular normal checks out.
+        // Even if the constrution is trivial, just putting numbers in place still check if you assumptions hold.
+        // You made this mistake in the past, multiple times, e.g when triangle was really a line,
+        // so assumptions were wrong, and you spend coutless hours debugging.
+        {
+            Ray rayPerpendicularNormal((kA + kB + kC) / 3.0,
+                                       triangle.normal().crossProduct(kA - kB));
+            ASSERT_NEAR(0, rayPerpendicularNormal.getDirection().scalarProduct(triangle.normal()), 0.001f)
+                << "Ray is not perpendicular to the triangle normal, but it should be";
+            ASSERT_FALSE(triangle.hitObject(rayPerpendicularNormal, kSkipFreq, &ignore));
+        }
+
+        // Sometimes it is a good idea to wrap test cases with braces like this. This way:
+        // 1. you have some visual separation of the test cases. You can also add comments explaining each case instead,
+        // saying, why you want this to happen.
+        // 2. if you want to reuse the same variables you used earlier (see Printing test).
+        {
+            Ray raySamDirectionNormal((kA + kB + kC) / 3.0, triangle.normal());
+            ASSERT_FALSE(triangle.hitObject(raySamDirectionNormal, kSkipFreq, &ignore));
+        }
+    }
+
+    // This is how it looks without comments.
+    TEST(TriangleObjectTest, RayWithOriginInsideDoNotHit2)
+    {
+        Vec3 kA(1, 2, 3);
+        Vec3 kB(4, 5, 2);
+        Vec3 kC(-2, -2, 1);
+        TriangleObj triangle(kA, kB, kC);
+
+        RayHitData ignore;
+
+        Ray rayOppositeNormal((kA + kB + kC) / 3.0, -triangle.normal());
+        ASSERT_FALSE(triangle.hitObject(rayOppositeNormal, kSkipFreq, &ignore));
+
+        Ray raySamDirectionNormal((kA + kB + kC) / 3.0, triangle.normal());
+        ASSERT_FALSE(triangle.hitObject(raySamDirectionNormal, kSkipFreq, &ignore));
+
+        Ray rayPerpendicularNormal((kA + kB + kC) / 3.0,
+                                   triangle.normal().crossProduct(kA - kB));
+        ASSERT_NEAR(0, rayPerpendicularNormal.getDirection().scalarProduct(triangle.normal()), 0.001f)
+            << "Ray is not perpendicular to the triangle normal, but it should be";
+        ASSERT_FALSE(triangle.hitObject(rayPerpendicularNormal, kSkipFreq, &ignore));
     }
 
 }; // namespace objects
