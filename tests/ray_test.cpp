@@ -1,6 +1,3 @@
-#ifndef RAY_TEST_H
-#define RAY_TEST_H
-
 #include "gtest/gtest.h"
 #include "core/exceptions.h"
 #include "core/vec3.h"
@@ -11,7 +8,7 @@
 
 namespace core
 {
-    TEST(RAY_OPERATOR, Test_operator_ostream)
+    TEST(RAY_OPERATOR, Operator_ostream)
     {
         std::stringstream s1;
         std::stringstream s2;
@@ -38,12 +35,12 @@ namespace core
         ASSERT_EQ(s5.str(), "RAY origin: Vec3(1.41421, 1, 1), direction: Vec3(1, 0, 0), energy: 0");
     }
 
-    TEST(RAY_CONSTRUCTOR, Test_constructor_invalid)
+    TEST(RAY_CONSTRUCTOR, constructor_invalid)
     {
         ASSERT_THROW(Ray({0, 0, 0}, {0, 0, 0}), std::invalid_argument);
         ASSERT_THROW(Ray({0, 0, 0}, {0, 0, constants::kAccuracy * 0.999}), std::invalid_argument);
     }
-    TEST(RAY_CONSTRUCTOR, Test_All_Possible_Constructors)
+    TEST(RAY_CONSTRUCTOR, All_Possible_Constructors)
     {
         Ray temp1;
         Ray temp2(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
@@ -62,13 +59,13 @@ namespace core
         ASSERT_EQ(temp3, temp6);
     }
 
-    TEST(RAY_OPERATOR, Test_Operator_Equal_Equal)
+    TEST(RAY_OPERATOR, Operator_Equal_Equal)
     {
         ASSERT_EQ(Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)), Ray(Vec3(0, 0, 0), Vec3(1, 0, -1)));
         ASSERT_EQ(Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)), Ray(Vec3(0, 0, 1), Vec3(1, 0, 1)));
     }
 
-    TEST(RAY_METHOD, test_Method_PhaseAt)
+    TEST(RAY_METHOD, Method_PhaseAt)
     {
         double freq1 = 1000;
         double freq2 = 300;
@@ -83,7 +80,7 @@ namespace core
         ASSERT_NEAR(2 * constants::kPi, temp3.phaseAt(freq3, 0.686432), constants::kAccuracy);
     }
 
-    TEST(RAY_METHOD, Test_PhaseAt_catch_exception)
+    TEST(RAY_METHOD, PhaseAt_catch_exception)
     {
         ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(0, 1), std::invalid_argument);
         ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(1, 0), std::invalid_argument);
@@ -92,7 +89,7 @@ namespace core
         ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(constants::kAccuracy, constants::kAccuracy), std::invalid_argument);
     }
 
-    TEST(RAY_METHOD, Test_Method_At)
+    TEST(RAY_METHOD, Method_At)
     {
         Ray temp1(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
         Ray temp2(Vec3(0, 1, 0), Vec3(0, 0, 1), 0);
@@ -102,8 +99,7 @@ namespace core
         ASSERT_EQ(Vec3(0, 1, -10), temp2.at(-10));
     }
 
-
-    TEST(RAY_METHOD, Test_Method_Setters_Getters)
+    TEST(RAY_METHOD, Method_Setters_Getters)
     {
         Ray temp1;
         Ray temp2(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
@@ -118,7 +114,7 @@ namespace core
         ASSERT_EQ(temp3.getDirection(), temp5.getDirection());
     }
 
-    TEST(RAYHITDATA_OPERATORS, Test_Operator_ostream)
+    TEST(RAYHITDATA_OPERATORS, Operator_ostream)
     {
         // std::stringstream ss1;
         // std::stringstream ss2;
@@ -137,7 +133,7 @@ namespace core
         // ASSERT_EQ(ss3.str(), "Collision point: Vec3(0, 1, 2), incoming ray direction: Vec3(0, 0, 1), normal: Vec3(0, 1, 0), time: -3, energy: 3, phase 5 [radians]");
     }
 
-    TEST(RAYHITDATA_OPERATOR, Test_Operator_Equal_Equal)
+    TEST(RAYHITDATA_OPERATOR, Operator_Equal_Equal)
     {
         RayHitData temp1(3, Vec3(1, 4, 0).normalize(), Ray({0, 0, 1}, {2, 9, 1}), 1000);
         RayHitData temp2(8, Vec3(1, 0, 2).normalize(), Ray({5, 0, 1}, {2, 3, 1}), 20);
@@ -152,7 +148,7 @@ namespace core
         ASSERT_EQ(temp6, temp3);
     }
 
-    TEST(RAYHITDATA_OPERATORS, Test_Operator_equal)
+    TEST(RAYHITDATA_OPERATORS, Operator_equal)
     {
         RayHitData temp1(3, Vec3(1, 2, 0).normalize(), Ray({2, 0, 1}, {1, 3, 1}), 1000);
         RayHitData temp2(40, Vec3(1, 0, 8).normalize(), Ray({0, 4, 1}, {2, 8, 1}), 50);
@@ -168,4 +164,3 @@ namespace core
     }
 
 } // namespace core
-#endif

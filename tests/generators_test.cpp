@@ -1,6 +1,3 @@
-#ifndef GENERATORS_TEST_CPP
-#define GENERATORS_TEST_CPP
-
 #include "gtest/gtest.h"
 #include "obj/generators.h"
 #include "obj/objects.h"
@@ -13,13 +10,13 @@ namespace generators
 {
     FakeRandomGen fakeEngine;
 
-    TEST(POINTSOURCE_CONSTRUCTOR, Test_All_Possible_Constructors)
+    TEST(POINTSOURCE_CONSTRUCTOR, All_Possible_Constructors)
     {
         ASSERT_EQ(PointSource(100, 1000, 1, &fakeEngine), PointSource(100, 1000, 1, &fakeEngine));
         ASSERT_EQ(PointSource(100, 1000, 1, &fakeEngine), PointSource(100, 1000, 1, &fakeEngine));
     }
 
-    TEST(POINTSOURCE_OPERATORS, Test_Operator_equal)
+    TEST(POINTSOURCE_OPERATORS, Operator_equal)
     {
         PointSource source = PointSource(100, 1000, 1, &fakeEngine);
         PointSource source2 = source;
@@ -27,7 +24,7 @@ namespace generators
         ASSERT_EQ(source2, source);
     }
 
-    TEST(POINTSOURCE_OPERATORS, Test_Operator_Equal_Equal)
+    TEST(POINTSOURCE_OPERATORS, Operator_Equal_Equal)
     {
         PointSource object1(100, 100, 100, &fakeEngine);
         PointSource object2(100, 100, 100, &fakeEngine);
@@ -41,7 +38,7 @@ namespace generators
         ASSERT_EQ(object5, object6);
     }
 
-    TEST(POINTSOURCE_OPERATORS, Test_Operators_ostream)
+    TEST(POINTSOURCE_OPERATORS, Operators_ostream)
     {
         PointSource object1(100, 100, 100, &fakeEngine);
         PointSource object2(1000, 200, 100, &fakeEngine);
@@ -60,7 +57,7 @@ namespace generators
         ASSERT_EQ(ss3.str(), "Point Source: origin: Vec3(0, 0, 4), number of rays per row: 100, diffusor size: 1.41421, frequency: 1.41421");
     }
 
-    TEST(POINTSOURCE_METHODS, Test_Getters)
+    TEST(POINTSOURCE_METHODS, Getters)
     {
         PointSource object1(100, 100, 100, &fakeEngine);
         PointSource object2(1000, 200, 100, &fakeEngine);
@@ -83,7 +80,7 @@ namespace generators
         ASSERT_EQ(object3.origin(), core::Vec3(0, 0, 4));
     }
 
-    TEST(POINTSOURCE_METHODS, Test_Setters)
+    TEST(POINTSOURCE_METHODS, Setters)
     {
         PointSource object1(100, 100, 100, &fakeEngine);
         PointSource object2(1000, 200, 100, &fakeEngine);
@@ -122,7 +119,7 @@ namespace generators
         ASSERT_EQ(object3.origin(), core::Vec3(0, 12, 2));
     }
 
-    TEST(POINTSOURCE_METHODS, Test_Method_updateDiffusorSize)
+    TEST(POINTSOURCE_METHODS, Method_updateDiffusorSize)
     {
         PointSource object1(100, 1000, 100, &fakeEngine);
         PointSource object2(200, 100, 1, &fakeEngine);
@@ -131,7 +128,7 @@ namespace generators
         ASSERT_EQ(object2.getLeftCorner(), core::Vec3(-0.5, -0.5, 1));
     }
 
-    TEST(POINTSOURCE_METHOD, Test_Single_rayHit)
+    TEST(POINTSOURCE_METHOD, Single_rayHit)
     {
         const double freq = 1000;
         const size_t rayNumPerRow = 1000;
@@ -148,7 +145,7 @@ namespace generators
         ASSERT_EQ(core::Ray(source.origin(), hitData.direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
     }
 
-    TEST(POINTSOURCE_METHODS, Test_GenerateRay_Test) // Monte Carlo Test
+    TEST(POINTSOURCE_METHODS, GenerateRay_Test) // Monte Carlo Test
     {
         const size_t rayNumPerRow = 1000;
         const double freq = 1000;
@@ -178,4 +175,3 @@ namespace generators
     }
 
 } // namespace generators
-#endif
