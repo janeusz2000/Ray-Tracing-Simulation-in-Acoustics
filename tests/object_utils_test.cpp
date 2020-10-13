@@ -1,6 +1,3 @@
-#ifndef OBJECT_TEST_H
-#define OBJECT_TEST_H
-
 #include "constants.h"
 #include "core/exceptions.h"
 #include "core/ray.h"
@@ -16,7 +13,7 @@ namespace objects
 {
     const double kSkipFreq = 1000;
 
-    TEST(SPHERE_OPERATORS, Test_Operator_ostream)
+    TEST(SPHERE_OPERATORS, Operator_ostream)
     {
         std::stringstream ss1;
         std::stringstream ss2;
@@ -47,7 +44,7 @@ namespace objects
         ASSERT_EQ(ss6.str(), "Sphere origin: Vec3(15, 16, 17), radius: 18 [m]");
     }
 
-    TEST(SPHERE_METHOD, Test_Normal)
+    TEST(SPHERE_METHOD, Normal)
     {
         Sphere tempSphere(core::Vec3(0, 0, 0), 1);
 
@@ -62,7 +59,7 @@ namespace objects
         ASSERT_EQ(normal4, core::Vec3(0, -1, 0));
     }
 
-    TEST(SPHERE_METHOD, Test_Getters_and_Setters)
+    TEST(SPHERE_METHOD, Getters_and_Setters)
     {
         Sphere object1(core::Vec3(0, 0, 0), 0.5);
         Sphere object2(core::Vec3(1, 2, 1), 5);
@@ -86,7 +83,7 @@ namespace objects
         ASSERT_EQ(0.3, object6.getRadius());
     }
 
-    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_0_1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(SPHERE_METHOD, HitObject_VEC3_0_0_1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -135,7 +132,7 @@ namespace objects
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_0_minus1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(SPHERE_METHOD, HitObject_VEC3_0_0_minus1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -184,7 +181,7 @@ namespace objects
         ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
-    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_1_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(SPHERE_METHOD, HitObject_VEC3_0_1_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -233,7 +230,7 @@ namespace objects
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(SPHERE_METHOD, Test_HitObject_VEC3_0_minus1_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(SPHERE_METHOD, HitObject_VEC3_0_minus1_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -282,7 +279,7 @@ namespace objects
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(SPHERE_METHOD, Test_HitObject_VEC3_1_0_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(SPHERE_METHOD, HitObject_VEC3_1_0_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -330,7 +327,7 @@ namespace objects
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(SPHERE_METHOD, Test_HitObject_VEC3_minus1_0_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(SPHERE_METHOD, HitObject_VEC3_minus1_0_0) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -378,7 +375,26 @@ namespace objects
         ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(SPHERE_METHODS, Test_Ray_hit_Data_Properties)
+    TEST(SPHERE_METHODS, Hit_Object_RayHitData_Vec3_0_0_1)
+    {
+        using namespace core;
+
+        std::vector<Sphere> objectList = {Sphere(Vec3(0, 0, 0), 1), Sphere(Vec3(0, 0, 4), 1)};
+        std::vector<Ray> rayList = {Ray(Vec3(0, 0, -5), Vec3(0, 0, 1)), Ray(Vec3(0, 0, 0), Vec3(0, 0, 1))};
+        RayHitData hitData;
+        for (auto &ray : rayList)
+        {
+            for (auto &obj : objectList)
+            {
+                ASSERT_TRUE(obj.hitObject(ray, kSkipFreq, &hitData));
+                double time = std::abs(obj.getOrigin().z() - obj.getRadius() - ray.getOrigin().z());
+                ASSERT_EQ(hitData.time, time);
+                ASSERT_EQ(hitData.collisionPoint, ray.at(time));
+            }
+        }
+    }
+
+    TEST(SPHERE_METHODS, Ray_hit_Data_Properties)
     {
         core::Ray tempRay(core::Vec3(0, 0, 5), core::Vec3(0, 0, -1));
         Sphere object1(core::Vec3(0, 0, 0), 1);
@@ -391,7 +407,7 @@ namespace objects
         ASSERT_EQ(4, hitData.time);
     }
 
-    TEST(SPHERE_CONSTRUCTOR, Test_All_Possible_Constructors)
+    TEST(SPHERE_CONSTRUCTOR, All_Possible_Constructors)
     {
         Sphere object1;
 
@@ -404,7 +420,7 @@ namespace objects
         ASSERT_EQ(core::Vec3(0, 0, 1), object2.getOrigin());
     }
 
-    TEST(SPHEREWALL_CONSTRUCTOR, Test_All_Possible_Constructors)
+    TEST(SPHEREWALL_CONSTRUCTOR, All_Possible_Constructors)
     {
         SphereWall object1;
 
@@ -412,7 +428,7 @@ namespace objects
         ASSERT_EQ(core::Vec3(0, 0, 0), object1.getOrigin());
     }
 
-    TEST(SPHEREWALL_METHOD, Test_HItObject)
+    TEST(SPHEREWALL_METHOD, HitObject)
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
@@ -437,7 +453,7 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(SPHEREWALL_METHOD, Test_Normal)
+    TEST(SPHEREWALL_METHOD, Normal)
     {
         SphereWall tempSphere;
 
@@ -452,7 +468,7 @@ namespace objects
         ASSERT_EQ(normal4, core::Vec3(0, -1, 0));
     }
 
-    TEST(SPHEREWALL_METHOD, Test_Getters_and_Setters)
+    TEST(SPHEREWALL_METHOD, Getters_and_Setters)
     {
         SphereWall object1;
 
@@ -460,7 +476,7 @@ namespace objects
         ASSERT_EQ(4, object1.getRadius());
     }
 
-    TEST(SPHEREWALL_OPERATORS, Test_Operator_ostream)
+    TEST(SPHEREWALL_OPERATORS, Operator_ostream)
     {
         std::stringstream ss1;
         SphereWall temp1;
@@ -468,4 +484,3 @@ namespace objects
         ASSERT_EQ(ss1.str(), "SphereWall origin: Vec3(0, 0, 0), radius: 4 [m]");
     }
 } // namespace objects
-#endif

@@ -1,6 +1,3 @@
-#ifndef ENERGYCOLLECTOR_TEST_CPP
-#define ENERGYCOLLECTOR_TEST_CPP
-
 #include "constants.h"
 #include "core/exceptions.h"
 #include "core/ray.h"
@@ -13,7 +10,7 @@
 
 namespace objects
 {
-    TEST(ENERGYCOLLECTOR_CONSTRUCTOR, Test_All_Possible_Constructors)
+    TEST(ENERGYCOLLECTOR_CONSTRUCTOR, All_Possible_Constructors)
     {
         EnergyCollector object1;
 
@@ -63,7 +60,7 @@ namespace objects
         ASSERT_EQ(object7.getEnergy(), 0);
     }
 
-    TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_ostream)
+    TEST(ENERGYCOLLECTOR_OPERATORS, Operator_ostream)
     {
         EnergyCollector object8;
         EnergyCollector object9;
@@ -90,7 +87,7 @@ namespace objects
         ASSERT_EQ(ss5.str(), "Energy Collector ID: 0, Energy collected: 0");
     }
 
-    TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_Equal_Equal)
+    TEST(ENERGYCOLLECTOR_OPERATORS, Operator_Equal_Equal)
     {
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
         EnergyCollector object2(core::Vec3(0, 0, 0), 0, 1);
@@ -109,7 +106,7 @@ namespace objects
         ASSERT_EQ(object7, object8);
     }
 
-    TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_equal)
+    TEST(ENERGYCOLLECTOR_OPERATORS, Operator_equal)
     {
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
         EnergyCollector object2 = object1;
@@ -128,7 +125,7 @@ namespace objects
         ASSERT_EQ(object7, object8);
     }
 
-    TEST(ENERGYCOLLECTOR_METHODS, Test_Method_DistanceAt)
+    TEST(ENERGYCOLLECTOR_METHODS, Method_DistanceAt)
     {
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);
 
@@ -136,7 +133,7 @@ namespace objects
         ASSERT_EQ(object1.distanceAt(core::Vec3(3, 0, 4)), 5);
     }
 
-    TEST(ENERGYCOLLECTOR_METHODS, Test_Method_CollectEnergy)
+    TEST(ENERGYCOLLECTOR_METHODS, Method_CollectEnergy)
     {
         // TODO: Energy distribution between many collectors
         // TODO: Phase impact on the given energy to the collector
@@ -149,5 +146,3 @@ namespace objects
     }
 
 } // namespace objects
-
-#endif

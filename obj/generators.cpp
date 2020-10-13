@@ -1,6 +1,3 @@
-#ifndef GENERATORS_CPP
-#define GENERATORS_CPP
-
 #include "generators.h"
 #include <random>
 namespace generators
@@ -97,4 +94,3 @@ namespace generators
 #pragma endregion
 
 } // namespace generators
-#endif

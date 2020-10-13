@@ -1,6 +1,3 @@
-#ifndef TRIANGLEOBJ_TEST_CPP
-#define TRIANGLEOBJ_TEST_CPP
-
 #include "gtest/gtest.h"
 #include "obj/objects.h"
 #include "core/vec3.h"
@@ -19,7 +16,7 @@ namespace objects
 
     const double kSkipFreq = 1000;
 
-    TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_iostream)
+    TEST(TRIANGLEOBJ_OPERATORS, Operator_iostream)
     {
         TriangleObj object1(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0));
         TriangleObj object2(core::Vec3(1, 0, 2), core::Vec3(1, 0, 1), core::Vec3(1, 1, 0));
@@ -46,7 +43,7 @@ namespace objects
         ASSERT_EQ(ss5.str(), "Triangle Object, vertex: Vec3(0, 0, 2), Vec3(0, 0, 3), Vec3(0, 4, 0)");
     }
 
-    TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal_Equal)
+    TEST(TRIANGLEOBJ_OPERATORS, Operator_equal_Equal)
     {
         ASSERT_EQ(TriangleObj(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0)), TriangleObj(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1), core::Vec3(0, 1, 0)));
         ASSERT_EQ(TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)), TriangleObj(core::Vec3(1, 1, 0), core::Vec3(1, 0, 1), core::Vec3(0, 1, 1)));
@@ -55,7 +52,7 @@ namespace objects
         ASSERT_EQ(TriangleObj(core::Vec3(0, 0, 1), core::Vec3(0, 1, 0), core::Vec3(1, 0, 0)), TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1)));
     }
 
-    TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_All_Possible_Constructors)
+    TEST(TRIANGLEOBJ_CONSTRUCTORS, All_Possible_Constructors)
     {
         TriangleObj object1({1, 0, 0}, {0, 1, 0}, {0, 0, 1});
         TriangleObj object2(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1));
@@ -70,7 +67,7 @@ namespace objects
         ASSERT_EQ(object4, object3);
     }
 
-    TEST(TRIANGLEOBJ_CONSTRUCTORS, Test_invalid_COnstructors)
+    TEST(TRIANGLEOBJ_CONSTRUCTORS, invalid_COnstructors)
     {
         ASSERT_THROW(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 0, 0, 1}), std::invalid_argument);
         ASSERT_THROW(TriangleObj({0, 0, 0, 0}, {0, 0, 1}, {0, 0, 1}), std::invalid_argument);
@@ -83,7 +80,7 @@ namespace objects
         ASSERT_THROW(TriangleObj({3, 3, 3}, {2, 2, 2}, {4, 4, 4}), std::invalid_argument);
     }
 
-    TEST(TRIANGLEOBJ_OPERATORS, Test_Operator_equal)
+    TEST(TRIANGLEOBJ_OPERATORS, Operator_equal)
     {
         TriangleObj object1;
         TriangleObj object2 = object1;
@@ -98,7 +95,7 @@ namespace objects
         ASSERT_EQ(object5, object6);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Normal)
+    TEST(TRIANGLEOBJ_METHOD, Normal)
     {
         TriangleObj object1({0, 0, 0}, {0, 1, 0}, {1, 0, 0});
         TriangleObj object2({0, 0, 0}, {0, 0, 1}, {0, 1, 0});
@@ -106,7 +103,7 @@ namespace objects
         ASSERT_EQ(object2.normal(core::Vec3()), core::Vec3(-1, 0, 0));
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_0_1)
+    TEST(TRIANGLEOBJ_METHOD, does_Hit_Vec3_0_0_1)
     {
         TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 1, 0});
 
@@ -130,7 +127,7 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_0_minus1)
+    TEST(TRIANGLEOBJ_METHOD, does_Hit_Vec3_0_0_minus1)
     {
         TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 1, 0});
 
@@ -154,7 +151,7 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_1_0)
+    TEST(TRIANGLEOBJ_METHOD, does_Hit_Vec3_0_1_0)
     {
         TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 0, 1});
 
@@ -178,7 +175,7 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_0_minus1_0)
+    TEST(TRIANGLEOBJ_METHOD, does_Hit_Vec3_0_minus1_0)
     {
         TriangleObj object({0, 0, 0}, {1, 0, 0}, {1, 0, 1});
 
@@ -202,7 +199,7 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_1_0_0)
+    TEST(TRIANGLEOBJ_METHOD, does_Hit_Vec3_1_0_0)
     {
         TriangleObj object({0, 0, 0}, {0, 1, 0}, {0, 0, 1});
 
@@ -226,7 +223,7 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_does_Hit_Vec3_minus1_0_0)
+    TEST(TRIANGLEOBJ_METHOD, does_Hit_Vec3_minus1_0_0)
     {
         TriangleObj object({0, 0, 0}, {0, 1, 0}, {0, 0, 1});
 
@@ -250,7 +247,7 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_HitObject) // This is Monte Carlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
+    TEST(TRIANGLEOBJ_METHOD, HitObject) // This is Monte Carlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         TriangleObj object1({1, 2, 1}, {1, 1, 1}, {2, 1, 1});
 
@@ -280,14 +277,14 @@ namespace objects
         ASSERT_NEAR(ratio, areaRatio, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Area)
+    TEST(TRIANGLEOBJ_METHOD, Area)
     {
         ASSERT_EQ(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 1, 1}).area(), 0.5);
         ASSERT_EQ(TriangleObj({0, 0, 0}, {0, 0, 2}, {0, 2, 2}).area(), 2);
         ASSERT_EQ(TriangleObj({0, 0, 0}, {5, 0, 0}, {5, 5, 0}).area(), 12.5);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_Inside_Object_Vec_0_1_0)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Inside_Object_Vec_0_1_0)
     {
         using namespace core;
 
@@ -307,7 +304,7 @@ namespace objects
         ASSERT_EQ(hitData.time, 4);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_Back_Object_Vec_0_1_0)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_0_1_0)
     {
         using namespace core;
 
@@ -322,7 +319,7 @@ namespace objects
         }
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_front_Object_Vec_0_1_0)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_front_Object_Vec_0_1_0)
     {
         using namespace core;
 
@@ -339,7 +336,7 @@ namespace objects
         }
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_Inside_Object_Vec_0_0_1)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Inside_Object_Vec_0_0_1)
     {
         using namespace core;
 
@@ -359,7 +356,7 @@ namespace objects
         ASSERT_EQ(hitData.time, 4);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_Back_Object_Vec_0_0_1)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_0_0_1)
     {
         using namespace core;
 
@@ -374,7 +371,7 @@ namespace objects
         }
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_front_Object_Vec_0_0_1)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_front_Object_Vec_0_0_1)
     {
         using namespace core;
 
@@ -391,7 +388,7 @@ namespace objects
         }
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_Inside_Object_Vec_1_0_0)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Inside_Object_Vec_1_0_0)
     {
         using namespace core;
 
@@ -411,7 +408,7 @@ namespace objects
         ASSERT_EQ(hitData.time, 4);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_Back_Object_Vec_1_0_0)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_1_0_0)
     {
         using namespace core;
 
@@ -426,7 +423,7 @@ namespace objects
         }
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Hit_Object_Ray_front_Object_Vec_1_0_0)
+    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_front_Object_Vec_1_0_0)
     {
         using namespace core;
 
@@ -443,7 +440,7 @@ namespace objects
         }
     }
 
-    TEST(TRIANGLEOBJ_METHOD, Test_Method_Getters_And_Setters)
+    TEST(TRIANGLEOBJ_METHOD, Getters_And_Setters)
     {
         TriangleObj object1({0, 1, 1}, {2, 0, 2}, {3, 3, 0});
 
@@ -466,4 +463,3 @@ namespace objects
 
 }; // namespace objects
 
-#endif

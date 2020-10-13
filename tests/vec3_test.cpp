@@ -1,6 +1,3 @@
-#ifndef VEC3_TEST_H
-#define VEC3_TEST_H
-
 #include "gtest/gtest.h"
 #include "core/vec3.h"
 
@@ -423,4 +420,3 @@ namespace core
 
 } // namespace core
 
-#endif
