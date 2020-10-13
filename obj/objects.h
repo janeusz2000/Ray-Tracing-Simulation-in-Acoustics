@@ -119,14 +119,14 @@ namespace objects
         void refreshAttributes();
 
         // GETTERS AND SETTERS
-        core::Vec3 getX() const;
-        void setX(const core::Vec3 &point);
+        core::Vec3 point1() const;
+        void setPoint1(const core::Vec3 &point);
 
-        core::Vec3 getY() const;
-        void setY(const core::Vec3 &point);
+        core::Vec3 point2() const;
+        void setPoint2(const core::Vec3 &point);
 
-        core::Vec3 getZ() const;
-        void setZ(const core::Vec3 &point);
+        core::Vec3 point3() const;
+        void setPoint3(const core::Vec3 &point);
 
     private:
         void recalculateNormal();

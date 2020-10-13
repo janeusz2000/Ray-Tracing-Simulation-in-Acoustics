@@ -191,9 +191,9 @@ namespace objects
 
     TriangleObj::TriangleObj(const TriangleObj &other)
     {
-        this->setX(other.getX());
-        this->setY(other.getY());
-        this->setZ(other.getZ());
+        this->setPoint1(other.point1());
+        this->setPoint2(other.point2());
+        this->setPoint3(other.point3());
         this->refreshAttributes();
     }
 
@@ -201,9 +201,9 @@ namespace objects
 
     TriangleObj &TriangleObj::operator=(const TriangleObj &other)
     {
-        this->setX(other.getX());
-        this->setY(other.getY());
-        this->setZ(other.getZ());
+        this->setPoint1(other.point1());
+        this->setPoint2(other.point2());
+        this->setPoint3(other.point3());
 
         this->refreshAttributes();
 
@@ -212,8 +212,8 @@ namespace objects
 
     bool operator==(const TriangleObj &left, const TriangleObj &right)
     {
-        std::vector<core::Vec3> vertexVec({left.getX(), left.getY(), left.getZ()});
-        std::vector<core::Vec3> refVec({right.getX(), right.getY(), right.getZ()});
+        std::vector<core::Vec3> vertexVec({left.point1(), left.point2(), left.point3()});
+        std::vector<core::Vec3> refVec({right.point1(), right.point2(), right.point3()});
 
         for (size_t ind = 0; ind < vertexVec.size(); ++ind)
         {
@@ -232,7 +232,7 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const TriangleObj &object)
     {
-        return os << "Triangle Object, vertex: " << object.getX() << ", " << object.getY() << ", " << object.getZ();
+        return os << "Triangle Object, vertex: " << object.point1() << ", " << object.point2() << ", " << object.point3();
     }
 
     // METHODS
@@ -281,8 +281,7 @@ namespace objects
         double beta = vecC.crossProduct(vecA).magnitude() / 2;
         double gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
-        // TODO: Why do you multiply by 0.99? Consider making it a constant and using it here.
-        return (((alpha + beta + gamma) > _area + constants::kHitAccuracy * 0.99) ? false : true);
+        return (((alpha + beta + gamma) > _area + constants::kHitAccuracy) ? false : true);
     }
 
     double TriangleObj::area() const
@@ -298,9 +297,6 @@ namespace objects
     }
 
     // PRIVATE METHODS
-
-    // TODO: Why do you have all these separate methods recalculating some small parts,
-    // while you could just move all the code into refreshAttributes() and cache the results.
     void TriangleObj::recalculateArea()
     {
         core::Vec3 vecA = _point1 - _point2;
@@ -315,6 +311,7 @@ namespace objects
         core::Vec3 perpendicular = vecA.crossProduct(vecB);
         _normal = perpendicular.normalize();
     }
+    // while you could just move all the code into refreshAttributes() and cache the results.
 
     bool TriangleObj::arePointsValid()
     {
@@ -336,29 +333,29 @@ namespace objects
     }
 
     // GETTERS AND SETTERS
-    core::Vec3 TriangleObj::getX() const
+    core::Vec3 TriangleObj::point1() const
     {
         return _point1;
     }
-    void TriangleObj::setX(const core::Vec3 &point)
+    void TriangleObj::setPoint1(const core::Vec3 &point)
     {
         this->_point1 = point;
     }
 
-    core::Vec3 TriangleObj::getY() const
+    core::Vec3 TriangleObj::point2() const
     {
         return _point2;
     }
-    void TriangleObj::setY(const core::Vec3 &point)
+    void TriangleObj::setPoint2(const core::Vec3 &point)
     {
         this->_point2 = point;
     }
 
-    core::Vec3 TriangleObj::getZ() const
+    core::Vec3 TriangleObj::point3() const
     {
         return _point3;
     }
-    void TriangleObj::setZ(const core::Vec3 &point)
+    void TriangleObj::setPoint3(const core::Vec3 &point)
     {
         this->_point3 = point;
     }

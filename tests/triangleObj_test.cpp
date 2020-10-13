@@ -290,19 +290,19 @@ namespace objects
     {
         TriangleObj object1({0, 1, 1}, {2, 0, 2}, {3, 3, 0});
 
-        ASSERT_EQ(object1.getX(), core::Vec3(0, 1, 1));
-        ASSERT_EQ(object1.getY(), core::Vec3(2, 0, 2));
-        ASSERT_EQ(object1.getZ(), core::Vec3(3, 3, 0));
+        ASSERT_EQ(object1.point1(), core::Vec3(0, 1, 1));
+        ASSERT_EQ(object1.point2(), core::Vec3(2, 0, 2));
+        ASSERT_EQ(object1.point3(), core::Vec3(3, 3, 0));
 
-        object1.setX(core::Vec3(0, 0, 0));
-        object1.setY(core::Vec3(1, 0, 0));
-        object1.setZ(core::Vec3(1, 1, 0));
+        object1.setPoint1(core::Vec3(0, 0, 0));
+        object1.setPoint2(core::Vec3(1, 0, 0));
+        object1.setPoint3(core::Vec3(1, 1, 0));
 
         object1.refreshAttributes();
 
-        ASSERT_EQ(object1.getX(), core::Vec3(0, 0, 0));
-        ASSERT_EQ(object1.getY(), core::Vec3(1, 0, 0));
-        ASSERT_EQ(object1.getZ(), core::Vec3(1, 1, 0));
+        ASSERT_EQ(object1.point1(), core::Vec3(0, 0, 0));
+        ASSERT_EQ(object1.point2(), core::Vec3(1, 0, 0));
+        ASSERT_EQ(object1.point3(), core::Vec3(1, 1, 0));
         ASSERT_EQ(object1.normal(core::Vec3()), core::Vec3(0, 0, 1));
         ASSERT_EQ(object1.getOrigin(), core::Vec3((2.0 / 3.0), (1.0 / 3.0), 0));
     }
