@@ -117,23 +117,6 @@ namespace objects
         return os << "Energy Collector ID: " << collector.getID() << ", Energy collected: " << collector.getEnergy();
     }
 
-    EnergyCollector operator+(const EnergyCollector &left, const EnergyCollector &right)
-    {
-        if (left.getOrigin() != right.getOrigin())
-        {
-            std::stringstream ss;
-            ss << "Energy Collectors doesn't have the same origin positions. Positions are left: " << left.getOrigin() << ", right: " << right.getOrigin();
-            throw exception::differentPositions(ss.str());
-        }
-        else
-        {
-            return EnergyCollector(left.getOrigin(), left.getEnergy() + right.getEnergy());
-            // TODO: This may cause issues, when you want to keep collectors in a list of unique_ptrs.
-            // Since this one creates a new object and it seems that energy collectors are just data objects.
-            // My guess would be that you want to mutate collectors?
-        }
-    }
-
     bool objects::operator==(const EnergyCollector &left, const EnergyCollector &right)
     {
         return (left.getID() == right.getID() && left.getOrigin() == right.getOrigin() && left.getRadius() == right.getRadius() && left.getEnergy() == right.getEnergy());
@@ -179,11 +162,9 @@ namespace objects
 
     // CONSTRUCTORS
 
-    TriangleObj::TriangleObj() : TriangleObj(core::Vec3(1, 0, 0), core::Vec3(0, 1, 0), core::Vec3(0, 0, 1))
-    {
-        this->refreshAttributes();
-    }
-    TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2, const core::Vec3 &point3) : _point1(point1), _point2(point2), _point3(point3)
+    TriangleObj::TriangleObj(const core::Vec3 &point1,
+                             const core::Vec3 &point2,
+                             const core::Vec3 &point3) : _point1(point1), _point2(point2), _point3(point3)
     {
         this->arePointsValid();
         this->refreshAttributes();

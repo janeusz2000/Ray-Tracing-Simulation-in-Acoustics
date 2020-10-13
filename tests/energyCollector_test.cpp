@@ -128,19 +128,6 @@ namespace objects
         ASSERT_EQ(object7, object8);
     }
 
-    TEST(ENERGYCOLLECTOR_OPERATORS, Test_Operator_plus)
-    {
-        EnergyCollector object13(core::Vec3(0, 0, 0), 50, 4);
-        EnergyCollector object14(core::Vec3(0, 0, 0), 50, 5);
-
-        EnergyCollector object15 = object13 + object14;
-
-        ASSERT_EQ(object15.getEnergy(), object13.getEnergy() + object14.getEnergy());
-        ASSERT_EQ(object15.getID(), 0);
-        ASSERT_EQ(object15.getOrigin(), core::Vec3(0, 0, 0));
-        ASSERT_EQ(object15.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
-    }
-
     TEST(ENERGYCOLLECTOR_METHODS, Test_Method_DistanceAt)
     {
         EnergyCollector object1(core::Vec3(0, 0, 0), 0, 1);

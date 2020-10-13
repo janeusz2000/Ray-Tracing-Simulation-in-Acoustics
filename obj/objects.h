@@ -33,15 +33,15 @@ namespace objects
     class Sphere : public Object
     {
     public:
-        Sphere() : _radius(1){};
-        Sphere::Sphere(const core::Vec3 & or, const double &rad);
+        Sphere() :_radius(1) {};
+        Sphere(const core::Vec3 & or, const double &rad = 1);
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //METHODS
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const override;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData  &hitData) override;
+        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData &hitData) override;
 
         //GETTERS AND SETTERS
         double getRadius() const;
@@ -75,10 +75,7 @@ namespace objects
 
         // OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector);
-        friend EnergyCollector operator+(const EnergyCollector &left, const EnergyCollector &right);
         friend bool operator==(const EnergyCollector &left, const EnergyCollector &right);
-
-        // This operator copies all data except Id. It doesn't change population number.
         EnergyCollector &operator=(const EnergyCollector &other);
 
         // METHODS
@@ -100,8 +97,9 @@ namespace objects
     class TriangleObj : public Object
     {
     public:
-        TriangleObj();
-        TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2, const core::Vec3 &point3);
+        TriangleObj(const core::Vec3 &point1 = {1, 0, 0}, \
+                    const core::Vec3 &point2 = {0, 1 ,0}, \
+                    const core::Vec3 &point3 = {0, 0, 1});
         TriangleObj(const TriangleObj &other);
         ~TriangleObj() = default;
 
