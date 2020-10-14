@@ -99,18 +99,5 @@ namespace core
         return os << "Collision point: " << rayData.collisionPoint << ", incoming ray direction: " << rayData.direction << ", normal: " << rayData.normal << ", time: " << rayData.time << ", energy: " << rayData.energy << ", phase " << rayData.phase << " [radians]";
     }
 
-    void RayHitData::swap(RayHitData *other) noexcept
-    {
-        using std::swap;
-
-        swap(collisionPoint, other->collisionPoint);
-        swap(direction, other->direction);
-        swap(energy, other->energy);
-        swap(frequency, other->frequency);
-        swap(origin, other->origin);
-        swap(phase, other->phase);
-        swap(time, other->time);
-    }
-
 #pragma endregion
 } // namespace core

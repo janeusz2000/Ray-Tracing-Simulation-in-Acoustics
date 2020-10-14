@@ -54,9 +54,6 @@ namespace core
         bool operator==(const RayHitData &other) const;
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 
-        // METHODS
-        void swap(RayHitData *other) noexcept;
-
         // VARIABLES
         // Why do you store the members of the Ray separately?
         Vec3 collisionPoint, direction, normal, origin;

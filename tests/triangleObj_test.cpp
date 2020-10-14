@@ -288,20 +288,18 @@ namespace objects
         ASSERT_EQ(TriangleObj({0, 0, 0}, {5, 0, 0}, {5, 5, 0}).area(), 12.5);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, RayInsideTriagnleDoesntHit)
+    TEST(TRIANGLEOBJ_METHOD, RayInsideTriangleDoesNotHit)
     {
 
         Ray tempRay(Vec3(0.25, 0, 0.25), Vec3(0, 1, 0)); // Ray has origin inside object1
 
-        // NOTE: Why there are 2 objects in the list? Why there is a second one given that ray hits the first one?
-        // (at least that is what the comment says).
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
         RayHitData hitData;
         for (TriangleObj &obj : objectList)
         {
-            (obj.hitObject(tempRay, kSkipFreq, &hitData));
+            (obj.hitObject(tempRay, kSkipFreq, &hitData)); // First object doesn't hit. Second object hit.
         }
-        ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 4, 0.25));
+        ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 4, 0.25)); // Making sure that second object is hit properly.
         ASSERT_EQ(hitData.direction, tempRay.getDirection());
         ASSERT_EQ(hitData.origin, tempRay.getOrigin());
         ASSERT_EQ(hitData.time, 4);

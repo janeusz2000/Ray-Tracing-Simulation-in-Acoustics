@@ -9,9 +9,43 @@
 #include <sstream>
 #include <random>
 
+using core::Ray;
+using core::RayHitData;
+using core::Vec3;
+
 namespace objects
 {
     const double kSkipFreq = 1000;
+
+    struct RandomEngine
+    {
+        virtual ~RandomEngine(){};
+        virtual double getNext() = 0;
+    };
+
+    struct GaussianRandom : public RandomEngine
+    {
+        GaussianRandom() : _engine(std::random_device()()), _dist(0, 1){};
+        double getNext() override
+        {
+            return _dist(_engine);
+        }
+
+        std::random_device _rd;
+        std::mt19937_64 _engine;
+        std::normal_distribution<double> _dist;
+    };
+
+    struct FakeRandom : public RandomEngine
+    {
+        double getNext() override
+        {
+            return 0;
+        }
+    };
+
+    GaussianRandom gaussRand;
+    FakeRandom fakeRand;
 
     TEST(SPHERE_OPERATORS, Operator_ostream)
     {
@@ -424,31 +458,6 @@ namespace objects
         ASSERT_EQ(core::Vec3(0, 0, 0), object1.getOrigin());
     }
 
-    TEST(SPHEREWALL_METHOD, HitObject)
-    {
-        std::random_device rd;
-        std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(-8, 8);
-
-        SphereWall object1;
-
-        const double radius = constants::kSimulationRadius;
-        const double rayNum = 1000000;
-        double hits = 0;
-
-        const double referenceRatio = constants::kPi * radius * radius / 256;
-        for (double num = 0; num < rayNum; num++)
-        {
-            core::Ray tempRay(core::Vec3(dist(e2), dist(e2), -40), core::Vec3(0, 0, 1));
-            core::RayHitData hitData;
-            if (object1.hitObject(tempRay, kSkipFreq, &hitData))
-            {
-                ++hits;
-            }
-        }
-        ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
-    }
-
     TEST(SPHEREWALL_METHOD, Normal)
     {
         SphereWall tempSphere;
@@ -478,5 +487,29 @@ namespace objects
         SphereWall temp1;
         ss1 << temp1;
         ASSERT_EQ(ss1.str(), "SphereWall origin: Vec3(0, 0, 0), radius: 4 [m]");
+    }
+
+    TEST(SphereWallObjectTest, RayInsideSphereHit)
+    {
+        SphereWall sphereWall;
+
+        RayHitData ignore;
+        size_t numberOfTests = 10000;
+
+        for (size_t iteration = 0; iteration < numberOfTests; ++iteration)
+        {
+            // No matter what direction of the ray is, hit should occur;
+            Vec3 randomDirection(gaussRand.getNext(), gaussRand.getNext(), gaussRand.getNext());
+
+            while (randomDirection == Vec3(0, 0, 0)) // while randomDirection is invalid
+            {
+                randomDirection = Vec3(gaussRand.getNext(), gaussRand.getNext(), gaussRand.getNext());
+            }
+
+            Ray randomDirectionRay(sphereWall.getOrigin(), randomDirection);
+            ASSERT_TRUE(sphereWall.hitObject(randomDirectionRay, kSkipFreq, &ignore))
+                << "Ray Hit didn't occur. Iteration: " << iteration << " Direction: "
+                << randomDirectionRay.getDirection();
+        }
     }
 } // namespace objects

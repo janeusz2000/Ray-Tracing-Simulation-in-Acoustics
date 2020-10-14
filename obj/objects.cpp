@@ -60,7 +60,7 @@ namespace objects
         {
             double time = std::min(time1, time2);
             core::Vec3 collision = ray.at(time);
-            hitData->swap(&core::RayHitData(time, normal(collision), ray, freq));
+            *hitData = core::RayHitData(time, normal(collision), ray, freq);
             return true;
         }
     }
@@ -83,15 +83,39 @@ namespace objects
 #pragma endregion
 #pragma region SPHEREWALL
 
-    SphereWall::SphereWall()
-    {
-        this->setOrigin(core::Vec3(0, 0, 0));
-        this->setRadius(constants::kSimulationRadius);
-    }
-
     std::ostream &operator<<(std::ostream &os, const SphereWall &sp)
     {
         return os << "SphereWall origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
+    }
+
+    bool SphereWall::hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData)
+    {
+        core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
+
+        // this calculates variables that are neccesary to calculate times at which ray hits the object SphereWall.
+        double beta = 2 * rVec3.scalarProduct(ray.getDirection());
+        double gamma = rVec3.scalarProduct(rVec3) - _radius * _radius;
+        double discriminant = beta * beta - 4 * gamma;
+        // ==================================================
+
+        // If object is at opposite direction than ray is:
+        if (discriminant < 0)
+        {
+            return false;
+        }
+
+        double temp = std::sqrt(discriminant);
+        double time1 = (-beta - temp) / 2;
+        double time2 = (-beta + temp) / 2;
+
+        if (time1 < 0 && time2 > 0 || time1 > 0 && time2 < 0) // when ray hit is inside the SphereWall
+        {
+            double time = std::max(time1, time2);
+            core::Vec3 collision = ray.at(time);
+            hitData = reinterpret_cast<core::RayHitData *>(&core::RayHitData(time, normal(collision), ray, freq));
+            return true;
+        }
+        return false;
     }
 
 #pragma endregion
@@ -246,7 +270,7 @@ namespace objects
 
         if (this->doesHit(surfaceHit))
         {
-            hitData->swap(&core::RayHitData(time, _normal, ray, freq));
+            *hitData = core::RayHitData(time, _normal, ray, freq);
             return true;
         }
         return false;
