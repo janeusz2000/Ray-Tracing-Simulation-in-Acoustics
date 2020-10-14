@@ -491,25 +491,19 @@ namespace objects
 
     TEST(SphereWallObjectTest, RayInsideSphereHit)
     {
-        SphereWall sphereWall;
+        Vec3 kO(123, 1, 2);
+        const double kR = 3;
+        Sphere sphere(kO, kR);
 
         RayHitData ignore;
-        size_t numberOfTests = 10000;
 
-        for (size_t iteration = 0; iteration < numberOfTests; ++iteration)
-        {
-            // No matter what direction of the ray is, hit should occur;
-            Vec3 randomDirection(gaussRand.getNext(), gaussRand.getNext(), gaussRand.getNext());
+        Vec3 dir(1, 2, 3);
+        Ray rayInsideSphere(sphere.getOrigin(), dir);
+        ASSERT_TRUE(sphere.hitObject(rayInsideSphere, kSkipFreq, &ignore))
+            << "Ray Hit didn't occur.";
 
-            while (randomDirection == Vec3(0, 0, 0)) // while randomDirection is invalid
-            {
-                randomDirection = Vec3(gaussRand.getNext(), gaussRand.getNext(), gaussRand.getNext());
-            }
-
-            Ray randomDirectionRay(sphereWall.getOrigin(), randomDirection);
-            ASSERT_TRUE(sphereWall.hitObject(randomDirectionRay, kSkipFreq, &ignore))
-                << "Ray Hit didn't occur. Iteration: " << iteration << " Direction: "
-                << randomDirectionRay.getDirection();
-        }
+        Ray rayOutsideSphere(sphere.getOrigin() + Vec3(2 * kR, 0, 0), dir);
+        ASSERT_FALSE(sphere.hitObject(rayOutsideSphere, kSkipFreq, &ignore))
+            << "Ray hit when it shouldn't";
     }
 } // namespace objects

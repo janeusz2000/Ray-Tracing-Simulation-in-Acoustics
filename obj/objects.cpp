@@ -31,14 +31,13 @@ namespace objects
     {
         core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
 
-        // this calculates variables that are neccesary to calculate times at which ray hits the object SphereWall.
+        // this calculates variables that are neccesary to calculate times at which ray hits the object
         double beta = 2 * rVec3.scalarProduct(ray.getDirection());
         double gamma = rVec3.scalarProduct(rVec3) - _radius * _radius;
         double discriminant = beta * beta - 4 * gamma;
         // ==================================================
 
-        // If object is at opposite direction than ray is:
-        if (discriminant < 0)
+        if (discriminant < 0) // making sure that ray hits the sphere
         {
             return false;
         }
@@ -47,22 +46,21 @@ namespace objects
         double time1 = (-beta - temp) / 2;
         double time2 = (-beta + temp) / 2;
 
-        // if both objects are at opposite direction then ray is:
-        if (time1 < 0)
+        if (time1 < 0 && time2 > 0) // Ray inside sphere
         {
-            return false;
+            double time = std::max(time1, time2);
+            core::Vec3 collision = ray.at(time);
+            *hitData = core::RayHitData(time, normal(collision), ray, freq);
+            return true;
         }
-        else if (time1 < 0 && time2 < 0)
-        {
-            return false;
-        }
-        else
+        else if (time1 > 0 && time2 > 0) // ray in front of the sphere
         {
             double time = std::min(time1, time2);
             core::Vec3 collision = ray.at(time);
             *hitData = core::RayHitData(time, normal(collision), ray, freq);
             return true;
         }
+        return false;
     }
 
     std::ostream &operator<<(std::ostream &os, const Sphere &sp)
@@ -86,36 +84,6 @@ namespace objects
     std::ostream &operator<<(std::ostream &os, const SphereWall &sp)
     {
         return os << "SphereWall origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
-    }
-
-    bool SphereWall::hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData)
-    {
-        core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
-
-        // this calculates variables that are neccesary to calculate times at which ray hits the object SphereWall.
-        double beta = 2 * rVec3.scalarProduct(ray.getDirection());
-        double gamma = rVec3.scalarProduct(rVec3) - _radius * _radius;
-        double discriminant = beta * beta - 4 * gamma;
-        // ==================================================
-
-        // If object is at opposite direction than ray is:
-        if (discriminant < 0)
-        {
-            return false;
-        }
-
-        double temp = std::sqrt(discriminant);
-        double time1 = (-beta - temp) / 2;
-        double time2 = (-beta + temp) / 2;
-
-        if (time1 < 0 && time2 > 0 || time1 > 0 && time2 < 0) // when ray hit is inside the SphereWall
-        {
-            double time = std::max(time1, time2);
-            core::Vec3 collision = ray.at(time);
-            hitData = reinterpret_cast<core::RayHitData *>(&core::RayHitData(time, normal(collision), ray, freq));
-            return true;
-        }
-        return false;
     }
 
 #pragma endregion

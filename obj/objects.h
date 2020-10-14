@@ -59,7 +59,6 @@ namespace objects
     public:
         SphereWall(const SphereWall &other) = default;
         SphereWall() { this->setRadius(constants::kSimulationRadius);}
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
 
         friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);
     };
