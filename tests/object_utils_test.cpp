@@ -380,17 +380,13 @@ namespace objects
         using namespace core;
 
         std::vector<Sphere> objectList = {Sphere(Vec3(0, 0, 0), 1), Sphere(Vec3(0, 0, 4), 1)};
-        std::vector<Ray> rayList = {Ray(Vec3(0, 0, -5), Vec3(0, 0, 1)), Ray(Vec3(0, 0, 0), Vec3(0, 0, 1))};
+        Ray tempRay(Vec3(0, 0, -5), Vec3(0, 0, 1));
         RayHitData hitData;
-        for (auto &ray : rayList)
+        for (auto &obj : objectList)
         {
-            for (auto &obj : objectList)
-            {
-                ASSERT_TRUE(obj.hitObject(ray, kSkipFreq, &hitData));
-                double time = std::abs(obj.getOrigin().z() - obj.getRadius() - ray.getOrigin().z());
-                ASSERT_EQ(hitData.time, time);
-                ASSERT_EQ(hitData.collisionPoint, ray.at(time));
-            }
+            ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
+            ASSERT_EQ(hitData.time, std::abs(obj.getOrigin().z() - obj.getRadius() - tempRay.getOrigin().z()));
+            ASSERT_EQ(hitData.collisionPoint, tempRay.at(std::abs(obj.getOrigin().z() - obj.getRadius() - tempRay.getOrigin().z())));
         }
     }
 

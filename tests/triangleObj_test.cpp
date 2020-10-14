@@ -3,7 +3,7 @@
 #include "core/ray.h"
 #include "core/vec3.h"
 #include "obj/objects.h"
-#include "gtest/gtest.h"
+#include "gtest/gtest.h" // https://google.github.io/styleguide/cppguide.html#Namespaces
 
 #include <algorithm>
 #include <cmath>
@@ -11,8 +11,6 @@
 #include <random>
 #include <vector>
 
-// Define what you are using at the top of the file.
-// https://google.github.io/styleguide/cppguide.html#Namespaces
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -290,42 +288,19 @@ namespace objects
         ASSERT_EQ(TriangleObj({0, 0, 0}, {5, 0, 0}, {5, 5, 0}).area(), 12.5);
     }
 
-    // NOTE: Name of the test does not explain well what the test is doing.
-    // It seems that you are trying to verify that rays with origin inside the triangle, do not generate a hit (I guess?)
-    // but you are not really testing for that!
-    //
-    // Why do you need this Vec_0_1_0? Why is it important, looks like a special case? (but we know that it is clearly not)
-    //
-    // Better name would be something like: RayWithOriginInsideDoNotHit
-    //
-    // Also underscores should be avoided in test names (it is in the documentation 2x):
-    // https://github.com/google/googletest/blob/master/googletest/docs/primer.md#simple-tests
-    // https://github.com/google/googletest/blob/master/googletest/docs/faq.md#why-should-test-suite-names-and-test-names-not-contain-underscore
-    TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Inside_Object_Vec_0_1_0)
+    TEST(TRIANGLEOBJ_METHOD, RayInsideTriagnleDoesntHit)
     {
-        // NOTE: Just don't. https://google.github.io/styleguide/cppguide.html#Namespaces
-        using namespace core;
 
-        // Move this right just before it is used. Forward declarations were required in C.
-        RayHitData hitData;
         Ray tempRay(Vec3(0.25, 0, 0.25), Vec3(0, 1, 0)); // Ray has origin inside object1
 
         // NOTE: Why there are 2 objects in the list? Why there is a second one given that ray hits the first one?
         // (at least that is what the comment says).
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
-
-        // Do not use auto if it does not improve the readability.
-        // Use const references. Almost always.
-        for (auto &obj : objectList)
+        RayHitData hitData;
+        for (TriangleObj &obj : objectList)
         {
-            // Why you are not checking the return value here?
-            obj.hitObject(tempRay, kSkipFreq, &hitData);
-            // Why are you not asserting on the results of hitData?
-            // What if the first object got hit? This way you would get bonkers results below.
+            (obj.hitObject(tempRay, kSkipFreq, &hitData));
         }
-
-        // Where are those numbers coming from? If calculations are hard, add them in the comment to explain.
-        // This way future you while reading the code will be sure that the test itself is correct.
         ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 4, 0.25));
         ASSERT_EQ(hitData.direction, tempRay.getDirection());
         ASSERT_EQ(hitData.origin, tempRay.getOrigin());
@@ -337,7 +312,7 @@ namespace objects
         using namespace core;
 
         RayHitData hitData;
-        Ray tempRay(Vec3(0.25, 5, 0.25), Vec3(0, 1, 0)); // Ray is in front of object2 with direction outside of object2;
+        Ray tempRay(Vec3(0.25, 5, 0.25), Vec3(0, 1, 0));
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
 
@@ -366,7 +341,6 @@ namespace objects
 
     TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Inside_Object_Vec_0_0_1)
     {
-        using namespace core;
 
         RayHitData hitData;
         Ray tempRay(Vec3(0.25, 0.25, 0), Vec3(0, 0, 1)); // Ray has origin inside object1
@@ -375,9 +349,8 @@ namespace objects
 
         for (auto &obj : objectList)
         {
-            obj.hitObject(tempRay, kSkipFreq, &hitData);
+            (obj.hitObject(tempRay, kSkipFreq, &hitData));
         }
-
         ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 0.25, 4));
         ASSERT_EQ(hitData.direction, tempRay.getDirection());
         ASSERT_EQ(hitData.origin, tempRay.getOrigin());
