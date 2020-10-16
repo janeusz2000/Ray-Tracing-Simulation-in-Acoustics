@@ -138,7 +138,7 @@ namespace generators
         std::vector<std::unique_ptr<objects::TriangleObj>> objectsVec;
         objects::TriangleObj object({-0.6, -0.6, 1}, {0.6, -0.6, 1}, {-0.6, 0.6, 1});
 
-        core::Ray tempRay = source.GenerateRay(0, 0);
+        core::Ray tempRay = source.generateRay(0, 0);
         core::RayHitData hitData;
         ASSERT_TRUE(object.hitObject(tempRay, freq, &hitData));
         std::cout << hitData << std::endl;
@@ -159,7 +159,7 @@ namespace generators
         {
             for (size_t y = 0; y < rayNumPerRow; ++y)
             {
-                core::Ray tempRay = source.GenerateRay(x, y);
+                core::Ray tempRay = source.generateRay(x, y);
                 if (object.hitObject(tempRay, freq, &hitData))
                 {
                     ++hits;

@@ -46,8 +46,8 @@ namespace generators
     public:
         PointSource() = delete;
         explicit PointSource::PointSource(const double &freq, const size_t &numOfRaysPerRow, \
-                                        const double &diffusorSize, RandomGen* randomGen) : _frequency(freq),\
-                                        _numOfRaysPerRow(numOfRaysPerRow), _sampleSize(diffusorSize), \
+                                        const double &SampleSize, RandomGen* randomGen) : _frequency(freq),\
+                                        _numOfRaysPerRow(numOfRaysPerRow), _sampleSize(SampleSize), \
                                         _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen) {updateSampleSize();}
 
         // OPERATORS
