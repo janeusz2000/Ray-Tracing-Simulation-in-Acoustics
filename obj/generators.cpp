@@ -30,7 +30,7 @@ namespace generators
         _leftCorner = core::Vec3(-1 * _sampleSize / 2, -1 * _sampleSize / 2, 1);
     }
 
-    core::Ray PointSource::GenerateRay(const size_t &xIter, const size_t &yIter)
+    core::Ray PointSource::generateRay(const size_t &xIter, const size_t &yIter)
     {
         if (xIter >= _numOfRaysPerRow && yIter >= _numOfRaysPerRow)
         {

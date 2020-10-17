@@ -56,7 +56,7 @@ namespace generators
 
         // METHODS
         void updateSampleSize();
-        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter);
+        core::Ray generateRay(const size_t &xIter, const size_t &yIter);
 
         // GETTERS AND SETTERS
         double frequency() const;
