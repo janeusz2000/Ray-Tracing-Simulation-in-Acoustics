@@ -20,7 +20,7 @@
 class SceneBuilder
 {
     public:
-    SceneBuilder() : _collectorCurrentId(0) {};
+    SceneBuilder() {};
 
     // Construct Sceneshould move ownership of the objects to the class Simulator
     // 
@@ -28,18 +28,18 @@ class SceneBuilder
     // - preddefined size
     // - all energycollectors
     // - should use private method build collector for situating it at the right position
-    std::vector<objects::Object*> BuildEnergyColellectors(); 
+    bool buildEnergyColellectors(const std::vector<objects::Object*>* energyCollectorsPtr); 
 
     // Sample method should return imported sample from object reader that will be in the future and move owenership
-    std::vector<objects::Object*> BuildSample();   
+    bool buildSample(std::vector<objects::Object*> *samplePtr);   
 
     // THis just return test sample which containt two triangleObj that are making 
     // perfect square thogether.
-    std::vector<object::Objects*> BuildTestSample();
-
+    bool buildTestSample(std::vector<objects::Object*> *testSample);
+    
     // should return sphere wall object. If SPhere wall is hit only, energy is collected
-    std::unique_ptr<objects::Object*> sphereWall();
-
+    bool sphereWall(objects::Object* SphereWall);
+    
     // import sample via ObjReader class. 
     void importSample(std::string_view objPath); 
 };

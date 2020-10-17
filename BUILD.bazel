@@ -6,7 +6,7 @@ cc_library(
     srcs = [
         "core/ray.cpp",
         "core/vec3.cpp",
-        "main/sceneuBuilder.cpp",
+        "main/sceneBuilder.cpp",
         "obj/generators.cpp",
         "obj/objects.cpp",
     ],

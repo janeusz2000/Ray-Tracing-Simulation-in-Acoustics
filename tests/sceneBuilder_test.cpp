@@ -25,7 +25,8 @@ TEST(SceneBuildertest, IsTestSampleRightShape)
 
     const std::vector<TriangleObj> referenceSample = {TriangleObj(k1, k2, k3), TriangleObj(k2, k3, k4)};
 
-    std::vector<std::unique_ptr<Object>> testSample = builder.BuildTestSample();
+    std::vector<objects::Object *> testSample;
+    ASSERT_TRUE(builder.buildTestSample(&testSample)) << "test sample wasn't build";
 
     // TODO: This needs to be replaced with ASSERT_THAT. I should read more about google test framework
     // ASSERT_THAT(test_sample, UnorderedElementsAre(TriangleObj(k1, k2, k3), TriangleObj(k2, k3, k4)));
@@ -71,7 +72,8 @@ TEST(SceneBuilderTest, PointSourceRaysHitsBuildedTestSample)
     PointSource source(kSkipFreq, rayNumberPerRow, sampleSide, &fakeRand);
 
     SceneBuilder builder;
-    std::vector<std::unique_ptr<Object>> testSample = builder.BuildTestSample();
+    std::vector<objects::Object *> testSample;
+    ASSERT_TRUE(builder.buildTestSample(&testSample)) << "Test sample wasn't build";
 
     RayHitData ignore;
 
@@ -80,7 +82,7 @@ TEST(SceneBuilderTest, PointSourceRaysHitsBuildedTestSample)
     {
         for (size_t yIter = 0; yIter < rayNumberPerRow; ++yIter)
         {
-            for (const Object *objPtr : testSample)
+            for (Object *objPtr : testSample)
             {
                 if (objPtr->hitObject(source.generateRay(xIter, yIter), kSkipFreq, &ignore)
                 {
