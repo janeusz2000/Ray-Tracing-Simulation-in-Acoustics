@@ -1,6 +1,8 @@
 #ifndef RAY_H
 #define RAY_H
 
+// TODO: Change all doubles to float
+
 #include "constants.h"
 #include "core/exceptions.h"
 #include "core/vec3.h"

@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cmath>
 
+// TODO: Change all doubles to float
+
 namespace core
 {
     TEST(RAY_OPERATOR, Operator_ostream)

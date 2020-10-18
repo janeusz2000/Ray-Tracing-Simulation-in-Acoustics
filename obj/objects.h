@@ -12,6 +12,8 @@
 #include <memory>
 #include <vector>
 
+// TODO: Change all doubles to float
+
 namespace objects
 {
     class Object

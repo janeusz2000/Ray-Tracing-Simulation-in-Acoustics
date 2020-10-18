@@ -12,6 +12,7 @@
 #include <iostream>
 #include <random>
 
+// TODO: Change all doubles to float
 
 namespace generators
 {
