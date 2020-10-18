@@ -39,15 +39,15 @@ namespace generators
     };
 
     class PointSource final // This object is generating rays with the origin 
-                            // of the point source position and direction calculated
-                            // from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0)
-                            // and origin of the source position
+                            // of the point source position and direction calculated 
+                            // from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0) 
+                            // and origin of the source position 
     {
     public:
         PointSource() = delete;
         explicit PointSource::PointSource(const double &freq, const size_t &numOfRaysPerRow, \
-                                        const double &diffusorSize, RandomGen* randomGen) : _frequency(freq),\
-                                        _numOfRaysPerRow(numOfRaysPerRow), _sampleSize(diffusorSize), \
+                                        const double &SampleSize, RandomGen* randomGen) : _frequency(freq),\
+                                        _numOfRaysPerRow(numOfRaysPerRow), _sampleSize(SampleSize), \
                                         _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen) {updateSampleSize();}
 
         // OPERATORS
@@ -56,7 +56,7 @@ namespace generators
 
         // METHODS
         void updateSampleSize();
-        core::Ray GenerateRay(const size_t &xIter, const size_t &yIter);
+        core::Ray generateRay(const size_t &xIter, const size_t &yIter);
 
         // GETTERS AND SETTERS
         double frequency() const;
