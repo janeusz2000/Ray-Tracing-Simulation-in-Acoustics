@@ -1,5 +1,8 @@
 #include "generators.h"
 #include <random>
+
+// TODO: Change all doubles to float
+
 namespace generators
 {
 #pragma region RANDOMGENERATORS

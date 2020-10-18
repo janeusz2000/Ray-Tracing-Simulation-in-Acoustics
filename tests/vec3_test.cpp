@@ -5,6 +5,8 @@
 #include <sstream>
 #include <cmath>
 
+// TODO: Change all doubles to float
+
 namespace core
 {
     TEST(VEC3_BASIC, Test_Operator_ostream)
@@ -419,4 +421,3 @@ namespace core
     }
 
 } // namespace core
-
