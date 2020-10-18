@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <cmath>
 
+// TODO: Change all doubles to float
+
 namespace objects
 {
     TEST(ENERGYCOLLECTOR_CONSTRUCTOR, All_Possible_Constructors)

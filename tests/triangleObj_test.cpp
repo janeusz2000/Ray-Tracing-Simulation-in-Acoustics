@@ -15,6 +15,8 @@ using core::Ray;
 using core::RayHitData;
 using core::Vec3;
 
+// TODO: Change all doubles to float
+
 namespace objects
 {
 

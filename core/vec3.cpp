@@ -3,6 +3,8 @@
 
 #include <exception>
 
+// TODO: Change all doubles to float
+
 namespace core
 {
 #pragma region CONSTRUCTOR

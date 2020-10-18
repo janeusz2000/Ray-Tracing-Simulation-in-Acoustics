@@ -1,5 +1,8 @@
 #include "objects.h"
 #include <sstream>
+
+// TODO: Change all doubles to float
+
 namespace objects
 {
 #pragma region OBJECT

@@ -1,5 +1,7 @@
 #include "ray.h"
 
+// TODO: Change all doubles to float
+
 namespace core
 {
 #pragma region CONSTRUCTORS

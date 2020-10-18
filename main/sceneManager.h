@@ -45,7 +45,7 @@
 class SceneManager
 {
     public:
-    SceneManager() {};
+    SceneManager(double sampleSize = 1) : _sampleSize(sampleSize){};
 
     // builds std::vector<Objects*> with Energy collectors  and assign it to the given pointer. 
     // Returns true if it was successful
@@ -70,7 +70,7 @@ class SceneManager
     // Disallow copy and assign
     SceneManager(const SceneManager&) = delete;
     SceneManager& operator=(const SceneManager&) = delete;
-
+    double _sampleSize;
 };
 
 

@@ -6,6 +6,8 @@
 #include <cmath>
 #include <sstream>
 
+// TODO: Change all doubles to float
+
 namespace generators
 {
     FakeRandomGen fakeEngine;

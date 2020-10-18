@@ -1,5 +1,7 @@
 #include "main/sceneManager.h"
 
+// TODO: Change all doubles to float
+
 bool SceneManager::loadEnergyColellectors(const std::vector<objects::Object *> *energyCollectorsPtr)
 {
     // TODO: load energy collector implementation
@@ -14,8 +16,26 @@ bool SceneManager::loadSample(std::vector<objects::Object *> *samplePtr)
 
 bool SceneManager::loadTestSample(std::vector<objects::Object *> *testSample)
 {
-    // TODO: load test sample implementation
-    return false;
+
+    // a) Vec3(-0.5, -0.5, 0)
+    // b) Vec3(0.5, -0.5, 0)
+    // c) Vec3(-0.5, 0.5, 0)
+    // d) Vec3(0.5, 0.5, 0)
+
+    core::Vec3 k0(-_sampleSize, -_sampleSize, 0);
+    core::Vec3 k1(_sampleSize, -_sampleSize, 0);
+    core::Vec3 k2(-_sampleSize, _sampleSize, 0);
+    core::Vec3 k3(_sampleSize, _sampleSize, 0);
+
+    objects::TriangleObj temp1(k0, k1, k2));
+    objects::TriangleObj temp2(k0, k1, k2));
+
+    std::vector<objects::Object *> tempTestSample;
+
+    *testSample = tempTestSample;
+    if (testSample = nullptr)
+        return false;
+    return true;
 }
 
 bool SceneManager::loadSphereWall(objects::Object *SphereWall)

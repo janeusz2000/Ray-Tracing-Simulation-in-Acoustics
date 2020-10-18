@@ -5,6 +5,8 @@
 #include <initializer_list>
 #include <iostream>
 
+// TODO: Change all doubles to float
+
 namespace core
 {
 

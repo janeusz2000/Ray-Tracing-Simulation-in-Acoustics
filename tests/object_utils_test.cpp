@@ -9,6 +9,8 @@
 #include <sstream>
 #include <random>
 
+// TODO: Change all doubles to float
+
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
