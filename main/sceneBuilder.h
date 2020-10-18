@@ -13,27 +13,20 @@
 #include <vector>
 
 // This class is creating all necessary objects for simulation,
-// assign them to the right positions and give ownership 
-// of those objects to the Simulator class, where simulation will be 
-// performed.
+// assign them to the given pointer from class Simulator
 
 class SceneBuilder
 {
     public:
     SceneBuilder() {};
 
-    // Construct Sceneshould move ownership of the objects to the class Simulator
-    // 
-    // returned vector needs to have;
-    // - preddefined size
-    // - all energycollectors
-    // - should use private method build collector for situating it at the right position
+    // builds std::vector<Objects*> with Energy collectors  and assign it to the given pointer. 
     bool buildEnergyColellectors(const std::vector<objects::Object*>* energyCollectorsPtr); 
-
-    // Sample method should return imported sample from object reader that will be in the future and move owenership
+    // This method should build vector<Object*> with usage of ObjectReader class. Object Reader
+    // is translateing .obj files into TriangleObj.
     bool buildSample(std::vector<objects::Object*> *samplePtr);   
 
-    // THis just return test sample which containt two triangleObj that are making 
+    // THis just assing testSample to given pointer which containt two triangleObj that are making 
     // perfect square thogether.
     bool buildTestSample(std::vector<objects::Object*> *testSample);
     
