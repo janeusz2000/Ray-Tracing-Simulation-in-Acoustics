@@ -20,7 +20,7 @@ bool SceneManager::loadTestSample(std::vector<objects::Object *> *testSample)
 
 bool SceneManager::loadSphereWall(objects::Object *SphereWall)
 {
-    // TODO: sphereWall returing method
+    // TODO: load SPhereWall
     return false;
 }
 
