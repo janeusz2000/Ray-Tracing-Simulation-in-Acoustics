@@ -84,7 +84,7 @@ TEST(SceneBuilderTest, PointSourceRaysHitsBuildedTestSample)
         {
             for (Object *objPtr : testSample)
             {
-                if (objPtr->hitObject(source.generateRay(xIter, yIter), kSkipFreq, &ignore)
+                if (objPtr->hitObject(source.generateRay(xIter, yIter), kSkipFreq, &ignore))
                 {
                     ++hits;
                     break;

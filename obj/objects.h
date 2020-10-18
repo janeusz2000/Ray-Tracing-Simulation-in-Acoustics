@@ -22,6 +22,10 @@ namespace objects
         virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
         virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) = 0;
 
+        // OPERATORS
+        friend std::ostream &operator<<(std::ostream &os, const Object &obj);
+        friend bool operator==(const Object &left, const Object &right);
+        
         //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 & or);
         core::Vec3 getOrigin() const;

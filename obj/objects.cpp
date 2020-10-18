@@ -13,6 +13,18 @@ namespace objects
         return _origin;
     }
 
+    // OPERATORS
+
+    std::ostream &operator<<(std::ostream &os, const Object &obj)
+    {
+        return os << "Abstract obj";
+    }
+
+    bool operator==(const Object &left, const Object &right)
+    {
+        return (left.getOrigin() == right.getOrigin());
+    }
+
 #pragma endregion
 #pragma region SPHERE
 
