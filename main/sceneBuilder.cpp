@@ -3,25 +3,25 @@
 bool SceneBuilder::buildEnergyColellectors(const std::vector<objects::Object *> *energyCollectorsPtr)
 {
     // TODO: build energy collector implementation
-    return true;
+    return false;
 }
 
 bool SceneBuilder::buildSample(std::vector<objects::Object *> *samplePtr)
 {
     // TODO: build sampple implementation
-    return true;
+    return false;
 }
 
 bool SceneBuilder::buildTestSample(std::vector<objects::Object *> *testSample)
 {
     // TODO: build test sample implementation
-    return true;
+    return false;
 }
 
 bool SceneBuilder::sphereWall(objects::Object *SphereWall)
 {
     // TODO: sphereWall returing method
-    return true;
+    return false;
 }
 
 void SceneBuilder::importSample(std::string_view objPath)
