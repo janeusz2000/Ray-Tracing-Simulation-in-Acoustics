@@ -1,5 +1,5 @@
 #include "gtest/gtest.h" // https://google.github.io/styleguide/cppguide.html#Namespaces
-#include "main/sceneBuilder.h"
+#include "main/sceneManager.h"
 #include "obj/generators.h"
 #include "obj/objects.h"
 
@@ -13,7 +13,7 @@ using objects::TriangleObj;
 const double kSkipFreq = 1000;
 generators::FakeRandomGen fakeRand;
 
-TEST(SceneBuildertest, IsTestSampleRightShape)
+TEST(SceneManagertest, IsTestSampleRightShape)
 {
     Vec3 k1(-0.5, -0.5, 0);
     Vec3 k2(0.5, -0.5, 0);
@@ -21,12 +21,12 @@ TEST(SceneBuildertest, IsTestSampleRightShape)
     Vec3 k4(0.5, 0.5, 0);
     Vec3 k5(123, 123, 1);
 
-    SceneBuilder builder;
+    SceneManager manager;
 
     const std::vector<TriangleObj> referenceSample = {TriangleObj(k1, k2, k3), TriangleObj(k2, k3, k4)};
 
     std::vector<objects::Object *> testSample;
-    ASSERT_TRUE(builder.buildTestSample(&testSample)) << "test sample wasn't build";
+    ASSERT_TRUE(manager.loadTestSample(&testSample)) << "test sample wasn't build";
 
     // TODO: This needs to be replaced with ASSERT_THAT. I should read more about google test framework
     // ASSERT_THAT(test_sample, UnorderedElementsAre(TriangleObj(k1, k2, k3), TriangleObj(k2, k3, k4)));
@@ -43,7 +43,7 @@ TEST(SceneBuildertest, IsTestSampleRightShape)
         << "Triangle1: " << *testSample[0] << ", Triangle2: " << *testSample[1];
 }
 
-TEST(SceneBuilderTest, PointSourceRaysHitsBuildedTestSample)
+TEST(SceneManagerTest, PointSourceRaysHitsBuildedTestSample)
 {
     // Monte Carlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
 
@@ -71,9 +71,9 @@ TEST(SceneBuilderTest, PointSourceRaysHitsBuildedTestSample)
     const double sampleSide = 1;
     PointSource source(kSkipFreq, rayNumberPerRow, sampleSide, &fakeRand);
 
-    SceneBuilder builder;
+    SceneManager manager;
     std::vector<objects::Object *> testSample;
-    ASSERT_TRUE(builder.buildTestSample(&testSample)) << "Test sample wasn't build";
+    ASSERT_TRUE(manager.loadTestSample(&testSample)) << "Test sample wasn't build";
 
     RayHitData ignore;
 

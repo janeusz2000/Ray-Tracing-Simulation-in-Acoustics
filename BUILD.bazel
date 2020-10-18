@@ -6,7 +6,7 @@ cc_library(
     srcs = [
         "core/ray.cpp",
         "core/vec3.cpp",
-        "main/sceneBuilder.cpp",
+        "main/sceneManager.cpp",
         "obj/generators.cpp",
         "obj/objects.cpp",
     ],
@@ -15,7 +15,7 @@ cc_library(
         "core/exceptions.h",
         "core/ray.h",
         "core/vec3.h",
-        "main/sceneBuilder.h",
+        "main/sceneManager.h",
         "obj/generators.h",
         "obj/objects.h",
     ],
@@ -115,7 +115,7 @@ cc_test(
 cc_test(
     name = "scene_test",
     srcs = [
-        "tests/sceneBuilder_test.cpp",
+        "tests/sceneManager_test.cpp",
     ],
     copts = [
         "-Iexternal/gtest/include",

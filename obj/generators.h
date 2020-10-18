@@ -39,9 +39,9 @@ namespace generators
     };
 
     class PointSource final // This object is generating rays with the origin 
-                            // of the point source position and direction calculated
-                            // from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0)
-                            // and origin of the source position
+                            // of the point source position and direction calculated 
+                            // from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0) 
+                            // and origin of the source position 
     {
     public:
         PointSource() = delete;
