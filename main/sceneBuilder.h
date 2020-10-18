@@ -26,7 +26,7 @@ class SceneBuilder
     // is translateing .obj files into TriangleObj.
     bool buildSample(std::vector<objects::Object*> *samplePtr);   
 
-    // THis just assing testSample to given pointer which containt two triangleObj that are making 
+    // buildTestSample method is assigning testSample to given pointer which containt two triangleObj that are making 
     // perfect square thogether.
     bool buildTestSample(std::vector<objects::Object*> *testSample);
     

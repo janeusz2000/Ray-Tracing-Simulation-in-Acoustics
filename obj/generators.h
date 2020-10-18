@@ -17,22 +17,22 @@ namespace generators
 {
     struct RandomGen {
         virtual ~RandomGen() {};
-        virtual double getNext()  = 0;
+        virtual float getNext()  = 0;
     };
 
     struct UniformRandomGen : public RandomGen {
-        UniformRandomGen(double min, double max) : _engine(std::random_device()()), _dist(min, max) {};
-        double getNext() override {
+        UniformRandomGen(float min, float max) : _engine(std::random_device()()), _dist(min, max) {};
+        float getNext() override {
             return _dist(_engine);
         }
 
         std::random_device _rd;
         std::mt19937_64 _engine;
-        std::uniform_real_distribution<double> _dist;
+        std::uniform_real_distribution<float> _dist;
     };
 
     struct FakeRandomGen : public RandomGen {
-        double getNext() override 
+        float getNext() override 
         {
             return 0;
         }
@@ -45,8 +45,8 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        explicit PointSource::PointSource(const double &freq, const size_t &numOfRaysPerRow, \
-                                        const double &SampleSize, RandomGen* randomGen) : _frequency(freq),\
+        explicit PointSource::PointSource(float freq,  size_t numOfRaysPerRow, \
+                                        float SampleSize, RandomGen* randomGen) : _frequency(freq),\
                                         _numOfRaysPerRow(numOfRaysPerRow), _sampleSize(SampleSize), \
                                         _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen) {updateSampleSize();}
 
@@ -60,13 +60,13 @@ namespace generators
 
         // GETTERS AND SETTERS
         double frequency() const;
-        void setFrequency(const double &freq);
+        void setFrequency(float freq);
 
         double sampleSize() const;
-        void setDiffusorSize(const double &diffusorSize);
+        void setSampleSize(float diffusorSize);
 
         size_t numOfRaysPerRow() const;
-        void setNumOfRaysPerRow(const size_t &raynum);
+        void setNumOfRaysPerRow(size_t raynum);
 
         core::Vec3 origin() const;
         void setOrigin(const core::Vec3 &point);
@@ -76,7 +76,7 @@ namespace generators
 
     private:
         core::Vec3 _origin, _leftCorner;
-        double _frequency, _sampleSize;
+        float _frequency, _sampleSize;
         size_t _numOfRaysPerRow;
         
         RandomGen* _randomGen;
