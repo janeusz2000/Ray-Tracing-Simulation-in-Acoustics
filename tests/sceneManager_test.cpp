@@ -13,6 +13,8 @@ using objects::TriangleObj;
 const double kSkipFreq = 1000;
 generators::FakeRandomGen fakeRand;
 
+// TODO: Change all doubles to float
+
 TEST(SceneManagertest, IsTestSampleRightShape)
 {
     Vec3 k1(-0.5, -0.5, 0);
@@ -36,6 +38,8 @@ TEST(SceneManagertest, IsTestSampleRightShape)
                 std::find(referenceSample.cbegin(), referenceSample.cend(),
                           *testSample[1]) != referenceSample.cend())
         << "Triangle1: " << *testSample[0] << ", Triangle2: " << *testSample[1];
+
+    // TODO: Make class that has function which does it for me. Its good idea to use TEST_F macrofor this.
 
     const std::vector<TriangleObj> invalidTestSample = {TriangleObj(k1, k2, k3), TriangleObj(k2, k3, k5)};
     ASSERT_FALSE(std::find(invalidTestSample.cbegin(), invalidTestSample.cend(), *testSample[0]) != invalidTestSample.cend() &&

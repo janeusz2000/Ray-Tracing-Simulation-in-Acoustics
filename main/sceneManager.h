@@ -12,8 +12,35 @@
 #include <string_view>
 #include <vector>
 
+// TODO: Change all doubles to float
+
 // This class is creating all necessary objects for simulation,
 // assign them to the given pointer from class Simulator
+
+// DAWID PROPOSAL OF THE INTERFACE
+
+// class SceneManager {
+//  public:
+    // Constructs SceneManager that configures energy collectors with given spacing.
+//    SceneManager(float energyCollectorSpacing) {}
+
+    // Loads the scene from the given file. Returns true if it was successful.
+    // All getters below can be called only after LoadScene() call 
+    // was successful. Otherwise it throws an error.
+//    bool LoadScene(const std::string& filename);
+    // Returns SphereWall around the scene. 
+//    const SphereWall& GetSphereWall();
+    // Returns all energy collectors in the scene.
+//    std::vector<EnergyCollector*> GetEnergyCollectors();
+//    std::vector<Object*> GetObjects();
+    // Returns objects in a test scene.
+//    std::vector<Object*> GetTestObjects();
+// private:
+   // Disallow copy and assign.
+//    SceneManager(const SceneManager&) = delete;
+//    SceneManager& operator=(const SceneManager&) = delete;
+// };
+
 
 class SceneManager
 {
