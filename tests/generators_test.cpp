@@ -61,11 +61,11 @@ namespace generators
     {
         PointSource object1(100, 100, 100, &fakeEngine);
         PointSource object2(1000, 200, 100, &fakeEngine);
-        PointSource object3(static_cast<float>(std::sqrt(2)), 100, static_cast<float>(std::sqrt(2)), &fakeEngine);
+        PointSource object3(std::sqrt(2), 100, std::sqrt(2), &fakeEngine);
 
         ASSERT_EQ(object1.frequency(), 100);
         ASSERT_EQ(object2.frequency(), 1000);
-        ASSERT_EQ(object3.frequency(), static_cast<float>(std::sqrt(2)));
+        ASSERT_EQ(object3.frequency(), std::sqrt(2));
 
         ASSERT_EQ(object1.numOfRaysPerRow(), 100);
         ASSERT_EQ(object2.numOfRaysPerRow(), 200);
@@ -73,7 +73,7 @@ namespace generators
 
         ASSERT_EQ(object1.sampleSize(), 100);
         ASSERT_EQ(object2.sampleSize(), 100);
-        ASSERT_EQ(object3.sampleSize(), static_cast<float>(std::sqrt(2)));
+        ASSERT_EQ(object3.sampleSize(), std::sqrt(2));
 
         ASSERT_EQ(object1.origin(), core::Vec3(0, 0, 4));
         ASSERT_EQ(object2.origin(), core::Vec3(0, 0, 4));
@@ -84,15 +84,15 @@ namespace generators
     {
         PointSource object1(100, 100, 100, &fakeEngine);
         PointSource object2(1000, 200, 100, &fakeEngine);
-        PointSource object3(static_cast<float>(std::sqrt(2)), 100, static_cast<float>(std::sqrt(2)), &fakeEngine);
+        PointSource object3(std::sqrt(2), 100, std::sqrt(2), &fakeEngine);
 
         object1.setFrequency(1000);
-        object2.setFrequency(static_cast<float>(std::sqrt(3)));
-        object3.setFrequency(static_cast<float>(std::sqrt(5)));
+        object2.setFrequency(std::sqrt(3));
+        object3.setFrequency(std::sqrt(5));
 
         ASSERT_EQ(object1.frequency(), 1000);
-        ASSERT_EQ(object2.frequency(), static_cast<float>(std::sqrt(3)));
-        ASSERT_EQ(object3.frequency(), static_cast<float>(std::sqrt(5)));
+        ASSERT_EQ(object2.frequency(), std::sqrt(3));
+        ASSERT_EQ(object3.frequency(), std::sqrt(5));
 
         object1.setNumOfRaysPerRow(200);
         object2.setNumOfRaysPerRow(800);
@@ -102,13 +102,13 @@ namespace generators
         ASSERT_EQ(object2.numOfRaysPerRow(), 800);
         ASSERT_EQ(object3.numOfRaysPerRow(), 2);
 
-        object1.setSampleSize(std::sqrt(2));
-        object2.setSampleSize(std::sqrt(13));
-        object3.setSampleSize(std::sqrt(21));
+        object1.setDiffusorSize(std::sqrt(2));
+        object2.setDiffusorSize(std::sqrt(13));
+        object3.setDiffusorSize(std::sqrt(21));
 
-        ASSERT_EQ(object1.sampleSize(), static_cast<float>(std::sqrt(2)));
-        ASSERT_EQ(object2.sampleSize(), static_cast<float>(std::sqrt(13)));
-        ASSERT_EQ(object3.sampleSize(), static_cast<float>(std::sqrt(21)));
+        ASSERT_EQ(object1.sampleSize(), std::sqrt(2));
+        ASSERT_EQ(object2.sampleSize(), std::sqrt(13));
+        ASSERT_EQ(object3.sampleSize(), std::sqrt(21));
 
         object1.setOrigin(core::Vec3(0, 0, 1));
         object2.setOrigin(core::Vec3(1, 0, 2));
@@ -130,7 +130,7 @@ namespace generators
 
     TEST(POINTSOURCE_METHOD, Single_rayHit)
     {
-        const float freq = 1000;
+        const double freq = 1000;
         const size_t rayNumPerRow = 1000;
 
         PointSource source(freq, rayNumPerRow, 1, &fakeEngine);
@@ -147,13 +147,13 @@ namespace generators
 
     TEST(POINTSOURCE_METHODS, GenerateRay_Test) // Monte Carlo Test
     {
-        const float freq = 1000;
         const size_t rayNumPerRow = 1000;
+        const double freq = 1000;
         const size_t samples = 3;
         PointSource source(freq, rayNumPerRow, 1, &fakeEngine);
 
         objects::TriangleObj object({-0.25, -0.25, 1}, {0.25, -0.25, 1}, {-0.25, 0.25, 1});
-        float hits = 0, missed = 0;
+        double hits = 0, missed = 0;
         core::RayHitData hitData;
         for (size_t x = 0; x < rayNumPerRow; ++x)
         {

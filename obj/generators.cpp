@@ -49,7 +49,7 @@ namespace generators
     {
         return _frequency;
     }
-    void PointSource::setFrequency(const float freq)
+    void PointSource::setFrequency(const double &freq)
     {
         _frequency = freq;
     }
@@ -58,7 +58,7 @@ namespace generators
     {
         return _sampleSize;
     }
-    void PointSource::setSampleSize(const float diffusorSize)
+    void PointSource::setDiffusorSize(const double &diffusorSize)
     {
         _sampleSize = diffusorSize;
         updateSampleSize();
@@ -77,7 +77,7 @@ namespace generators
     {
         return _numOfRaysPerRow;
     }
-    void PointSource::setNumOfRaysPerRow(const size_t rayNum)
+    void PointSource::setNumOfRaysPerRow(const size_t &rayNum)
     {
         _numOfRaysPerRow = rayNum;
     }
