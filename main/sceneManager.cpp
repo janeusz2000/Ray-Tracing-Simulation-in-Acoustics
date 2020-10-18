@@ -1,51 +1,26 @@
 #include "main/sceneManager.h"
 
-// TODO: Change all doubles to float
+using Tri = objects::TriangleObj;
 
-bool SceneManager::loadEnergyColellectors(const std::vector<objects::Object *> *energyCollectorsPtr)
+void IamSimulator()
 {
-    // TODO: load energy collector implementation
-    return false;
-}
+    SceneManager manager;
+    CHECK(manager.loadModel("123231")) << "Cannot load model";
 
-bool SceneManager::loadSample(std::vector<objects::Object *> *samplePtr)
-{
-    // TODO: load sampple implementation
-    return false;
-}
+    std::vector<Tri> triangles = manager.getModelTriangles();
+    generators::PointSource source;
 
-bool SceneManager::loadTestSample(std::vector<objects::Object *> *testSample)
-{
+    for (int i = 0; i < 1000000; i++)
+    {
+        auto ray = source.generateRay(1, 2);
 
-    // a) Vec3(-0.5, -0.5, 0)
-    // b) Vec3(0.5, -0.5, 0)
-    // c) Vec3(-0.5, 0.5, 0)
-    // d) Vec3(0.5, 0.5, 0)
-
-    core::Vec3 k0(-_sampleSize, -_sampleSize, 0);
-    core::Vec3 k1(_sampleSize, -_sampleSize, 0);
-    core::Vec3 k2(-_sampleSize, _sampleSize, 0);
-    core::Vec3 k3(_sampleSize, _sampleSize, 0);
-
-    objects::TriangleObj temp1(k0, k1, k2));
-    objects::TriangleObj temp2(k0, k1, k2));
-
-    std::vector<objects::Object *> tempTestSample;
-
-    *testSample = tempTestSample;
-    if (testSample = nullptr)
-        return false;
-    return true;
-}
-
-bool SceneManager::loadSphereWall(objects::Object *SphereWall)
-{
-    // TODO: load SPhereWall
-    return false;
-}
-
-bool SceneManager::importSample(std::string_view objPath)
-{
-    // TODo: import sample via object reader
-    return false;
+        for (const Tri &triangle : triangles)
+        {
+            core::RayHitData hitData;
+            if (triangle.hitObject(ray, 123123, &hitData))
+            {
+                ///
+            }
+        }
+    }
 }

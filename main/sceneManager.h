@@ -2,8 +2,8 @@
 #define SCENEBUILDER_H
 
 #include "constants.h"
-#include "core/vec3.h"
 #include "core/ray.h"
+#include "core/vec3.h"
 #include "obj/generators.h"
 #include "obj/objects.h"
 
@@ -12,66 +12,33 @@
 #include <string_view>
 #include <vector>
 
-// TODO: Change all doubles to float
-
-// This class is creating all necessary objects for simulation,
-// assign them to the given pointer from class Simulator
-
-// DAWID PROPOSAL OF THE INTERFACE
-
-// class SceneManager {
-//  public:
-    // Constructs SceneManager that configures energy collectors with given spacing.
-//    SceneManager(float energyCollectorSpacing) {}
-
-    // Loads the scene from the given file. Returns true if it was successful.
-    // All getters below can be called only after LoadScene() call 
-    // was successful. Otherwise it throws an error.
-//    bool LoadScene(const std::string& filename);
-    // Returns SphereWall around the scene. 
-//    const SphereWall& GetSphereWall();
-    // Returns all energy collectors in the scene.
-//    std::vector<EnergyCollector*> GetEnergyCollectors();
-//    std::vector<Object*> GetObjects();
-    // Returns objects in a test scene.
-//    std::vector<Object*> GetTestObjects();
-// private:
-   // Disallow copy and assign.
-//    SceneManager(const SceneManager&) = delete;
-//    SceneManager& operator=(const SceneManager&) = delete;
-// };
-
-
+// This class is creating all necessary objects for simulation.
 class SceneManager
 {
-    public:
-    SceneManager(double sampleSize = 1) : _sampleSize(sampleSize){};
+public:
+    bool loadModel(std::string_view objPath);
 
-    // builds std::vector<Objects*> with Energy collectors  and assign it to the given pointer. 
-    // Returns true if it was successful
-    bool loadEnergyColellectors(const std::vector<objects::Object*>* energyCollectorsPtr); 
+    std::vector<objects::EnergyCollector *> getEnergyCollectors();
 
-    // This method builds vector<Object*> with usage of ObjectReader class. Object Reader
-    // is translateing .obj files into TriangleObj. Returns true if successful.
-    bool loadSample(std::vector<objects::Object*> *samplePtr);   
+    std::vector<objects::TriangleObj *> getModelTriangles()
+    {
+        std::vector<objects::TriangleObj *> v;
+        v.reserve(model_triangles_.size());
+        for (const auto &t : model_triangles_)
+        {
+            v.push_back(t.get());
+        }
+        return v;
+    }
 
-    // buildTestSample method is assigning testSample to given pointer which containt two 
-    // triangleObj that are making perfect square thogether.
-    // Returns true if successful.
-    bool loadTestSample(std::vector<objects::Object*> *testSample);
-    
-    // assigns single sphere wall object to given pointer. Returns true if successful.  
-    bool loadSphereWall(objects::Object* SphereWall);
-    
-    // import sample via ObjReader class. Returns true if successful.
-    bool importSample(std::string_view objPath); 
+    std::vector<objects::TriangleObj *> getReferencePlate();
+    const objects::SphereWall &getSphereWall();
 
-    private:
-    // Disallow copy and assign
-    SceneManager(const SceneManager&) = delete;
-    SceneManager& operator=(const SceneManager&) = delete;
-    double _sampleSize;
+private:
+    // Disallow copy and assign.
+    SceneManager(const SceneManager &) = delete;
+    SceneManager &operator=(const SceneManager &) = delete;
+    std::vector<std::unique_ptr<objects::TriangleObj>> model_triangles_;
 };
-
 
 #endif
