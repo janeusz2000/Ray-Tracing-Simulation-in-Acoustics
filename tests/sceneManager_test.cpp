@@ -22,14 +22,13 @@ protected:
                                                                                  // TODO: delete hard dependency
     bool performHitAtEnergyCollectors(const Ray &tempRay, RayHitData *hitData)
     {
-        bool hit = false;
         for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors())
         {
             const double kSkipFreq = 1000;
             if (energyCol->hitObject(tempRay, kSkipFreq, hitData))
-                hit = true;
+                return true;
         }
-        return hit;
+        return false;
     }
 };
 
