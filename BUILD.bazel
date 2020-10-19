@@ -113,7 +113,7 @@ cc_test(
 )
 
 cc_test(
-    name = "scene_test",
+    name = "sceneManager_test",
     srcs = [
         "tests/sceneManager_test.cpp",
     ],

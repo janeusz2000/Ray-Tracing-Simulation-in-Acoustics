@@ -16,41 +16,41 @@ namespace objects
     {
         EnergyCollector object1(core::Vec3(0, 0, 2));
 
-        ASSERT_EQ(object1.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        ASSERT_EQ(object1.getRadius(), constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
         ASSERT_EQ(object1.getOrigin(), core::Vec3(0, 0, 2));
         ASSERT_EQ(object1.getEnergy(), 0);
 
         EnergyCollector object2(core::Vec3(0, 0, 2));
 
-        ASSERT_EQ(object2.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        ASSERT_EQ(object2.getRadius(), constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
         ASSERT_EQ(object2.getOrigin(), core::Vec3(0, 0, 2));
         ASSERT_EQ(object2.getEnergy(), 0);
 
         EnergyCollector object3(core::Vec3(0, 0, -1));
 
-        ASSERT_EQ(object3.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        ASSERT_EQ(object3.getRadius(), constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
         ASSERT_EQ(object3.getOrigin(), core::Vec3(0, 0, -1));
         ASSERT_EQ(object3.getEnergy(), 0);
 
         EnergyCollector object4(core::Vec3(0, 0, -1), 50);
 
-        ASSERT_EQ(object4.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        ASSERT_EQ(object4.getRadius(), constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
         ASSERT_EQ(object4.getOrigin(), core::Vec3(0, 0, -1));
         ASSERT_EQ(object4.getEnergy(), 50);
 
         EnergyCollector object5(core::Vec3(0, 0, -1), 50);
 
-        ASSERT_EQ(object5.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        ASSERT_EQ(object5.getRadius(), constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
         ASSERT_EQ(object5.getOrigin(), core::Vec3(0, 0, -1));
         ASSERT_EQ(object5.getEnergy(), 50);
 
         EnergyCollector object6(object2);
-        ASSERT_EQ(object6.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        ASSERT_EQ(object6.getRadius(), constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
         ASSERT_EQ(object6.getOrigin(), core::Vec3(0, 0, 2));
         ASSERT_EQ(object6.getEnergy(), 0);
 
         EnergyCollector object7(core::Vec3(0, 0, 2));
-        ASSERT_EQ(object7.getRadius(), constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+        ASSERT_EQ(object7.getRadius(), constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
         ASSERT_EQ(object7.getOrigin(), core::Vec3(0, 0, 2));
         ASSERT_EQ(object7.getEnergy(), 0);
     }

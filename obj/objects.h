@@ -70,7 +70,7 @@ namespace objects
     public:
         EnergyCollector(const core::Vec3 &origin, double energy = 0) : _energy(energy)
         {
-            setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
+            setRadius(constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
             setOrigin(origin);
         }
 
