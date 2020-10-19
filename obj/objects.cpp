@@ -109,12 +109,12 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector)
     {
-        return os << "Energy Collector ID: " << collector.getID() << ", Energy collected: " << collector.getEnergy();
+        return os << "Energy Collector. Origin: " << collector.getOrigin() << ", Energy collected: " << collector.getEnergy();
     }
 
     bool objects::operator==(const EnergyCollector &left, const EnergyCollector &right)
     {
-        return (left.getID() == right.getID() && left.getOrigin() == right.getOrigin() && left.getRadius() == right.getRadius() && left.getEnergy() == right.getEnergy());
+        return (left.getOrigin() == right.getOrigin() && left.getRadius() == right.getRadius() && left.getEnergy() == right.getEnergy());
     }
 
     // METHODS
@@ -142,14 +142,6 @@ namespace objects
     void EnergyCollector::addEnergy(const double &en)
     {
         _energy += en;
-    }
-    void EnergyCollector::setID(const int &id)
-    {
-        _id = id;
-    }
-    int EnergyCollector::getID() const
-    {
-        return _id;
     }
 
 #pragma endregion

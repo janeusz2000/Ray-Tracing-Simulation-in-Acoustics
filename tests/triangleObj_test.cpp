@@ -253,36 +253,6 @@ namespace objects
         ASSERT_NEAR(referenceRatio, hits / rayNum, constants::kHitAccuracy * 10);
     }
 
-    TEST(TRIANGLEOBJ_METHOD, HitObject) // This is Monte Carlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
-    {
-        TriangleObj object1({1, 2, 1}, {1, 1, 1}, {2, 1, 1});
-
-        std::random_device rd;
-        std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(0, 3);
-
-        double hits = 0;
-        double missed = 0;
-        const double areaRatio = 0.5 / 9;
-
-        for (auto a = 0; a < 10000000; ++a)
-        {
-            core::Vec3 randomPoint(dist(e2), dist(e2), 1);
-            if (object1.doesHit(randomPoint))
-            {
-                ++hits;
-            }
-            else
-            {
-                ++missed;
-            }
-        }
-
-        double ratio = hits / (hits + missed);
-        std::cout << "Missed: " << missed << ", Hits: " << hits << ", RATIO: " << ratio << std::endl;
-        ASSERT_NEAR(ratio, areaRatio, constants::kHitAccuracy * 10);
-    }
-
     TEST(TRIANGLEOBJ_METHOD, Area)
     {
         ASSERT_EQ(TriangleObj({0, 0, 0}, {0, 0, 1}, {0, 1, 1}).area(), 0.5);
@@ -401,7 +371,10 @@ namespace objects
 
         for (auto &obj : objectList)
         {
-            obj.hitObject(tempRay, kSkipFreq, &hitData);
+            if (obj.hitObject(tempRay, kSkipFreq, &hitData))
+            {
+                continue;
+            };
         }
 
         ASSERT_EQ(hitData.collisionPoint, Vec3(4, 0.25, 0.25));

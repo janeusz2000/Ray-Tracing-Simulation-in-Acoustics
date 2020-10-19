@@ -9,6 +9,7 @@ namespace constants
     const double kSimulationRadius = 4; // [m]
     const int kPopulation = 37;
     const double kHitAccuracy = 0.0001;
+    const size_t kCollectors = 37;
 
 } // namespace constants
 

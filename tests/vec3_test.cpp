@@ -18,7 +18,7 @@ namespace core
         std::stringstream testStream5;
         std::stringstream testStream6;
 
-        testStream1 << Vec3(0.0, 1, 2);
+        testStream1 << Vec3(0.0, 1, 2); 
         testStream2 << Vec3(0.1, 0, 3);
         testStream3 << Vec3(3.00001, 2, 1);
         testStream4 << Vec3(std::sqrt(2), 2, 1);

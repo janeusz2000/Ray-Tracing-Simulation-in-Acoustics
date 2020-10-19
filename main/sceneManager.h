@@ -16,29 +16,24 @@
 class SceneManager
 {
 public:
+    SceneManager();
     bool loadModel(std::string_view objPath);
 
     std::vector<objects::EnergyCollector *> getEnergyCollectors();
-
-    std::vector<objects::TriangleObj *> getModelTriangles()
-    {
-        std::vector<objects::TriangleObj *> v;
-        v.reserve(model_triangles_.size());
-        for (const auto &t : model_triangles_)
-        {
-            v.push_back(t.get());
-        }
-        return v;
-    }
-
+    std::vector<objects::TriangleObj *> getModelTriangles();
     std::vector<objects::TriangleObj *> getReferencePlate();
     const objects::SphereWall &getSphereWall();
+    const generators::PointSource &getPointSource();
 
 private:
     // Disallow copy and assign.
     SceneManager(const SceneManager &) = delete;
     SceneManager &operator=(const SceneManager &) = delete;
-    std::vector<std::unique_ptr<objects::TriangleObj>> model_triangles_;
+    std::vector<std::unique_ptr<objects::TriangleObj>> _modelTriangles;
+    std::vector<std::unique_ptr<objects::EnergyCollector>> _energyCollectors;
+
+    //  METHODS
+    void createCollectors();
 };
 
 #endif

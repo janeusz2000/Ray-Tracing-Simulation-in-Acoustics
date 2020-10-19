@@ -68,7 +68,7 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        EnergyCollector(const core::Vec3 &origin, double energy) : _id(id), _energy(energy)
+        EnergyCollector(const core::Vec3 &origin, double energy = 0) : _energy(energy)
         {
             setRadius(constants::kPi * constants::kSimulationRadius / constants::kPopulation);
             setOrigin(origin);
