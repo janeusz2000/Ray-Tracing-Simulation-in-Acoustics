@@ -18,8 +18,11 @@ class SceneManagerTest : public ::testing::Test
 {
 protected:
     SceneManager manager;
-    double energyCollectorRadius = objects::EnergyCollector(Vec3()).getRadius(); // TODO: I dont like this. Vec3 should be skip ;-)
-                                                                                 // TODO: delete hard dependency
+
+    // TODO: I dont like this. Vec3 should be skip ;-)
+    // TODO: delete hard dependency
+    double energyCollectorRadius = objects::EnergyCollector(Vec3()).getRadius();
+
     bool performHitAtEnergyCollectors(const Ray &tempRay, RayHitData *hitData)
     {
         for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors())
@@ -32,7 +35,8 @@ protected:
     }
 };
 
-TEST_F(SceneManagerTest, PrintAllEnergyCollectorpositions) // TODO: Remove when second test is passed
+// TODO: Remove when second test is passed
+TEST_F(SceneManagerTest, PrintAllEnergyCollectorpositions)
 {
     for (const auto &collectorPtr : manager.getEnergyCollectors())
     {
