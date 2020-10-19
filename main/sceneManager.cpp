@@ -18,17 +18,6 @@ std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
     return temp;
 }
 
-std::vector<objects::TriangleObj *> SceneManager::getModelTriangles()
-{
-    std::vector<objects::TriangleObj *> temp;
-    temp.reserve(_modelTriangles.size());
-    for (const auto &t : _modelTriangles)
-    {
-        temp.push_back(t.get());
-    }
-    return temp;
-}
-
 // PRIVATE METHODS
 
 void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't work. I messed uo with radians and degrees
