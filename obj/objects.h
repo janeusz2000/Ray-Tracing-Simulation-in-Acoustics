@@ -69,9 +69,11 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        EnergyCollector(const core::Vec3 &origin, double energy = 0) : _energy(energy) // TODO: delete argument for energy and assing 0 to energy by default
+        // TODO: delete argument for energy and assing 0 to energy by default
+        EnergyCollector(const core::Vec3 &origin) : _energy(0) 
         {
-            setRadius(constants::kPi * (constants::kSimulationRadius) / constants::kPopulation); // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to qual distances
+            // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to qual distances
+            setRadius(constants::kPi * (constants::kSimulationRadius) / constants::kPopulation); 
             setOrigin(origin);
         }
 
