@@ -432,7 +432,7 @@ namespace objects
         Sphere object1(core::Vec3(0, 0, 0), 1);
         core::RayHitData hitData;
 
-        object1.hitObject(tempRay, kSkipFreq, &hitData);
+        ASSERT_TRUE(object1.hitObject(tempRay, kSkipFreq, &hitData));
         ASSERT_EQ(core::Vec3(0, 0, -1), hitData.direction);
         ASSERT_EQ(core::Vec3(0, 0, 1), hitData.collisionPoint);
         ASSERT_EQ(core::Vec3(0, 0, 5), hitData.origin);

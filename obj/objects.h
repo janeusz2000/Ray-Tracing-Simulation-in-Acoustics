@@ -43,7 +43,7 @@ namespace objects
 
         //METHODS
         core::Vec3 normal(const core::Vec3 &surface_point) const override;
-        bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
+        [[nodiscard]] bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
 
         //GETTERS AND SETTERS
         double getRadius() const;
