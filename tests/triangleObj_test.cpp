@@ -16,6 +16,7 @@ using core::RayHitData;
 using core::Vec3;
 
 // TODO: Change all doubles to float
+// TODO: change underscore to the end
 
 namespace objects
 {

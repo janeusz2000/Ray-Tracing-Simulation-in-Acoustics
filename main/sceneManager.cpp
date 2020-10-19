@@ -1,5 +1,7 @@
 #include "main/sceneManager.h"
 
+// TODO: change underscore to the end
+
 SceneManager::SceneManager()
 {
     createCollectors();
@@ -29,20 +31,20 @@ std::vector<objects::TriangleObj *> SceneManager::getModelTriangles()
 
 // PRIVATE METHODS
 
-void SceneManager::createCollectors()
+void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't work. I messed uo with radians and degrees
 {
-    _energyCollectors.reserve(constants::kCollectors);
+    _energyCollectors.reserve(constants::kPopulation); // TODO: delete hardcoded dependency for kPopulation
 
-    const double collectorRadius = static_cast<double>(constants::kSimulationRadius) / 2;
+    const double collectorRadius = constants::kSimulationRadius / 2;
     double alphaIncrement;
 
-    if (constants::kCollectors % 2 == 0)
+    if (constants::kPopulation % 2 == 0)
     {
-        alphaIncrement = 2 * constants::kPi * 180 / (static_cast<double>(constants::kCollectors) / 2 * 360);
+        alphaIncrement = 2 * constants::kPi * 180 / (static_cast<double>(constants::kPopulation) / 2 * 360);
     }
     else
     {
-        alphaIncrement = 2 * constants::kPi * 180 / ((static_cast<double>(constants::kCollectors) - 1) / 2 * 360);
+        alphaIncrement = 2 * constants::kPi * 180 / ((static_cast<double>(constants::kPopulation) - 1) / 2 * 360);
     }
 
     for (double alpha = 0; alpha <= constants::kPi; alpha += alphaIncrement)
@@ -55,12 +57,12 @@ void SceneManager::createCollectors()
 
         if (xAxesOrigin == core::Vec3(0, 0, constants::kSimulationRadius / 2))
         {
-            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(objects::EnergyCollector(xAxesOrigin)));
+            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
         }
         else
         {
-            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(objects::EnergyCollector(xAxesOrigin)));
-            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(objects::EnergyCollector(yAxesOrigin)));
+            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
+            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(yAxesOrigin));
         }
     }
 }

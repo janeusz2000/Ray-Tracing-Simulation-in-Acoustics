@@ -2,6 +2,7 @@
 #define RAY_H
 
 // TODO: Change all doubles to float
+// TODO: change underscore to the end
 
 #include "constants.h"
 #include "core/exceptions.h"

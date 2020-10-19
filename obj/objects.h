@@ -13,6 +13,7 @@
 #include <vector>
 
 // TODO: Change all doubles to float
+// TODO: change underscore to the end
 
 namespace objects
 {
@@ -68,9 +69,9 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        EnergyCollector(const core::Vec3 &origin, double energy = 0) : _energy(energy)
+        EnergyCollector(const core::Vec3 &origin, double energy = 0) : _energy(energy) // TODO: delete argument for energy and assing 0 to energy by default
         {
-            setRadius(constants::kPi * (constants::kSimulationRadius / 2) / constants::kPopulation);
+            setRadius(constants::kPi * (constants::kSimulationRadius) / constants::kPopulation); // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to qual distances
             setOrigin(origin);
         }
 
