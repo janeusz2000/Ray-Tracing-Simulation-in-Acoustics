@@ -262,15 +262,19 @@ namespace objects
 
     TEST(TRIANGLEOBJ_METHOD, RayInsideTriangleDoesNotHit)
     {
-
-        Ray tempRay(Vec3(0.25, 0, 0.25), Vec3(0, 1, 0)); // Ray has origin inside object1
-
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
+
+        size_t iteration = 0;
         RayHitData hitData;
+        Ray tempRay(Vec3(0.25, 0, 0.25), Vec3(0, 1, 0)); // Ray has origin inside object1
+        std::vector<bool> ExpectedResults = {false, true};
+
         for (TriangleObj &obj : objectList)
         {
-            (obj.hitObject(tempRay, kSkipFreq, &hitData)); // First object doesn't hit. Second object hit.
+            ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == ExpectedResults[iteration])); // First object doesn't hit. Second object does hit.
+            ++iteration;
         }
+
         ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 4, 0.25)); // Making sure that second object is hit properly.
         ASSERT_EQ(hitData.direction, tempRay.getDirection());
         ASSERT_EQ(hitData.origin, tempRay.getOrigin());
@@ -317,10 +321,15 @@ namespace objects
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
 
+        std::vector<bool> expectedResults = {false, true};
+        size_t iteration = 0;
+
         for (auto &obj : objectList)
         {
-            (obj.hitObject(tempRay, kSkipFreq, &hitData));
+            ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData)) == expectedResults[iteration]);
+            ++iteration;
         }
+
         ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 0.25, 4));
         ASSERT_EQ(hitData.direction, tempRay.getDirection());
         ASSERT_EQ(hitData.origin, tempRay.getOrigin());
@@ -368,13 +377,12 @@ namespace objects
         Ray tempRay(Vec3(0, 0.25, 0.25), Vec3(1, 0, 0)); // Ray has origin inside object1
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
-
+        std::vector<bool> ExpectedResults = {false, true};
+        size_t iteration = 0;
         for (auto &obj : objectList)
         {
-            if (obj.hitObject(tempRay, kSkipFreq, &hitData))
-            {
-                continue;
-            };
+            ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == ExpectedResults[iteration]));
+            ++iteration;
         }
 
         ASSERT_EQ(hitData.collisionPoint, Vec3(4, 0.25, 0.25));

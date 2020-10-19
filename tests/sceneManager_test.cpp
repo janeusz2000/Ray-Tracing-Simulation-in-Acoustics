@@ -13,4 +13,7 @@ using objects::TriangleObj;
 const double kSkipFreq = 1000;
 generators::FakeRandomGen fakeRand;
 
-// TODO: Change all doubles to float
+TEST(SceneManagerTest, EnergyCollectorPositionCheck)
+{
+    //
+}
