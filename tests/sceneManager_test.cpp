@@ -18,23 +18,12 @@ class SceneManagerTest : public ::testing::Test
 {
 protected:
     SceneManager manager;
-    std::vector<objects::EnergyCollector *> energyCollectors;
     double energyCollectorRadius = objects::EnergyCollector(Vec3()).getRadius(); // TODO: I dont like this. Vec3 should be skip ;-)
                                                                                  // TODO: delete hard dependency
-    void SetUp() override
-    {
-        energyCollectors = manager.getEnergyCollectors();
-    }
-
-    void TearDown() override
-    {
-        energyCollectors.clear();
-    }
-
     bool performHitAtEnergyCollectors(const Ray &tempRay, RayHitData *hitData)
     {
         bool hit = false;
-        for (objects::EnergyCollector *energyCol : energyCollectors)
+        for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors())
         {
             const double kSkipFreq = 1000;
             if (energyCol->hitObject(tempRay, kSkipFreq, hitData))
@@ -46,7 +35,7 @@ protected:
 
 TEST_F(SceneManagerTest, PrintAllEnergyCollectorpositions) // TODO: Remove when second test is passed
 {
-    for (const auto &collectorPtr : energyCollectors)
+    for (const auto &collectorPtr : manager.getEnergyCollectors())
     {
         std::cout << *collectorPtr << std::endl;
     }
@@ -54,7 +43,7 @@ TEST_F(SceneManagerTest, PrintAllEnergyCollectorpositions) // TODO: Remove when 
 
 TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
 {
-    ASSERT_EQ(energyCollectors.size(), constants::kPopulation) << "wrong numebr of energy collectors";
+    ASSERT_EQ(manager.getEnergyCollectors().size(), constants::kPopulation) << "wrong numebr of energy collectors";
 
     RayHitData hitData;
     Ray tempRay(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1));
