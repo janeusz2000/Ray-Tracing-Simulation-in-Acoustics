@@ -28,10 +28,19 @@ public:
     SceneManagerTest(){};
 };
 
-TEST_F(SceneManagerTest, EnergyCollectorPositionCheck)
+TEST_F(SceneManagerTest, PrintAllEnergyCollectorpositions)
 {
     SetUp();
-    ASSERT_EQ(energyCollectors.size(), constants::kCollectors) << "wrong numebr ogf energy collectors";
+    for (const auto &collectorPtr : energyCollectors)
+    {
+        std::cout << *collectorPtr << std::endl;
+    }
+}
+
+TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
+{
+    SetUp();
+    ASSERT_EQ(energyCollectors.size(), constants::kCollectors) << "wrong numebr of energy collectors";
 
     RayHitData hitData;
     Ray tempRay(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1));
