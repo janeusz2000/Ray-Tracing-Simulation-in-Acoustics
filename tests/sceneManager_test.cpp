@@ -19,9 +19,21 @@ class SceneManagerTest : public ::testing::Test
 protected:
     SceneManager manager;
     std::vector<objects::EnergyCollector *> energyCollectors;
+    double energyCollectorRadius = objects::EnergyCollector(kSkipVec3).getRadius();
     void SetUp() override
     {
         energyCollectors = manager.getEnergyCollectors();
+    }
+
+    bool performHitAtEnergyCollectors(const Ray &tempRay, RayHitData *hitData)
+    {
+        bool hit = false;
+        for (const auto &energyColPtr : energyCollectors)
+        {
+            if (energyColPtr->hitObject(tempRay, kSkipFreq, hitData))
+                hit = true;
+        }
+        return hit;
     }
 
 public:
@@ -44,15 +56,23 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
 
     RayHitData hitData;
     Ray tempRay(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1));
-    bool hit = false;
 
-    for (const auto &energyColPtr : energyCollectors)
-    {
-        if (energyColPtr->hitObject(tempRay, kSkipFreq, &hitData))
-            hit = true;
-    }
-    ASSERT_TRUE(hit) << "Ray didn't hit any of the collectors;";
+    ASSERT_TRUE(performHitAtEnergyCollectors(tempRay, &hitData)) << "no hit: " << tempRay;
 
-    core::Vec3 referenceCollisionPoint(0, 0, constants::kSimulationRadius / 2 - objects::EnergyCollector(kSkipVec3).getRadius());
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "Invalid hit point from ray(core::Vec3(0, 0, 0), core::Vec3(0, 0, 1))";
+    core::Vec3 referenceCollisionPoint(0, 0, constants::kSimulationRadius / 2 - energyCollectorRadius);
+    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "Invalid hit point from: " << tempRay;
+
+    tempRay.setDirection(Vec3(-1, 0, 0));
+
+    ASSERT_TRUE(performHitAtEnergyCollectors(tempRay, &hitData)) << "no hit: " << tempRay;
+
+    referenceCollisionPoint = Vec3(-constants::kSimulationRadius / 2 - energyCollectorRadius, 0, 0);
+    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "Invalid hit point from: " << tempRay;
+
+    tempRay.setDirection(Vec3(0, 1, 0));
+
+    ASSERT_TRUE(performHitAtEnergyCollectors(tempRay, &hitData)) << "no hit: " << tempRay;
+
+    referenceCollisionPoint = Vec3(0, constants::kSimulationRadius / 2 - energyCollectorRadius, 0);
+    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "Invalid hit point from: " << tempRay;
 }
