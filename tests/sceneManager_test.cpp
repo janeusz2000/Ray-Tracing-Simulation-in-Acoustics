@@ -17,12 +17,6 @@ generators::FakeRandomGen fakeRand;
 class SceneManagerTest : public ::testing::Test
 {
 protected:
-    SceneManager manager;
-
-    // TODO: I dont like this. Vec3 should be skip ;-)
-    // TODO: delete hard dependency
-    double energyCollectorRadius = objects::EnergyCollector(Vec3()).getRadius();
-
     bool performHitAtEnergyCollectors(const Ray &tempRay, RayHitData *hitData)
     {
         for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors())
@@ -33,6 +27,12 @@ protected:
         }
         return false;
     }
+
+    SceneManager manager;
+
+    // TODO: I dont like this. Vec3 should be skip ;-)
+    // TODO: delete hard dependency on radius
+    double energyCollectorRadius = objects::EnergyCollector(Vec3()).getRadius();
 };
 
 // TODO: Remove when second test is passed
