@@ -71,7 +71,7 @@ namespace objects
     public:
         EnergyCollector(const core::Vec3 &origin) : _energy(0) 
         {
-            // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to qual distances
+            // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to equal distances
             setRadius(constants::kPi * (constants::kSimulationRadius) / constants::kPopulation); 
             setOrigin(origin);
         }

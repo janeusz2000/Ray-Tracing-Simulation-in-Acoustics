@@ -23,7 +23,9 @@ protected:
         {
             const double kSkipFreq = 1000;
             if (energyCol->hitObject(straightUp, kSkipFreq, hitData))
+            {
                 return true;
+            }
         }
         return false;
     }
