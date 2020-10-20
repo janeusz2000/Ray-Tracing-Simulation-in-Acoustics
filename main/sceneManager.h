@@ -32,7 +32,7 @@ private:
     SceneManager(const SceneManager &) = delete;
     SceneManager &operator=(const SceneManager &) = delete;
 
-    // assigns energyCollector objects to the right positions. 
+    // Assigns energyCollector objects to the right positions. 
     // EnergyCollector positions creates two half-circles with the same 
     // origin at Vec3(0, 0, 0) and radius: simulationRadius / 2
     // that are crossing each other at Vec3(0, 0, kSimulationRadius / 2). 

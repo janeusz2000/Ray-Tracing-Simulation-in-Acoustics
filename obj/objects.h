@@ -69,7 +69,6 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        // TODO: delete argument for energy and assing 0 to energy by default
         EnergyCollector(const core::Vec3 &origin) : _energy(0) 
         {
             // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to qual distances
