@@ -37,17 +37,13 @@ protected:
     double energyCollectorRadius = objects::EnergyCollector(Vec3()).getRadius();
 };
 
-// TODO: Remove when second test is passed
-TEST_F(SceneManagerTest, PrintAllEnergyCollectorpositions)
+TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
 {
     for (const auto &collectorPtr : manager.getEnergyCollectors())
     {
         std::cout << *collectorPtr << std::endl;
     }
-}
 
-TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
-{
     ASSERT_EQ(manager.getEnergyCollectors().size(), constants::kPopulation) << "wrong numebr of energy collectors";
 
     RayHitData hitData;
