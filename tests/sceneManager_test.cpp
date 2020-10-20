@@ -55,13 +55,13 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "Invalid hit point from: " << straightUp;
 
     Ray againstXAxis(core::Vec3(0, 0, 0), core::Vec3(-1, 0, 0));
-    ASSERT_TRUE(performHitAtEnergyCollectors(straightUp2, &hitData)) << "no hit: " << straightUp;
+    ASSERT_TRUE(performHitAtEnergyCollectors(againstXAxis, &hitData)) << "no hit: " << straightUp;
 
     Vec3 referenceCollisionPoint2(-constants::kSimulationRadius / 2 - energyCollectorRadius, 0, 0);
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint2) << "Invalid hit point from: " << straightUp;
 
     Ray againstYAxis(core::Vec3(0, 0, 0), core::Vec3(0, 1, 0));
-    ASSERT_TRUE(performHitAtEnergyCollectors(straightUp3, &hitData)) << "no hit: " << straightUp;
+    ASSERT_TRUE(performHitAtEnergyCollectors(againstYAxis, &hitData)) << "no hit: " << straightUp;
 
     Vec3 referenceCollisionPoint3(0, constants::kSimulationRadius / 2 - energyCollectorRadius, 0);
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint3) << "Invalid hit point from: " << straightUp;
