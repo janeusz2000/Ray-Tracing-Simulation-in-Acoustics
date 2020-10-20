@@ -17,7 +17,8 @@
 class SceneManager
 {
 public:
-    SceneManager();
+    SceneManager() : collectors_(constants::kPopulation) {};
+    SceneManager(size_t collectors) : collectors_(collectors) {createCollectors();};
     bool loadModel(std::string_view objPath);
 
     std::vector<objects::EnergyCollector *> getEnergyCollectors();
@@ -34,11 +35,12 @@ private:
     // Assigns energyCollector objects to the right positions. 
     // EnergyCollector positions creates two half-circles with the same 
     // origin at Vec3(0, 0, 0) and radius: simulationRadius / 2
-    // that are crossing each other at Vec3(0, 0, kSimulationRadius / 2). 
+    // that are crossing each other at Vec3(0, 0, SimulationRadius / 2). 
     void createCollectors();    
 
     std::vector<std::unique_ptr<objects::TriangleObj>> modelTriangles_;
     std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors_;
+    size_t collectors_;
     
 };
 

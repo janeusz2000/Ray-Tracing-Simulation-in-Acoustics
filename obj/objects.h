@@ -59,8 +59,8 @@ namespace objects
     class SphereWall : public Sphere
     {
     public:
+        SphereWall(double radius = constants::kDefaultSimulationRadius) { setRadius(radius); }
         SphereWall(const SphereWall &other) = default;
-        SphereWall() { this->setRadius(constants::kSimulationRadius); }
 
         friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);
     };
@@ -68,10 +68,9 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        EnergyCollector(const core::Vec3 &origin) : energy_(0) 
+        EnergyCollector(const core::Vec3 &origin, double radius = constants::kDefaultEnergyCollectorRadius) : energy_(0) 
         {
-            // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to equal distances
-            setRadius(constants::kPi * (constants::kSimulationRadius) / constants::kPopulation); 
+            setRadius(radius); 
             setOrigin(origin);
         }
 

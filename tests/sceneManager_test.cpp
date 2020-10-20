@@ -3,7 +3,6 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h" // https://google.github.io/styleguide/cppguide.html#Namespaces
 
-
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -30,10 +29,6 @@ protected:
     }
 
     SceneManager manager;
-
-    // TODO: I dont like this. Vec3 should be skip ;-)
-    // TODO: delete hard dependency on radius
-    double energyCollectorRadius = objects::EnergyCollector(Vec3()).getRadius();
 };
 
 TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
@@ -50,18 +45,18 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
 
     ASSERT_TRUE(performHitAtEnergyCollectors(straightUp, &hitData)) << "no hit: " << straightUp;
 
-    core::Vec3 referenceCollisionPoint(0, 0, constants::kSimulationRadius / 2 - energyCollectorRadius);
+    core::Vec3 referenceCollisionPoint(0, 0, constants::kDefaultSimulationRadius / 2 - constants::kDefaultEnergyCollectorRadius);
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "Invalid hit point from: " << straightUp;
 
     Ray againstXAxis(core::Vec3(0, 0, 0), core::Vec3(-1, 0, 0));
     ASSERT_TRUE(performHitAtEnergyCollectors(againstXAxis, &hitData)) << "no hit: " << straightUp;
 
-    Vec3 referenceCollisionPoint2(-constants::kSimulationRadius / 2 - energyCollectorRadius, 0, 0);
+    Vec3 referenceCollisionPoint2(-constants::kDefaultSimulationRadius / 2 - constants::kDefaultEnergyCollectorRadius, 0, 0);
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint2) << "Invalid hit point from: " << straightUp;
 
     Ray againstYAxis(core::Vec3(0, 0, 0), core::Vec3(0, 1, 0));
     ASSERT_TRUE(performHitAtEnergyCollectors(againstYAxis, &hitData)) << "no hit: " << straightUp;
 
-    Vec3 referenceCollisionPoint3(0, constants::kSimulationRadius / 2 - energyCollectorRadius, 0);
+    Vec3 referenceCollisionPoint3(0, constants::kDefaultSimulationRadius / 2 - constants::kDefaultEnergyCollectorRadius, 0);
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint3) << "Invalid hit point from: " << straightUp;
 }

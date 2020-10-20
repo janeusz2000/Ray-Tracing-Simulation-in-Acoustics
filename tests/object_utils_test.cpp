@@ -465,10 +465,10 @@ namespace objects
     {
         SphereWall tempSphere;
 
-        core::Vec3 normal1 = tempSphere.normal(core::Vec3(0, 0, -constants::kSimulationRadius));
-        core::Vec3 normal2 = tempSphere.normal(core::Vec3(0, 0, constants::kSimulationRadius));
-        core::Vec3 normal3 = tempSphere.normal(core::Vec3(0, constants::kSimulationRadius, 0));
-        core::Vec3 normal4 = tempSphere.normal(core::Vec3(0, -constants::kSimulationRadius, 0));
+        core::Vec3 normal1 = tempSphere.normal(core::Vec3(0, 0, -constants::kDefaultSimulationRadius));
+        core::Vec3 normal2 = tempSphere.normal(core::Vec3(0, 0, constants::kDefaultSimulationRadius));
+        core::Vec3 normal3 = tempSphere.normal(core::Vec3(0, constants::kDefaultSimulationRadius, 0));
+        core::Vec3 normal4 = tempSphere.normal(core::Vec3(0, -constants::kDefaultSimulationRadius, 0));
 
         ASSERT_EQ(normal1, core::Vec3(0, 0, -1));
         ASSERT_EQ(normal2, core::Vec3(0, 0, 1));
