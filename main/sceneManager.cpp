@@ -1,5 +1,16 @@
 #include "main/sceneManager.h"
-
+SceneManager::SceneManager(size_t collectors, double simulationRadius) : numCollectors_(collectors), simulationRadius_(simulationRadius)
+{
+    if (collectors % 4 != 0 || collectors - 1 % 4 != 0)
+    {
+        std::stringstream ss;
+        ss << "collector population:" << collectors << " % 4 or population - 1: " << collectors - 1 << " % 4 must be zero";
+        throw std::invalid_argument(ss.str().c_str());
+    }
+    // ( 2 *  pi * R ) / 2  for dividing whole half circle distance to equal distances
+    collectorRadius_ = constants::kPi * simulationRadius_ / numCollectors_;
+    createCollectors();
+}
 std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
 {
     std::vector<objects::EnergyCollector *> temp;
@@ -15,36 +26,36 @@ std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
 
 void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't work. I messed uo with radians and degrees
 {
-    energyCollectors_.reserve(collectors_);
+    energyCollectors_.reserve(numCollectors_);
+    size_t evenNum;
 
-    const double collectorRadius = constants::kDefaultSimulationRadius / 2; // TODO: delete this dependency
-    double alphaIncrement;
-
-    if (constants::kPopulation % 2 == 0)
+    if (numCollectors_ % 2 == 0)
     {
-        alphaIncrement = 2 * constants::kPi * 180 / (static_cast<double>(collectors_) / 2 * 360);
+        evenNum = numCollectors_;
     }
     else
     {
-        alphaIncrement = 2 * constants::kPi * 180 / ((static_cast<double>(collectors_) - 1) / 2 * 360);
+        evenNum = numCollectors_ - 1;
+        energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(
+            core::Vec3(0, 0, simulationRadius_ / 2),
+            collectorRadius_));
     }
-
-    for (double alpha = 0; alpha <= constants::kPi; alpha += alphaIncrement)
+    std::vector<core::Vec3> origins;
+    for (size_t iteration = 0; iteration * 4 < evenNum; ++iteration)
     {
-        double groundCoordinate = collectorRadius * std::sin(alpha);
-        double z = collectorRadius * std::cos(alpha);
+        double groundCoordinate = simulationRadius_ / 2 * std::cos(constants::kPi * iteration / evenNum);
+        double zCoordinate = simulationRadius_ / 2 * std::sin(constants::kPi * iteration / evenNum);
 
-        core::Vec3 xAxesOrigin(groundCoordinate, 0, z);
-        core::Vec3 yAxesOrigin(0, groundCoordinate, z);
+        origins = {
+            core::Vec3(groundCoordinate, 0, zCoordinate),
+            core::Vec3(0, -groundCoordinate, zCoordinate),
+            core::Vec3(-groundCoordinate, 0, zCoordinate),
+            core::Vec3(0, groundCoordinate, zCoordinate),
+        };
 
-        if (xAxesOrigin == core::Vec3(0, 0, constants::kDefaultSimulationRadius / 2)) // TODO: delete  this dependency
+        for (const core::Vec3 &origin : origins)
         {
-            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
-        }
-        else
-        {
-            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
-            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(yAxesOrigin));
+            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(origin, collectorRadius_));
         }
     }
 }

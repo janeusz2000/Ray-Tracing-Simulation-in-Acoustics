@@ -17,8 +17,10 @@
 class SceneManager
 {
 public:
-    SceneManager() : collectors_(constants::kPopulation) {};
-    SceneManager(size_t collectors) : collectors_(collectors) {createCollectors();};
+    SceneManager() : numCollectors_(constants::kPopulation), 
+                    collectorRadius_(constants::kDefaultEnergyCollectorRadius),
+                    simulationRadius_(constants::kDefaultSimulationRadius) {createCollectors();};
+    SceneManager(size_t collectors, double simulationRadius);
     bool loadModel(std::string_view objPath);
 
     std::vector<objects::EnergyCollector *> getEnergyCollectors();
@@ -40,7 +42,8 @@ private:
 
     std::vector<std::unique_ptr<objects::TriangleObj>> modelTriangles_;
     std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors_;
-    size_t collectors_;
+    size_t numCollectors_;
+    double collectorRadius_, simulationRadius_;
     
 };
 
