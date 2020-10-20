@@ -29,6 +29,9 @@ public:
     const objects::SphereWall &getSphereWall();
     const generators::PointSource &getPointSource();
 
+    double collectorRadius() const {return collectorRadius_;};
+    double simulatiorRadius() const {return simulationRadius_;};
+    
 private:
     // Disallow copy and assign.
     SceneManager(const SceneManager &) = delete;

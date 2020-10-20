@@ -32,11 +32,11 @@ namespace objects
         ss4 << object11;
         ss5 << object12;
 
-        ASSERT_EQ(ss1.str(), "Energy Collector. Origin: Vec3(0, 0, 2), Energy collected: 0");
-        ASSERT_EQ(ss2.str(), "Energy Collector. Origin: Vec3(0, 0, 4), Energy collected: 0");
-        ASSERT_EQ(ss3.str(), "Energy Collector. Origin: Vec3(1, 0, 9), Energy collected: 0");
-        ASSERT_EQ(ss4.str(), "Energy Collector. Origin: Vec3(0, 5, 3), Energy collected: 0");
-        ASSERT_EQ(ss5.str(), "Energy Collector. Origin: Vec3(2, 0, 1), Energy collected: 0");
+        ASSERT_EQ(ss1.str(), "Energy Collector. Origin: Vec3(0, 0, 2), Radius: 0.339632");
+        ASSERT_EQ(ss2.str(), "Energy Collector. Origin: Vec3(0, 0, 4), Radius: 0.339632");
+        ASSERT_EQ(ss3.str(), "Energy Collector. Origin: Vec3(1, 0, 9), Radius: 0.339632");
+        ASSERT_EQ(ss4.str(), "Energy Collector. Origin: Vec3(0, 5, 3), Radius: 0.339632");
+        ASSERT_EQ(ss5.str(), "Energy Collector. Origin: Vec3(2, 0, 1), Radius: 0.339632");
     }
 
     TEST(ENERGYCOLLECTOR_OPERATORS, Operator_Equal_Equal)

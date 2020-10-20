@@ -22,29 +22,31 @@ std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
     return temp;
 }
 
+
 // PRIVATE METHODS
 
 void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't work. I messed uo with radians and degrees
 {
     energyCollectors_.reserve(numCollectors_);
-    size_t evenNum;
+    size_t numToGo;
 
     if (numCollectors_ % 2 == 0)
     {
-        evenNum = numCollectors_;
+        numToGo = numCollectors_;
     }
     else
     {
-        evenNum = numCollectors_ - 1;
         energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(
             core::Vec3(0, 0, simulationRadius_ / 2),
             collectorRadius_));
+        numToGo = numCollectors_ - 1;
     }
     std::vector<core::Vec3> origins;
-    for (size_t iteration = 0; iteration * 4 < evenNum; ++iteration)
+
+    for (size_t iteration = 0; iteration * 4 < numToGo; ++iteration)
     {
-        double groundCoordinate = simulationRadius_ / 2 * std::cos(constants::kPi * iteration / evenNum);
-        double zCoordinate = simulationRadius_ / 2 * std::sin(constants::kPi * iteration / evenNum);
+        double groundCoordinate = simulationRadius_ / 2 * std::cos(2 * constants::kPi * iteration / numToGo);
+        double zCoordinate = simulationRadius_ / 2 * std::sin(2 * constants::kPi * iteration / numToGo);
 
         origins = {
             core::Vec3(groundCoordinate, 0, zCoordinate),

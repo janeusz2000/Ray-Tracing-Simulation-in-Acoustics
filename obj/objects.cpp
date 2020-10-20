@@ -109,7 +109,7 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector)
     {
-        return os << "Energy Collector. Origin: " << collector.getOrigin() << ", Energy collected: " << collector.getEnergy();
+        return os << "Energy Collector. Origin: " << collector.getOrigin() << ", Radius: " << collector.getRadius();
     }
 
     bool objects::operator==(const EnergyCollector &left, const EnergyCollector &right)
