@@ -12,7 +12,6 @@
 #include <string_view>
 #include <vector>
 
-// TODO: change underscore to the end
 
 // This class is creating all necessary objects for simulation.
 class SceneManager

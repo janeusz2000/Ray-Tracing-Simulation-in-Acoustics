@@ -3,7 +3,6 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h" // https://google.github.io/styleguide/cppguide.html#Namespaces
 
-// TODO: change underscore to the end
 
 using core::Ray;
 using core::RayHitData;

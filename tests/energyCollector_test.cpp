@@ -9,7 +9,6 @@
 #include <cmath>
 
 // TODO: Change all doubles to float
-// TODO: change underscore to the end
 // TODO: delete argument energy from constructor
 
 namespace objects

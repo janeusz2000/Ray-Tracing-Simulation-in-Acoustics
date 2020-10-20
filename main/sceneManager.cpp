@@ -1,7 +1,5 @@
 #include "main/sceneManager.h"
 
-// TODO: change underscore to the end
-
 SceneManager::SceneManager()
 {
     createCollectors();

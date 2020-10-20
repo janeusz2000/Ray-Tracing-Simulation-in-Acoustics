@@ -2,7 +2,6 @@
 #include <random>
 
 // TODO: Change all doubles to float
-// TODO: change underscore to the end
 
 namespace generators
 {
