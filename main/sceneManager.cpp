@@ -10,8 +10,8 @@ SceneManager::SceneManager()
 std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
 {
     std::vector<objects::EnergyCollector *> temp;
-    temp.reserve(_energyCollectors.size());
-    for (const auto &t : _energyCollectors)
+    temp.reserve(energyCollectors_.size());
+    for (const auto &t : energyCollectors_)
     {
         temp.push_back(t.get());
     }
@@ -22,7 +22,7 @@ std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
 
 void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't work. I messed uo with radians and degrees
 {
-    _energyCollectors.reserve(constants::kPopulation); // TODO: delete hardcoded dependency for kPopulation
+    energyCollectors_.reserve(constants::kPopulation); // TODO: delete hardcoded dependency for kPopulation
 
     const double collectorRadius = constants::kSimulationRadius / 2;
     double alphaIncrement;
@@ -46,12 +46,12 @@ void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't 
 
         if (xAxesOrigin == core::Vec3(0, 0, constants::kSimulationRadius / 2))
         {
-            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
+            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
         }
         else
         {
-            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
-            _energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(yAxesOrigin));
+            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(xAxesOrigin));
+            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(yAxesOrigin));
         }
     }
 }

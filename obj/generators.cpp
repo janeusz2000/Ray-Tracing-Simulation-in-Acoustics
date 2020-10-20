@@ -19,7 +19,7 @@ namespace generators
 
     bool PointSource::operator==(const PointSource &other) const
     {
-        return (_frequency == other.frequency() && _numOfRaysPerRow == other.numOfRaysPerRow() && _origin == other.origin() && _sampleSize == other.sampleSize() && _leftCorner == other.getLeftCorner());
+        return (frequency_ == other.frequency() && numOfRaysPerRow_ == other.numOfRaysPerRow() && origin_ == other.origin() && sampleSize_ == other.sampleSize() && leftCorner_ == other.getLeftCorner());
     }
 
     std::ostream &operator<<(std::ostream &os, const PointSource &pointSource)
@@ -31,69 +31,69 @@ namespace generators
 
     void PointSource::updateSampleSize()
     {
-        _leftCorner = core::Vec3(-1 * _sampleSize / 2, -1 * _sampleSize / 2, 1);
+        leftCorner_ = core::Vec3(-1 * sampleSize_ / 2, -1 * sampleSize_ / 2, 1);
     }
 
     core::Ray PointSource::generateRay(const size_t &xIter, const size_t &yIter)
     {
-        if (xIter >= _numOfRaysPerRow && yIter >= _numOfRaysPerRow)
+        if (xIter >= numOfRaysPerRow_ && yIter >= numOfRaysPerRow_)
         {
             std::stringstream ss;
-            ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << _numOfRaysPerRow - 1 << ", y: " << yIter << " / " << _numOfRaysPerRow;
+            ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << numOfRaysPerRow_ - 1 << ", y: " << yIter << " / " << numOfRaysPerRow_;
             throw std::out_of_range(ss.str().c_str());
         }
-        double v = (static_cast<double>(xIter) + _randomGen->getNext()) / static_cast<double>(_numOfRaysPerRow - 1) * _sampleSize;
-        double u = (static_cast<double>(yIter) + _randomGen->getNext()) / static_cast<double>(_numOfRaysPerRow - 1) * _sampleSize;
-        return core::Ray(_origin, _leftCorner + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - _origin);
+        double v = (static_cast<double>(xIter) + randomGen_->getNext()) / static_cast<double>(numOfRaysPerRow_ - 1) * sampleSize_;
+        double u = (static_cast<double>(yIter) + randomGen_->getNext()) / static_cast<double>(numOfRaysPerRow_ - 1) * sampleSize_;
+        return core::Ray(origin_, leftCorner_ + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - origin_);
     }
 
     // GETTERS AND SETTERS
 
     double PointSource::frequency() const
     {
-        return _frequency;
+        return frequency_;
     }
     void PointSource::setFrequency(const double &freq)
     {
-        _frequency = freq;
+        frequency_ = freq;
     }
 
     double PointSource::sampleSize() const
     {
-        return _sampleSize;
+        return sampleSize_;
     }
     void PointSource::setDiffusorSize(const double &diffusorSize)
     {
-        _sampleSize = diffusorSize;
+        sampleSize_ = diffusorSize;
         updateSampleSize();
     }
 
     core::Vec3 PointSource::origin() const
     {
-        return _origin;
+        return origin_;
     }
     void PointSource::setOrigin(const core::Vec3 &point)
     {
-        _origin = point;
+        origin_ = point;
     }
 
     size_t PointSource::numOfRaysPerRow() const
     {
-        return _numOfRaysPerRow;
+        return numOfRaysPerRow_;
     }
     void PointSource::setNumOfRaysPerRow(const size_t &rayNum)
     {
-        _numOfRaysPerRow = rayNum;
+        numOfRaysPerRow_ = rayNum;
     }
 
     core::Vec3 PointSource::getLeftCorner() const
     {
-        return _leftCorner;
+        return leftCorner_;
     }
 
     void PointSource::setLeftCorner(const core::Vec3 &point)
     {
-        _leftCorner = point;
+        leftCorner_ = point;
     }
 #pragma endregion
 

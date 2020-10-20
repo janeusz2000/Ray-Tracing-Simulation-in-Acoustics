@@ -19,11 +19,11 @@ namespace core
             throw std::invalid_argument(ss1.str());
         }
         auto iterator = initList.begin();
-        _x = *iterator;
+        x_ = *iterator;
         iterator++;
-        _y = *iterator;
+        y_ = *iterator;
         iterator++;
-        _z = *iterator;
+        z_ = *iterator;
     }
 
 #pragma endregion
@@ -61,17 +61,17 @@ namespace core
 
     Vec3 &Vec3::operator+=(const Vec3 &other)
     {
-        _x += other.x();
-        _y += other.y();
-        _z += other.z();
+        x_ += other.x();
+        y_ += other.y();
+        z_ += other.z();
         return *this;
     }
 
     Vec3 &Vec3::operator+=(const double &num)
     {
-        _x += num;
-        _y += num;
-        _z += num;
+        x_ += num;
+        y_ += num;
+        z_ += num;
         return *this;
     }
 
@@ -80,17 +80,17 @@ namespace core
 
     Vec3 &Vec3::operator-=(const Vec3 &other)
     {
-        _x -= other.x();
-        _y -= other.y();
-        _z -= other.z();
+        x_ -= other.x();
+        y_ -= other.y();
+        z_ -= other.z();
         return *this;
     }
 
     Vec3 &Vec3::operator-=(const double &num)
     {
-        _x -= num;
-        _y -= num;
-        _z -= num;
+        x_ -= num;
+        y_ -= num;
+        z_ -= num;
         return *this;
     }
 
@@ -112,9 +112,9 @@ namespace core
 
     Vec3 &Vec3::operator*=(const double &num)
     {
-        _x *= num;
-        _y *= num;
-        _z *= num;
+        x_ *= num;
+        y_ *= num;
+        z_ *= num;
         return *this;
     }
 
@@ -140,15 +140,15 @@ namespace core
 
     double Vec3::scalarProduct(const Vec3 &other) const
     {
-        return _x * other.x() + _y * other.y() + _z * other.z();
+        return x_ * other.x() + y_ * other.y() + z_ * other.z();
     }
     Vec3 Vec3::crossProduct(const Vec3 &other) const
     {
-        return Vec3(_y * other.z() - _z * other.y(), _z * other.x() - _x * other.z(), _x * other.y() - _y * other.x());
+        return Vec3(y_ * other.z() - z_ * other.y(), z_ * other.x() - x_ * other.z(), x_ * other.y() - y_ * other.x());
     }
     double Vec3::magnitudeSquared() const
     {
-        return _x * _x + _y * _y + _z * _z;
+        return x_ * x_ + y_ * y_ + z_ * z_;
     }
     double Vec3::magnitude() const
     {
@@ -180,9 +180,9 @@ namespace core
 
     Vec3 &Vec3::operator=(const Vec3 &other)
     {
-        _x = other.x();
-        _y = other.y();
-        _z = other.z();
+        x_ = other.x();
+        y_ = other.y();
+        z_ = other.z();
         return *this;
     }
 
@@ -191,27 +191,27 @@ namespace core
 
     void Vec3::setX(const double &num)
     {
-        _x = num;
+        x_ = num;
     }
     double Vec3::x() const
     {
-        return _x;
+        return x_;
     }
     void Vec3::setY(const double &num)
     {
-        _y = num;
+        y_ = num;
     }
     double Vec3::y() const
     {
-        return _y;
+        return y_;
     }
     void Vec3::setZ(const double &num)
     {
-        _z = num;
+        z_ = num;
     }
     double Vec3::z() const
     {
-        return _z;
+        return z_;
     }
 
 #pragma endregion

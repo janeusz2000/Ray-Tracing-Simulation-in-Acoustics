@@ -25,14 +25,14 @@ namespace generators
 
     struct UniformRandomGen : public RandomGen
     {
-        UniformRandomGen(double min, double max) : _engine(std::random_device()()), _dist(min, max){};
+        UniformRandomGen(double min, double max) : engine_(std::random_device()()), dist_(min, max){};
         double getNext() override
         {
-            return _dist(_engine);
+            return dist_(engine_);
         }
 
-        std::mt19937_64 _engine;
-        std::uniform_real_distribution<double> _dist;
+        std::mt19937_64 engine_;
+        std::uniform_real_distribution<double> dist_;
     };
 
     struct FakeRandomGen : public RandomGen
@@ -51,9 +51,9 @@ namespace generators
     public:
         PointSource() = delete;
         explicit PointSource::PointSource(const double &freq, const size_t &numOfRaysPerRow,
-                                          const double &SampleSize, RandomGen *randomGen) : _frequency(freq),
-                                                                                            _numOfRaysPerRow(numOfRaysPerRow), _sampleSize(SampleSize),
-                                                                                            _origin(core::Vec3(0, 0, 4)), _randomGen(randomGen) { updateSampleSize(); }
+                                          const double &SampleSize, RandomGen *randomGen) : frequency_(freq),
+                                                                                            numOfRaysPerRow_(numOfRaysPerRow), sampleSize_(SampleSize),
+                                                                                            origin_(core::Vec3(0, 0, 4)), randomGen_(randomGen) { updateSampleSize(); }
 
         // OPERATORS
         bool operator==(const PointSource &other) const;
@@ -80,11 +80,11 @@ namespace generators
         void PointSource::setLeftCorner(const core::Vec3 &point);
 
     private:
-        core::Vec3 _origin, _leftCorner;
-        double _frequency, _sampleSize;
-        size_t _numOfRaysPerRow;
+        core::Vec3 origin_, leftCorner_;
+        double frequency_, sampleSize_;
+        size_t numOfRaysPerRow_;
 
-        RandomGen *_randomGen;
+        RandomGen *randomGen_;
     };
 
 } // namespace generators

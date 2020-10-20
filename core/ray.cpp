@@ -13,13 +13,13 @@ namespace core
         {
             // This is kind of a mouthful. Why not simply:
             // throw std::invalid_argument(absl::Substitute("Invalid direction $0", direction));
-            // Learn how to format text nicely with absl :)
+            // TODO: Learn how to format text nicely with absl :)
             throw std::invalid_argument("Ray object couldn't be constructed. You cannot have direction of the ray equal to Vec3(0, 0, 0)");
         }
 
-        _origin = origin;
-        _direction = direction / direction.magnitude();
-        _energy = energy;
+        origin_ = origin;
+        direction_ = direction / direction.magnitude();
+        energy_ = energy;
     }
 
 #pragma endregion
@@ -27,7 +27,7 @@ namespace core
 
     Vec3 Ray::at(const double &time) const
     {
-        return _origin + time * _direction;
+        return origin_ + time * direction_;
     }
 
     double Ray::phaseAt(const double &freq, const double &time) const
@@ -39,7 +39,7 @@ namespace core
             throw std::invalid_argument(ss.str().c_str());
         }
         double waveLength = constants::kSoundSpeed / freq;
-        double displacement = (_origin - at(time)).magnitude();
+        double displacement = (origin_ - at(time)).magnitude();
         return displacement / waveLength * 2 * constants::kPi;
     }
 
@@ -61,32 +61,32 @@ namespace core
 
     void Ray::setOrigin(const Vec3 &origin)
     {
-        _origin = origin;
+        origin_ = origin;
     }
 
     Vec3 Ray::getOrigin() const
     {
-        return _origin;
+        return origin_;
     }
 
     void Ray::setDirection(const Vec3 &direction)
     {
-        _direction = direction;
+        direction_ = direction;
     }
 
     Vec3 Ray::getDirection() const
     {
-        return _direction;
+        return direction_;
     }
 
     void Ray::setEnergy(const double &num)
     {
-        _energy = num;
+        energy_ = num;
     }
 
     double Ray::getEnergy() const
     {
-        return _energy;
+        return energy_;
     }
 
 #pragma endregion

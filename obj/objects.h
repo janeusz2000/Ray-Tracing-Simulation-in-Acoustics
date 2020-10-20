@@ -22,7 +22,7 @@ namespace objects
     public:
         //METHODS
         virtual ~Object(){};
-        virtual core::Vec3 normal(const core::Vec3 &surface_point) const = 0;
+        virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
         virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) = 0;
 
         //GETTERS_AND_SETTERS
@@ -30,20 +30,20 @@ namespace objects
         core::Vec3 getOrigin() const;
 
     private:
-        core::Vec3 _origin;
+        core::Vec3 origin_;
     };
 
     class Sphere : public Object
     {
     public:
-        Sphere() : _radius(1){};
+        Sphere() : radius_(1){};
         Sphere(const core::Vec3 & or, const double &rad = 1);
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //METHODS
-        core::Vec3 normal(const core::Vec3 &surface_point) const override;
+        core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
         [[nodiscard]] bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
 
         //GETTERS AND SETTERS
@@ -51,7 +51,7 @@ namespace objects
         void setRadius(const double &rad);
 
     protected:
-        double _radius;
+        double radius_;
     };
 
     // When this object has two purposes: first - when ray hit this object, there is no longer need
@@ -69,7 +69,7 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        EnergyCollector(const core::Vec3 &origin) : _energy(0) 
+        EnergyCollector(const core::Vec3 &origin) : energy_(0) 
         {
             // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to equal distances
             setRadius(constants::kPi * (constants::kSimulationRadius) / constants::kPopulation); 
@@ -93,7 +93,7 @@ namespace objects
         int getID() const;
 
     private:
-        double _energy;
+        double energy_;
     };
 
     class TriangleObj : public Object
@@ -112,7 +112,7 @@ namespace objects
         friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
 
         // METHODS
-        core::Vec3 normal(const core::Vec3 &surface_point = core::Vec3()) const override;
+        core::Vec3 normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
         // https://en.cppreference.com/w/cpp/language/attributes/nodiscard
         [[nodiscard]] bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
 
@@ -135,8 +135,8 @@ namespace objects
         void recalculateNormal();
         void recalculateArea();
         bool arePointsValid();
-        core::Vec3 _normal, _point1, _point2, _point3;
-        double _area;
+        core::Vec3 normal_, point1_, point2_, point3_;
+        double area_;
     };
 
 } // namespace objects

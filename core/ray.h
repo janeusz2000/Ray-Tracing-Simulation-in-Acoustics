@@ -35,8 +35,8 @@ namespace core
         double getEnergy() const;
 
     private:
-        Vec3 _origin, _direction;
-        double _energy;
+        Vec3 origin_, direction_;
+        double energy_;
     };
 
     struct RayHitData

@@ -16,14 +16,14 @@ namespace exception
     public:
         objectUnableToImport(std::string_view msg)
         {
-            _msg = msg;
+            msg_ = msg;
         }
         const char *what() const noexcept override
         {
-            return _msg.c_str();
+            return msg_.c_str();
         }
         private:
-        std::string _msg;
+        std::string msg_;
     };
 
     // TODO: Make sure that exception::objectsFileCorruption this error provide enough information about the error occurred
@@ -33,14 +33,14 @@ namespace exception
 
         objectFileCorruption(std::string_view msg)
         {
-            _msg = msg;
+            msg_ = msg;
         }
         const char *what() const noexcept override
         {
-            return _msg.c_str();
+            return msg_.c_str();
         }
         private:
-        std::string _msg;
+        std::string msg_;
     };
 
     class differentPositions : public std::exception
@@ -48,15 +48,15 @@ namespace exception
     public:
         differentPositions(std::string_view msg)
         {
-            _msg = msg;
+            msg_ = msg;
         }
         const char *what() const noexcept override
         {
-            return _msg.c_str();
+            return msg_.c_str();
         }
 
     private:
-        std::string _msg;
+        std::string msg_;
     };
 
 } // namespace exception

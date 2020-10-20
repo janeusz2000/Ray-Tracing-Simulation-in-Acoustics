@@ -38,8 +38,8 @@ private:
     // that are crossing each other at Vec3(0, 0, kSimulationRadius / 2). 
     void createCollectors();    
 
-    std::vector<std::unique_ptr<objects::TriangleObj>> _modelTriangles;
-    std::vector<std::unique_ptr<objects::EnergyCollector>> _energyCollectors;
+    std::vector<std::unique_ptr<objects::TriangleObj>> modelTriangles_;
+    std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors_;
     
 };
 
