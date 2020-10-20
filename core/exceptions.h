@@ -7,8 +7,6 @@
 
 namespace exception
 {   
-    // TODO: Change all doubles to float
-    // TODO: change underscore to the end
 
     // TODO: Make sure that exception::objectsUnableToImport this error provide enough information about the error occurred
     class objectUnableToImport : public std::exception
