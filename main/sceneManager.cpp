@@ -38,11 +38,11 @@ void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't 
 
     for (double alpha = 0; alpha <= constants::kPi; alpha += alphaIncrement)
     {
-        double cur = collectorRadius * std::sin(alpha);
+        double groundCoordinate = collectorRadius * std::sin(alpha);
         double z = collectorRadius * std::cos(alpha);
 
-        core::Vec3 xAxesOrigin(cur, 0, z);
-        core::Vec3 yAxesOrigin(0, cur, z);
+        core::Vec3 xAxesOrigin(groundCoordinate, 0, z);
+        core::Vec3 yAxesOrigin(0, groundCoordinate, z);
 
         if (xAxesOrigin == core::Vec3(0, 0, constants::kSimulationRadius / 2))
         {
