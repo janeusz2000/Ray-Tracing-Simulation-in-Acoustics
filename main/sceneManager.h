@@ -32,10 +32,11 @@ private:
     SceneManager(const SceneManager &) = delete;
     SceneManager &operator=(const SceneManager &) = delete;
 
-    void createCollectors();    // assigns energyCollector objects to the right positions. 
-                                // EnergyCollector positions creates two half-circles with the same 
-                                // origin at Vec3(0, 0, 0) that are crossing each other at 
-                                // Vec3(0, 0, kSimulationRadius / 2)
+    // assigns energyCollector objects to the right positions. 
+    // EnergyCollector positions creates two half-circles with the same 
+    // origin at Vec3(0, 0, 0) that are crossing each other at 
+    // Vec3(0, 0, kSimulationRadius / 2)
+    void createCollectors();    
 
     std::vector<std::unique_ptr<objects::TriangleObj>> _modelTriangles;
     std::vector<std::unique_ptr<objects::EnergyCollector>> _energyCollectors;
