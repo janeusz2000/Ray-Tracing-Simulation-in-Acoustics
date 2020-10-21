@@ -17,9 +17,6 @@
 class SceneManager
 {
 public:
-    // SceneManager() : numCollectors_(constants::kPopulation), 
-                    // collectorRadius_(constants::kDefaultEnergyCollectorRadius),
-                    // simulationRadius_(constants::kDefaultSimulationRadius) {createCollectors();};
     SceneManager() : SceneManager(constants::kPopulation, constants::kDefaultSimulationRadius) {};
     SceneManager(int collectors, double simulationRadius); 
     
