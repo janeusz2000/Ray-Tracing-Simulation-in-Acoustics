@@ -8,7 +8,7 @@ class Simulator
 public: 
 
 private:
-
+SceneManager manager;
 };
 
 #endif
