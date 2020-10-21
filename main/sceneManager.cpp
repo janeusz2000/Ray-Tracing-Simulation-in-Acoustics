@@ -1,16 +1,18 @@
 #include "main/sceneManager.h"
 SceneManager::SceneManager(int collectors, double simulationRadius) : numCollectors_(collectors), simulationRadius_(simulationRadius)
 {
-    if (numCollectors_ % 4 != 0 || (numCollectors_ - 1) % 4 != 0)
+    if (numCollectors_ % 4 == 0 || (numCollectors_ - 1) % 4 == 0)
+    {
+        // ( 2 *  pi * R ) / ( 2 * population)  for dividing whole half circle distance to equal distances for population of energyCollectors
+        collectorRadius_ = 2 * constants::kPi * simulationRadius_ / (2 * numCollectors_);
+        createCollectors();
+    }
+    else
     {
         std::stringstream ss;
         ss << "collector population:" << numCollectors_ << " % 4 or population - 1: " << numCollectors_ - 1 << " % 4 must be zero";
         throw std::invalid_argument(ss.str().c_str());
     }
-
-    // ( 2 *  pi * R ) / ( 2 * population)  for dividing whole half circle distance to equal distances for population of energyCollectors
-    collectorRadius_ = 2 * constants::kPi * simulationRadius_ / (2 * numCollectors_);
-    createCollectors();
 }
 std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
 {
