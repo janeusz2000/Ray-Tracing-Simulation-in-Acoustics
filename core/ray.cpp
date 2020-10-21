@@ -23,6 +23,7 @@ namespace core
 #pragma endregion
 #pragma region METHODS
 
+
     Vec3 Ray::at(const double &time) const
     {
         return origin_ + time * direction_;
