@@ -269,7 +269,7 @@ namespace objects
         Ray tempRay(Vec3(0.25, 0, 0.25), Vec3(0, 1, 0)); // Ray has origin inside object1
         std::vector<bool> expectedResults = {false, true};
 
-        for (const TriangleObj &obj : objectList)
+        for (TriangleObj &obj : objectList)
         {
             ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == expectedResults[iteration])); // First object doesn't hit. Second object does hit.
             ++iteration;
@@ -290,7 +290,7 @@ namespace objects
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
 
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_TRUE(!obj.hitObject(tempRay, kSkipFreq, &hitData));
         }
@@ -305,7 +305,7 @@ namespace objects
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
 
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
             ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, obj.point1().y(), 0.25));
@@ -324,7 +324,7 @@ namespace objects
         std::vector<bool> expectedResults = {false, true};
         size_t iteration = 0;
 
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData)) == expectedResults[iteration]);
             ++iteration;
@@ -345,7 +345,7 @@ namespace objects
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
 
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_FALSE(obj.hitObject(tempRay, kSkipFreq, &hitData));
         }
@@ -360,7 +360,7 @@ namespace objects
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
 
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
             ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 0.25, obj.point1().z()));
@@ -378,7 +378,7 @@ namespace objects
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
         std::vector<bool> ExpectedResults = {false, true};
         size_t iteration = 0;
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == ExpectedResults[iteration]));
             ++iteration;
@@ -399,7 +399,7 @@ namespace objects
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
 
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_TRUE(!obj.hitObject(tempRay, kSkipFreq, &hitData));
         }
@@ -414,7 +414,7 @@ namespace objects
 
         std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
 
-        for (const auto &obj : objectList)
+        for (auto &obj : objectList)
         {
             ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
             ASSERT_EQ(hitData.collisionPoint, Vec3(obj.point1().x(), 0.25, 0.25));

@@ -10,8 +10,6 @@ using generators::PointSource;
 using objects::Object;
 using objects::TriangleObj;
 
-generators::FakeRandomGen fakeRand;
-
 class SceneManagerTest : public ::testing::Test
 {
 protected:
