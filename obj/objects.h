@@ -68,7 +68,7 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        EnergyCollector(const core::Vec3 &origin, double radius = constants::kDefaultEnergyCollectorRadius) : energy_(0) 
+        explicit EnergyCollector(const core::Vec3 &origin, double radius = constants::kDefaultEnergyCollectorRadius) : energy_(0) 
         {
             setRadius(radius); 
             setOrigin(origin);
@@ -111,7 +111,6 @@ namespace objects
 
         // METHODS
         core::Vec3 normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
-        // https://en.cppreference.com/w/cpp/language/attributes/nodiscard
         [[nodiscard]] bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
 
         double area() const;
