@@ -23,7 +23,6 @@ namespace core
 #pragma endregion
 #pragma region METHODS
 
-
     Vec3 Ray::at(const double &time) const
     {
         return origin_ + time * direction_;
@@ -38,8 +37,7 @@ namespace core
             throw std::invalid_argument(ss.str().c_str());
         }
         double waveLength = constants::kSoundSpeed / freq;
-        double displacement = (origin_ - at(time)).magnitude();
-        return displacement / waveLength * 2 * constants::kPi;
+        return time / waveLength * 2 * constants::kPi;
     }
 
 #pragma endregion
