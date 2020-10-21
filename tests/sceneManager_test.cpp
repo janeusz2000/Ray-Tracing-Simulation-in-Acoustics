@@ -57,4 +57,13 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
 
     Vec3 referenceCollisionPoint3(0, manager.simulatiorRadius() / 2 - manager.collectorRadius(), 0);
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint3) << "Invalid hit point from: " << againstXAxis;
+
+    Ray atSixtyDegreesAgainstX(core::Vec3(0, 0, 0), core::Vec3(std::cos(constants::kPi / 3), 0, std::sin(constants::kPi / 3)));
+    ASSERT_TRUE(performHitAtEnergyCollectors(atSixtyDegreesAgainstX, &hitData)) << "no hit: " << atSixtyDegreesAgainstX;
+
+    Vec3 referenceCollisionAtSixty(manager.simulatiorRadius() / 2 * std::cos(constants::kPi / 3) - manager.collectorRadius() * std::cos(constants::kPi / 3),
+                                   0, manager.simulatiorRadius() / 2 * std::sin(constants::kPi / 3) - manager.collectorRadius() * std::sin(constants::kPi / 3));
+
+    ASSERT_EQ(hitData.collisionPoint, referenceCollisionAtSixty)
+        << "Invalid hit from " << atSixtyDegreesAgainstX << " to: " << referenceCollisionAtSixty;
 }
