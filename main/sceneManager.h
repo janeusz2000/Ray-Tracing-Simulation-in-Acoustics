@@ -22,9 +22,9 @@ public:
     
     bool loadModel(std::string_view objPath);
 
-    std::vector<objects::EnergyCollector *> getEnergyCollectors();
-    std::vector<objects::TriangleObj *> getModelTriangles();
-    std::vector<objects::TriangleObj *> getReferencePlate();
+    const std::vector<objects::EnergyCollector *> getEnergyCollectors();
+    const std::vector<objects::TriangleObj *> getModelTriangles();
+    const std::vector<objects::TriangleObj *> getReferencePlate();
     const objects::SphereWall &getSphereWall();
     const generators::PointSource &getPointSource();
 
