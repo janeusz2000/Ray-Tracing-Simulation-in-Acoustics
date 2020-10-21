@@ -51,14 +51,23 @@ namespace objects
 
         if (time1 < 0 && time2 > 0) // Ray inside sphere
         {
-            double time = std::max(time1, time2);
-            core::Vec3 collision = ray.at(time);
-            *hitData = core::RayHitData(time, normal(collision), ray, freq);
+            if (time2 < constants::kAccuracy)
+            {
+                return false;
+            }
+
+            core::Vec3 collision = ray.at(time2);
+            *hitData = core::RayHitData(time2, normal(collision), ray, freq);
             return true;
         }
         else if (time1 > 0 && time2 > 0) // ray in front of the sphere
         {
             double time = std::min(time1, time2);
+            if (time < constants::kAccuracy)
+            {
+                return false;
+            }
+
             core::Vec3 collision = ray.at(time);
             *hitData = core::RayHitData(time, normal(collision), ray, freq);
             return true;

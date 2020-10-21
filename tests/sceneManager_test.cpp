@@ -75,4 +75,13 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
 
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionAtThirty)
         << "Invalid hit from " << atThirtyDegreesAgainstX << " to: " << referenceCollisionAtThirty;
+
+    Ray straightDown(core::Vec3(0, 0, 0), core::Vec3(0, 0, -1));
+    ASSERT_FALSE(performHitAtEnergyCollectors(straightDown, &hitData))
+        << "hit registered in: " << hitData.collisionPoint << "from ray: " << straightDown;
+
+    // Ray at the edge of EnergyCollector at: Vec3(0, 0, 2)
+    Ray straightUpAbove(core::Vec3(0, 0, manager.simulatiorRadius() / 2 + manager.collectorRadius()), core::Vec3(0, 0, 1));
+    ASSERT_FALSE(performHitAtEnergyCollectors(straightUpAbove, &hitData))
+        << "hit registered in: " << hitData.collisionPoint << "from ray: " << straightUpAbove;
 }
