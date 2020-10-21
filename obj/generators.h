@@ -50,9 +50,9 @@ namespace generators
     public:
         PointSource() = delete;
         explicit PointSource::PointSource(const double &freq, const size_t &numOfRaysPerRow,
-                                          const double &SampleSize, RandomGen *randomGen) : frequency_(freq),
-                                                                                            numOfRaysPerRow_(numOfRaysPerRow), sampleSize_(SampleSize),
-                                                                                            origin_(core::Vec3(0, 0, 4)), randomGen_(randomGen) { updateSampleSize(); }
+                                          const double &SampleSize, RandomGen *randomGen,
+                                          core::Vec3 origin = core::Vec3(0, 0, constants::kDefaultSimulationRadius)) : frequency_(freq), numOfRaysPerRow_(numOfRaysPerRow),
+                                          sampleSize_(SampleSize), origin_(origin), randomGen_(randomGen) { updateSampleSize(); }
 
         // OPERATORS
         bool operator==(const PointSource &other) const;
