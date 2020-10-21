@@ -15,8 +15,7 @@ namespace core
 
         origin_ = origin;
 
-        // TODO: use normalize() - there are some issues with const keyword
-        direction_ = direction / direction.magnitude();
+        direction_ = direction.normalize();
         energy_ = energy;
     }
 
@@ -68,7 +67,7 @@ namespace core
 
     void Ray::setDirection(const Vec3 &direction)
     {
-        direction_ = direction;
+        direction_ = direction.normalize();
     }
 
     Vec3 Ray::getDirection() const
