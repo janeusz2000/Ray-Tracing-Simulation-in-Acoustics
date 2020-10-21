@@ -59,7 +59,7 @@ namespace objects
     class SphereWall : public Sphere
     {
     public:
-        SphereWall(double radius = constants::kDefaultSimulationRadius) { setRadius(radius); }
+        SphereWall(double radius) { setRadius(radius); }
         SphereWall(const SphereWall &other) = default;
 
         friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);

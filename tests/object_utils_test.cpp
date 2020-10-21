@@ -11,7 +11,6 @@
 
 // TODO: Change all doubles to float
 
-
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -455,7 +454,7 @@ namespace objects
 
     TEST(SPHEREWALL_CONSTRUCTOR, All_Possible_Constructors)
     {
-        SphereWall object1;
+        SphereWall object1(constants::kDefaultSimulationRadius);
 
         ASSERT_EQ(4.0, object1.getRadius());
         ASSERT_EQ(core::Vec3(0, 0, 0), object1.getOrigin());
@@ -463,7 +462,7 @@ namespace objects
 
     TEST(SPHEREWALL_METHOD, Normal)
     {
-        SphereWall tempSphere;
+        SphereWall tempSphere(constants::kDefaultSimulationRadius);
 
         core::Vec3 normal1 = tempSphere.normal(core::Vec3(0, 0, -constants::kDefaultSimulationRadius));
         core::Vec3 normal2 = tempSphere.normal(core::Vec3(0, 0, constants::kDefaultSimulationRadius));
@@ -478,7 +477,7 @@ namespace objects
 
     TEST(SPHEREWALL_METHOD, Getters_and_Setters)
     {
-        SphereWall object1;
+        SphereWall object1(constants::kDefaultSimulationRadius);
 
         ASSERT_EQ(core::Vec3(0, 0, 0), object1.getOrigin());
         ASSERT_EQ(4, object1.getRadius());
@@ -487,7 +486,7 @@ namespace objects
     TEST(SPHEREWALL_OPERATORS, Operator_ostream)
     {
         std::stringstream ss1;
-        SphereWall temp1;
+        SphereWall temp1(constants::kDefaultSimulationRadius);
         ss1 << temp1;
         ASSERT_EQ(ss1.str(), "SphereWall origin: Vec3(0, 0, 0), radius: 4 [m]");
     }
