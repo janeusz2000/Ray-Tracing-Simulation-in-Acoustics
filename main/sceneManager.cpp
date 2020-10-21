@@ -14,7 +14,7 @@ SceneManager::SceneManager(int collectors, double simulationRadius) : numCollect
         throw std::invalid_argument(ss.str().c_str());
     }
 }
-std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
+const std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
 {
     std::vector<objects::EnergyCollector *> temp;
     temp.reserve(energyCollectors_.size());

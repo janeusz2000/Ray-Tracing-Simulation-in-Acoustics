@@ -14,6 +14,8 @@ namespace core
         }
 
         origin_ = origin;
+
+        // TODO: use normalize() - there are some issues with const keyword
         direction_ = direction / direction.magnitude();
         energy_ = energy;
     }
