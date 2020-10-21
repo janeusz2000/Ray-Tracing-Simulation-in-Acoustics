@@ -13,12 +13,12 @@ using objects::TriangleObj;
 class SceneManagerTest : public ::testing::Test
 {
 protected:
-    bool performHitAtEnergyCollectors(const Ray &straightUp, RayHitData *hitData)
+    bool performHitAtEnergyCollectors(const Ray &inputRay, RayHitData *hitData)
     {
         for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors())
         {
             const double kSkipFreq = 1000;
-            if (energyCol->hitObject(straightUp, kSkipFreq, hitData))
+            if (energyCol->hitObject(inputRay, kSkipFreq, hitData))
             {
                 return true;
             }
