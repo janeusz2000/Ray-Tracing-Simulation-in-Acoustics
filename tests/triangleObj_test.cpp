@@ -267,11 +267,11 @@ namespace objects
         size_t iteration = 0;
         RayHitData hitData;
         Ray tempRay(Vec3(0.25, 0, 0.25), Vec3(0, 1, 0)); // Ray has origin inside object1
-        std::vector<bool> ExpectedResults = {false, true};
+        std::vector<bool> expectedResults = {false, true};
 
         for (TriangleObj &obj : objectList)
         {
-            ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == ExpectedResults[iteration])); // First object doesn't hit. Second object does hit.
+            ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == expectedResults[iteration])); // First object doesn't hit. Second object does hit.
             ++iteration;
         }
 
