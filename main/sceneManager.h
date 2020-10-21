@@ -17,12 +17,11 @@
 class SceneManager
 {
 public:
-    SceneManager() : numCollectors_(constants::kPopulation), 
-                    collectorRadius_(constants::kDefaultEnergyCollectorRadius),
-                    simulationRadius_(constants::kDefaultSimulationRadius) {createCollectors();};
-   .
-   // TODO: this constructor is weird. Test it and fix it
-    SceneManager(size_t collectors, double simulationRadius); 
+    // SceneManager() : numCollectors_(constants::kPopulation), 
+                    // collectorRadius_(constants::kDefaultEnergyCollectorRadius),
+                    // simulationRadius_(constants::kDefaultSimulationRadius) {createCollectors();};
+    SceneManager() : SceneManager(constants::kPopulation, constants::kDefaultSimulationRadius) {};
+    SceneManager(int collectors, double simulationRadius); 
     
     bool loadModel(std::string_view objPath);
 
@@ -48,7 +47,7 @@ private:
 
     std::vector<std::unique_ptr<objects::TriangleObj>> modelTriangles_;
     std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors_;
-    size_t numCollectors_;
+    int numCollectors_;
     double collectorRadius_, simulationRadius_;
     
 };
