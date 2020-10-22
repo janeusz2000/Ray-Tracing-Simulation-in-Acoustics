@@ -18,8 +18,8 @@ class SceneManager
 {
 public:
     SceneManager() : SceneManager(constants::kPopulation, constants::kDefaultSimulationRadius) {};
-    SceneManager(int collectors, double simulationRadius); 
-    
+    SceneManager(int collectors, float simulationRadius);
+
     bool loadModel(std::string_view objPath);
 
     std::vector<objects::EnergyCollector *> getEnergyCollectors();
@@ -28,9 +28,9 @@ public:
     const objects::SphereWall &getSphereWall();
     const generators::PointSource &getPointSource();
 
-    double collectorRadius() const {return collectorRadius_;};
-    double simulatiorRadius() const {return simulationRadius_;};
-    
+    float collectorRadius() const { return collectorRadius_; };
+    float simulatiorRadius() const { return simulationRadius_; };
+
 private:
     // Disallow copy and assign.
     SceneManager(const SceneManager &) = delete;
@@ -45,8 +45,7 @@ private:
     std::vector<std::unique_ptr<objects::TriangleObj>> modelTriangles_;
     std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors_;
     int numCollectors_;
-    double collectorRadius_, simulationRadius_;
-    
+    float collectorRadius_, simulationRadius_;
 };
 
 #endif

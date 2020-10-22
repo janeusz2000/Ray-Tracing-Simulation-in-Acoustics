@@ -17,7 +17,7 @@ protected:
     {
         for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors())
         {
-            const double kSkipFreq = 1000;
+            const float kSkipFreq = 1000;
             if (energyCol->hitObject(straightUp, kSkipFreq, hitData))
             {
                 return true;

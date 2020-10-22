@@ -12,7 +12,7 @@
 #include <memory>
 #include <vector>
 
-// TODO: Change all doubles to float
+
 
 namespace objects
 {
@@ -22,7 +22,7 @@ namespace objects
         //METHODS
         virtual ~Object(){};
         virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
-        virtual bool hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData) = 0;
+        virtual bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) = 0;
 
         //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 &origin);
@@ -36,21 +36,21 @@ namespace objects
     {
     public:
         Sphere() : radius_(1){};
-        Sphere(const core::Vec3 &origin, double rad = 1);
+        Sphere(const core::Vec3 & or, float rad = 1);
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //METHODS
         core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
-        [[nodiscard]] bool hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData) override;
+        [[nodiscard]] bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) override;
 
         //GETTERS AND SETTERS
-        double getRadius() const;
-        void setRadius(double rad);
+        float getRadius() const;
+        void setRadius(float rad);
 
     protected:
-        double radius_;
+        float radius_;
     };
 
     // When this object has two purposes: first - when ray hit this object, there is no longer need
@@ -59,7 +59,7 @@ namespace objects
     class SphereWall : public Sphere
     {
     public:
-        SphereWall(double radius) { setRadius(radius); }
+        SphereWall(float radius) { setRadius(radius); }
         SphereWall(const SphereWall &other) = default;
 
         friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);
@@ -68,7 +68,7 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        explicit EnergyCollector(const core::Vec3 &origin, double radius = constants::kDefaultEnergyCollectorRadius) : energy_(0)
+        explicit EnergyCollector(const core::Vec3 &origin, float radius = constants::kDefaultEnergyCollectorRadius) : energy_(0)
         {
             setRadius(radius);
             setOrigin(origin);
@@ -80,18 +80,18 @@ namespace objects
         EnergyCollector &operator=(const EnergyCollector &other);
 
         // METHODS
-        double distanceAt(const core::Vec3 &positionHit) const;
+        float distanceAt(const core::Vec3 &positionHit) const;
         void collectEnergy(const core::RayHitData &hitdata);
 
         // GETTERS AND SETTERS
-        void setEnergy(double en);
-        double getEnergy() const;
-        void addEnergy(double en);
+        void setEnergy(float en);
+        float getEnergy() const;
+        void addEnergy(float en);
         void setID(int id);
         int getID() const;
 
     private:
-        double energy_;
+        float energy_;
     };
 
     class TriangleObj : public Object
@@ -111,9 +111,9 @@ namespace objects
 
         // METHODS
         core::Vec3 normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
-        [[nodiscard]] bool hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData) override;
+        [[nodiscard]] bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) override;
 
-        double area() const;
+        float area() const;
         void refreshAttributes();
 
         // GETTERS AND SETTERS
@@ -133,7 +133,7 @@ namespace objects
         void recalculateArea();
         bool arePointsValid();
         core::Vec3 normal_, point1_, point2_, point3_;
-        double area_;
+        float area_;
     };
 
 } // namespace objects

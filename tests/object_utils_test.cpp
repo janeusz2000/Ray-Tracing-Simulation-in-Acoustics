@@ -9,7 +9,7 @@
 #include <sstream>
 #include <random>
 
-// TODO: Change all doubles to float
+
 
 using core::Ray;
 using core::RayHitData;
@@ -17,30 +17,30 @@ using core::Vec3;
 
 namespace objects
 {
-    const double kSkipFreq = 1000;
+    const float kSkipFreq = 1000;
 
     struct RandomEngine
     {
         virtual ~RandomEngine(){};
-        virtual double getNext() = 0;
+        virtual float getNext() = 0;
     };
 
     struct GaussianRandom : public RandomEngine
     {
         GaussianRandom() : _engine(std::random_device()()), _dist(0, 1){};
-        double getNext() override
+        float getNext() override
         {
             return _dist(_engine);
         }
 
         std::random_device _rd;
         std::mt19937_64 _engine;
-        std::normal_distribution<double> _dist;
+        std::normal_distribution<float> _dist;
     };
 
     struct FakeRandom : public RandomEngine
     {
-        double getNext() override
+        float getNext() override
         {
             return 0;
         }
@@ -111,38 +111,38 @@ namespace objects
         ASSERT_EQ(core::Vec3(1, 43, 3), object5.getOrigin());
         ASSERT_EQ(core::Vec3(12, -12, 1), object6.getOrigin());
 
-        ASSERT_EQ(0.5, object1.getRadius());
+        ASSERT_FLOAT_EQ(0.5, object1.getRadius());
         ASSERT_EQ(5, object2.getRadius());
         ASSERT_EQ(123, object3.getRadius());
         ASSERT_EQ(8, object4.getRadius());
         ASSERT_EQ(4, object5.getRadius());
-        ASSERT_EQ(0.3, object6.getRadius());
+        ASSERT_FLOAT_EQ(0.3, object6.getRadius());
     }
 
     TEST(SPHERE_METHOD, HitObject_VEC3_0_0_1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double radius1 = 0.2;
+        float radius1 = 0.2;
         Sphere object1(core::Vec3(1, 1, 20), radius1);
 
-        double radius2 = 0.3;
+        float radius2 = 0.3;
         Sphere object2(core::Vec3(1, 1, 20), radius2);
 
-        double radius3 = 0.4;
+        float radius3 = 0.4;
         Sphere object3(core::Vec3(1, 1, 20), radius3);
 
-        const double rayNum = 1000000;
+        const float rayNum = 1000000;
 
-        double hits1 = 0;
-        double hits2 = 0;
-        double hits3 = 0;
+        float hits1 = 0;
+        float hits2 = 0;
+        float hits3 = 0;
 
-        const double reference1 = constants::kPi * radius1 * radius1 / 4;
-        const double reference2 = constants::kPi * radius2 * radius2 / 4;
-        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const float reference1 = constants::kPi * radius1 * radius1 / 4;
+        const float reference2 = constants::kPi * radius2 * radius2 / 4;
+        const float reference3 = constants::kPi * radius3 * radius3 / 4;
 
         for (size_t n = 0; n < rayNum; n++)
         {
@@ -172,27 +172,27 @@ namespace objects
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double radius1 = 0.2;
+        float radius1 = 0.2;
         Sphere object1(core::Vec3(1, 1, -20), radius1);
 
-        double radius2 = 0.3;
+        float radius2 = 0.3;
         Sphere object2(core::Vec3(1, 1, -20), radius2);
 
-        double radius3 = 0.4;
+        float radius3 = 0.4;
         Sphere object3(core::Vec3(1, 1, -20), radius3);
 
-        const double rayNum = 1000000;
+        const float rayNum = 1000000;
 
-        double hits1 = 0;
-        double hits2 = 0;
-        double hits3 = 0;
+        float hits1 = 0;
+        float hits2 = 0;
+        float hits3 = 0;
 
-        const double reference1 = constants::kPi * radius1 * radius1 / 4;
-        const double reference2 = constants::kPi * radius2 * radius2 / 4;
-        const double reference3 = constants::kPi * radius3 * radius3 / 4;
-        const double tempFreq = 1000;
+        const float reference1 = constants::kPi * radius1 * radius1 / 4;
+        const float reference2 = constants::kPi * radius2 * radius2 / 4;
+        const float reference3 = constants::kPi * radius3 * radius3 / 4;
+        const float tempFreq = 1000;
 
         for (size_t n = 0; n < rayNum; n++)
         {
@@ -221,26 +221,26 @@ namespace objects
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double radius1 = 0.2;
+        float radius1 = 0.2;
         Sphere object1(core::Vec3(1, 20, 1), radius1);
 
-        double radius2 = 0.3;
+        float radius2 = 0.3;
         Sphere object2(core::Vec3(1, 20, 1), radius2);
 
-        double radius3 = 0.4;
+        float radius3 = 0.4;
         Sphere object3(core::Vec3(1, 20, 1), radius3);
 
-        const double rayNum = 1000000;
+        const float rayNum = 1000000;
 
-        double hits1 = 0;
-        double hits2 = 0;
-        double hits3 = 0;
+        float hits1 = 0;
+        float hits2 = 0;
+        float hits3 = 0;
 
-        const double reference1 = constants::kPi * radius1 * radius1 / 4;
-        const double reference2 = constants::kPi * radius2 * radius2 / 4;
-        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const float reference1 = constants::kPi * radius1 * radius1 / 4;
+        const float reference2 = constants::kPi * radius2 * radius2 / 4;
+        const float reference3 = constants::kPi * radius3 * radius3 / 4;
 
         for (size_t n = 0; n < rayNum; n++)
         {
@@ -270,26 +270,26 @@ namespace objects
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double radius1 = 0.2;
+        float radius1 = 0.2;
         Sphere object1(core::Vec3(1, -20, 1), radius1);
 
-        double radius2 = 0.3;
+        float radius2 = 0.3;
         Sphere object2(core::Vec3(1, -20, 1), radius2);
 
-        double radius3 = 0.4;
+        float radius3 = 0.4;
         Sphere object3(core::Vec3(1, -20, 1), radius3);
 
-        const double rayNum = 1000000;
+        const float rayNum = 1000000;
 
-        double hits1 = 0;
-        double hits2 = 0;
-        double hits3 = 0;
+        float hits1 = 0;
+        float hits2 = 0;
+        float hits3 = 0;
 
-        const double reference1 = constants::kPi * radius1 * radius1 / 4;
-        const double reference2 = constants::kPi * radius2 * radius2 / 4;
-        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const float reference1 = constants::kPi * radius1 * radius1 / 4;
+        const float reference2 = constants::kPi * radius2 * radius2 / 4;
+        const float reference3 = constants::kPi * radius3 * radius3 / 4;
 
         for (size_t n = 0; n < rayNum; n++)
         {
@@ -319,26 +319,26 @@ namespace objects
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double radius1 = 0.2;
+        float radius1 = 0.2;
         Sphere object1(core::Vec3(20, 1, 1), radius1);
 
-        double radius2 = 0.3;
+        float radius2 = 0.3;
         Sphere object2(core::Vec3(20, 1, 1), radius2);
 
-        double radius3 = 0.4;
+        float radius3 = 0.4;
         Sphere object3(core::Vec3(20, 1, 1), radius3);
 
-        const double rayNum = 1000000;
+        const float rayNum = 1000000;
 
-        double hits1 = 0;
-        double hits2 = 0;
-        double hits3 = 0;
+        float hits1 = 0;
+        float hits2 = 0;
+        float hits3 = 0;
 
-        const double reference1 = constants::kPi * radius1 * radius1 / 4;
-        const double reference2 = constants::kPi * radius2 * radius2 / 4;
-        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const float reference1 = constants::kPi * radius1 * radius1 / 4;
+        const float reference2 = constants::kPi * radius2 * radius2 / 4;
+        const float reference3 = constants::kPi * radius3 * radius3 / 4;
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(-50, dist(e2), dist(e2));
@@ -367,26 +367,26 @@ namespace objects
     {
         std::random_device rd;
         std::mt19937_64 e2(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double radius1 = 0.2;
+        float radius1 = 0.2;
         Sphere object1(core::Vec3(-20, 1, 1), radius1);
 
-        double radius2 = 0.3;
+        float radius2 = 0.3;
         Sphere object2(core::Vec3(-20, 1, 1), radius2);
 
-        double radius3 = 0.4;
+        float radius3 = 0.4;
         Sphere object3(core::Vec3(-20, 1, 1), radius3);
 
-        const double rayNum = 1000000;
+        const float rayNum = 1000000;
 
-        double hits1 = 0;
-        double hits2 = 0;
-        double hits3 = 0;
+        float hits1 = 0;
+        float hits2 = 0;
+        float hits3 = 0;
 
-        const double reference1 = constants::kPi * radius1 * radius1 / 4;
-        const double reference2 = constants::kPi * radius2 * radius2 / 4;
-        const double reference3 = constants::kPi * radius3 * radius3 / 4;
+        const float reference1 = constants::kPi * radius1 * radius1 / 4;
+        const float reference2 = constants::kPi * radius2 * radius2 / 4;
+        const float reference3 = constants::kPi * radius3 * radius3 / 4;
         for (size_t n = 0; n < rayNum; n++)
         {
             core::Vec3 rayPosition(50, dist(e2), dist(e2));
@@ -494,7 +494,7 @@ namespace objects
     TEST(SphereWallObjectTest, RayInsideSphereHit)
     {
         Vec3 kO(123, 1, 2);
-        const double kR = 3;
+        const float kR = 3;
         Sphere sphere(kO, kR);
 
         RayHitData ignore;

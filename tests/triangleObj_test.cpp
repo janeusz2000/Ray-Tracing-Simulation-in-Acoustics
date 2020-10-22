@@ -15,12 +15,12 @@ using core::Ray;
 using core::RayHitData;
 using core::Vec3;
 
-// TODO: Change all doubles to float
+
 
 namespace objects
 {
 
-    const double kSkipFreq = 1000;
+    const float kSkipFreq = 1000;
 
     TEST(TRIANGLEOBJ_OPERATORS, Operator_iostream)
     {
@@ -115,11 +115,11 @@ namespace objects
 
         std::random_device rd;
         std::mt19937_64 engine(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double hits = 0;
-        const double referenceRatio = 0.5 / 4;
-        const double rayNum = 1000000;
+        float hits = 0;
+        const float referenceRatio = 0.5 / 4;
+        const float rayNum = 1000000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
@@ -139,11 +139,11 @@ namespace objects
 
         std::random_device rd;
         std::mt19937_64 engine(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double hits = 0;
-        const double referenceRatio = 0.5 / 4;
-        const double rayNum = 1000000;
+        float hits = 0;
+        const float referenceRatio = 0.5 / 4;
+        const float rayNum = 1000000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
@@ -163,11 +163,11 @@ namespace objects
 
         std::random_device rd;
         std::mt19937_64 engine(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double hits = 0;
-        const double referenceRatio = 0.5 / 4;
-        const double rayNum = 1000000;
+        float hits = 0;
+        const float referenceRatio = 0.5 / 4;
+        const float rayNum = 1000000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
@@ -187,11 +187,11 @@ namespace objects
 
         std::random_device rd;
         std::mt19937_64 engine(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double hits = 0;
-        const double referenceRatio = 0.5 / 4;
-        const double rayNum = 1000000;
+        float hits = 0;
+        const float referenceRatio = 0.5 / 4;
+        const float rayNum = 1000000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
@@ -211,11 +211,11 @@ namespace objects
 
         std::random_device rd;
         std::mt19937_64 engine(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double hits = 0;
-        const double referenceRatio = 0.5 / 4;
-        const double rayNum = 1000000;
+        float hits = 0;
+        const float referenceRatio = 0.5 / 4;
+        const float rayNum = 1000000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
@@ -235,11 +235,11 @@ namespace objects
 
         std::random_device rd;
         std::mt19937_64 engine(rd());
-        std::uniform_real_distribution<double> dist(0, 2);
+        std::uniform_real_distribution<float> dist(0, 2);
 
-        double hits = 0;
-        const double referenceRatio = 0.5 / 4;
-        const double rayNum = 1000000;
+        float hits = 0;
+        const float referenceRatio = 0.5 / 4;
+        const float rayNum = 1000000;
 
         for (auto num = 0; num < rayNum; ++num)
         {
@@ -448,7 +448,7 @@ namespace objects
     {
         {
             std::stringstream ss;
-            ss << TriangleObj(core::Vec3(std::sqrt(2), 0, 0), core::Vec3(1, 2, 3), core::Vec3(-4, -5, -6));
+            ss << TriangleObj(core::Vec3(std::sqrt(2.0f), 0, 0), core::Vec3(1, 2, 3), core::Vec3(-4, -5, -6));
             ASSERT_EQ(ss.str(), "Triangle Object, vertex: Vec3(1.41421, 0, 0), Vec3(1, 2, 3), Vec3(-4, -5, -6)");
         }
 
