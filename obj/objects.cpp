@@ -1,8 +1,6 @@
 #include "objects.h"
 #include <sstream>
 
-
-
 namespace objects
 {
 
@@ -14,7 +12,6 @@ namespace objects
     {
         return origin_;
     }
-
 
     core::Vec3 Sphere::normal(const core::Vec3 &surfacePoint) const
     {
