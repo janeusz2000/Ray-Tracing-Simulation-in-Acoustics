@@ -1,12 +1,12 @@
 #include "ray.h"
 
-// TODO: Change all doubles to float
+
 
 namespace core
 {
 #pragma region CONSTRUCTORS
 
-    Ray::Ray(const Vec3 &origin, const Vec3 &direction, double energy)
+    Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
     {
         if (direction == Vec3(0, 0, 0))
         {
@@ -21,12 +21,12 @@ namespace core
 #pragma endregion
 #pragma region METHODS
 
-    Vec3 Ray::at(double time) const
+    Vec3 Ray::at(float time) const
     {
         return origin_ + time * direction_;
     }
 
-    double Ray::phaseAt(double freq, double time) const
+    float Ray::phaseAt(float freq, float time) const
     {
         if (freq <= constants::kAccuracy || time <= constants::kAccuracy)
         {
@@ -34,8 +34,8 @@ namespace core
             ss << "Could not calculate phase at, because input frequency or time is close or equal to zero. Values are: freq: " << freq << ", time: " << time;
             throw std::invalid_argument(ss.str().c_str());
         }
-        double waveLength = constants::kSoundSpeed / freq;
-        double displacement = (origin_ - at(time)).magnitude();
+        float waveLength = constants::kSoundSpeed / freq;
+        float displacement = (origin_ - at(time)).magnitude();
         return displacement / waveLength * 2 * constants::kPi;
     }
 
@@ -75,12 +75,12 @@ namespace core
         return direction_;
     }
 
-    void Ray::setEnergy(double num)
+    void Ray::setEnergy(float num)
     {
         energy_ = num;
     }
 
-    double Ray::getEnergy() const
+    float Ray::getEnergy() const
     {
         return energy_;
     }

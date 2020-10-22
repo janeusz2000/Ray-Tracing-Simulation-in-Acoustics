@@ -5,7 +5,7 @@
 #include <initializer_list>
 #include <iostream>
 
-// TODO: Change all doubles to float
+
 
 namespace core
 {
@@ -17,17 +17,17 @@ namespace core
         // Z cord: represents down (-) to up (+) coordinates
 
     public:
-        explicit Vec3(double x = 0, double y = 0, double z = 0) : x_(x), y_(y), z_(z){};
-        Vec3(std::initializer_list<double> initList);
+        explicit Vec3(float x = 0, float y = 0, float z = 0) : x_(x), y_(y), z_(z){};
+        Vec3(std::initializer_list<float> initList);
         Vec3(const Vec3 &other) = default;
         ~Vec3() = default;
 
         Vec3 &operator=(const Vec3 &other);
         Vec3 &operator+=(const Vec3 &other);
-        Vec3 &operator+=(double num);
+        Vec3 &operator+=(float num);
         Vec3 &operator-=(const Vec3 &other);
-        Vec3 &operator-=(double num);
-        Vec3 &operator*=(double num);
+        Vec3 &operator-=(float num);
+        Vec3 &operator*=(float num);
         Vec3 operator-()
         {
             return *this * -1;
@@ -37,30 +37,30 @@ namespace core
         friend bool operator==(const Vec3 &left, const Vec3 &right);
         friend bool operator!=(const Vec3 &left, const Vec3 &right);
         friend Vec3 operator+(const Vec3 &left, const Vec3 &right);
-        friend Vec3 operator+(const Vec3 &left, double right);
-        friend Vec3 operator+(double left, const Vec3 &right);
+        friend Vec3 operator+(const Vec3 &left, float right);
+        friend Vec3 operator+(float left, const Vec3 &right);
         friend Vec3 operator-(const Vec3 &left, const Vec3 &right);
-        friend Vec3 operator-(const Vec3 &left, double right);
-        friend Vec3 operator*(double num, const Vec3 &vec);
-        friend Vec3 operator*(const Vec3 &vec, double num);
-        friend Vec3 operator/(const Vec3 &vec, double num);
+        friend Vec3 operator-(const Vec3 &left, float right);
+        friend Vec3 operator*(float num, const Vec3 &vec);
+        friend Vec3 operator*(const Vec3 &vec, float num);
+        friend Vec3 operator/(const Vec3 &vec, float num);
 
-        double scalarProduct(const Vec3 &other) const;
+        float scalarProduct(const Vec3 &other) const;
         Vec3 crossProduct(const Vec3 &other) const;
-        double magnitude() const;
-        double magnitudeSquared() const;
+        float magnitude() const;
+        float magnitudeSquared() const;
         Vec3 normalize() const;
 
         //GETTERS & SETTERS
-        double x() const;
-        void setX(double num);
-        double y() const;
-        void setY(double num);
-        double z() const;
-        void setZ(double num);
+        float x() const;
+        void setX(float num);
+        float y() const;
+        void setY(float num);
+        float z() const;
+        void setZ(float num);
 
     private:
-        double x_, y_, z_;
+        float x_, y_, z_;
     };
 
 } // namespace core

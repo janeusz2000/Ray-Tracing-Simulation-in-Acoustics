@@ -1,15 +1,15 @@
 #include "generators.h"
 #include <random>
 
-// TODO: Change all doubles to float
+
 
 namespace generators
 {
 #pragma region RANDOMGENERATORS
 
-    // double EngineUniformRandom(double min, double max);
-    // double EngineGaussianRandom(double mean, double standDev);
-    // double EngineZero(double passA, double passB);
+    // float EngineUniformRandom(float min, float max);
+    // float EngineGaussianRandom(float mean, float standDev);
+    // float EngineZero(float passA, float passB);
 
 #pragma endregion
 #pragma region POINTSOURCE
@@ -41,27 +41,27 @@ namespace generators
             ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << numOfRaysPerRow_ - 1 << ", y: " << yIter << " / " << numOfRaysPerRow_;
             throw std::out_of_range(ss.str().c_str());
         }
-        double v = (static_cast<double>(xIter) + randomGen_->getNext()) / static_cast<double>(numOfRaysPerRow_ - 1) * sampleSize_;
-        double u = (static_cast<double>(yIter) + randomGen_->getNext()) / static_cast<double>(numOfRaysPerRow_ - 1) * sampleSize_;
+        float v = (static_cast<float>(xIter) + randomGen_->getNext()) / static_cast<float>(numOfRaysPerRow_ - 1) * sampleSize_;
+        float u = (static_cast<float>(yIter) + randomGen_->getNext()) / static_cast<float>(numOfRaysPerRow_ - 1) * sampleSize_;
         return core::Ray(origin_, leftCorner_ + u * core::Vec3(1, 0, 0) + v * core::Vec3(0, 1, 0) - origin_);
     }
 
     // GETTERS AND SETTERS
 
-    double PointSource::frequency() const
+    float PointSource::frequency() const
     {
         return frequency_;
     }
-    void PointSource::setFrequency(double freq)
+    void PointSource::setFrequency(float freq)
     {
         frequency_ = freq;
     }
 
-    double PointSource::sampleSize() const
+    float PointSource::sampleSize() const
     {
         return sampleSize_;
     }
-    void PointSource::setDiffusorSize(double diffusorSize)
+    void PointSource::setDiffusorSize(float diffusorSize)
     {
         sampleSize_ = diffusorSize;
         updateSampleSize();

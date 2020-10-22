@@ -6,9 +6,6 @@
 #include <sstream>
 #include <cmath>
 
-// TODO: Change all doubles to float
-
-
 namespace core
 {
     TEST(RAY_OPERATOR, Operator_ostream)
@@ -23,7 +20,7 @@ namespace core
         Ray temp2(Vec3(0, 1, 0), Vec3(0, 0, 1), 0);
         Ray temp3(Vec3(1, 1, 1), Vec3(1, 0, 1), 0);
         Ray temp4(Vec3(1, 2, 3), Vec3(1, 2, 3), 0);
-        Ray temp5(Vec3(std::sqrt(2), 1, 1), Vec3(std::sqrt(2), 0, 0), 0);
+        Ray temp5(Vec3(std::sqrt(2.0f), 1, 1), Vec3(std::sqrt(2.0f), 0, 0), 0);
 
         s1 << temp1;
         s2 << temp2;
@@ -70,9 +67,9 @@ namespace core
 
     TEST(RAY_METHOD, Method_PhaseAt)
     {
-        double freq1 = 1000;
-        double freq2 = 300;
-        double freq3 = 500;
+        float freq1 = 1000;
+        float freq2 = 300;
+        float freq3 = 500;
 
         Ray temp1(Vec3(0, 0, 0), Vec3(0, 0, 1));
         Ray temp2(Vec3(0, 0, 0), Vec3(0, 1, 0));
