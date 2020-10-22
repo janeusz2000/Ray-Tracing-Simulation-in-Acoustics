@@ -7,9 +7,9 @@ namespace objects
 {
 #pragma region OBJECT
 
-    void Object::setOrigin(const core::Vec3 & or)
+    void Object::setOrigin(const core::Vec3 &origin)
     {
-        origin_ = or ;
+        origin_ = origin;
     }
     core::Vec3 Object::getOrigin() const
     {
@@ -24,9 +24,9 @@ namespace objects
         return (surfacePoint - getOrigin()).normalize();
     }
 
-    Sphere::Sphere(const core::Vec3 & or, double rad)
+    Sphere::Sphere(const core::Vec3 &origin, double rad)
     {
-        this->setOrigin(or);
+        this->setOrigin(origin);
         radius_ = rad;
     }
 
@@ -112,7 +112,7 @@ namespace objects
         return os << "Energy Collector. Origin: " << collector.getOrigin() << ", Radius: " << collector.getRadius();
     }
 
-    bool objects::operator==(const EnergyCollector &left, const EnergyCollector &right)
+    bool operator==(const EnergyCollector &left, const EnergyCollector &right)
     {
         return (left.getOrigin() == right.getOrigin() && left.getRadius() == right.getRadius() && left.getEnergy() == right.getEnergy());
     }

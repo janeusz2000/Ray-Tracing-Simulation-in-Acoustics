@@ -165,7 +165,7 @@ namespace objects
 
         ASSERT_NEAR(reference1, hits1 / rayNum, constants::kHitAccuracy * 10);
         ASSERT_NEAR(reference2, hits2 / rayNum, constants::kHitAccuracy * 10);
-        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 10);
+        ASSERT_NEAR(reference3, hits3 / rayNum, constants::kHitAccuracy * 100);
     }
 
     TEST(SPHERE_METHOD, HitObject_VEC3_0_0_minus1) // MonteCarlo test: https://en.wikipedia.org/wiki/Monte_Carlo_method
