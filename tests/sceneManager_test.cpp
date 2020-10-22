@@ -13,12 +13,12 @@ using objects::TriangleObj;
 class SceneManagerTest : public ::testing::Test
 {
 protected:
-    bool performHitAtEnergyCollectors(const Ray &straightUp, RayHitData *hitData)
+    bool performHitAtEnergyCollectors(const Ray &inputRay, RayHitData *hitData)
     {
         for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors())
         {
             const float kSkipFreq = 1000;
-            if (energyCol->hitObject(straightUp, kSkipFreq, hitData))
+            if (energyCol->hitObject(inputRay, kSkipFreq, hitData))
             {
                 return true;
             }
@@ -44,17 +44,17 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
     ASSERT_TRUE(performHitAtEnergyCollectors(straightUp, &hitData)) << "no hit: " << straightUp;
 
     core::Vec3 referenceCollisionPoint(0, 0, manager.simulatiorRadius() / 2 - manager.collectorRadius());
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "Invalid hit point from: " << straightUp;
+    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "point from: " << straightUp;
 
-    Ray againstYAxis(core::Vec3(0, 0, 0), core::Vec3(-1, 0, 0));
-    ASSERT_TRUE(performHitAtEnergyCollectors(againstYAxis, &hitData)) << "no hit: " << againstYAxis;
+    Ray parallelXAxis(core::Vec3(0, 0, 0), core::Vec3(-1, 0, 0));
+    ASSERT_TRUE(performHitAtEnergyCollectors(parallelXAxis, &hitData)) << "no hit: " << parallelXAxis;
 
     Vec3 referenceCollisionPoint2(-(manager.simulatiorRadius() / 2 - manager.collectorRadius()), 0, 0);
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint2) << "Invalid hit point from: " << againstYAxis;
+    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint2) << " point from: " << parallelXAxis;
 
-    Ray againstXAxis(core::Vec3(0, 0, 0), core::Vec3(0, 1, 0));
-    ASSERT_TRUE(performHitAtEnergyCollectors(againstXAxis, &hitData)) << "no hit: " << againstXAxis;
+    Ray parallelYaxis(core::Vec3(0, 0, 0), core::Vec3(0, 1, 0));
+    ASSERT_TRUE(performHitAtEnergyCollectors(parallelYaxis, &hitData)) << "no hit: " << parallelYaxis;
 
     Vec3 referenceCollisionPoint3(0, manager.simulatiorRadius() / 2 - manager.collectorRadius(), 0);
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint3) << "Invalid hit point from: " << againstXAxis;
+    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint3) << " point from: " << parallelYaxis;
 }
