@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cmath>
 
-// TODO: Change all doubles to float
+
 
 namespace objects
 {
@@ -49,11 +49,11 @@ namespace objects
         EnergyCollector object4(core::Vec3(1, 2, 0));
         ASSERT_EQ(object3, object4);
 
-        EnergyCollector object5(core::Vec3(std::sqrt(2), 1, 2));
-        EnergyCollector object6(core::Vec3(std::sqrt(2), 1, 2));
+        EnergyCollector object5(core::Vec3(std::sqrt(2.0f), 1, 2));
+        EnergyCollector object6(core::Vec3(std::sqrt(2.0f), 1, 2));
         ASSERT_EQ(object5, object6);
 
-        EnergyCollector object7(core::Vec3(std::sqrt(3) * std::sqrt(3), std::sqrt(2) * std::sqrt(2), 0));
+        EnergyCollector object7(core::Vec3(std::sqrt(3.f) * std::sqrt(3.f), std::sqrt(2.0f) * std::sqrt(2.0f), 0));
         EnergyCollector object8(core::Vec3(3, 2, 0));
         ASSERT_EQ(object7, object8);
     }
@@ -68,11 +68,11 @@ namespace objects
         EnergyCollector object4 = object3;
         ASSERT_EQ(object3, object4);
 
-        EnergyCollector object5(core::Vec3(std::sqrt(2), 1, 2));
+        EnergyCollector object5(core::Vec3(std::sqrt(2.0f), 1, 2));
         EnergyCollector object6 = object5;
         ASSERT_EQ(object5, object6);
 
-        EnergyCollector object7(core::Vec3(std::sqrt(3), 0, std::sqrt(2)));
+        EnergyCollector object7(core::Vec3(std::sqrt(3.f), 0, std::sqrt(2.0f)));
         EnergyCollector object8 = object7;
         ASSERT_EQ(object7, object8);
     }

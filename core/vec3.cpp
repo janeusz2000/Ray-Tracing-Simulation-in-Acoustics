@@ -3,13 +3,13 @@
 
 #include <exception>
 
-// TODO: Change all doubles to float
+
 
 namespace core
 {
 #pragma region CONSTRUCTOR
 
-    Vec3::Vec3(std::initializer_list<double> initList)
+    Vec3::Vec3(std::initializer_list<float> initList)
     {
         if (initList.size() != 3)
         {
@@ -33,12 +33,12 @@ namespace core
         return Vec3(left.x() + right.x(), left.y() + right.y(), left.z() + right.z());
     }
 
-    Vec3 operator+(const Vec3 &left, double right)
+    Vec3 operator+(const Vec3 &left, float right)
     {
         return Vec3(left.x() + right, left.y() + right, left.z() + right);
     }
 
-    Vec3 operator+(double left, const Vec3 &right)
+    Vec3 operator+(float left, const Vec3 &right)
     {
         return right + left;
     }
@@ -50,7 +50,7 @@ namespace core
     {
         return Vec3(left.x() - right.x(), left.y() - right.y(), left.z() - right.z());
     }
-    Vec3 operator-(const Vec3 &left, double num)
+    Vec3 operator-(const Vec3 &left, float num)
     {
         return Vec3(left.x() - num, left.y() - num, left.z() - num);
     }
@@ -66,7 +66,7 @@ namespace core
         return *this;
     }
 
-    Vec3 &Vec3::operator+=(double num)
+    Vec3 &Vec3::operator+=(float num)
     {
         x_ += num;
         y_ += num;
@@ -85,7 +85,7 @@ namespace core
         return *this;
     }
 
-    Vec3 &Vec3::operator-=(double num)
+    Vec3 &Vec3::operator-=(float num)
     {
         x_ -= num;
         y_ -= num;
@@ -96,12 +96,12 @@ namespace core
 #pragma endregion
 #pragma region OPERATOR_MULTIPLY
 
-    Vec3 operator*(double num, const Vec3 &vec)
+    Vec3 operator*(float num, const Vec3 &vec)
     {
         return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
     }
 
-    Vec3 operator*(const Vec3 &vec, double num)
+    Vec3 operator*(const Vec3 &vec, float num)
     {
         return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
     }
@@ -109,7 +109,7 @@ namespace core
 #pragma endregion
 #pragma region OPERATOR_MULTIPLY_EQUAL
 
-    Vec3 &Vec3::operator*=(double num)
+    Vec3 &Vec3::operator*=(float num)
     {
         x_ *= num;
         y_ *= num;
@@ -120,7 +120,7 @@ namespace core
 #pragma endregion
 #pragma region OPERATOR_DIVISION
 
-    Vec3 operator/(const Vec3 &vec, double num)
+    Vec3 operator/(const Vec3 &vec, float num)
     {
         if (num <= constants::kAccuracy)
         {
@@ -137,7 +137,7 @@ namespace core
 #pragma endregion
 #pragma region METHODS
 
-    double Vec3::scalarProduct(const Vec3 &other) const
+    float Vec3::scalarProduct(const Vec3 &other) const
     {
         return x_ * other.x() + y_ * other.y() + z_ * other.z();
     }
@@ -145,11 +145,11 @@ namespace core
     {
         return Vec3(y_ * other.z() - z_ * other.y(), z_ * other.x() - x_ * other.z(), x_ * other.y() - y_ * other.x());
     }
-    double Vec3::magnitudeSquared() const
+    float Vec3::magnitudeSquared() const
     {
         return x_ * x_ + y_ * y_ + z_ * z_;
     }
-    double Vec3::magnitude() const
+    float Vec3::magnitude() const
     {
         return std::sqrt(this->magnitudeSquared());
     }
@@ -188,27 +188,27 @@ namespace core
 #pragma endregion
 #pragma region GETTERS_SETTERS
 
-    void Vec3::setX(double num)
+    void Vec3::setX(float num)
     {
         x_ = num;
     }
-    double Vec3::x() const
+    float Vec3::x() const
     {
         return x_;
     }
-    void Vec3::setY(double num)
+    void Vec3::setY(float num)
     {
         y_ = num;
     }
-    double Vec3::y() const
+    float Vec3::y() const
     {
         return y_;
     }
-    void Vec3::setZ(double num)
+    void Vec3::setZ(float num)
     {
         z_ = num;
     }
-    double Vec3::z() const
+    float Vec3::z() const
     {
         return z_;
     }

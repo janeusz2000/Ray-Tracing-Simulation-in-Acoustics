@@ -1,7 +1,7 @@
 #ifndef RAY_H
 #define RAY_H
 
-// TODO: Change all doubles to float
+
 
 #include "constants.h"
 #include "core/exceptions.h"
@@ -15,11 +15,11 @@ namespace core
     class Ray
     {
     public:
-        Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), double energy = 0);
+        Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), float energy = 0);
 
         //METHODS
-        Vec3 at(double time) const;
-        double phaseAt(double freq, double time) const;
+        Vec3 at(float time) const;
+        float phaseAt(float freq, float time) const;
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
@@ -30,18 +30,18 @@ namespace core
         Vec3 getOrigin() const;
         void setDirection(const Vec3 &direction);
         Vec3 getDirection() const;
-        void setEnergy(double num);
-        double getEnergy() const;
+        void setEnergy(float num);
+        float getEnergy() const;
 
     private:
         Vec3 origin_, direction_;
-        double energy_;
+        float energy_;
     };
 
     struct RayHitData
     {
         RayHitData() = default;
-        RayHitData(double t, const Vec3 &norm, const Ray &ray, double freq) : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)), direction(ray.getDirection()), energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
+        RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq) : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)), direction(ray.getDirection()), energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
         {
             origin = ray.getOrigin();
         }
@@ -58,7 +58,7 @@ namespace core
         // VARIABLES
         // Why do you store the members of the Ray separately?
         Vec3 collisionPoint, direction, normal, origin;
-        double time, energy, phase, frequency;
+        float time, energy, phase, frequency;
     };
 } // namespace core
 

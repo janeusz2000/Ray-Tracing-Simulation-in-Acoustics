@@ -1,5 +1,5 @@
 #include "main/sceneManager.h"
-SceneManager::SceneManager(int collectors, double simulationRadius) : numCollectors_(collectors), simulationRadius_(simulationRadius)
+SceneManager::SceneManager(int collectors, float simulationRadius) : numCollectors_(collectors), simulationRadius_(simulationRadius)
 {
     if (numCollectors_ % 4 == 0 || (numCollectors_ - 1) % 4 == 0)
     {
@@ -47,8 +47,8 @@ void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't 
 
     for (size_t iteration = 0; iteration * 4 < numToGo; ++iteration)
     {
-        double groundCoordinate = simulationRadius_ / 2 * std::cos(2 * constants::kPi * iteration / numToGo);
-        double zCoordinate = simulationRadius_ / 2 * std::sin(2 * constants::kPi * iteration / numToGo);
+        float groundCoordinate = simulationRadius_ / 2 * std::cos(2 * constants::kPi * iteration / numToGo);
+        float zCoordinate = simulationRadius_ / 2 * std::sin(2 * constants::kPi * iteration / numToGo);
 
         origins = {
             core::Vec3(groundCoordinate, 0, zCoordinate),
