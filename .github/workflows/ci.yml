@@ -16,4 +16,4 @@ jobs:
       - name: Setup Bazel
         uses: abhinavsingh/setup-bazel@v3
       - name: Run all tests
-        run: bazel -c opt test :all
+        run: bazel test -c opt :all
