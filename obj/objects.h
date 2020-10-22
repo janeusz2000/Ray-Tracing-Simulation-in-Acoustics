@@ -36,7 +36,7 @@ namespace objects
     {
     public:
         Sphere() : radius_(1){};
-        Sphere(const core::Vec3 & or, float rad = 1);
+        Sphere(const core::Vec3 &origin, float rad = 1);
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
