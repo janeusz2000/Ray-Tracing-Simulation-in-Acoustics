@@ -5,7 +5,6 @@
 
 namespace objects
 {
-#pragma region OBJECT
 
     void Object::setOrigin(const core::Vec3 &origin)
     {
@@ -16,8 +15,6 @@ namespace objects
         return origin_;
     }
 
-#pragma endregion
-#pragma region SPHERE
 
     core::Vec3 Sphere::normal(const core::Vec3 &surfacePoint) const
     {
@@ -80,16 +77,11 @@ namespace objects
         return radius_;
     }
 
-#pragma endregion
-#pragma region SPHEREWALL
 
     std::ostream &operator<<(std::ostream &os, const SphereWall &sp)
     {
         return os << "SphereWall origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
     }
-
-#pragma endregion
-#pragma region ENERGY_COLLECTOR
 
     // OPERATORS
     EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other)
@@ -142,9 +134,6 @@ namespace objects
     {
         energy_ += en;
     }
-
-#pragma endregion
-#pragma region TRIANGLEOBJ
 
     // CONSTRUCTORS
 
@@ -326,5 +315,4 @@ namespace objects
         this->point3_ = point;
     }
 
-#pragma endregion
 } // namespace objects

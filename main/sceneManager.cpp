@@ -14,19 +14,20 @@ SceneManager::SceneManager(int collectors, float simulationRadius) : numCollecto
         throw std::invalid_argument(ss.str().c_str());
     }
 }
-std::vector<objects::EnergyCollector *>
-SceneManager::getEnergyCollectors() const {
-  std::vector<objects::EnergyCollector *> temp;
-  temp.reserve(energyCollectors_.size());
-  for (const auto &t : energyCollectors_) {
-    temp.push_back(t.get());
-  }
-  return temp;
+std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors() const
+{
+    std::vector<objects::EnergyCollector *> temp;
+    temp.reserve(energyCollectors_.size());
+    for (const auto &t : energyCollectors_)
+    {
+        temp.push_back(t.get());
+    }
+    return temp;
 }
 
 // PRIVATE METHODS
 
-void SceneManager::createCollectors() // TODO: rewrite this, because it doesn't work. I messed uo with radians and degrees
+void SceneManager::createCollectors()   
 {
     energyCollectors_.reserve(numCollectors_);
     size_t numToGo;
