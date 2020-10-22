@@ -19,7 +19,7 @@ cc_library(
         "obj/generators.h",
         "obj/objects.h",
     ],
-    copts = ["-std:c++17"],
+    copts = ["/std:c++17"],
 )
 
 cc_test(
@@ -29,7 +29,7 @@ cc_test(
     ],
     copts = [
         "-Iexternal/gtest/include",
-        "-std:c++17",
+        "/std:c++17",
     ],
     deps = [
         ":utils",
@@ -44,7 +44,7 @@ cc_test(
     ],
     copts = [
         "-Iexternal/gtest/include",
-        "-std:c++17",
+        "/std:c++17",
     ],
     deps = [
         ":utils",
@@ -59,7 +59,7 @@ cc_test(
     ],
     copts = [
         "-Iexternal/gtest/include",
-        "-std:c++17",
+        "/std:c++17",
     ],
     deps = [
         ":utils",
@@ -74,7 +74,7 @@ cc_test(
     ],
     copts = [
         "-Iexternal/gtest/include",
-        "-std:c++17",
+        "/std:c++17",
     ],
     deps = [
         ":utils",
@@ -89,7 +89,7 @@ cc_test(
     ],
     copts = [
         "-Iexternal/gtest/include",
-        "-std:c++17",
+        "/std:c++17",
     ],
     deps = [
         ":utils",
@@ -104,7 +104,7 @@ cc_test(
     ],
     copts = [
         "-Iexternal/gtest/include",
-        "-std:c++17",
+        "/std:c++17",
     ],
     deps = [
         ":utils",
@@ -119,7 +119,7 @@ cc_test(
     ],
     copts = [
         "-Iexternal/gtest/include",
-        "-std:c++17",
+        "/std:c++17",
     ],
     deps = [
         ":utils",
