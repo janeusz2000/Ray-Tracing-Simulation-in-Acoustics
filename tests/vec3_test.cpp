@@ -1,9 +1,9 @@
-#include "gtest/gtest.h"
 #include "core/vec3.h"
 
-#include "core\exceptions.h"
-#include <sstream>
+#include "gtest/gtest.h"
+#include "core/exceptions.h"
 #include <cmath>
+#include <sstream>
 
 // TODO: Change all doubles to float
 
