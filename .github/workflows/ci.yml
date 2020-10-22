@@ -9,11 +9,11 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
       - name: Setup Bazel
         uses: abhinavsingh/setup-bazel@v3
       - name: Run all tests
-        run: ./bazel.exe test -c opt :all
+        run: bazel test :all
