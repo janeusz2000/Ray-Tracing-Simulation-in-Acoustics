@@ -25,7 +25,7 @@ namespace objects
         virtual bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) = 0;
 
         //GETTERS_AND_SETTERS
-        void setOrigin(const core::Vec3 & or);
+        void setOrigin(const core::Vec3 &origin);
         core::Vec3 getOrigin() const;
 
     private:

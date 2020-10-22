@@ -18,7 +18,10 @@ namespace generators
 
     bool PointSource::operator==(const PointSource &other) const
     {
-        return (frequency_ == other.frequency() && numOfRaysPerRow_ == other.numOfRaysPerRow() && origin_ == other.origin() && sampleSize_ == other.sampleSize() && leftCorner_ == other.getLeftCorner());
+      return (frequency_ == other.frequency() &&
+              numOfRaysPerRow_ == other.numOfRaysPerRow() &&
+              origin_ == other.origin() && sampleSize_ == other.sampleSize() &&
+              leftCorner_ == other.getLeftCorner());
     }
 
     std::ostream &operator<<(std::ostream &os, const PointSource &pointSource)

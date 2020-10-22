@@ -75,10 +75,10 @@ namespace generators
         core::Vec3 origin() const;
         void setOrigin(const core::Vec3 &point);
 
-        core::Vec3 PointSource::getLeftCorner() const;
-        void PointSource::setLeftCorner(const core::Vec3 &point);
+        core::Vec3 getLeftCorner() const;
+        void setLeftCorner(const core::Vec3 &point);
 
-    private:
+      private:
         core::Vec3 origin_, leftCorner_;
         float frequency_, sampleSize_;
         size_t numOfRaysPerRow_;

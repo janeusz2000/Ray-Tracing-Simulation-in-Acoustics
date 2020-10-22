@@ -1,1 +1,4 @@
 test --test_output=errors
+build -c opt
+build:_win --cxxopt=/std:c++17
+build:_gcc --cxxopt=-std=c++17
