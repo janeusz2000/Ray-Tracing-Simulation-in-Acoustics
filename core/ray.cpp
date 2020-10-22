@@ -14,7 +14,7 @@ namespace core
         }
 
         origin_ = origin;
-        direction_ = direction / direction.magnitude();
+        direction_ = direction.normalize();
         energy_ = energy;
     }
 
@@ -35,8 +35,7 @@ namespace core
             throw std::invalid_argument(ss.str().c_str());
         }
         float waveLength = constants::kSoundSpeed / freq;
-        float displacement = (origin_ - at(time)).magnitude();
-        return displacement / waveLength * 2 * constants::kPi;
+        return time / waveLength * 2 * constants::kPi;
     }
 
 #pragma endregion
@@ -67,7 +66,7 @@ namespace core
 
     void Ray::setDirection(const Vec3 &direction)
     {
-        direction_ = direction;
+      direction_ = direction.normalize();
     }
 
     Vec3 Ray::getDirection() const

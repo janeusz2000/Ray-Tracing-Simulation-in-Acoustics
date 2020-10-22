@@ -8,39 +8,6 @@
 namespace exception
 {   
 
-    // TODO: Make sure that exception::objectsUnableToImport this error provide enough information about the error occurred
-    class objectUnableToImport : public std::exception
-    {
-    public:
-        objectUnableToImport(std::string_view msg)
-        {
-            msg_ = msg;
-        }
-        const char *what() const noexcept override
-        {
-            return msg_.c_str();
-        }
-        private:
-        std::string msg_;
-    };
-
-    // TODO: Make sure that exception::objectsFileCorruption this error provide enough information about the error occurred
-    class objectFileCorruption : public std::exception
-    {
-    public:
-
-        objectFileCorruption(std::string_view msg)
-        {
-            msg_ = msg;
-        }
-        const char *what() const noexcept override
-        {
-            return msg_.c_str();
-        }
-        private:
-        std::string msg_;
-    };
-
     class differentPositions : public std::exception
     {
     public:

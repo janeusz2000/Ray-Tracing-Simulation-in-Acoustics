@@ -14,15 +14,14 @@ SceneManager::SceneManager(int collectors, float simulationRadius) : numCollecto
         throw std::invalid_argument(ss.str().c_str());
     }
 }
-std::vector<objects::EnergyCollector *> SceneManager::getEnergyCollectors()
-{
-    std::vector<objects::EnergyCollector *> temp;
-    temp.reserve(energyCollectors_.size());
-    for (const auto &t : energyCollectors_)
-    {
-        temp.push_back(t.get());
-    }
-    return temp;
+std::vector<objects::EnergyCollector *>
+SceneManager::getEnergyCollectors() const {
+  std::vector<objects::EnergyCollector *> temp;
+  temp.reserve(energyCollectors_.size());
+  for (const auto &t : energyCollectors_) {
+    temp.push_back(t.get());
+  }
+  return temp;
 }
 
 // PRIVATE METHODS
