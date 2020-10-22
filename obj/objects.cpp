@@ -26,8 +26,8 @@ namespace objects
 
     Sphere::Sphere(const core::Vec3 & or, float rad)
     {
-        this->setOrigin(origin);
-        radius_ = rad;
+      this->setOrigin(or);
+      radius_ = rad;
     }
 
     bool Sphere::hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData)
