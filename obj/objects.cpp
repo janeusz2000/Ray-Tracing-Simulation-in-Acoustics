@@ -24,9 +24,8 @@ namespace objects
         return (surfacePoint - getOrigin()).normalize();
     }
 
-    Sphere::Sphere(const core::Vec3 & or, float rad)
-    {
-      this->setOrigin(or);
+    Sphere::Sphere(const core::Vec3 &origin, float rad) {
+      this->setOrigin(origin);
       radius_ = rad;
     }
 
