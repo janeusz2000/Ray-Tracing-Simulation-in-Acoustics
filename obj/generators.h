@@ -49,10 +49,10 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        explicit PointSource::PointSource(const double &freq, const size_t &numOfRaysPerRow,
-                                          const double &SampleSize, RandomGen *randomGen,
+        explicit PointSource::PointSource(double freq, int numOfRaysPerRow,
+                                          double SampleSize, RandomGen *randomGen,
                                           core::Vec3 origin = core::Vec3(0, 0, constants::kDefaultSimulationRadius)) : frequency_(freq), numOfRaysPerRow_(numOfRaysPerRow),
-                                          sampleSize_(SampleSize), origin_(origin), randomGen_(randomGen) { updateSampleSize(); }
+                                                                                                                       sampleSize_(SampleSize), origin_(origin), randomGen_(randomGen) { updateSampleSize(); }
 
         // OPERATORS
         bool operator==(const PointSource &other) const;
@@ -60,17 +60,17 @@ namespace generators
 
         // METHODS
         void updateSampleSize();
-        core::Ray generateRay(const size_t &xIter, const size_t &yIter);
+        core::Ray generateRay(int xIter, int yIter);
 
         // GETTERS AND SETTERS
         double frequency() const;
-        void setFrequency(const double &freq);
+        void setFrequency(double freq);
 
         double sampleSize() const;
-        void setDiffusorSize(const double &diffusorSize);
+        void setDiffusorSize(double diffusorSize);
 
         size_t numOfRaysPerRow() const;
-        void setNumOfRaysPerRow(const size_t &raynum);
+        void setNumOfRaysPerRow(int raynum);
 
         core::Vec3 origin() const;
         void setOrigin(const core::Vec3 &point);

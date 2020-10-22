@@ -15,11 +15,11 @@ namespace core
     class Ray
     {
     public:
-        Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), const double &energy = 0);
+        Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), double energy = 0);
 
         //METHODS
-        Vec3 at(const double &time) const;
-        double phaseAt(const double &freq, const double &time) const;
+        Vec3 at(double time) const;
+        double phaseAt(double freq, double time) const;
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
@@ -30,7 +30,7 @@ namespace core
         Vec3 getOrigin() const;
         void setDirection(const Vec3 &direction);
         Vec3 getDirection() const;
-        void setEnergy(const double &num);
+        void setEnergy(double num);
         double getEnergy() const;
 
     private:
@@ -41,8 +41,7 @@ namespace core
     struct RayHitData
     {
         RayHitData() = default;
-        RayHitData(const double &t, const Vec3 &norm, const Ray &ray, const double &freq) : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)),
-                                                                                            direction(ray.getDirection()), energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
+        RayHitData(double t, const Vec3 &norm, const Ray &ray, double freq) : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)), direction(ray.getDirection()), energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
         {
             origin = ray.getOrigin();
         }

@@ -33,7 +33,7 @@ namespace generators
         leftCorner_ = core::Vec3(-1 * sampleSize_ / 2, -1 * sampleSize_ / 2, 1);
     }
 
-    core::Ray PointSource::generateRay(const size_t &xIter, const size_t &yIter)
+    core::Ray PointSource::generateRay(int xIter, int yIter)
     {
         if (xIter >= numOfRaysPerRow_ && yIter >= numOfRaysPerRow_)
         {
@@ -52,7 +52,7 @@ namespace generators
     {
         return frequency_;
     }
-    void PointSource::setFrequency(const double &freq)
+    void PointSource::setFrequency(double freq)
     {
         frequency_ = freq;
     }
@@ -61,7 +61,7 @@ namespace generators
     {
         return sampleSize_;
     }
-    void PointSource::setDiffusorSize(const double &diffusorSize)
+    void PointSource::setDiffusorSize(double diffusorSize)
     {
         sampleSize_ = diffusorSize;
         updateSampleSize();
@@ -80,7 +80,7 @@ namespace generators
     {
         return numOfRaysPerRow_;
     }
-    void PointSource::setNumOfRaysPerRow(const size_t &rayNum)
+    void PointSource::setNumOfRaysPerRow(int rayNum)
     {
         numOfRaysPerRow_ = rayNum;
     }

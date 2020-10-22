@@ -6,7 +6,7 @@ namespace core
 {
 #pragma region CONSTRUCTORS
 
-    Ray::Ray(const Vec3 &origin, const Vec3 &direction, const double &energy)
+    Ray::Ray(const Vec3 &origin, const Vec3 &direction, double energy)
     {
         if (direction == Vec3(0, 0, 0))
         {
@@ -21,12 +21,12 @@ namespace core
 #pragma endregion
 #pragma region METHODS
 
-    Vec3 Ray::at(const double &time) const
+    Vec3 Ray::at(double time) const
     {
         return origin_ + time * direction_;
     }
 
-    double Ray::phaseAt(const double &freq, const double &time) const
+    double Ray::phaseAt(double freq, double time) const
     {
         if (freq <= constants::kAccuracy || time <= constants::kAccuracy)
         {
@@ -75,7 +75,7 @@ namespace core
         return direction_;
     }
 
-    void Ray::setEnergy(const double &num)
+    void Ray::setEnergy(double num)
     {
         energy_ = num;
     }

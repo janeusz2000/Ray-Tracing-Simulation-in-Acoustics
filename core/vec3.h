@@ -24,10 +24,10 @@ namespace core
 
         Vec3 &operator=(const Vec3 &other);
         Vec3 &operator+=(const Vec3 &other);
-        Vec3 &operator+=(const double &num);
+        Vec3 &operator+=(double num);
         Vec3 &operator-=(const Vec3 &other);
-        Vec3 &operator-=(const double &num);
-        Vec3 &operator*=(const double &num);
+        Vec3 &operator-=(double num);
+        Vec3 &operator*=(double num);
         Vec3 operator-()
         {
             return *this * -1;
@@ -37,13 +37,13 @@ namespace core
         friend bool operator==(const Vec3 &left, const Vec3 &right);
         friend bool operator!=(const Vec3 &left, const Vec3 &right);
         friend Vec3 operator+(const Vec3 &left, const Vec3 &right);
-        friend Vec3 operator+(const Vec3 &left, const double &right);
-        friend Vec3 operator+(const double &left, const Vec3 &right);
+        friend Vec3 operator+(const Vec3 &left, double right);
+        friend Vec3 operator+(double left, const Vec3 &right);
         friend Vec3 operator-(const Vec3 &left, const Vec3 &right);
-        friend Vec3 operator-(const Vec3 &left, const double &right);
-        friend Vec3 operator*(const double &num, const Vec3 &vec);
-        friend Vec3 operator*(const Vec3 &vec, const double &num);
-        friend Vec3 operator/(const Vec3 &vec, const double &num);
+        friend Vec3 operator-(const Vec3 &left, double right);
+        friend Vec3 operator*(double num, const Vec3 &vec);
+        friend Vec3 operator*(const Vec3 &vec, double num);
+        friend Vec3 operator/(const Vec3 &vec, double num);
 
         double scalarProduct(const Vec3 &other) const;
         Vec3 crossProduct(const Vec3 &other) const;
@@ -53,11 +53,11 @@ namespace core
 
         //GETTERS & SETTERS
         double x() const;
-        void setX(const double &num);
+        void setX(double num);
         double y() const;
-        void setY(const double &num);
+        void setY(double num);
         double z() const;
-        void setZ(const double &num);
+        void setZ(double num);
 
     private:
         double x_, y_, z_;

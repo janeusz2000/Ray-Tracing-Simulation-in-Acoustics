@@ -24,13 +24,13 @@ namespace objects
         return (surfacePoint - getOrigin()).normalize();
     }
 
-    Sphere::Sphere(const core::Vec3 & or, const double &rad)
+    Sphere::Sphere(const core::Vec3 & or, double rad)
     {
         this->setOrigin(or);
         radius_ = rad;
     }
 
-    bool Sphere::hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData)
+    bool Sphere::hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData)
     {
         core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
 
@@ -72,7 +72,7 @@ namespace objects
     }
 
     // GETTERS AND SETTERS
-    void Sphere::setRadius(const double &rad)
+    void Sphere::setRadius(double rad)
     {
         radius_ = rad;
     }
@@ -131,7 +131,7 @@ namespace objects
     }
 
     // GETTERS AND SETTERS
-    void EnergyCollector::setEnergy(const double &en)
+    void EnergyCollector::setEnergy(double en)
     {
         energy_ = en;
     }
@@ -139,7 +139,7 @@ namespace objects
     {
         return energy_;
     }
-    void EnergyCollector::addEnergy(const double &en)
+    void EnergyCollector::addEnergy(double en)
     {
         energy_ += en;
     }
@@ -210,7 +210,7 @@ namespace objects
         return normal_;
     }
 
-    bool TriangleObj::hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData)
+    bool TriangleObj::hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData)
     {
         // if ray direction is parpedicular to normal, there is no hit. It can be translated into
         // checking if scalarProduct of the ray.direction and normal is close or equal to zero.

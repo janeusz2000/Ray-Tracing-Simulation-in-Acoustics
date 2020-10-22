@@ -1,5 +1,5 @@
-#include "exceptions.h"
 #include "vec3.h"
+#include "exceptions.h"
 
 #include <exception>
 
@@ -33,12 +33,12 @@ namespace core
         return Vec3(left.x() + right.x(), left.y() + right.y(), left.z() + right.z());
     }
 
-    Vec3 operator+(const Vec3 &left, const double &right)
+    Vec3 operator+(const Vec3 &left, double right)
     {
         return Vec3(left.x() + right, left.y() + right, left.z() + right);
     }
 
-    Vec3 operator+(const double &left, const Vec3 &right)
+    Vec3 operator+(double left, const Vec3 &right)
     {
         return right + left;
     }
@@ -50,7 +50,7 @@ namespace core
     {
         return Vec3(left.x() - right.x(), left.y() - right.y(), left.z() - right.z());
     }
-    Vec3 operator-(const Vec3 &left, const double &num)
+    Vec3 operator-(const Vec3 &left, double num)
     {
         return Vec3(left.x() - num, left.y() - num, left.z() - num);
     }
@@ -66,7 +66,7 @@ namespace core
         return *this;
     }
 
-    Vec3 &Vec3::operator+=(const double &num)
+    Vec3 &Vec3::operator+=(double num)
     {
         x_ += num;
         y_ += num;
@@ -85,7 +85,7 @@ namespace core
         return *this;
     }
 
-    Vec3 &Vec3::operator-=(const double &num)
+    Vec3 &Vec3::operator-=(double num)
     {
         x_ -= num;
         y_ -= num;
@@ -96,12 +96,12 @@ namespace core
 #pragma endregion
 #pragma region OPERATOR_MULTIPLY
 
-    Vec3 operator*(const double &num, const Vec3 &vec)
+    Vec3 operator*(double num, const Vec3 &vec)
     {
         return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
     }
 
-    Vec3 operator*(const Vec3 &vec, const double &num)
+    Vec3 operator*(const Vec3 &vec, double num)
     {
         return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
     }
@@ -109,7 +109,7 @@ namespace core
 #pragma endregion
 #pragma region OPERATOR_MULTIPLY_EQUAL
 
-    Vec3 &Vec3::operator*=(const double &num)
+    Vec3 &Vec3::operator*=(double num)
     {
         x_ *= num;
         y_ *= num;
@@ -120,7 +120,7 @@ namespace core
 #pragma endregion
 #pragma region OPERATOR_DIVISION
 
-    Vec3 operator/(const Vec3 &vec, const double &num)
+    Vec3 operator/(const Vec3 &vec, double num)
     {
         if (num <= constants::kAccuracy)
         {
@@ -188,7 +188,7 @@ namespace core
 #pragma endregion
 #pragma region GETTERS_SETTERS
 
-    void Vec3::setX(const double &num)
+    void Vec3::setX(double num)
     {
         x_ = num;
     }
@@ -196,7 +196,7 @@ namespace core
     {
         return x_;
     }
-    void Vec3::setY(const double &num)
+    void Vec3::setY(double num)
     {
         y_ = num;
     }
@@ -204,7 +204,7 @@ namespace core
     {
         return y_;
     }
-    void Vec3::setZ(const double &num)
+    void Vec3::setZ(double num)
     {
         z_ = num;
     }

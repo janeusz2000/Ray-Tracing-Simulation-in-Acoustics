@@ -22,7 +22,7 @@ namespace objects
         //METHODS
         virtual ~Object(){};
         virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
-        virtual bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) = 0;
+        virtual bool hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData) = 0;
 
         //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 & or);
@@ -36,18 +36,18 @@ namespace objects
     {
     public:
         Sphere() : radius_(1){};
-        Sphere(const core::Vec3 & or, const double &rad = 1);
+        Sphere(const core::Vec3 & or, double rad = 1);
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
         //METHODS
         core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
-        [[nodiscard]] bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
+        [[nodiscard]] bool hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData) override;
 
         //GETTERS AND SETTERS
         double getRadius() const;
-        void setRadius(const double &rad);
+        void setRadius(double rad);
 
     protected:
         double radius_;
@@ -68,9 +68,9 @@ namespace objects
     class EnergyCollector : public Sphere
     {
     public:
-        explicit EnergyCollector(const core::Vec3 &origin, double radius = constants::kDefaultEnergyCollectorRadius) : energy_(0) 
+        explicit EnergyCollector(const core::Vec3 &origin, double radius = constants::kDefaultEnergyCollectorRadius) : energy_(0)
         {
-            setRadius(radius); 
+            setRadius(radius);
             setOrigin(origin);
         }
 
@@ -84,10 +84,10 @@ namespace objects
         void collectEnergy(const core::RayHitData &hitdata);
 
         // GETTERS AND SETTERS
-        void setEnergy(const double &en);
+        void setEnergy(double en);
         double getEnergy() const;
-        void addEnergy(const double &en);
-        void setID(const int &id);
+        void addEnergy(double en);
+        void setID(int id);
         int getID() const;
 
     private:
@@ -111,7 +111,7 @@ namespace objects
 
         // METHODS
         core::Vec3 normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
-        [[nodiscard]] bool hitObject(const core::Ray &ray, const double &freq, core::RayHitData *hitData) override;
+        [[nodiscard]] bool hitObject(const core::Ray &ray, double freq, core::RayHitData *hitData) override;
 
         double area() const;
         void refreshAttributes();
