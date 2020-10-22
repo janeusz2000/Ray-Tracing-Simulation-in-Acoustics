@@ -49,10 +49,14 @@ namespace generators
     {
     public:
         PointSource() = delete;
-        explicit PointSource::PointSource(double freq, int numOfRaysPerRow,
-                                          double SampleSize, RandomGen *randomGen,
-                                          core::Vec3 origin = core::Vec3(0, 0, constants::kDefaultSimulationRadius)) : frequency_(freq), numOfRaysPerRow_(numOfRaysPerRow),
-                                                                                                                       sampleSize_(SampleSize), origin_(origin), randomGen_(randomGen) { updateSampleSize(); }
+        explicit PointSource(double freq, int numOfRaysPerRow,
+                             double SampleSize, RandomGen *randomGen,
+                             core::Vec3 origin = core::Vec3(
+                                 0, 0, constants::kDefaultSimulationRadius))
+            : frequency_(freq), numOfRaysPerRow_(numOfRaysPerRow),
+              sampleSize_(SampleSize), origin_(origin), randomGen_(randomGen) {
+          updateSampleSize();
+        }
 
         // OPERATORS
         bool operator==(const PointSource &other) const;
@@ -75,10 +79,10 @@ namespace generators
         core::Vec3 origin() const;
         void setOrigin(const core::Vec3 &point);
 
-        core::Vec3 PointSource::getLeftCorner() const;
-        void PointSource::setLeftCorner(const core::Vec3 &point);
+        core::Vec3 getLeftCorner() const;
+        void setLeftCorner(const core::Vec3 &point);
 
-    private:
+      private:
         core::Vec3 origin_, leftCorner_;
         double frequency_, sampleSize_;
         size_t numOfRaysPerRow_;
