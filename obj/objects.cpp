@@ -42,13 +42,15 @@ namespace objects
         float time1 = (-beta - temp) / 2;
         float time2 = (-beta + temp) / 2;
 
-        if (time1 < -constants::kAccuracy && time2 > constants::kAccuracy) // Ray inside sphere
+        // Ray inside sphere. kAccurracy is for the case that ray is on the edge of the sphere
+        if (time1 < -constants::kAccuracy && time2 > constants::kAccuracy) 
         {
             core::Vec3 collision = ray.at(time2);
             *hitData = core::RayHitData(time2, normal(collision), ray, freq);
             return true;
         }
-        else if (time1 > constants::kAccuracy && time2 > constants::kAccuracy) // ray in front of the sphere
+        // ray in front of the sphere. kAccuracy if for the edge case
+        else if (time1 > constants::kAccuracy && time2 > constants::kAccuracy) 
         {
             float time = std::min(time1, time2);
             core::Vec3 collision = ray.at(time);
