@@ -31,9 +31,9 @@ namespace objects
         float beta = 2 * rVec3.scalarProduct(ray.getDirection());
         float gamma = rVec3.scalarProduct(rVec3) - radius_ * radius_;
         float discriminant = beta * beta - 4 * gamma;
-        // ==================================================
 
-        if (discriminant < 0) // making sure that ray hits the sphere
+        // when hit of the sphere never occur:
+        if (discriminant < 0) 
         {
             return false;
         }
