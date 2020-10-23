@@ -16,15 +16,12 @@ namespace core
     public:
         Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1), float energy = 0);
 
-        //METHODS
         Vec3 at(float time) const;
         float phaseAt(float freq, float time) const;
 
-        //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
         friend bool operator==(const Ray &left, const Ray &right);
 
-        //SETTERS AND GETTERS
         void setOrigin(const Vec3 &origin);
         Vec3 getOrigin() const;
         void setDirection(const Vec3 &direction);
@@ -41,23 +38,46 @@ namespace core
     {
         RayHitData() = default;
         RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
-         : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)),
-          direction(ray.getDirection()), energy(ray.getEnergy()),
-           phase(ray.phaseAt(freq, t)), origin(ray.getOrigin()) {};
+         : time_(t), ray_(ray), normal_(norm), frequency_(freq) {};
         ~RayHitData() = default;
         RayHitData(const RayHitData &) = default;
 
-        // Operators? No kidding!
-        // These comments are just visual clutter. I would remove them. It is more important to e.g
-        // describe what this does if the impl. is somehow not really self explanatory (e.g skips some params).
-        // OPERATORS
         bool operator==(const RayHitData &other) const;
         friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 
-        // VARIABLES
-        // Why do you store the members of the Ray separately?
-        Vec3 collisionPoint, direction, normal, origin;
-        float time, energy, phase, frequency;
+        Vec3 normal() const
+        {
+            return normal_;
+        }
+        Vec3 collisionPoint() const
+        {
+            return ray_.at(time_);
+        }
+        Vec3 direction() const
+        {
+            return ray_.getDirection();
+        }
+        Vec3 origin() const
+        {
+            return ray_.getOrigin();
+        }
+        float time() const
+        {
+            return time_;
+        }
+        float energy() const
+        {
+            return ray_.getEnergy();
+        }
+        float phase() const
+        {
+            return ray_.phaseAt(frequency_, time_);
+        }
+
+        private:
+        Vec3 normal_, origin_;
+        float energy_, phase_, frequency_, time_;
+        Ray ray_;
     };
 } // namespace core
 

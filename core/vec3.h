@@ -50,8 +50,7 @@ namespace core
         float magnitude() const;
         float magnitudeSquared() const;
         Vec3 normalize() const;
-
-        //GETTERS & SETTERS
+        
         float x() const;
         void setX(float num);
         float y() const;

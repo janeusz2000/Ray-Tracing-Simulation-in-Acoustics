@@ -261,7 +261,9 @@ namespace objects
 
     TEST(TRIANGLEOBJ_METHOD, RayInsideTriangleDoesNotHit)
     {
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), 
+            TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
 
         size_t iteration = 0;
         RayHitData hitData;
@@ -270,14 +272,16 @@ namespace objects
 
         for (TriangleObj &obj : objectList)
         {
-            ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == expectedResults[iteration])); // First object doesn't hit. Second object does hit.
+            // First object doesn't hit. Second object does hit.
+            ASSERT_TRUE((obj.hitObject(tempRay, kSkipFreq, &hitData) == expectedResults[iteration])); 
             ++iteration;
         }
 
-        ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 4, 0.25)); // Making sure that second object is hit properly.
-        ASSERT_EQ(hitData.direction, tempRay.getDirection());
-        ASSERT_EQ(hitData.origin, tempRay.getOrigin());
-        ASSERT_EQ(hitData.time, 4);
+        // Making sure that second object is hit properly.
+        ASSERT_EQ(hitData.collisionPoint(), Vec3(0.25, 4, 0.25)); 
+        ASSERT_EQ(hitData.direction(), tempRay.getDirection());
+        ASSERT_EQ(hitData.origin(), tempRay.getOrigin());
+        ASSERT_EQ(hitData.time(), 4);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_0_1_0)
@@ -287,7 +291,9 @@ namespace objects
         RayHitData hitData;
         Ray tempRay(Vec3(0.25, 5, 0.25), Vec3(0, 1, 0));
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), 
+            TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
 
         for (auto &obj : objectList)
         {
@@ -300,15 +306,20 @@ namespace objects
         using namespace core;
 
         RayHitData hitData;
-        Ray tempRay(Vec3(0.25, -4, 0.25), Vec3(0, 1, 0)); // Ray is in front of object2 with direction outside of object2;
+        // Ray is in front of object2 with direction outside of object2;
+        Ray tempRay(Vec3(0.25, -4, 0.25), Vec3(0, 1, 0)); 
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)), TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(1, 0, 0)),
+            TriangleObj(Vec3(0, 4, 1), Vec3(0, 4, 0), Vec3(1, 4, 0))};
 
         for (auto &obj : objectList)
         {
             ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
-            ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, obj.point1().y(), 0.25));
-            ASSERT_EQ(hitData.time, std::abs(tempRay.getOrigin().y()) + obj.point1().y());
+            ASSERT_EQ(hitData.collisionPoint(),
+                      Vec3(0.25, obj.point1().y(), 0.25));
+            ASSERT_EQ(hitData.time(),
+                      std::abs(tempRay.getOrigin().y()) + obj.point1().y());
         }
     }
 
@@ -318,7 +329,9 @@ namespace objects
         RayHitData hitData;
         Ray tempRay(Vec3(0.25, 0.25, 0), Vec3(0, 0, 1)); // Ray has origin inside object1
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)),
+            TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
 
         std::vector<bool> expectedResults = {false, true};
         size_t iteration = 0;
@@ -329,10 +342,10 @@ namespace objects
             ++iteration;
         }
 
-        ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 0.25, 4));
-        ASSERT_EQ(hitData.direction, tempRay.getDirection());
-        ASSERT_EQ(hitData.origin, tempRay.getOrigin());
-        ASSERT_EQ(hitData.time, 4);
+        ASSERT_EQ(hitData.collisionPoint(), Vec3(0.25, 0.25, 4));
+        ASSERT_EQ(hitData.direction(), tempRay.getDirection());
+        ASSERT_EQ(hitData.origin(), tempRay.getOrigin());
+        ASSERT_EQ(hitData.time(), 4);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_0_0_1)
@@ -340,9 +353,12 @@ namespace objects
         using namespace core;
 
         RayHitData hitData;
-        Ray tempRay(Vec3(0.25, 0.25, 5), Vec3(0, 0, 1)); // Ray is in front of object2 with direction outside of object2;
+        // Ray is in front of object2 with direction outside of object2;
+        Ray tempRay(Vec3(0.25, 0.25, 5), Vec3(0, 0, 1)); 
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)), 
+            TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
 
         for (auto &obj : objectList)
         {
@@ -355,15 +371,18 @@ namespace objects
         using namespace core;
 
         RayHitData hitData;
-        Ray tempRay(Vec3(0.25, 0.25, -4), Vec3(0, 0, 1)); // Ray is in front of object2 with direction outside of object2;
+        // Ray is in front of object2 with direction outside of object2;
+        Ray tempRay(Vec3(0.25, 0.25, -4), Vec3(0, 0, 1)); 
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0)),
+            TriangleObj(Vec3(1, 0, 4), Vec3(0, 0, 4), Vec3(0, 1, 4))};
 
         for (auto &obj : objectList)
         {
             ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
-            ASSERT_EQ(hitData.collisionPoint, Vec3(0.25, 0.25, obj.point1().z()));
-            ASSERT_EQ(hitData.time, std::abs(tempRay.getOrigin().z()) + obj.point1().z());
+            ASSERT_EQ(hitData.collisionPoint(), Vec3(0.25, 0.25, obj.point1().z()));
+            ASSERT_EQ(hitData.time(), std::abs(tempRay.getOrigin().z()) + obj.point1().z());
         }
     }
 
@@ -374,7 +393,9 @@ namespace objects
         RayHitData hitData;
         Ray tempRay(Vec3(0, 0.25, 0.25), Vec3(1, 0, 0)); // Ray has origin inside object1
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)),
+            TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
         std::vector<bool> ExpectedResults = {false, true};
         size_t iteration = 0;
         for (auto &obj : objectList)
@@ -383,10 +404,10 @@ namespace objects
             ++iteration;
         }
 
-        ASSERT_EQ(hitData.collisionPoint, Vec3(4, 0.25, 0.25));
-        ASSERT_EQ(hitData.direction, tempRay.getDirection());
-        ASSERT_EQ(hitData.origin, tempRay.getOrigin());
-        ASSERT_EQ(hitData.time, 4);
+        ASSERT_EQ(hitData.collisionPoint(), Vec3(4, 0.25, 0.25));
+        ASSERT_EQ(hitData.direction(), tempRay.getDirection());
+        ASSERT_EQ(hitData.origin(), tempRay.getOrigin());
+        ASSERT_EQ(hitData.time(), 4);
     }
 
     TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_1_0_0)
@@ -394,9 +415,12 @@ namespace objects
         using namespace core;
 
         RayHitData hitData;
-        Ray tempRay(Vec3(5, 0.25, 0.25), Vec3(1, 0, 0)); // Ray is in front of object2 with direction outside of object2;
+        // Ray is in front of object2 with direction outside of object2;
+        Ray tempRay(Vec3(5, 0.25, 0.25), Vec3(1, 0, 0)); 
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), 
+            TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
 
         for (auto &obj : objectList)
         {
@@ -409,15 +433,18 @@ namespace objects
         using namespace core;
 
         RayHitData hitData;
-        Ray tempRay(Vec3(-4, 0.25, 0.25), Vec3(1, 0, 0)); // Ray is in front of object2 with direction outside of object2;
+        // Ray is in front of object2 with direction outside of object2;
+        Ray tempRay(Vec3(-4, 0.25, 0.25), Vec3(1, 0, 0)); 
 
-        std::vector<TriangleObj> objectList = {TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
+        std::vector<TriangleObj> objectList = {
+            TriangleObj(Vec3(0, 0, 1), Vec3(0, 0, 0), Vec3(0, 1, 0)), 
+            TriangleObj(Vec3(4, 0, 1), Vec3(4, 0, 0), Vec3(4, 1, 0))};
 
         for (auto &obj : objectList)
         {
             ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
-            ASSERT_EQ(hitData.collisionPoint, Vec3(obj.point1().x(), 0.25, 0.25));
-            ASSERT_EQ(hitData.time, std::abs(tempRay.getOrigin().x()) + obj.point1().x());
+            ASSERT_EQ(hitData.collisionPoint(), Vec3(obj.point1().x(), 0.25, 0.25));
+            ASSERT_EQ(hitData.time(), std::abs(tempRay.getOrigin().x()) + obj.point1().x());
         }
     }
 

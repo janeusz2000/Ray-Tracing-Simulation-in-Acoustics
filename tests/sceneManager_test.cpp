@@ -51,14 +51,15 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
     ASSERT_TRUE(performHitAtEnergyCollectors(straightUp, &hitData)) << "no hit: " << straightUp;
 
     core::Vec3 referenceCollisionPoint(0, 0, manager.simulatiorRadius() / 2 - manager.collectorRadius());
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint) << "point from: " << straightUp;
+    ASSERT_EQ(hitData.collisionPoint(), referenceCollisionPoint)
+        << "point from: " << straightUp;
 
     Ray parallelXAxis(kVZero, core::Vec3(-1, 0, 0));
     ASSERT_TRUE(performHitAtEnergyCollectors(parallelXAxis, &hitData)) << "no hit: " << parallelXAxis;
 
     Vec3 referenceCollisionPoint2(
         -(manager.simulatiorRadius() / 2 - manager.collectorRadius()), 0, 0);
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint2)
+    ASSERT_EQ(hitData.collisionPoint(), referenceCollisionPoint2)
         << " point from: " << parallelXAxis;
 
     Ray parallelYaxis(kVZero, core::Vec3(0, 1, 0));
@@ -66,7 +67,7 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
         << "no hit: " << parallelYaxis;
 
     Vec3 referenceCollisionPoint3(0, manager.simulatiorRadius() / 2 - manager.collectorRadius(), 0);
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint3)
+    ASSERT_EQ(hitData.collisionPoint(), referenceCollisionPoint3)
         << " point from: " << parallelYaxis;
 
     Ray atSixtyDegreesAlongX(
@@ -81,13 +82,13 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
         manager.simulatiorRadius() / 2 * std::sin(deg2rad(60)) -
             manager.collectorRadius() * std::sin(deg2rad(60)));
 
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionAtSixty)
+    ASSERT_EQ(hitData.collisionPoint(), referenceCollisionAtSixty)
         << "Invalid hit from " << atSixtyDegreesAlongX
         << " to: " << referenceCollisionAtSixty;
 
     Ray straightDown(kVZero, core::Vec3(0, 0, -1));
     ASSERT_FALSE(performHitAtEnergyCollectors(straightDown, &hitData))
-        << "hit registered in: " << hitData.collisionPoint
+        << "hit registered in: " << hitData.collisionPoint()
         << "from ray: " << straightDown;
 
     // Ray at the edge of EnergyCollector at: Vec3(0, 0, 2)
@@ -96,6 +97,6 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
                    manager.simulatiorRadius() / 2 + manager.collectorRadius()),
         core::Vec3(0, 0, 1));
     ASSERT_FALSE(performHitAtEnergyCollectors(straightUpAbove, &hitData))
-        << "hit registered in: " << hitData.collisionPoint
+        << "hit registered in: " << hitData.collisionPoint()
         << "from ray: " << straightUpAbove;
 }

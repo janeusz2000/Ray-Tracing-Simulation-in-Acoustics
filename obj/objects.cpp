@@ -123,7 +123,7 @@ namespace objects
     void EnergyCollector::collectEnergy(const core::RayHitData &hitdata)
     {
         // TODO: Energy distribution between many collectors
-        energy_ += hitdata.energy;
+        energy_ += hitdata.energy();
     }
 
     // GETTERS AND SETTERS

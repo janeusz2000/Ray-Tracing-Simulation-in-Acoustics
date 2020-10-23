@@ -57,15 +57,12 @@ namespace generators
           updateSampleSize();
         }
 
-        // OPERATORS
         bool operator==(const PointSource &other) const;
         friend std::ostream &operator<<(std::ostream &os, const PointSource &pointSource);
 
-        // METHODS
         void updateSampleSize();
         core::Ray generateRay(int xIter, int yIter);
 
-        // GETTERS AND SETTERS
         float frequency() const;
         void setFrequency(float freq);
 

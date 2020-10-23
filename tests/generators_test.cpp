@@ -142,7 +142,9 @@ namespace generators
         core::RayHitData hitData;
         ASSERT_TRUE(object.hitObject(tempRay, freq, &hitData));
         std::cout << hitData << std::endl;
-        ASSERT_EQ(core::Ray(source.origin(), hitData.direction), core::Ray(core::Vec3(0, 0, 4), core::Vec3(-0.5, -0.5, -3).normalize()));
+        ASSERT_EQ(core::Ray(source.origin(), hitData.direction()),
+                  core::Ray(core::Vec3(0, 0, 4),
+                            core::Vec3(-0.5, -0.5, -3).normalize()));
     }
 
     TEST(POINTSOURCE_METHODS, GenerateRay_Test) // Monte Carlo Test

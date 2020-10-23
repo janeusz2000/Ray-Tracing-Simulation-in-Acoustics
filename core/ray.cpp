@@ -89,12 +89,22 @@ namespace core
 
     bool RayHitData::operator==(const RayHitData &other) const
     {
-        return (std::abs(other.time - time) <= constants::kAccuracy && other.collisionPoint - collisionPoint == Vec3(0, 0, 0) && other.direction - direction == Vec3(0, 0, 0) && other.normal - normal == Vec3(0, 0, 0) && std::abs(other.energy - energy) <= constants::kAccuracy && std::abs(other.phase - phase) <= constants::kAccuracy);
+      return (std::abs(other.time() - time()) <= constants::kAccuracy &&
+              other.collisionPoint() - collisionPoint() == Vec3(0, 0, 0) &&
+              other.direction() - direction() == Vec3(0, 0, 0) &&
+              other.normal() - normal() == Vec3(0, 0, 0) &&
+              std::abs(other.energy() - energy()) <= constants::kAccuracy &&
+              std::abs(other.phase() - phase()) <= constants::kAccuracy);
     }
 
     std::ostream &operator<<(std::ostream &os, const RayHitData &rayData)
     {
-        return os << "Collision point: " << rayData.collisionPoint << ", incoming ray direction: " << rayData.direction << ", normal: " << rayData.normal << ", time: " << rayData.time << ", energy: " << rayData.energy << ", phase " << rayData.phase << " [radians]";
+      return os << "Collision point: " << rayData.collisionPoint()
+                << ", incoming ray direction: " << rayData.direction()
+                << ", normal: " << rayData.normal()
+                << ", time: " << rayData.time()
+                << ", energy: " << rayData.energy() << ", phase "
+                << rayData.phase() << " [radians]";
     }
 
 #pragma endregion

@@ -418,8 +418,13 @@ namespace objects
         for (auto &obj : objectList)
         {
             ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
-            ASSERT_EQ(hitData.time, std::abs(obj.getOrigin().z() - obj.getRadius() - tempRay.getOrigin().z()));
-            ASSERT_EQ(hitData.collisionPoint, tempRay.at(std::abs(obj.getOrigin().z() - obj.getRadius() - tempRay.getOrigin().z())));
+            ASSERT_EQ(hitData.time(),
+                      std::abs(obj.getOrigin().z() - obj.getRadius() -
+                               tempRay.getOrigin().z()));
+            ASSERT_EQ(
+                hitData.collisionPoint(),
+                tempRay.at(std::abs(obj.getOrigin().z() - obj.getRadius() -
+                                    tempRay.getOrigin().z())));
         }
     }
 
@@ -430,10 +435,10 @@ namespace objects
         core::RayHitData hitData;
 
         ASSERT_TRUE(object1.hitObject(tempRay, kSkipFreq, &hitData));
-        ASSERT_EQ(core::Vec3(0, 0, -1), hitData.direction);
-        ASSERT_EQ(core::Vec3(0, 0, 1), hitData.collisionPoint);
-        ASSERT_EQ(core::Vec3(0, 0, 5), hitData.origin);
-        ASSERT_EQ(4, hitData.time);
+        ASSERT_EQ(core::Vec3(0, 0, -1), hitData.direction());
+        ASSERT_EQ(core::Vec3(0, 0, 1), hitData.collisionPoint());
+        ASSERT_EQ(core::Vec3(0, 0, 5), hitData.origin());
+        ASSERT_EQ(4, hitData.time());
     }
 
     TEST(SPHERE_CONSTRUCTOR, All_Possible_Constructors)
