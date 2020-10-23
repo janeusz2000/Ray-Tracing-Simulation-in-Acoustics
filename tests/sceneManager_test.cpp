@@ -43,7 +43,7 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
     }
 
     ASSERT_EQ(manager.getEnergyCollectors().size(), kPopulation)
-        << "wrong numebr of energy collectors";
+        << "wrong number of energy collectors";
 
     RayHitData hitData;
     Ray straightUp(kVZero, core::Vec3(0, 0, 1));
