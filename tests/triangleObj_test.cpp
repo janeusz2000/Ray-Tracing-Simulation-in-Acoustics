@@ -518,7 +518,7 @@ TEST(TriangleObjectTest, RayWithOriginInsideDoNotHit) {
   // under test and then asserts you, and then you need to jump back and fourth
   // between data and checks to make sure it works... Nightmare.
   //
-  // The worst example of this is the first test with ostream opeartor.
+  // The worst example of this is the first test with ostream operator.
   //
   // References:
   // https://blogs.agilefaqs.com/2010/11/14/single-assert-per-unit-test-myth/

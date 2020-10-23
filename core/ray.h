@@ -19,8 +19,8 @@ namespace core
       Vec3 at(float time) const;
       float phaseAt(float freq, float time) const;
 
-      friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
-        friend bool operator==(const Ray &left, const Ray &right);
+    friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
+     friend bool operator==(const Ray &left, const Ray &right);
 
         void setOrigin(const Vec3 &origin);
         Vec3 getOrigin() const;

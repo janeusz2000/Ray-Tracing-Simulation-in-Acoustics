@@ -4,7 +4,6 @@
 #include <sstream>
 
 namespace core {
-#pragma region CONSTRUCTOR
 
 Vec3::Vec3(std::initializer_list<float> initList) {
   if (initList.size() != 3) {
@@ -21,9 +20,6 @@ Vec3::Vec3(std::initializer_list<float> initList) {
   z_ = *iterator;
 }
 
-#pragma endregion
-#pragma region OPERATORS_PLUS
-
 Vec3 operator+(const Vec3 &left, const Vec3 &right) {
   return Vec3(left.x() + right.x(), left.y() + right.y(), left.z() + right.z());
 }
@@ -34,18 +30,12 @@ Vec3 operator+(const Vec3 &left, float right) {
 
 Vec3 operator+(float left, const Vec3 &right) { return right + left; }
 
-#pragma endregion
-#pragma region OPERATORS_MINUS
-
 Vec3 operator-(const Vec3 &left, const Vec3 &right) {
   return Vec3(left.x() - right.x(), left.y() - right.y(), left.z() - right.z());
 }
 Vec3 operator-(const Vec3 &left, float num) {
   return Vec3(left.x() - num, left.y() - num, left.z() - num);
 }
-
-#pragma endregion
-#pragma region OPERATORS_PLUS_EQUAL
 
 Vec3 &Vec3::operator+=(const Vec3 &other) {
   x_ += other.x();
@@ -61,9 +51,6 @@ Vec3 &Vec3::operator+=(float num) {
   return *this;
 }
 
-#pragma endregion
-#pragma region OPERATORS_MINUS_EQUAL
-
 Vec3 &Vec3::operator-=(const Vec3 &other) {
   x_ -= other.x();
   y_ -= other.y();
@@ -78,9 +65,6 @@ Vec3 &Vec3::operator-=(float num) {
   return *this;
 }
 
-#pragma endregion
-#pragma region OPERATOR_MULTIPLY
-
 Vec3 operator*(float num, const Vec3 &vec) {
   return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
 }
@@ -89,18 +73,12 @@ Vec3 operator*(const Vec3 &vec, float num) {
   return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
 }
 
-#pragma endregion
-#pragma region OPERATOR_MULTIPLY_EQUAL
-
 Vec3 &Vec3::operator*=(float num) {
   x_ *= num;
   y_ *= num;
   z_ *= num;
   return *this;
 }
-
-#pragma endregion
-#pragma region OPERATOR_DIVISION
 
 Vec3 operator/(const Vec3 &vec, float num) {
   if (num <= constants::kAccuracy) {
@@ -113,9 +91,6 @@ Vec3 operator/(const Vec3 &vec, float num) {
   }
 }
 
-#pragma endregion
-#pragma region METHODS
-
 float Vec3::scalarProduct(const Vec3 &other) const {
   return x_ * other.x() + y_ * other.y() + z_ * other.z();
 }
@@ -126,9 +101,6 @@ Vec3 Vec3::crossProduct(const Vec3 &other) const {
 float Vec3::magnitudeSquared() const { return x_ * x_ + y_ * y_ + z_ * z_; }
 float Vec3::magnitude() const { return std::sqrt(this->magnitudeSquared()); }
 Vec3 Vec3::normalize() const { return (*this) / magnitude(); }
-
-#pragma endregion
-#pragma region SINGLE_OPERATORS
 
 bool operator==(const Vec3 &left, const Vec3 &right) {
   return (std::abs(left.x() - right.x()) < constants::kAccuracy &&
@@ -151,16 +123,11 @@ Vec3 &Vec3::operator=(const Vec3 &other) {
   return *this;
 }
 
-#pragma endregion
-#pragma region GETTERS_SETTERS
-
 void Vec3::setX(float num) { x_ = num; }
 float Vec3::x() const { return x_; }
 void Vec3::setY(float num) { y_ = num; }
 float Vec3::y() const { return y_; }
 void Vec3::setZ(float num) { z_ = num; }
 float Vec3::z() const { return z_; }
-
-#pragma endregion
 
 } // namespace core
