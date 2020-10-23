@@ -8,8 +8,6 @@
 #include <sstream>
 #include <random>
 
-
-
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;

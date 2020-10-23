@@ -10,6 +10,8 @@ using generators::PointSource;
 using objects::Object;
 using objects::TriangleObj;
 
+const core::Vec3 kVZero(0, 0, 0);
+
 class SceneManagerTest : public ::testing::Test
 {
 protected:
@@ -25,9 +27,10 @@ protected:
         }
         return false;
     }
-    
+
+    float deg2rad(float angle) { return 2 * constants::kPi * angle / 360; }
+
     SceneManager manager;
-    core::Vec3 kVZero;
 };
 
 TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
@@ -63,38 +66,21 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck)
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionPoint3)
         << " point from: " << parallelYaxis;
 
-    Ray atSixtyDegreesAlongX(kVZero, core::Vec3(std::cos(constants::kPi / 3), 0,
-                                                std::sin(constants::kPi / 3)));
+    Ray atSixtyDegreesAlongX(
+        kVZero, core::Vec3(std::cos(deg2rad(60)), 0, std::sin(deg2rad(60))));
     ASSERT_TRUE(performHitAtEnergyCollectors(atSixtyDegreesAlongX, &hitData))
         << "no hit: " << atSixtyDegreesAlongX;
 
     Vec3 referenceCollisionAtSixty(
-        manager.simulatiorRadius() / 2 * std::cos(constants::kPi / 3) -
-            manager.collectorRadius() * std::cos(constants::kPi / 3),
+        manager.simulatiorRadius() / 2 * std::cos(deg2rad(60)) -
+            manager.collectorRadius() * std::cos(deg2rad(60)),
         0,
-        manager.simulatiorRadius() / 2 * std::sin(constants::kPi / 3) -
-            manager.collectorRadius() * std::sin(constants::kPi / 3));
+        manager.simulatiorRadius() / 2 * std::sin(deg2rad(60)) -
+            manager.collectorRadius() * std::sin(deg2rad(60)));
 
     ASSERT_EQ(hitData.collisionPoint, referenceCollisionAtSixty)
         << "Invalid hit from " << atSixtyDegreesAlongX
         << " to: " << referenceCollisionAtSixty;
-
-    Ray atThirtyDegreesAlongX(kVZero,
-                              core::Vec3(std::cos(constants::kPi / 6), 0,
-                                         std::sin(constants::kPi / 6)));
-    ASSERT_TRUE(performHitAtEnergyCollectors(atThirtyDegreesAlongX, &hitData))
-        << "no hit: " << atThirtyDegreesAlongX;
-
-    Vec3 referenceCollisionAtThirty(
-        manager.simulatiorRadius() / 2 * std::cos(constants::kPi / 6) -
-            manager.collectorRadius() * std::cos(constants::kPi / 6),
-        0,
-        manager.simulatiorRadius() / 2 * std::sin(constants::kPi / 6) -
-            manager.collectorRadius() * std::sin(constants::kPi / 6));
-
-    ASSERT_EQ(hitData.collisionPoint, referenceCollisionAtThirty)
-        << "Invalid hit from " << atThirtyDegreesAlongX
-        << " to: " << referenceCollisionAtThirty;
 
     Ray straightDown(kVZero, core::Vec3(0, 0, -1));
     ASSERT_FALSE(performHitAtEnergyCollectors(straightDown, &hitData))
