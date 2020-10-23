@@ -35,7 +35,7 @@ namespace objects
     {
     public:
         Sphere() : radius_(1){};
-        Sphere(const core::Vec3 &origin, float rad = 1);
+        explicit Sphere(const core::Vec3 &origin, float rad = 1);
 
         //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
@@ -58,7 +58,7 @@ namespace objects
     class SphereWall : public Sphere
     {
     public:
-        SphereWall(float radius) { setRadius(radius); }
+        explicit SphereWall(float radius) { setRadius(radius); }
         SphereWall(const SphereWall &other) = default;
 
         friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);

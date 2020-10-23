@@ -40,10 +40,10 @@ namespace core
     struct RayHitData
     {
         RayHitData() = default;
-        RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq) : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)), direction(ray.getDirection()), energy(ray.getEnergy()), phase(ray.phaseAt(freq, t))
-        {
-            origin = ray.getOrigin();
-        }
+        RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
+         : time(t), normal(norm), frequency(freq), collisionPoint(ray.at(t)),
+          direction(ray.getDirection()), energy(ray.getEnergy()),
+           phase(ray.phaseAt(freq, t)), origin(ray.getOrigin()) {};
         ~RayHitData() = default;
         RayHitData(const RayHitData &) = default;
 
