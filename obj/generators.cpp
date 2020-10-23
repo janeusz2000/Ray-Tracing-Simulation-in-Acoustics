@@ -2,30 +2,22 @@
 #include <random>
 #include <sstream>
 
-namespace generators
-{
-#pragma region RANDOMGENERATORS
+namespace generators {
+// OPERATORS
 
-    // float EngineUniformRandom(float min, float max);
-    // float EngineGaussianRandom(float mean, float standDev);
-    // float EngineZero(float passA, float passB);
-
-#pragma endregion
-#pragma region POINTSOURCE
-
-    // OPERATORS
-
-    bool PointSource::operator==(const PointSource &other) const
-    {
-      return (frequency_ == other.frequency() &&
-              numOfRaysPerRow_ == other.numOfRaysPerRow() &&
-              origin_ == other.origin() && sampleSize_ == other.sampleSize() &&
-              leftCorner_ == other.getLeftCorner());
-    }
+bool PointSource::operator==(const PointSource &other) const {
+  return (frequency_ == other.frequency() &&
+          numOfRaysPerRow_ == other.numOfRaysPerRow() &&
+          origin_ == other.origin() && sampleSize_ == other.sampleSize() &&
+          leftCorner_ == other.getLeftCorner());
+}
 
     std::ostream &operator<<(std::ostream &os, const PointSource &pointSource)
     {
-        return os << "Point Source: origin: " << pointSource.origin() << ", number of rays per row: " << pointSource.numOfRaysPerRow() << ", diffusor size: " << pointSource.sampleSize() << ", frequency: " << pointSource.frequency();
+      return os << "Point Source: origin: " << pointSource.origin()
+                << ", number of rays per row: " << pointSource.numOfRaysPerRow()
+                << ", diffusor size: " << pointSource.sampleSize()
+                << ", frequency: " << pointSource.frequency();
     }
 
     // METHODS
@@ -40,8 +32,10 @@ namespace generators
         if (xIter >= numOfRaysPerRow_ && yIter >= numOfRaysPerRow_)
         {
             std::stringstream ss;
-            ss << "Arguments of x and y are out of range. Arguments are: x: " << xIter << " / " << numOfRaysPerRow_ - 1 << ", y: " << yIter << " / " << numOfRaysPerRow_;
-            throw std::out_of_range(ss.str().c_str());
+            ss << "Arguments are: \n "
+               << "x: " << xIter << " / " << numOfRaysPerRow_ - 1 << "\n"
+               << "y: " << yIter << " / " << numOfRaysPerRow_ << "\n";
+            throw std::out_of_range(ss.str());
         }
         float v = (static_cast<float>(xIter) + randomGen_->getNext()) / static_cast<float>(numOfRaysPerRow_ - 1) * sampleSize_;
         float u = (static_cast<float>(yIter) + randomGen_->getNext()) / static_cast<float>(numOfRaysPerRow_ - 1) * sampleSize_;
@@ -96,6 +90,5 @@ namespace generators
     {
         leftCorner_ = point;
     }
-#pragma endregion
 
-} // namespace generators
+    } // namespace generators
