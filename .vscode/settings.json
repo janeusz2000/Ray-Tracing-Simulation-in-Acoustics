@@ -78,5 +78,8 @@
     "xtree": "cpp",
     "xutility": "cpp"
   },
-  "editor.formatOnSaveMode": "modifications"
+  "editor.formatOnSaveMode": "modifications",
+"editor.autoIndent": "advanced",
+"editor.tabSize": 2,
+"html.format.wrapLineLength": 80
 }

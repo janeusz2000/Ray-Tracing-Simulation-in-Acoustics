@@ -23,7 +23,8 @@ namespace generators
 
     struct UniformRandomGen : public RandomGen
     {
-        UniformRandomGen(float min, float max) : engine_(std::random_device()()), dist_(min, max){};
+        UniformRandomGen(float min, float max) : 
+            engine_(std::random_device()()), dist_(min, max){};
         float getNext() override
         {
             return dist_(engine_);
@@ -41,10 +42,11 @@ namespace generators
         }
     };
 
-    class PointSource final // This object is generating rays with the origin
-                            // of the point source position and direction calculated
-                            // from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0)
-                            // and origin of the source position
+    // This object is generating rays with the origin   
+    // of the point source position and direction calculated
+    // from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0)
+    // and origin of the source position
+    class PointSource final 
     {
     public:
         PointSource() = delete;
