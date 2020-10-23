@@ -2,7 +2,6 @@
 #define OBJECTS_H
 
 #include "constants.h"
-#include "core/exceptions.h"
 #include "core/ray.h"
 #include "core/vec3.h"
 

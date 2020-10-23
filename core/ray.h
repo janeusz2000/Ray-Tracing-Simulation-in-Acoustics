@@ -4,7 +4,6 @@
 
 
 #include "constants.h"
-#include "core/exceptions.h"
 #include "core/vec3.h"
 
 #include <initializer_list>

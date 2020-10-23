@@ -1,9 +1,7 @@
 #include "vec3.h"
-#include "exceptions.h"
 
 #include <exception>
-
-
+#include <sstream>
 
 namespace core
 {

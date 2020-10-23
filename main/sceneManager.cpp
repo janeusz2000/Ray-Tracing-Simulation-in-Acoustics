@@ -1,4 +1,5 @@
 #include "main/sceneManager.h"
+#include <sstream>
 SceneManager::SceneManager(int collectors, float simulationRadius) : numCollectors_(collectors), simulationRadius_(simulationRadius)
 {
     if (numCollectors_ % 4 == 0 || (numCollectors_ - 1) % 4 == 0)

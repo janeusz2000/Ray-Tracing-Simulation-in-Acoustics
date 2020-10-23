@@ -12,7 +12,6 @@ cc_library(
     ],
     hdrs = [
         "constants.h",
-        "core/exceptions.h",
         "core/ray.h",
         "core/vec3.h",
         "main/sceneManager.h",

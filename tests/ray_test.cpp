@@ -1,7 +1,6 @@
-#include "gtest/gtest.h"
-#include "core/exceptions.h"
-#include "core/vec3.h"
 #include "core/ray.h"
+#include "core/vec3.h"
+#include "gtest/gtest.h"
 
 #include <sstream>
 #include <cmath>

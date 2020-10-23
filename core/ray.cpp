@@ -1,6 +1,6 @@
 #include "ray.h"
 
-
+#include <sstream>
 
 namespace core
 {
@@ -32,7 +32,7 @@ namespace core
         {
             std::stringstream ss;
             ss << "Could not calculate phase at, because input frequency or time is close or equal to zero. Values are: freq: " << freq << ", time: " << time;
-            throw std::invalid_argument(ss.str().c_str());
+            throw std::invalid_argument(ss.str());
         }
         float waveLength = constants::kSoundSpeed / freq;
         return time / waveLength * 2 * constants::kPi;
