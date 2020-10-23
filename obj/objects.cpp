@@ -106,7 +106,9 @@ namespace objects
 
     bool operator==(const EnergyCollector &left, const EnergyCollector &right)
     {
-        return (left.getOrigin() == right.getOrigin() && left.getRadius() == right.getRadius() && left.getEnergy() == right.getEnergy());
+      return (left.getOrigin() == right.getOrigin() &&
+              left.getRadius() == right.getRadius() &&
+              left.getEnergy() == right.getEnergy());
     }
 
     // METHODS
@@ -238,7 +240,8 @@ namespace objects
         core::Vec3 vecB = point2_ - point;
         core::Vec3 vecC = point3_ - point;
 
-        float alpha = vecB.crossProduct(vecC).magnitude() / 2; //  Area of the triangle made with point and w triangle points.
+        //  Area of the triangle made with point and w triangle points.
+        float alpha = vecB.crossProduct(vecC).magnitude() / 2;
         float beta = vecC.crossProduct(vecA).magnitude() / 2;
         float gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
