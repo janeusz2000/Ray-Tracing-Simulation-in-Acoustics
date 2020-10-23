@@ -280,14 +280,21 @@ namespace objects
 
     bool TriangleObj::arePointsValid()
     {
-        if (point1_ == point2_ || point1_ == point3_ || point2_ == point3_)
-        {
-            std::stringstream ss;
-            ss << "one point is duplicate of another \n"
-               << "point 1: " << point1_ << "\n"
-               << "point 2: " << point2_ << "\n"
-               << "point 3: " << point3_;
-            throw std::invalid_argument(ss.str());
+
+      // TODO: Repace this condition to area() < constants::kAccuracy
+      // it required a lot of changes how constructors of objects are implemented
+      if (point1_ == point2_ || point1_ == point3_ || point2_ == point3_) {
+        std::stringstream ss;
+        ss << "one point is duplicate of another \n"
+           << "point 1: " << point1_ << "\n"
+           << "point 2: " << point2_ << "\n"
+           << "point 3: " << point3_;
+        throw std::invalid_argument(ss.str());
+        } else if (area() < constants::kAccuracy) { // THIS auto formating
+                                                    // sucks, i dont like it
+          std::stringstream ss;
+          ss << "area of triangle is too small: " << area();
+          throw std::invalid_argument(ss.str());
         }
 
         core::Vec3 alpha = point1_ - point2_;
