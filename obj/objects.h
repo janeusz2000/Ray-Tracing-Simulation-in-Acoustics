@@ -18,12 +18,10 @@ namespace objects
     class Object
     {
     public:
-        //METHODS
         virtual ~Object(){};
         virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
         virtual bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) = 0;
 
-        //GETTERS_AND_SETTERS
         void setOrigin(const core::Vec3 &origin);
         core::Vec3 getOrigin() const;
 
@@ -37,14 +35,11 @@ namespace objects
         Sphere() : radius_(1){};
         explicit Sphere(const core::Vec3 &origin, float rad = 1);
 
-        //OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
-        //METHODS
         core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
         [[nodiscard]] bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) override;
 
-        //GETTERS AND SETTERS
         float getRadius() const;
         void setRadius(float rad);
 
@@ -73,16 +68,13 @@ namespace objects
             setOrigin(origin);
         }
 
-        // OPERATORS
         friend std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector);
         friend bool operator==(const EnergyCollector &left, const EnergyCollector &right);
         EnergyCollector &operator=(const EnergyCollector &other);
 
-        // METHODS
         float distanceAt(const core::Vec3 &positionHit) const;
         void collectEnergy(const core::RayHitData &hitdata);
 
-        // GETTERS AND SETTERS
         void setEnergy(float en);
         float getEnergy() const;
         void addEnergy(float en);
@@ -102,20 +94,17 @@ namespace objects
         TriangleObj(const TriangleObj &other);
         ~TriangleObj() = default;
 
-        // OPERATORS
         TriangleObj &operator=(const TriangleObj &other);
         friend bool operator==(const TriangleObj &left, const TriangleObj &right);
         friend bool operator!=(const TriangleObj &left, const TriangleObj &right);
         friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
 
-        // METHODS
         core::Vec3 normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
         [[nodiscard]] bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) override;
 
         float area() const;
         void refreshAttributes();
-
-        // GETTERS AND SETTERS
+        
         core::Vec3 point1() const;
         void setPoint1(const core::Vec3 &point);
 
