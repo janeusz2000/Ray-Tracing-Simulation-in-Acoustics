@@ -1,7 +1,6 @@
 #include "core/vec3.h"
-
 #include "gtest/gtest.h"
-#include "core/exceptions.h"
+
 #include <cmath>
 #include <sstream>
 
