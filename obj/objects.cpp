@@ -62,7 +62,8 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const Sphere &sp)
     {
-        return os << "Sphere origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
+      return os << "Sphere origin: " << sp.getOrigin()
+                << ", radius: " << sp.getRadius() << " [m]";
     }
 
     // GETTERS AND SETTERS
@@ -78,7 +79,8 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const SphereWall &sp)
     {
-        return os << "SphereWall origin: " << sp.getOrigin() << ", radius: " << sp.getRadius() << " [m]";
+      return os << "SphereWall origin: " << sp.getOrigin()
+                << ", radius: " << sp.getRadius() << " [m]";
     }
 
     // OPERATORS
@@ -98,7 +100,8 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector)
     {
-        return os << "Energy Collector. Origin: " << collector.getOrigin() << ", Radius: " << collector.getRadius();
+      return os << "Energy Collector. Origin: " << collector.getOrigin()
+                << ", Radius: " << collector.getRadius();
     }
 
     bool operator==(const EnergyCollector &left, const EnergyCollector &right)
@@ -135,12 +138,11 @@ namespace objects
 
     // CONSTRUCTORS
 
-    TriangleObj::TriangleObj(const core::Vec3 &point1,
-                             const core::Vec3 &point2,
-                             const core::Vec3 &point3) : point1_(point1), point2_(point2), point3_(point3)
-    {
-        this->arePointsValid();
-        this->refreshAttributes();
+    TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2,
+                             const core::Vec3 &point3)
+        : point1_(point1), point2_(point2), point3_(point3) {
+      this->arePointsValid();
+      this->refreshAttributes();
     }
 
     TriangleObj::TriangleObj(const TriangleObj &other)
