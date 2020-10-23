@@ -73,10 +73,14 @@ namespace core
         {
             return ray_.phaseAt(frequency_, time_);
         }
+        float frequency() const
+        {
+            return frequency_;
+        }
 
         private:
-        Vec3 normal_, origin_;
-        float energy_, phase_, frequency_, time_;
+        Vec3 normal_;
+        float frequency_, time_;
         Ray ray_;
     };
 } // namespace core
