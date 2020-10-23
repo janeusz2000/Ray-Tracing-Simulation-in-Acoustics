@@ -166,16 +166,19 @@ namespace objects
 
     bool operator==(const TriangleObj &left, const TriangleObj &right)
     {
-        std::vector<core::Vec3> vertexVec({left.point1(), left.point2(), left.point3()});
-        std::vector<core::Vec3> refVec({right.point1(), right.point2(), right.point3()});
+      // if other triangle has the same points but declared in different order,
+      // they will be still equal.
+      std::vector<core::Vec3> vertexVec(
+          {left.point1(), left.point2(), left.point3()});
+      std::vector<core::Vec3> refVec(
+          {right.point1(), right.point2(), right.point3()});
 
-        for (size_t ind = 0; ind < vertexVec.size(); ++ind)
-        {
-            if (std::find(vertexVec.begin(), vertexVec.end(), refVec.at(ind)) == vertexVec.end())
-            {
-                return false;
-            }
+      for (size_t ind = 0; ind < vertexVec.size(); ++ind) {
+        if (std::find(vertexVec.begin(), vertexVec.end(), refVec.at(ind)) ==
+            vertexVec.end()) {
+          return false;
         }
+      }
         return true;
     }
 
@@ -186,7 +189,8 @@ namespace objects
 
     std::ostream &operator<<(std::ostream &os, const TriangleObj &object)
     {
-        return os << "Triangle Object, vertex: " << object.point1() << ", " << object.point2() << ", " << object.point3();
+      return os << "Triangle Object, vertex: " << object.point1() << ", "
+                << object.point2() << ", " << object.point3();
     }
 
     // METHODS
@@ -206,7 +210,8 @@ namespace objects
             return false;
         }
 
-        // Following code calculates time at which ray is hitting surface where triangle is positioned
+        // Following code calculates time at which ray
+        // is hitting surface where triangle is positioned
         float time = (-1 * (ray.getOrigin() - point3_)).scalarProduct(normal_) / parpCoeff;
 
         // Following code is making sure that ray doesn't hit the same object.
@@ -271,7 +276,10 @@ namespace objects
         if (point1_ == point2_ || point1_ == point3_ || point2_ == point3_)
         {
             std::stringstream ss;
-            ss << "TriangleObj arguments error. You cannot have duplications of the same point in constructor 1: " << point1_ << ", 2: " << point2_ << ", 3: " << point3_;
+            ss << "one point is duplicate of another \n"
+               << "point 1: " << point1_ << "\n"
+               << "point 2: " << point2_ << "\n"
+               << "point 3: " << point3_;
             throw std::invalid_argument(ss.str());
         }
 
@@ -280,7 +288,12 @@ namespace objects
 
         if (alpha.crossProduct(beta) == core::Vec3(0, 0, 0))
         {
-            throw std::invalid_argument("Triangle object couldn't be constructed. You cannot have all points of the object linedup straight");
+          std::stringstream ss;
+          ss << "points of the triangle cannot be at the same line \n"
+             << "point 1: " << point1_ << "\n"
+             << "point 2: " << point2_ << "\n"
+             << "point 3: " << point3_;
+          throw std::invalid_argument(ss.str());
         }
         return true;
     }
