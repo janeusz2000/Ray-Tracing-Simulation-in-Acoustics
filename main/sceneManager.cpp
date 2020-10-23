@@ -1,17 +1,20 @@
 #include "main/sceneManager.h"
 #include <sstream>
-SceneManager::SceneManager(int collectors, float simulationRadius) : numCollectors_(collectors), simulationRadius_(simulationRadius)
+SceneManager::SceneManager(int collectors, float simulationRadius) :
+ numCollectors_(collectors), simulationRadius_(simulationRadius)
 {
     if (numCollectors_ % 4 == 0 || (numCollectors_ - 1) % 4 == 0)
     {
-        // ( 2 *  pi * R ) / ( 2 * population)  for dividing whole half circle distance to equal distances for population of energyCollectors
+        // ( 2 *  pi * R ) / ( 2 * population)  for dividing whole
+        // half circle distance to equal distances for population of energyCollectors
         collectorRadius_ = 2 * constants::kPi * simulationRadius_ / (2 * numCollectors_);
         createCollectors();
     }
     else
     {
         std::stringstream ss;
-        ss << "collector population:" << numCollectors_ << " % 4 or population - 1: " << numCollectors_ - 1 << " % 4 must be zero";
+        ss << "collector population:" << numCollectors_ 
+        << " % 4 or population - 1: " << numCollectors_ - 1 << " % 4 must be zero";
         throw std::invalid_argument(ss.str().c_str());
     }
 }
@@ -48,8 +51,10 @@ void SceneManager::createCollectors()
 
     for (size_t iteration = 0; iteration * 4 < numToGo; ++iteration)
     {
-        float groundCoordinate = simulationRadius_ / 2 * std::cos(2 * constants::kPi * iteration / numToGo);
-        float zCoordinate = simulationRadius_ / 2 * std::sin(2 * constants::kPi * iteration / numToGo);
+        float groundCoordinate = simulationRadius_ / 2 * 
+        std::cos(2 * constants::kPi * iteration / numToGo);
+        float zCoordinate = simulationRadius_ / 2 * 
+        std::sin(2 * constants::kPi * iteration / numToGo);
 
         origins = {
             core::Vec3(groundCoordinate, 0, zCoordinate),
@@ -60,7 +65,8 @@ void SceneManager::createCollectors()
 
         for (const core::Vec3 &origin : origins)
         {
-            energyCollectors_.push_back(std::make_unique<objects::EnergyCollector>(origin, collectorRadius_));
+            energyCollectors_.push_back(
+                std::make_unique<objects::EnergyCollector>(origin, collectorRadius_));
         }
     }
 }

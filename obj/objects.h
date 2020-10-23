@@ -11,118 +11,121 @@
 #include <memory>
 #include <vector>
 
+namespace objects {
+class Object {
+public:
+  virtual ~Object(){};
+  virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
+  virtual bool hitObject(const core::Ray &ray, float freq,
+                         core::RayHitData *hitData) = 0;
 
+  void setOrigin(const core::Vec3 &origin);
+  core::Vec3 getOrigin() const;
 
-namespace objects
-{
-    class Object
-    {
-    public:
-        virtual ~Object(){};
-        virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
-        virtual bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) = 0;
+private:
+  core::Vec3 origin_;
+};
 
-        void setOrigin(const core::Vec3 &origin);
-        core::Vec3 getOrigin() const;
+class Sphere : public Object {
+public:
+  Sphere() : radius_(1){};
+  explicit Sphere(const core::Vec3 &origin, float rad = 1);
 
-    private:
-        core::Vec3 origin_;
-    };
+  friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
-    class Sphere : public Object
-    {
-    public:
-        Sphere() : radius_(1){};
-        explicit Sphere(const core::Vec3 &origin, float rad = 1);
+  core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
+  [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
+                               core::RayHitData *hitData) override;
 
-        friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
+  float getRadius() const;
+  void setRadius(float rad);
 
-        core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
-        [[nodiscard]] bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) override;
+protected:
+  float radius_;
+};
 
-        float getRadius() const;
-        void setRadius(float rad);
+// When this object has two purposes: first - when ray hit this object, there is
+// no longer need
+// to continue ray traceing. Second - the collision point is passed to energy
+// collector, and after that specific
+// amount of energy from ray is collected depends on the distance from collision
+// point to the sphere collectors;
+class SphereWall : public Sphere {
+public:
+  explicit SphereWall(float radius) { setRadius(radius); }
+  SphereWall(const SphereWall &other) = default;
 
-    protected:
-        float radius_;
-    };
+  friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);
+};
 
-    // When this object has two purposes: first - when ray hit this object, there is no longer need
-    // to continue ray traceing. Second - the collision point is passed to energy collector, and after that specific
-    // amount of energy from ray is collected depends on the distance from collision point to the sphere collectors;
-    class SphereWall : public Sphere
-    {
-    public:
-        explicit SphereWall(float radius) { setRadius(radius); }
-        SphereWall(const SphereWall &other) = default;
+class EnergyCollector : public Sphere {
+public:
+  explicit EnergyCollector(
+      const core::Vec3 &origin,
+      float radius = constants::kDefaultEnergyCollectorRadius)
+      : energy_(0) {
+    setRadius(radius);
+    setOrigin(origin);
+  }
 
-        friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);
-    };
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const EnergyCollector &collector);
+  friend bool operator==(const EnergyCollector &left,
+                         const EnergyCollector &right);
+  EnergyCollector &operator=(const EnergyCollector &other);
 
-    class EnergyCollector : public Sphere
-    {
-    public:
-        explicit EnergyCollector(const core::Vec3 &origin, float radius = constants::kDefaultEnergyCollectorRadius) : energy_(0)
-        {
-            setRadius(radius);
-            setOrigin(origin);
-        }
+  float distanceAt(const core::Vec3 &positionHit) const;
+  void collectEnergy(const core::RayHitData &hitdata);
 
-        friend std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector);
-        friend bool operator==(const EnergyCollector &left, const EnergyCollector &right);
-        EnergyCollector &operator=(const EnergyCollector &other);
+  void setEnergy(float en);
+  float getEnergy() const;
+  void addEnergy(float en);
+  void setID(int id);
+  int getID() const;
 
-        float distanceAt(const core::Vec3 &positionHit) const;
-        void collectEnergy(const core::RayHitData &hitdata);
+private:
+  float energy_;
+};
 
-        void setEnergy(float en);
-        float getEnergy() const;
-        void addEnergy(float en);
-        void setID(int id);
-        int getID() const;
+class TriangleObj : public Object {
+public:
+  TriangleObj(const core::Vec3 &point1 = {1, 0, 0},
+              const core::Vec3 &point2 = {0, 1, 0},
+              const core::Vec3 &point3 = {0, 0, 1});
+  TriangleObj(const TriangleObj &other);
+  ~TriangleObj() = default;
 
-    private:
-        float energy_;
-    };
+  TriangleObj &operator=(const TriangleObj &other);
+  friend bool operator==(const TriangleObj &left, const TriangleObj &right);
+  friend bool operator!=(const TriangleObj &left, const TriangleObj &right);
+  friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
 
-    class TriangleObj : public Object
-    {
-    public:
-        TriangleObj(const core::Vec3 &point1 = {1, 0, 0},
-                    const core::Vec3 &point2 = {0, 1, 0},
-                    const core::Vec3 &point3 = {0, 0, 1});
-        TriangleObj(const TriangleObj &other);
-        ~TriangleObj() = default;
+  core::Vec3
+  normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
+  [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
+                               core::RayHitData *hitData) override;
 
-        TriangleObj &operator=(const TriangleObj &other);
-        friend bool operator==(const TriangleObj &left, const TriangleObj &right);
-        friend bool operator!=(const TriangleObj &left, const TriangleObj &right);
-        friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
+  float area() const;
+  void refreshAttributes();
 
-        core::Vec3 normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
-        [[nodiscard]] bool hitObject(const core::Ray &ray, float freq, core::RayHitData *hitData) override;
+  core::Vec3 point1() const;
+  void setPoint1(const core::Vec3 &point);
 
-        float area() const;
-        void refreshAttributes();
-        
-        core::Vec3 point1() const;
-        void setPoint1(const core::Vec3 &point);
+  core::Vec3 point2() const;
+  void setPoint2(const core::Vec3 &point);
 
-        core::Vec3 point2() const;
-        void setPoint2(const core::Vec3 &point);
+  core::Vec3 point3() const;
+  void setPoint3(const core::Vec3 &point);
 
-        core::Vec3 point3() const;
-        void setPoint3(const core::Vec3 &point);
+private:
+  bool doesHit(const core::Vec3 &point) const;
 
-    private:
-        bool doesHit(const core::Vec3 &point) const;
-
-        void recalculateNormal();
-        void recalculateArea();
-        bool arePointsValid();
-        core::Vec3 normal_, point1_, point2_, point3_;
-        float area_;
-    };
+  void recalculateNormal();
+  void recalculateArea();
+  bool arePointsValid();
+  core::Vec3 normal_, point1_, point2_, point3_;
+  float area_;
+};
 
 } // namespace objects
 

@@ -9,8 +9,8 @@ namespace core
     Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
     {
         if (direction == Vec3(0, 0, 0))
-        {
-            throw std::invalid_argument("Ray object couldn't be constructed. You cannot have direction of the ray equal to Vec3(0, 0, 0)");
+        {   
+            throw std::invalid_argument("Direction  equal to Vec3(0, 0, 0)");
         }
 
         origin_ = origin;
@@ -31,7 +31,9 @@ namespace core
         if (freq <= constants::kAccuracy || time <= constants::kAccuracy)
         {
             std::stringstream ss;
-            ss << "Could not calculate phase at, because input frequency or time is close or equal to zero. Values are: freq: " << freq << ", time: " << time;
+            ss << "Could not calculate phase at, because input " 
+                << "frequency or time is close or equal to zero. Values are: freq: " 
+                << freq << ", time: " << time;
             throw std::invalid_argument(ss.str());
         }
         float waveLength = constants::kSoundSpeed / freq;
@@ -43,7 +45,9 @@ namespace core
 
     std::ostream &operator<<(std::ostream &os, const Ray &srcRay)
     {
-        return os << "RAY origin: " << srcRay.getOrigin() << ", direction: " << srcRay.getDirection() << ", energy: " << srcRay.getEnergy();
+        return os << "RAY origin: " << srcRay.getOrigin() 
+                    << ", direction: " << srcRay.getDirection() 
+                    << ", energy: " << srcRay.getEnergy();
     }
 
     bool operator==(const Ray &left, const Ray &right)

@@ -14,10 +14,10 @@ bool PointSource::operator==(const PointSource &other) const {
 
     std::ostream &operator<<(std::ostream &os, const PointSource &pointSource)
     {
-      return os << "Point Source: origin: " << pointSource.origin()
-                << ", number of rays per row: " << pointSource.numOfRaysPerRow()
-                << ", diffusor size: " << pointSource.sampleSize()
-                << ", frequency: " << pointSource.frequency();
+        return os << "Point Source: origin: " << pointSource.origin()
+                    << ", number of rays per row: " << pointSource.numOfRaysPerRow()
+                    << ", diffusor size: " << pointSource.sampleSize()
+                    << ", frequency: " << pointSource.frequency();
     }
 
     // METHODS

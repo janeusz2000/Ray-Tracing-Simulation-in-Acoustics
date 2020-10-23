@@ -78,8 +78,9 @@
     "xtree": "cpp",
     "xutility": "cpp"
   },
-  "editor.formatOnSaveMode": "modifications",
-"editor.autoIndent": "advanced",
-"editor.tabSize": 2,
-"html.format.wrapLineLength": 80
+  "editor.formatOnSave": true,
+  "C_Cpp.vcFormat.indent.braces": true,
+  "C_Cpp.vcFormat.indent.accessSpecifiers": true,
+  "C_Cpp.vcFormat.indent.lambdaBracesWhenParameter": false,
+  "C_Cpp.clang_format_fallbackStyle": "{TabWidth 4, ColumnLimit: 80}",
 }
