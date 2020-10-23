@@ -39,10 +39,12 @@ namespace objects
         }
 
         float temp = std::sqrt(discriminant);
+        // times that ray hits sphere at:
         float time1 = (-beta - temp) / 2;
         float time2 = (-beta + temp) / 2;
 
-        // Ray inside sphere. kAccurracy is for the case that ray is on the edge of the sphere
+        // Ray inside sphere. kAccurracy is for the case that ray is on the edge
+        // of the sphere. time < 0 - hit behind ray, time > 0 - hit front of ray
         if (time1 < -constants::kAccuracy && time2 > constants::kAccuracy) 
         {
             core::Vec3 collision = ray.at(time2);
