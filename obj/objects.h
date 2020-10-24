@@ -117,6 +117,8 @@ public:
   core::Vec3 point3() const;
   void setPoint3(const core::Vec3 &point);
 
+  std::vector<core::Vec3> getPoints() const;
+
 private:
   bool doesHit(const core::Vec3 &point) const;
 

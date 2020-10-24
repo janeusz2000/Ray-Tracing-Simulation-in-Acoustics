@@ -1,6 +1,11 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
+
+# TODO: create multiple libraries and ad them to test cases. T
+# This way teset are cashed and changes are not triggering all test 
+# but only thos which are requied
+
 cc_library(
     name = "utils",
     srcs = [

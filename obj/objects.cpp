@@ -137,10 +137,8 @@ TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
 bool operator==(const TriangleObj &left, const TriangleObj &right) {
   // if other triangle has the same points but declared in different order,
   // they will be still equal.
-  std::vector<core::Vec3> vertexVec(
-      {left.point1(), left.point2(), left.point3()});
-  std::vector<core::Vec3> refVec(
-      {right.point1(), right.point2(), right.point3()});
+  std::vector<core::Vec3> vertexVec = left.getPoints();
+  std::vector<core::Vec3> refVec = right.getPoints();
 
   for (size_t ind = 0; ind < vertexVec.size(); ++ind) {
     if (std::find(vertexVec.begin(), vertexVec.end(), refVec.at(ind)) ==
@@ -262,5 +260,9 @@ void TriangleObj::setPoint2(const core::Vec3 &point) { this->point2_ = point; }
 
 core::Vec3 TriangleObj::point3() const { return point3_; }
 void TriangleObj::setPoint3(const core::Vec3 &point) { this->point3_ = point; }
+
+std::vector<core::Vec3> TriangleObj::getPoints() const {
+  return std::vector<core::Vec3>{point1_, point2_, point3_};
+}
 
 } // namespace objects
