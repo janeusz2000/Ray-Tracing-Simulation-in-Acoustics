@@ -118,10 +118,7 @@ TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2,
   refreshAttributes();
 }
 
-TriangleObj::TriangleObj(const TriangleObj &other) {
-  *this = other;
-  refreshAttributes();
-}
+TriangleObj::TriangleObj(const TriangleObj &other) { *this = other; }
 
 // OPERATORS
 
@@ -204,8 +201,7 @@ bool TriangleObj::doesHit(const core::Vec3 &point) const {
   float beta = vecC.crossProduct(vecA).magnitude() / 2;
   float gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
-  return (((alpha + beta + gamma) > area_ + constants::kHitAccuracy) ? false
-                                                                     : true);
+  return alpha + beta + gamma - area_ <= constants::kHitAccuracy;
 }
 
 float TriangleObj::area() const { return area_; }
