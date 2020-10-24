@@ -170,15 +170,15 @@ bool TriangleObj::hitObject(const core::Ray &ray, float freq,
   // if ray direction is parpedicular to normal, there is no hit. It can be
   // translated into checking if scalarProduct of the ray.direction and normal
   // is close or equal to zero.
-  float parpCoeff = ray.getDirection().scalarProduct(normal_);
-  if (std::abs(parpCoeff) <= constants::kAccuracy) {
+  float normalDot = ray.getDirection().scalarProduct(normal_);
+  if (std::abs(normalDot) <= constants::kAccuracy) {
     return false;
   }
 
   // Following code calculates time at which ray
   // is hitting surface where triangle is positioned
   float time =
-      (-1 * (ray.getOrigin() - point3_)).scalarProduct(normal_) / parpCoeff;
+      (-1 * (ray.getOrigin() - point3_)).scalarProduct(normal_) / normalDot;
 
   // Following code is making sure that ray doesn't hit the same object.
   if (time < constants::kHitAccuracy) {
