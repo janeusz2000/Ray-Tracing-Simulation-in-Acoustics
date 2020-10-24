@@ -134,7 +134,7 @@ TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
 
   return *this;
 }
-
+// TODO: change this from friend bool operator== to bool operator ;)
 bool operator==(const TriangleObj &left, const TriangleObj &right) {
   // if other triangle has the same points but declared in different order,
   // they will be still equal.
@@ -240,15 +240,6 @@ bool TriangleObj::arePointsValid() {
 
   core::Vec3 alpha = point1_ - point2_;
   core::Vec3 beta = point1_ - point3_;
-
-  if (alpha.crossProduct(beta) == core::Vec3(0, 0, 0)) {
-    std::stringstream ss;
-    ss << "points of the triangle cannot be at the same line \n"
-       << "point 1: " << point1_ << "\n"
-       << "point 2: " << point2_ << "\n"
-       << "point 3: " << point3_;
-    throw std::invalid_argument(ss.str());
-  }
   return true;
 }
 
