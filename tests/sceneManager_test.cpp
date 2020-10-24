@@ -25,7 +25,7 @@ protected:
     }
     return false;
   }
-
+  // TODO: add this to constants.h instead of here
   float deg2rad(float angle) { return 2 * kPi * angle / 360; }
 
   SceneManager manager;
@@ -36,8 +36,7 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {
     std::cout << *collectorPtr << std::endl;
   }
 
-  ASSERT_EQ(manager.getEnergyCollectors().size(), kPopulation)
-      << "wrong number of energy collectors";
+  ASSERT_EQ(manager.getEnergyCollectors().size(), kPopulation);
 
   RayHitData hitData;
   Ray straightUp(kVZero, core::Vec3(0, 0, 1));
@@ -77,8 +76,7 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {
           manager.collectorRadius() * std::sin(deg2rad(60)));
 
   ASSERT_EQ(hitData.collisionPoint(), referenceCollisionAtSixty)
-      << "Invalid hit from " << atSixtyDegreesAlongX
-      << " to: " << referenceCollisionAtSixty;
+      << "Invalid hit from " << atSixtyDegreesAlongX;
 
   Ray straightDown(kVZero, core::Vec3(0, 0, -1));
   ASSERT_FALSE(performHitAtEnergyCollectors(straightDown, &hitData))
