@@ -114,25 +114,23 @@ void EnergyCollector::addEnergy(float en) { energy_ += en; }
 TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2,
                          const core::Vec3 &point3)
     : point1_(point1), point2_(point2), point3_(point3) {
-  this->arePointsValid();
-  this->refreshAttributes();
+  arePointsValid();
+  refreshAttributes();
 }
 
 TriangleObj::TriangleObj(const TriangleObj &other) {
-  this->setPoint1(other.point1());
-  this->setPoint2(other.point2());
-  this->setPoint3(other.point3());
-  this->refreshAttributes();
+  *this = other;
+  refreshAttributes();
 }
 
 // OPERATORS
 
 TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
-  this->setPoint1(other.point1());
-  this->setPoint2(other.point2());
-  this->setPoint3(other.point3());
+  setPoint1(other.point1());
+  setPoint2(other.point2());
+  setPoint3(other.point3());
 
-  this->refreshAttributes();
+  refreshAttributes();
 
   return *this;
 }
