@@ -17,6 +17,7 @@ Sphere::Sphere(const core::Vec3 &origin, float rad) {
 
 bool Sphere::hitObject(const core::Ray &ray, float freq,
                        core::RayHitData *hitData) {
+
   core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
 
   // this calculates variables that are neccesary to calculate times at which
@@ -25,31 +26,33 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
   float gamma = rVec3.scalarProduct(rVec3) - radius_ * radius_;
   float discriminant = beta * beta - 4 * gamma;
 
-  // when hit of the sphere never occur:
+  // when there is no intersection between ray and object
   if (discriminant < 0) {
     return false;
   }
-
   float temp = std::sqrt(discriminant);
-  // times that ray hits sphere at:
-  float time1 = (-beta - temp) / 2;
-  float time2 = (-beta + temp) / 2;
 
-  // Ray inside sphere. kAccurracy is for the case that ray is on the edge
-  // of the sphere. time < 0 - hit behind ray, time > 0 - hit front of ray
-  if (time1 < -constants::kAccuracy && time2 > constants::kAccuracy) {
-    core::Vec3 collision = ray.at(time2);
-    *hitData = core::RayHitData(time2, normal(collision), ray, freq);
-    return true;
+  // hit times, both intersections. When there is only one
+  // intersection - time is equal to 0;
+  float timeLow = (-beta - temp) / 2;
+  float timeHigh = (-beta + temp) / 2;
+
+  // No hit, both intersections are behind the ray
+  if (timeHigh <= constants::kAccuracy) {
+    return false;
   }
-  // ray in front of the sphere. kAccuracy if for the edge case
-  else if (time1 > constants::kAccuracy && time2 > constants::kAccuracy) {
-    float time = std::min(time1, time2);
-    core::Vec3 collision = ray.at(time);
-    *hitData = core::RayHitData(time, normal(collision), ray, freq);
-    return true;
+
+  if (std::abs(timeLow) < constants::kAccuracy) {
+    return false;
   }
-  return false;
+
+  // NOTE: timeHigh is always positive, and timeLow is always less than timeHigh
+  // so we use it when it is also positive (i.e when ray is outside of the
+  // sphere).
+  float collisionTime = timeLow > 0 ? timeLow : timeHigh;
+  core::Vec3 collision = ray.at(collisionTime);
+  *hitData = core::RayHitData(collisionTime, normal(collision), ray, freq);
+  return true;
 }
 
 std::ostream &operator<<(std::ostream &os, const Sphere &sp) {
