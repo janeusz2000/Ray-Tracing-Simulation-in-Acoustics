@@ -291,7 +291,7 @@ TEST(TRIANGLEOBJ_METHOD, RayInsideTriangleDoesNotHit) {
   ASSERT_EQ(hitData.collisionPoint(), Vec3(0.25, 4, 0.25));
   ASSERT_EQ(hitData.direction(), tempRay.getDirection());
   ASSERT_EQ(hitData.origin(), tempRay.getOrigin());
-  ASSERT_EQ(hitData.time(), 4);
+  ASSERT_EQ(hitData.time, 4);
 }
 
 TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_0_1_0) {
@@ -323,7 +323,7 @@ TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_front_Object_Vec_0_1_0) {
   for (auto &obj : objectList) {
     ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
     ASSERT_EQ(hitData.collisionPoint(), Vec3(0.25, obj.point1().y(), 0.25));
-    ASSERT_EQ(hitData.time(),
+    ASSERT_EQ(hitData.time,
               std::abs(tempRay.getOrigin().y()) + obj.point1().y());
   }
 }
@@ -350,7 +350,7 @@ TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Inside_Object_Vec_0_0_1) {
   ASSERT_EQ(hitData.collisionPoint(), Vec3(0.25, 0.25, 4));
   ASSERT_EQ(hitData.direction(), tempRay.getDirection());
   ASSERT_EQ(hitData.origin(), tempRay.getOrigin());
-  ASSERT_EQ(hitData.time(), 4);
+  ASSERT_EQ(hitData.time, 4);
 }
 
 TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_0_0_1) {
@@ -383,7 +383,7 @@ TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_front_Object_Vec_0_0_1) {
   for (auto &obj : objectList) {
     ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
     ASSERT_EQ(hitData.collisionPoint(), Vec3(0.25, 0.25, obj.point1().z()));
-    ASSERT_EQ(hitData.time(),
+    ASSERT_EQ(hitData.time,
               std::abs(tempRay.getOrigin().z()) + obj.point1().z());
   }
 }
@@ -409,7 +409,7 @@ TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Inside_Object_Vec_1_0_0) {
   ASSERT_EQ(hitData.collisionPoint(), Vec3(4, 0.25, 0.25));
   ASSERT_EQ(hitData.direction(), tempRay.getDirection());
   ASSERT_EQ(hitData.origin(), tempRay.getOrigin());
-  ASSERT_EQ(hitData.time(), 4);
+  ASSERT_EQ(hitData.time, 4);
 }
 
 TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_Back_Object_Vec_1_0_0) {
@@ -442,7 +442,7 @@ TEST(TRIANGLEOBJ_METHOD, Hit_Object_Ray_front_Object_Vec_1_0_0) {
   for (auto &obj : objectList) {
     ASSERT_TRUE(obj.hitObject(tempRay, kSkipFreq, &hitData));
     ASSERT_EQ(hitData.collisionPoint(), Vec3(obj.point1().x(), 0.25, 0.25));
-    ASSERT_EQ(hitData.time(),
+    ASSERT_EQ(hitData.time,
               std::abs(tempRay.getOrigin().x()) + obj.point1().x());
   }
 }

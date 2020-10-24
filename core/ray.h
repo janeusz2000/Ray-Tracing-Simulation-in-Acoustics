@@ -34,7 +34,7 @@ private:
 struct RayHitData {
   RayHitData() = default;
   RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
-      : time_(t), ray_(ray), normal_(norm), frequency_(freq){};
+      : time(t), ray_(ray), normal_(norm), frequency(freq){};
   ~RayHitData() = default;
   RayHitData(const RayHitData &) = default;
 
@@ -42,17 +42,16 @@ struct RayHitData {
   friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
 
   Vec3 normal() const { return normal_; }
-  Vec3 collisionPoint() const { return ray_.at(time_); }
+  Vec3 collisionPoint() const { return ray_.at(time); }
   Vec3 direction() const { return ray_.getDirection(); }
   Vec3 origin() const { return ray_.getOrigin(); }
-  float time() const { return time_; }
   float energy() const { return ray_.getEnergy(); }
-  float phase() const { return ray_.phaseAt(frequency_, time_); }
-  float frequency() const { return frequency_; }
+  float phase() const { return ray_.phaseAt(frequency, time); }
+  float frequency, time;
 
 private:
   Vec3 normal_;
-  float frequency_, time_;
+
   Ray ray_;
 };
 } // namespace core
