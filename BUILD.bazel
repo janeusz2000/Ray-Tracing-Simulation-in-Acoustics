@@ -97,7 +97,7 @@ cc_test(
     srcs = [
         "tests/sceneManager_test.cpp",
     ],
-    deps = [
+    deps = [    
         ":utils",
         "@com_google_googletest//:gtest_main",
     ],
