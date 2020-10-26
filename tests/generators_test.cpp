@@ -133,7 +133,9 @@ TEST(POINTSOURCE_METHOD, Single_rayHit) {
   PointSource source(freq, rayNumPerRow, 1, &fakeEngine);
 
   std::vector<std::unique_ptr<objects::TriangleObj>> objectsVec;
-  objects::TriangleObj object({-0.6, -0.6, 1}, {0.6, -0.6, 1}, {-0.6, 0.6, 1});
+  objects::TriangleObj object(core::Vec3{-0.6, -0.6, 1},
+                              core::Vec3{0.6, -0.6, 1},
+                              core::Vec3{-0.6, 0.6, 1});
 
   core::Ray tempRay = source.generateRay(0, 0);
   core::RayHitData hitData;
@@ -151,8 +153,9 @@ TEST(POINTSOURCE_METHODS, GenerateRay_Test) // Monte Carlo Test
   const size_t samples = 3;
   PointSource source(freq, rayNumPerRow, 1, &fakeEngine);
 
-  objects::TriangleObj object({-0.25, -0.25, 1}, {0.25, -0.25, 1},
-                              {-0.25, 0.25, 1});
+  objects::TriangleObj object(core::Vec3{-0.25, -0.25, 1},
+                              core::Vec3{0.25, -0.25, 1},
+                              core::Vec3{-0.25, 0.25, 1});
   float hits = 0, missed = 0;
   core::RayHitData hitData;
   for (size_t x = 0; x < rayNumPerRow; ++x) {

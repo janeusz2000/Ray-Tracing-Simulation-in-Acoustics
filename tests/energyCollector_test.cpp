@@ -88,9 +88,9 @@ TEST(ENERGYCOLLECTOR_METHODS, Method_CollectEnergy) {
   // TODO: Phase impact on the given energy to the collector
 
   EnergyCollector object1(core::Vec3(0, 0, 0));
-  core::RayHitData temp(core::RayHitData(50, core::Vec3(0, 1, 0).normalize(),
-                                         core::Ray({0, 1, 0}, {1, 0, 0}, 50),
-                                         1000));
+  core::RayHitData temp(core::RayHitData(
+      50, core::Vec3(0, 1, 0).normalize(),
+      core::Ray(core::Vec3{0, 1, 0}, core::Vec3{1, 0, 0}, 50), 1000));
 
   object1.collectEnergy(temp);
   ASSERT_EQ(object1.getEnergy(), 50);

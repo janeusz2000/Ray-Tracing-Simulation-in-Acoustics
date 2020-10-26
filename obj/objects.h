@@ -89,9 +89,9 @@ private:
 
 class TriangleObj : public Object {
 public:
-  TriangleObj(const core::Vec3 &point1 = {1, 0, 0},
-              const core::Vec3 &point2 = {0, 1, 0},
-              const core::Vec3 &point3 = {0, 0, 1});
+  TriangleObj(const core::Vec3 &point1 = core::Vec3{1, 0, 0},
+              const core::Vec3 &point2 = core::Vec3{0, 1, 0},
+              const core::Vec3 &point3 = core::Vec3{0, 0, 1});
   TriangleObj(const TriangleObj &other);
   ~TriangleObj() = default;
 

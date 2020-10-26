@@ -39,16 +39,16 @@ TEST(RAY_OPERATOR, Operator_ostream) {
 }
 
 TEST(RAY_CONSTRUCTOR, constructor_invalid) {
-  ASSERT_THROW(Ray({0, 0, 0}, {0, 0, 0}), std::invalid_argument);
-  ASSERT_THROW(Ray({0, 0, 0}, {0, 0, constants::kAccuracy * 0.999f}),
+  ASSERT_THROW(Ray(Vec3{0, 0, 0}, Vec3{0, 0, 0}), std::invalid_argument);
+  ASSERT_THROW(Ray(Vec3{0, 0, 0}, Vec3{0, 0, constants::kAccuracy * 0.999f}),
                std::invalid_argument);
 }
 TEST(RAY_CONSTRUCTOR, All_Possible_Constructors) {
   Ray temp1;
   Ray temp2(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
   Ray temp3(Vec3(0, 0, 0), Vec3(0, 0, 1));
-  Ray temp4({0, 0, 0}, {0, 0, 1});
-  Ray temp5({0, 0, 0}, {0, 0, 1}, 0);
+  Ray temp4(Vec3{0, 0, 0}, Vec3{0, 0, 1});
+  Ray temp5(Vec3{0, 0, 0}, Vec3{0, 0, 1}, 0);
   Ray temp6(temp1);
 
   ASSERT_EQ(temp1, Ray(Vec3(0, 0, 0), Vec3(0, 0, 1)));
@@ -86,13 +86,17 @@ TEST(RAY_METHOD, Method_PhaseAt) {
 }
 
 TEST(RAY_METHOD, PhaseAt_catch_exception) {
-  ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(0, 1), std::invalid_argument);
-  ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(1, 0), std::invalid_argument);
-  ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(constants::kAccuracy, 1),
+  ASSERT_THROW(Ray(Vec3{0, 0, 1}, Vec3{1, 0, 0}).phaseAt(0, 1),
                std::invalid_argument);
-  ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0}).phaseAt(1, constants::kAccuracy),
+  ASSERT_THROW(Ray(Vec3{0, 0, 1}, Vec3{1, 0, 0}).phaseAt(1, 0),
                std::invalid_argument);
-  ASSERT_THROW(Ray({0, 0, 1}, {1, 0, 0})
+  ASSERT_THROW(
+      Ray(Vec3{0, 0, 1}, Vec3{1, 0, 0}).phaseAt(constants::kAccuracy, 1),
+      std::invalid_argument);
+  ASSERT_THROW(
+      Ray(Vec3{0, 0, 1}, Vec3{1, 0, 0}).phaseAt(1, constants::kAccuracy),
+      std::invalid_argument);
+  ASSERT_THROW(Ray(Vec3{0, 0, 1}, Vec3{1, 0, 0})
                    .phaseAt(constants::kAccuracy, constants::kAccuracy),
                std::invalid_argument);
 }
@@ -110,8 +114,8 @@ TEST(RAY_METHOD, Method_Setters_Getters) {
   Ray temp1;
   Ray temp2(Vec3(0, 0, 0), Vec3(0, 0, 1), 0);
   Ray temp3(Vec3(0, 0, 0), Vec3(0, 0, 1));
-  Ray temp4({0, 0, 0}, {0, 0, 1});
-  Ray temp5({0, 0, 0}, {0, 0, 1}, 0);
+  Ray temp4(Vec3{0, 0, 0}, Vec3{0, 0, 1});
+  Ray temp5(Vec3{0, 0, 0}, Vec3{0, 0, 1}, 0);
   Ray temp6(temp1);
 
   ASSERT_EQ(temp1.getDirection(), temp2.getDirection());
@@ -144,17 +148,19 @@ TEST(RAYHITDATA_OPERATORS, Operator_ostream) {
 }
 
 TEST(RAYHITDATA_OPERATOR, Operator_Equal_Equal) {
-  RayHitData temp1(3, Vec3(1, 4, 0).normalize(), Ray({0, 0, 1}, {2, 9, 1}),
-                   1000);
-  RayHitData temp2(8, Vec3(1, 0, 2).normalize(), Ray({5, 0, 1}, {2, 3, 1}), 20);
-  RayHitData temp3(15, Vec3(1, 0, 0).normalize(), Ray({0, 2, 1}, {13, 3, 1}),
-                   60);
+  RayHitData temp1(3, Vec3(1, 4, 0).normalize(),
+                   Ray(Vec3{0, 0, 1}, Vec3{2, 9, 1}), 1000);
+  RayHitData temp2(8, Vec3(1, 0, 2).normalize(),
+                   Ray(Vec3{5, 0, 1}, Vec3{2, 3, 1}), 20);
+  RayHitData temp3(15, Vec3(1, 0, 0).normalize(),
+                   Ray(Vec3{0, 2, 1}, Vec3{13, 3, 1}), 60);
 
-  RayHitData temp4(3, Vec3(1, 4, 0).normalize(), Ray({0, 0, 1}, {2, 9, 1}),
-                   1000);
-  RayHitData temp5(8, Vec3(1, 0, 2).normalize(), Ray({5, 0, 1}, {2, 3, 1}), 20);
-  RayHitData temp6(15, Vec3(1, 0, 0).normalize(), Ray({0, 2, 1}, {13, 3, 1}),
-                   60);
+  RayHitData temp4(3, Vec3(1, 4, 0).normalize(),
+                   Ray(Vec3{0, 0, 1}, Vec3{2, 9, 1}), 1000);
+  RayHitData temp5(8, Vec3(1, 0, 2).normalize(),
+                   Ray(Vec3{5, 0, 1}, Vec3{2, 3, 1}), 20);
+  RayHitData temp6(15, Vec3(1, 0, 0).normalize(),
+                   Ray(Vec3{0, 2, 1}, Vec3{13, 3, 1}), 60);
 
   ASSERT_EQ(temp1, temp4);
   ASSERT_EQ(temp2, temp5);
@@ -162,11 +168,12 @@ TEST(RAYHITDATA_OPERATOR, Operator_Equal_Equal) {
 }
 
 TEST(RAYHITDATA_OPERATORS, Operator_equal) {
-  RayHitData temp1(3, Vec3(1, 2, 0).normalize(), Ray({2, 0, 1}, {1, 3, 1}),
-                   1000);
-  RayHitData temp2(40, Vec3(1, 0, 8).normalize(), Ray({0, 4, 1}, {2, 8, 1}),
-                   50);
-  RayHitData temp3(4, Vec3(3, 0, 0).normalize(), Ray({5, 0, 1}, {2, 3, 2}), 20);
+  RayHitData temp1(3, Vec3(1, 2, 0).normalize(),
+                   Ray(Vec3{2, 0, 1}, Vec3{1, 3, 1}), 1000);
+  RayHitData temp2(40, Vec3(1, 0, 8).normalize(),
+                   Ray(Vec3{0, 4, 1}, Vec3{2, 8, 1}), 50);
+  RayHitData temp3(4, Vec3(3, 0, 0).normalize(),
+                   Ray(Vec3{5, 0, 1}, Vec3{2, 3, 2}), 20);
 
   RayHitData temp4 = temp1;
   RayHitData temp5 = temp2;

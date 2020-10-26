@@ -18,7 +18,7 @@ TEST(VEC3_BASIC, Test_Operator_ostream) {
   testStream3 << Vec3(3.00001, 2, 1);
   testStream4 << Vec3(std::sqrt(2.0f), 2, 1);
   testStream5 << Vec3(0, 0, 0);
-  testStream6 << Vec3({1, 2, 3});
+  testStream6 << Vec3(1, 2, 3);
 
   ASSERT_EQ(testStream1.str(), "Vec3(0, 1, 2)");
   ASSERT_EQ(testStream2.str(), "Vec3(0.1, 0, 3)");
@@ -29,9 +29,9 @@ TEST(VEC3_BASIC, Test_Operator_ostream) {
 }
 
 TEST(VEC3_BASIC, Test_constructor_initialier_list) {
-  ASSERT_EQ(Vec3(0, 0, 0), Vec3({0, 0, 0}));
-  ASSERT_EQ(Vec3(0, 0, 1), Vec3({0, 0, 1}));
-  ASSERT_EQ(Vec3(std::sqrt(2.0f), 0, 0), Vec3({std::sqrt(2.0f), 0, 0}));
+  ASSERT_EQ(Vec3(0, 0, 0), Vec3(0, 0, 0));
+  ASSERT_EQ(Vec3(0, 0, 1), Vec3(0, 0, 1));
+  ASSERT_EQ(Vec3(std::sqrt(2.0f), 0, 0), Vec3(std::sqrt(2.0f), 0, 0));
 }
 
 TEST(VEC3_BASIC, Test_Operator_equal) {
@@ -71,17 +71,17 @@ TEST(VEC3_OPERATOR_PLUS, Test_Operator_basic_addition) {
                                Vec3(0, 0, 0.5) + Vec3(0, 0, 0.5));
 }
 TEST(VEC3_OPERATOR_PLUS, Test_Operator_list_Addition) {
-  ASSERT_EQ(Vec3(0, 0, 1), Vec3(0, 0, 1) + Vec3({0, 0, 0}));
-  ASSERT_EQ(Vec3(0, 0, 1), Vec3({0, 0, 0}) + Vec3(0, 0, 1));
+  ASSERT_EQ(Vec3(0, 0, 1), Vec3(0, 0, 1) + Vec3(0, 0, 0));
+  ASSERT_EQ(Vec3(0, 0, 1), Vec3(0, 0, 0) + Vec3(0, 0, 1));
 }
 
 TEST(VEC3_OPERATOR_PLUS, Test_Operator_floating_point_error_Addition) {
-  ASSERT_EQ(Vec3(1, 2, 3), Vec3(0, 1, 2) + Vec3({1, 1, 1}));
+  ASSERT_EQ(Vec3(1, 2, 3), Vec3(0, 1, 2) + Vec3(1, 1, 1));
   ASSERT_EQ(Vec3(std::sqrt(2.0f) * 2, 0, 2),
-            Vec3(std::sqrt(2.0f), 0, 1) + Vec3({std::sqrt(2.0f), 0, 1}));
-  ASSERT_EQ(Vec3(1, 2, 3), Vec3(0.5, 0.5, 0.5) + Vec3({0.5, 0.5, 0.5}) +
-                               Vec3({0, 0.5, 0.5}) + Vec3({0, 0.5, 0.5}) +
-                               Vec3(0, 0, 0.5) + Vec3({0, 0, 0.5}));
+            Vec3(std::sqrt(2.0f), 0, 1) + Vec3(std::sqrt(2.0f), 0, 1));
+  ASSERT_EQ(Vec3(1, 2, 3), Vec3(0.5, 0.5, 0.5) + Vec3(0.5, 0.5, 0.5) +
+                               Vec3(0, 0.5, 0.5) + Vec3(0, 0.5, 0.5) +
+                               Vec3(0, 0, 0.5) + Vec3(0, 0, 0.5));
 }
 
 TEST(VEC3_OPERATOR_PLUS, Test_Operator_float_Addition) {
@@ -128,8 +128,8 @@ TEST(VEC3_OPERATOR_PLUS, Test_Operator_plus_Equal_rvalue_Vec3) {
 }
 
 TEST(VEC3_OPERATOR_PLUS, Test_Operator_Plus_Equal_list) {
-  ASSERT_EQ(Vec3(-0.1, -5, 0.3), Vec3(0, 0, 0) += Vec3({-0.1, -5, 0.3}));
-  ASSERT_EQ(Vec3(-4, 10, -5), Vec3(-2, 5, -3) += Vec3({-2, 5, -2}));
+  ASSERT_EQ(Vec3(-0.1, -5, 0.3), Vec3(0, 0, 0) += Vec3(-0.1, -5, 0.3));
+  ASSERT_EQ(Vec3(-4, 10, -5), Vec3(-2, 5, -3) += Vec3(-2, 5, -2));
 }
 
 TEST(VEC3_OPERATOR_MINUS, Test_Operator_minus_basic) {
