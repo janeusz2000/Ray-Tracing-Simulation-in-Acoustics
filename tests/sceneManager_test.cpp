@@ -48,21 +48,21 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {
   ASSERT_EQ(hitData.collisionPoint(), referenceCollisionPoint)
       << "point from: " << straightUp;
 
-  Ray parallelXAxis(kVZero, core::Vec3(-1, 0, 0));
-  ASSERT_TRUE(performHitAtEnergyCollectors(parallelXAxis, &hitData));
+  Ray alongXAxis(kVZero, core::Vec3(-1, 0, 0));
+  ASSERT_TRUE(performHitAtEnergyCollectors(alongXAxis, &hitData));
 
   Vec3 referenceCollisionPoint2(
       -(manager.simulatiorRadius() / 2 - manager.collectorRadius()), 0, 0);
   ASSERT_EQ(hitData.collisionPoint(), referenceCollisionPoint2)
-      << " point from: " << parallelXAxis;
+      << " point from: " << alongXAxis;
 
-  Ray parallelYaxis(kVZero, core::Vec3(0, 1, 0));
-  ASSERT_TRUE(performHitAtEnergyCollectors(parallelYaxis, &hitData));
+  Ray alongYAxis(kVZero, core::Vec3(0, 1, 0));
+  ASSERT_TRUE(performHitAtEnergyCollectors(alongYAxis, &hitData));
 
   Vec3 referenceCollisionPoint3(
       0, manager.simulatiorRadius() / 2 - manager.collectorRadius(), 0);
   ASSERT_EQ(hitData.collisionPoint(), referenceCollisionPoint3)
-      << " point from: " << parallelYaxis;
+      << " point from: " << alongYAxis;
 
   Ray atSixtyDegreesAlongX(
       kVZero, core::Vec3(std::cos(deg2rad(60)), 0, std::sin(deg2rad(60))));
