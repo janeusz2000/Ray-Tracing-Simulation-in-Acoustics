@@ -98,4 +98,8 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {
   ASSERT_EQ(
       core::Vec3(manager.simulatiorRadius() / 2, 0, manager.collectorRadius()),
       hitData.collisionPoint());
+
+  Ray tiltedFromXY(kVZero, Vec3(2 * manager.collectorRadius(),
+                                2 * manager.collectorRadius(), 2));
+  ASSERT_FALSE(performHitAtEnergyCollectors(tiltedFromXY, &hitData));
 }
