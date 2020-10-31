@@ -96,7 +96,7 @@ cc_test(
         "tests/generators_test.cpp",
     ],
     deps = [
-        ":utils",
+        ":utilsGenerators",
         "@com_google_googletest//:gtest_main",
     ],
 )
@@ -124,6 +124,21 @@ cc_test(
     ],
 )
 
+cc_library(
+    name = "utilsObject",
+    srcs = [
+        "core/ray.cpp",
+        "core/vec3.cpp",
+        "obj/objects.cpp"
+    ],
+    hdrs = [
+        "core/ray.h",
+        "core/vec3.h",
+        "constants.h",
+        "obj/objects.h",
+    ],
+)
+
 cc_test(
     name = "object_utils_test",
     srcs = [
@@ -131,8 +146,23 @@ cc_test(
     ],
 
     deps = [
-        ":utils",
+        ":utilsObject",
         "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "utilsTriangle",
+    srcs = [
+        "core/ray.cpp",
+        "core/vec3.cpp",
+        "obj/objects.cpp"
+    ],
+    hdrs = [
+        "core/ray.h",
+        "core/vec3.h",
+        "constants.h",
+        "obj/objects.h",
     ],
 )
 
@@ -142,12 +172,32 @@ cc_test(
         "tests/triangleObj_test.cpp",
     ],
     deps = [
-        ":utilsGenerators",
+        ":utilsTriangle",
         "@com_google_googletest//:gtest_main",
     ],
 )
 
+cc_library(
+    name = "utilsSceneManager",
+    srcs = [
+        "main/sceneManager.cpp",
+        "obj/generators.cpp",
+        "obj/objects.cpp",
+        "core/ray.cpp",
+        "core/vec3.cpp",
 
+    ],
+    hdrs = [
+        "constants.h",
+        "localUtilities.h",
+        "main/sceneManager.h",
+        "obj/generators.h",
+        "obj/objects.h",
+        "core/ray.h",
+        "core/vec3.h",
+    ],
+
+)
 
 cc_test(
     name = "sceneManager_test",
@@ -155,7 +205,7 @@ cc_test(
         "tests/sceneManager_test.cpp",
     ],
     deps = [    
-        ":utils",
+        ":utilsSceneManager",
         "@com_google_googletest//:gtest_main",
     ],
 )
