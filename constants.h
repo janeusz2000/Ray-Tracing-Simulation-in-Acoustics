@@ -3,18 +3,19 @@
 
 #include <cmath>
 
-namespace constants
-{
-    const float kAccuracy = 0.000005;
-    const float kSoundSpeed = 343.216; // This is measured in 20'C at 1000 hPa
-    const float kPi = std::acos(-1);
-    const float kDefaultSimulationRadius = 4; // [m] // TODO: deletethis dependency
-    const int kPopulation = 37; // TODO: delete this dependency
-    const float kHitAccuracy = 0.0001;
+namespace constants {
+const float kAccuracy = 0.000005;
+const float kSoundSpeed = 343.216; // This is measured in 20'C at 1000 hPa
+const float kPi = std::acos(-1);
+const float kDefaultSimulationRadius = 4; // [m]
+const int kPopulation = 37;
+const float kHitAccuracy = 0.0001;
 
-    // ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to equal distances
-    const float kDefaultEnergyCollectorRadius = kPi * kDefaultSimulationRadius / kPopulation;
+// ( 2 *  pi * R ) / 2 is for dividing whole sphereWall to equal distances
+const float kDefaultEnergyCollectorRadius =
+    kPi * kDefaultSimulationRadius / kPopulation;
 
 } // namespace constants
+
 
 #endif

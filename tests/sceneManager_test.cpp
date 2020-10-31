@@ -1,3 +1,5 @@
+#include "constants.h"
+#include "localUtilities.h"
 #include "main/sceneManager.h"
 #include "obj/generators.h"
 #include "obj/objects.h"
@@ -9,6 +11,7 @@ using core::Ray;
 using core::RayHitData;
 using core::Vec3;
 using generators::PointSource;
+using localUtilities::deg2rad;
 using objects::Object;
 using objects::TriangleObj;
 
@@ -25,8 +28,6 @@ protected:
     }
     return false;
   }
-  // TODO: add this to constants.h instead of here
-  float deg2rad(float angle) { return 2 * kPi * angle / 360; }
 
   SceneManager manager;
 };
