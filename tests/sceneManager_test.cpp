@@ -102,4 +102,9 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {
   Ray tiltedFromXY(kVZero, Vec3(2 * manager.collectorRadius(),
                                 2 * manager.collectorRadius(), 2));
   ASSERT_FALSE(performHitAtEnergyCollectors(tiltedFromXY, &hitData));
+
+  Ray straightUpMoved(
+      Vec3(2 * manager.collectorRadius(), 2 * manager.collectorRadius(), 0),
+      Vec3(0, 0, 1));
+  ASSERT_FALSE(performHitAtEnergyCollectors(straightUpMoved, &hitData));
 }
