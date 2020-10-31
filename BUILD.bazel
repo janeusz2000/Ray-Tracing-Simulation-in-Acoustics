@@ -25,6 +25,16 @@ cc_library(
         "localUtilities.h"
     ],
 )
+cc_library(
+   name = "utilsVec3",
+    srcs = [
+        "core/vec3.cpp",
+    ],
+    hdrs = [
+        "constants.h",
+        "core/vec3.h",
+    ], 
+)
 
 cc_test(
     name = "vec3_test",
@@ -32,7 +42,7 @@ cc_test(
         "tests/vec3_test.cpp",
     ],
     deps = [
-        ":utils",
+        ":utilsVec3",
         "@com_google_googletest//:gtest_main",
     ],
 )
