@@ -47,13 +47,79 @@ cc_test(
     ],
 )
 
+cc_library(
+   name = "utilsEnergyCollector",
+    srcs = [
+        "core/vec3.cpp",
+        "core/ray.cpp",
+        "obj/objects.cpp",
+    ],
+    hdrs = [
+        "constants.h",
+        "core/vec3.h",
+        "core/ray.h",
+        "obj/objects.h",
+    ], 
+)
+
+cc_test(
+    name = "energyCollector_test",
+    srcs = [
+        "tests/energyCollector_test.cpp",
+    ],
+    deps = [
+        ":utilsEnergyCollector",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+   name = "utilsGenerators",
+    srcs = [
+        "core/vec3.cpp",
+        "core/ray.cpp",
+        "obj/objects.cpp",
+        "obj/generators.cpp"
+    ],
+    hdrs = [
+        "constants.h",
+        "core/vec3.h",
+        "core/ray.h",
+        "obj/objects.h",
+        "obj/generators.h",
+    ], 
+)
+
+cc_test(
+    name = "generators_test",
+    srcs = [
+        "tests/generators_test.cpp",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "utilsRay",
+    srcs = [
+        "core/ray.cpp",
+        "core/vec3.cpp",
+    ],
+    hdrs = [
+        "core/ray.h",
+        "core/vec3.h",
+        "constants.h",
+    ],
+)
 cc_test(
     name = "ray_test",
     srcs = [
         "tests/ray_test.cpp",
     ],
     deps = [
-        ":utils",
+        ":utilsRay",
         "@com_google_googletest//:gtest_main",
     ],
 )
@@ -71,37 +137,17 @@ cc_test(
 )
 
 cc_test(
-    name = "energyCollector_test",
-    srcs = [
-        "tests/energyCollector_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-
-cc_test(
     name = "triangleObj_test",
     srcs = [
         "tests/triangleObj_test.cpp",
     ],
     deps = [
-        ":utils",
+        ":utilsGenerators",
         "@com_google_googletest//:gtest_main",
     ],
 )
 
-cc_test(
-    name = "generators_test",
-    srcs = [
-        "tests/generators_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
+
 
 cc_test(
     name = "sceneManager_test",
