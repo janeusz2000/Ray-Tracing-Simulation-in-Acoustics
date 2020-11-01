@@ -20,7 +20,7 @@ public:
                      constants::kDefaultSimulationRadius){};
   SceneManager(int collectors, float simulationRadius);
 
-  bool loadModel(std::string_view objPath);
+  [[nodiscard]] bool loadModel(std::string_view objPath);
 
   std::vector<objects::EnergyCollector *> getEnergyCollectors() const;
   std::vector<objects::TriangleObj *> getModelTriangles() const;
@@ -29,6 +29,8 @@ public:
   const generators::PointSource &getPointSource();
 
   float collectorRadius() const { return collectorRadius_; };
+  // TODO: this should be based od load model
+  float getSmapleSize() const { return 1.0f; };
   float simulatiorRadius() const { return simulationRadius_; };
 
 private:

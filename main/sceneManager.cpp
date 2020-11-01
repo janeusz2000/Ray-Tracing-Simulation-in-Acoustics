@@ -28,6 +28,10 @@ SceneManager::getEnergyCollectors() const {
   return temp;
 }
 
+// TODO: temporary implementation of load model
+// TODO: should also determinate size of the sample
+bool SceneManager::loadModel(std::string_view objPath) { return true; };
+
 // PRIVATE METHODS
 
 void SceneManager::createCollectors() {

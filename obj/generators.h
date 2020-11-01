@@ -26,6 +26,15 @@ struct UniformRandomGen : public RandomGen {
   std::uniform_real_distribution<float> dist_;
 };
 
+struct GaussianRandomGen : public RandomGen {
+  GaussianRandomGen(float mean, float standardDeviation)
+      : engine_(std::random_device()()), dist_(mean, standardDeviation){};
+  float getNext() override { return dist_(engine_); }
+
+  std::mt19937_64 engine_;
+  std::uniform_real_distribution<float> dist_;
+};
+
 struct FakeRandomGen : public RandomGen {
   float getNext() override { return 0; }
 };
@@ -36,7 +45,7 @@ struct FakeRandomGen : public RandomGen {
 // and origin of the source position
 class PointSource final {
 public:
-  PointSource() = delete;
+  PointSource() = default;
   explicit PointSource(
       float freq, int numOfRaysPerRow, float SampleSize, RandomGen *randomGen,
       core::Vec3 origin = core::Vec3(0, 0, constants::kDefaultSimulationRadius))
