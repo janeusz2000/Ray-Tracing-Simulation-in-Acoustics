@@ -5,6 +5,8 @@
 #include "obj/generators.h"
 #include "obj/objects.h"
 
+#include <iostream>
+#include <limits>
 #include <sstream>
 #include <string_view>
 #include <vector>
@@ -28,6 +30,7 @@ private:
   Simulator &operator=(const Simulator &) = delete;
 
   void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
+  void printEnergy();
 
   generators::PointSource source_;
   generators::FakeRandomGen offsetGenerator_;

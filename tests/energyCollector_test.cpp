@@ -84,9 +84,6 @@ TEST(ENERGYCOLLECTOR_METHODS, Method_DistanceAt) {
 }
 
 TEST(ENERGYCOLLECTOR_METHODS, Method_CollectEnergy) {
-  // TODO: Energy distribution between many collectors
-  // TODO: Phase impact on the given energy to the collector
-
   EnergyCollector object1(core::Vec3(0, 0, 0));
   core::RayHitData temp(core::RayHitData(
       50, core::Vec3(0, 1, 0).normalize(),

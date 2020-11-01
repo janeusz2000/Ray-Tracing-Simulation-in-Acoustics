@@ -25,7 +25,7 @@ public:
   std::vector<objects::EnergyCollector *> getEnergyCollectors() const;
   std::vector<objects::TriangleObj *> getModelTriangles() const;
   std::vector<objects::TriangleObj *> getReferencePlate() const;
-  const objects::SphereWall &getSphereWall();
+  objects::SphereWall &getSphereWall();
   const generators::PointSource &getPointSource();
 
   float collectorRadius() const { return collectorRadius_; };
