@@ -30,6 +30,34 @@ void Simulator::calculatePressure() {
   // TODO: calculates all pressure from energy collectors
 }
 
-bool Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData) {
-  return false;
+void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
+                         int depth) {
+  core::RayHitData closestHitdata;
+
+  if (depth > 0) {
+    bool continueRecursion = false;
+
+    for (const auto &obj : model_) {
+
+      if (obj->hitObject(ray, frequency_, hitData)) {
+        if ((ray.getOrigin() - hitData->origin()).magnitude() <
+            (ray.getOrigin() - closestHitdata.origin()).magnitude()) {
+
+          closestHitdata = *hitData;
+          continueRecursion = true;
+        }
+      }
+    }
+    if (continueRecursion) {
+
+      // Reflected direction
+      core::Vec3 newDir =
+          ray.getDirection() -
+          2 * (closestHitdata.normal().scalarProduct(ray.getDirection()) *
+               closestHitData.normal());
+
+      core::Ray reflectedRay(closestHitData.collisionPoint(), newDir);
+      rayTrace(reflectedRay, hitData, depth - 1);
+    }
+  }
 }
