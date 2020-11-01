@@ -32,8 +32,9 @@ void Simulator::calculatePressure() {
 
 void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
                          int depth) {
-  core::RayHitData closestHitdata;
+  core::RayHitData closestHitData;
 
+  // TODO: check sphere wall is hit
   if (depth > 0) {
     bool continueRecursion = false;
 
@@ -41,19 +42,18 @@ void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
 
       if (obj->hitObject(ray, frequency_, hitData)) {
         if ((ray.getOrigin() - hitData->origin()).magnitude() <
-            (ray.getOrigin() - closestHitdata.origin()).magnitude()) {
+            (ray.getOrigin() - closestHitData.origin()).magnitude()) {
 
-          closestHitdata = *hitData;
+          closestHitData = *hitData;
           continueRecursion = true;
         }
       }
     }
     if (continueRecursion) {
 
-      // Reflected direction
       core::Vec3 newDir =
           ray.getDirection() -
-          2 * (closestHitdata.normal().scalarProduct(ray.getDirection()) *
+          2 * (closestHitData.normal().scalarProduct(ray.getDirection()) *
                closestHitData.normal());
 
       core::Ray reflectedRay(closestHitData.collisionPoint(), newDir);
