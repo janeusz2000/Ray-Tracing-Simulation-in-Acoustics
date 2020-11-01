@@ -13,10 +13,11 @@
 
 // This class run simulation for specific frequency,
 // Calculates pressure from energy in collector in collectors
-// Writes results to txt file
+// Prepares pressure values for export
 
 class Simulator {
 public:
+  Simulator() = default; // TODO: resolve thsk folr later
   Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
             float simulationRadius, std::string_view objPath);
 
@@ -24,11 +25,9 @@ public:
   void run();
   void calculatePressure();
 
-private:
-  Simulator() = delete;
-  Simulator(const Simulator &) = delete;
-  Simulator &operator=(const Simulator &) = delete;
+  Simulator &operator=(const Simulator &other);
 
+private:
   void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
   void printEnergy();
 

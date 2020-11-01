@@ -30,6 +30,10 @@ void Simulator::calculatePressure() {
   // TODO: calculates all pressure from energy collectors
 }
 
+// TODO:
+// ! THIS NEEDS TO BE FIXED FIRST
+Simulator &Simulator::operator=(const Simulator &other) { return *this; };
+
 void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
                          int depth) {
   core::RayHitData closestHitData;
@@ -92,5 +96,5 @@ void Simulator::printEnergy() {
   for (const auto &col : collectors_) {
     std::cout << col->getEnergy() << "\n";
   }
-  std::cout << std::endl;
+  std::cout << std::flush;
 }
