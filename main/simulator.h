@@ -27,11 +27,14 @@ private:
   Simulator(const Simulator &) = delete;
   Simulator &operator=(const Simulator &) = delete;
 
+  [[nodiscard]] bool rayTrace(const core::Ray &ray, core::RayHitData *hitdata);
+
   generators::PointSource source_;
   generators::FakeRandomGen offsetGenerator_;
+  SceneManager manager_;
+
   float frequency_;
   size_t numOfRaysPerRow_;
-  SceneManager manager_;
   std::vector<objects::TriangleObj *> model_;
   std::vector<objects::EnergyCollector *> collectors_;
 };
