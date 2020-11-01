@@ -9,6 +9,7 @@ SceneManager::SceneManager(int collectors, float simulationRadius)
     collectorRadius_ =
         2 * constants::kPi * simulationRadius_ / (2 * numCollectors_);
     createCollectors();
+    createReferencePlate();
   } else {
     std::stringstream ss;
     ss << "collector population:" << numCollectors_
