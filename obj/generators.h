@@ -32,7 +32,7 @@ struct GaussianRandomGen : public RandomGen {
   float getNext() override { return dist_(engine_); }
 
   std::mt19937_64 engine_;
-  std::uniform_real_distribution<float> dist_;
+  std::normal_distribution<float> dist_;
 };
 
 struct FakeRandomGen : public RandomGen {
