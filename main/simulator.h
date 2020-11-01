@@ -27,7 +27,7 @@ private:
   Simulator(const Simulator &) = delete;
   Simulator &operator=(const Simulator &) = delete;
 
-  [[nodiscard]] bool rayTrace(const core::Ray &ray, core::RayHitData *hitdata);
+  [[nodiscard]] bool rayTrace(const core::Ray &ray, core::RayHitData *hitData);
 
   generators::PointSource source_;
   generators::FakeRandomGen offsetGenerator_;

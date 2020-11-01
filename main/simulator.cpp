@@ -23,9 +23,13 @@ Simulator::Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
 }
 
 void Simulator::run() {
-  // TODO: runs simulation
+  // TODO: initialization of the simulation
 }
 
 void Simulator::calculatePressure() {
   // TODO: calculates all pressure from energy collectors
+}
+
+bool Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData) {
+  return false;
 }
