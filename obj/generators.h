@@ -6,7 +6,6 @@
 #include "core/vec3.h"
 
 #include <cmath>
-#include <functional>
 #include <initializer_list>
 #include <iostream>
 #include <random>
