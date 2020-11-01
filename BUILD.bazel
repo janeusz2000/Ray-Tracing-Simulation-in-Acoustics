@@ -209,3 +209,38 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "utilsSimulator",
+    srcs = [
+        "main/sceneManager.cpp",
+        "main/simulator.cpp",
+        "obj/generators.cpp",
+        "obj/objects.cpp",
+        "core/ray.cpp",
+        "core/vec3.cpp",
+        
+    ],
+    hdrs = [
+        "constants.h",
+        "localUtilities.h",
+        "main/sceneManager.h",
+        "main/simulator.h",
+        "obj/generators.h",
+        "obj/objects.h",
+        "core/ray.h",
+        "core/vec3.h",
+    ]
+)
+
+cc_test(
+    name = "simulator_test",
+    srcs = [
+        "tests/simulator_test.cpp",
+    ],
+    deps = [    
+        ":utilsSimulator",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
