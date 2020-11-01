@@ -9,7 +9,7 @@
 // Calculates pressure from energy in collector in collectors
 // Writes results to txt file
 
-// TODO: how to pass path to sceneManager? - need to think about that
+// TODO: how to pass path to sceneManager?
 
 class Simulator {
 public:
