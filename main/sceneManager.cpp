@@ -61,3 +61,27 @@ void SceneManager::createCollectors() {
     }
   }
 }
+
+void SceneManager::createReferencePlate() {
+
+  if (!referencePlate_.empty()) {
+    std::stringstream ss;
+    ss << "reference plate not empty: \n";
+    for (const auto &tri : referencePlate_) {
+      ss << *tri << "\n";
+    }
+    throw std::logic_error(ss.str());
+  }
+
+  std::vector<core::Vec3> points = {
+      core::Vec3(simulationRadius_ / 4, simulationRadius_ / 4, 0),
+      core::Vec3(simulationRadius_ / 4, -simulationRadius_ / 4, 0),
+      core::Vec3(-simulationRadius_ / 4, simulationRadius_ / 4, 0),
+      core::Vec3(-simulationRadius_ / 4, -simulationRadius_ / 4, 0)};
+
+  referencePlate_.reserve(2);
+  referencePlate_.push_back(
+      std::make_unique<objects::TriangleObj>(points[0], points[1], points[2]));
+  referencePlate_.push_back(
+      std::make_unique<objects::TriangleObj>(points[1], points[2], points[3]));
+}

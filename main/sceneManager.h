@@ -42,8 +42,17 @@ private:
   // that are crossing each other at Vec3(0, 0, SimulationRadius / 2).
   void createCollectors();
 
+  // Assigns square made with two triangleObjs to the referenePlate_
+  // Triangles have points at:
+  //  - Vec3(simRadius/4, simRadius/4, 0),
+  //  - Vec3(simRadius/4, -simRadius/4, 0),
+  //  - Vec3(-simRadius/4, simRadius/4, 0),
+  //  - Vec3(-simRadius/4, -simRadius/4, 0)
+  void createReferencePlate();
+
   std::vector<std::unique_ptr<objects::TriangleObj>> modelTriangles_;
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors_;
+  std::vector<std::unique_ptr<objects::TriangleObj>> referencePlate_;
   int numCollectors_;
   float collectorRadius_, simulationRadius_;
 };
