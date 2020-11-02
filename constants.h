@@ -2,7 +2,7 @@
 #define CONSTANTS_H
 
 #include <cmath>
-
+#include <string>
 
 namespace constants {
 const float kAccuracy = 0.000005;
@@ -15,6 +15,9 @@ const float kHitAccuracy = 0.0001;
 const float kDefaultEnergyCollectorRadius =
     kPi * kDefaultSimulationRadius / kPopulation;
 
+const size_t kDefaultNumRaysPerRow = 1000;
+const std::string kSkipPath = "";
+const float kSkipFreq = 1000;
 } // namespace constants
 
 #endif

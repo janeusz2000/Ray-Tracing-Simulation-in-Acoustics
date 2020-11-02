@@ -17,7 +17,10 @@
 
 class Simulator {
 public:
-  Simulator() = default; // TODO: resolve thsk folr later
+  Simulator()
+      : Simulator(constants::kSkipFreq, constants::kDefaultNumRaysPerRow,
+                  constants::kPopulation, constants::kDefaultSimulationRadius,
+                  constants::kSkipPath){};
   Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
             float simulationRadius, std::string_view objPath);
 
@@ -25,9 +28,11 @@ public:
   void run();
   void calculatePressure();
 
-  Simulator &operator=(const Simulator &other);
-
 private:
+  // Disallow copy and assing
+  Simulator(const Simulator &) = delete;
+  Simulator &operator=(const Simulator &) = delete;
+
   void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
   void printEnergy();
 
