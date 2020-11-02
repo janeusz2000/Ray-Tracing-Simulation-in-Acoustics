@@ -52,7 +52,7 @@ protected:
 // point to the sphere collectors;
 class SphereWall : public Sphere {
 public:
-  SphereWall() : SphereWall(constants::kDefaultSimulationRadius){};
+  SphereWall() : SphereWall(constants::kDefaultSimulationRadius / 2){};
   explicit SphereWall(float radius) { setRadius(radius); }
   SphereWall(const SphereWall &other) = default;
 

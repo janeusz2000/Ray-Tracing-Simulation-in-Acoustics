@@ -2,7 +2,7 @@
 #include <sstream>
 SceneManager::SceneManager(int collectors, float simulationRadius)
     : numCollectors_(collectors), simulationRadius_(simulationRadius),
-      sphereWall_(objects::SphereWall(simulationRadius)) {
+      sphereWall_(objects::SphereWall(simulationRadius / 2)) {
   if (numCollectors_ % 4 == 0 || (numCollectors_ - 1) % 4 == 0) {
     // ( 2 *  pi * R ) / ( 2 * population)  for dividing whole
     // half circle distance to equal distances for population of
