@@ -28,7 +28,7 @@ private:
 
 class Sphere : public Object {
 public:
-  Sphere() : radius_(1){};
+  Sphere() : radius_(1.0f){};
   explicit Sphere(const core::Vec3 &origin, float rad = 1);
 
   friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
