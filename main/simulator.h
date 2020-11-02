@@ -20,13 +20,14 @@ public:
   Simulator()
       : Simulator(constants::kSkipFreq, constants::kDefaultNumRaysPerRow,
                   constants::kPopulation, constants::kDefaultSimulationRadius,
-                  constants::kSkipPath){};
+                  constants::kSkipPath, constants::kDefaultDepth){};
   Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
-            float simulationRadius, std::string_view objPath);
+            float simulationRadius, std::string_view objPath, int depth);
 
   // Im scared
   void run();
   void calculatePressure();
+  void printEnergy();
 
 private:
   // Disallow copy and assing
@@ -34,7 +35,6 @@ private:
   Simulator &operator=(const Simulator &) = delete;
 
   void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
-  void printEnergy();
 
   generators::PointSource source_;
   generators::FakeRandomGen offsetGenerator_;
@@ -42,6 +42,7 @@ private:
 
   float frequency_;
   size_t numOfRaysPerRow_;
+  int depth_;
   std::vector<objects::TriangleObj *> model_;
   std::vector<objects::EnergyCollector *> collectors_;
 };

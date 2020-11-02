@@ -1,9 +1,10 @@
 #include "main/simulator.h"
 
 Simulator::Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
-                     float simulationRadius, std::string_view objPath)
+                     float simulationRadius, std::string_view objPath,
+                     int depth)
     : frequency_(frequency), numOfRaysPerRow_(numOfRaysPerRow_),
-      manager_(SceneManager(collectors, simulationRadius)) {
+      manager_(SceneManager(collectors, simulationRadius)), depth_(depth) {
   // TODO: no implementation yet
   // model_ = manager_.getModelTriangles();
 
@@ -23,7 +24,13 @@ Simulator::Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
 }
 
 void Simulator::run() {
-  // TODO: initialization of the simulation
+  for (size_t xIter = 0; xIter < numOfRaysPerRow_; ++xIter) {
+    for (size_t yIter = 0; yIter < numOfRaysPerRow_; ++yIter) {
+      core::Ray currentRay = source_.generateRay(xIter, yIter);
+      core::RayHitData hitData;
+      rayTrace(currentRay, &hitData, depth_);
+    }
+  }
 }
 
 void Simulator::calculatePressure() {
@@ -48,12 +55,14 @@ void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
       }
     }
 
-    // if sphereWall is closer then object or is only hit by ray
+    // if sphereWall hit point is closer to ray then
+    // Triangle hits or does ray hit Sphere wall only.
     if (manager_.getSphereWall().hitObject(ray, frequency_, hitData)) {
       if ((ray.getOrigin() - hitData->origin()).magnitude() <
           (ray.getOrigin() - closestHitData.origin()).magnitude()) {
 
-        // Find the closest energy collector
+        // Find the closest energy collector to
+        // the point where sphereWall is hit
         float distance = std::numeric_limits<float>::max();
         int closestCollectorIndex;
         for (size_t collectorIndex = 0; collectorIndex < collectors_.size();
@@ -68,12 +77,12 @@ void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
         }
 
         // TODO: energy distribution between collectors
-        // add energy to the closest collector to hit
+        // add energy to the closest collector
         collectors_[closestCollectorIndex]->addEnergy(ray.getEnergy());
       }
     }
 
-    // if object was hit, not sphere wall, we continue to ray trace
+    // if triangle is hit, then we continue ray tracing
     if (continueRecursion) {
 
       // Snell's law applied for reflected ray
