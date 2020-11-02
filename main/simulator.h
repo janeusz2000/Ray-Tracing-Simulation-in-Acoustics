@@ -37,6 +37,7 @@ private:
   void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
 
   generators::PointSource source_;
+  // TODO: I want to be able to change engine during the program
   generators::FakeRandomGen offsetGenerator_;
   SceneManager manager_;
 
