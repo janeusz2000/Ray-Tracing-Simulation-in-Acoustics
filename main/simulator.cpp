@@ -86,7 +86,7 @@ void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
     // if triangle is hit, then we continue ray tracing
     if (continueRecursion) {
 
-      // Snell's law applied for reflected ray
+      // Reflection: https://en.wikipedia.org/wiki/Reflection_(mathematics)
       core::Vec3 newDir =
           ray.getDirection() -
           2 * (closestHitData.normal().scalarProduct(ray.getDirection()) *
@@ -104,4 +104,12 @@ void Simulator::printEnergy() {
     std::cout << col->getEnergy() << "\n";
   }
   std::cout << std::flush;
+}
+
+std::ostream &operator<<(std::ostream os, const Simulator &sim) {
+  return os << "SIMULATOR \n"
+            << "Ray per row num: " << sim.numOfRaysPerRow() << "\n"
+            << "Frequency: " << sim.frequency() << "\n"
+            << "Depth: " << sim.depth() << "\n"
+            << "Source Power: " << sim.sourcePower();
 }

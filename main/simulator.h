@@ -31,6 +31,12 @@ public:
   void printEnergy();
   void run();
   void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
+  friend std::ostream operator<<(std::ostream &os, const Simulator &sim);
+
+  size_t numOfRaysPerRow() const { return numOfRaysPerRow_; }
+  int depth() const { return depth_; }
+  float frequency() const { return frequency_; }
+  float sourcePower() const { return sourcePower_; }
 
 private:
   // Disallow copy and assing

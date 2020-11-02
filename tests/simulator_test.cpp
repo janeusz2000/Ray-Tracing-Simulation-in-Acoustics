@@ -2,6 +2,7 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
+using constants::kDefaultCollectorPopulation;
 using constants::kDefaultEnergyCollectorRadius;
 using constants::kDefaultSimulationRadius;
 using constants::kSkipFreq;
@@ -17,6 +18,11 @@ const float kDefaultEnergyPerRay =
     (constants::kDefaultNumRaysPerRow * constants::kDefaultNumRaysPerRow);
 
 class ReferencePlateTest : public ::testing::Test {
+public:
+  ReferencePlateTest()
+      : sim(Simulator(kSkipFreq, 100, kDefaultCollectorPopulation,
+                      kDefaultSimulationRadius, kSkipPath, 3, 500)){};
+
 protected:
   Simulator sim;
 };
@@ -31,4 +37,10 @@ TEST_F(ReferencePlateTest, EnergyCollectionFromRay) {
   ASSERT_EQ(hitData.collisionPoint(), Vec3(0, 0, kDefaultSimulationRadius / 2));
 
   ASSERT_EQ(hitData.energy(), kDefaultEnergyPerRay);
+}
+
+TEST_F(ReferencePlateTest, TempDemo) {
+  // sim.run();
+
+  // ASSERT_TRUE(false);
 }
