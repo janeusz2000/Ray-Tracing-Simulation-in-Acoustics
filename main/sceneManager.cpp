@@ -1,7 +1,8 @@
 #include "main/sceneManager.h"
 #include <sstream>
 SceneManager::SceneManager(int collectors, float simulationRadius)
-    : numCollectors_(collectors), simulationRadius_(simulationRadius) {
+    : numCollectors_(collectors), simulationRadius_(simulationRadius),
+      sphereWall_(objects::SphereWall(simulationRadius)) {
   if (numCollectors_ % 4 == 0 || (numCollectors_ - 1) % 4 == 0) {
     // ( 2 *  pi * R ) / ( 2 * population)  for dividing whole
     // half circle distance to equal distances for population of
@@ -77,7 +78,6 @@ void SceneManager::createCollectors() {
 }
 
 void SceneManager::createReferencePlate() {
-
   if (!referencePlate_.empty()) {
     std::stringstream ss;
     ss << "reference plate not empty: \n";
