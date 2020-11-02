@@ -27,16 +27,15 @@ public:
             float sourcePower);
 
   // Im scared
-  void run();
   void calculatePressure();
   void printEnergy();
+  void run();
+  void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
 
 private:
   // Disallow copy and assing
   Simulator(const Simulator &) = delete;
   Simulator &operator=(const Simulator &) = delete;
-
-  void rayTrace(const core::Ray &ray, core::RayHitData *hitData, int depth);
 
   generators::PointSource source_;
   // TODO: I want to be able to change engine during the program

@@ -4,14 +4,13 @@
 
 namespace core {
 
-Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy) {
+Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
+    : origin_(origin), energy_(energy) {
   if (direction == Vec3(0, 0, 0)) {
     throw std::invalid_argument("Direction  equal to Vec3(0, 0, 0)");
   }
 
-  origin_ = origin;
   direction_ = direction.normalize();
-  energy_ = energy;
 }
 
 Vec3 Ray::at(float time) const { return origin_ + time * direction_; }

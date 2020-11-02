@@ -6,6 +6,7 @@
 #include <random>
 #include <sstream>
 
+using constants::kDefaultEnergyPerRay;
 namespace generators {
 FakeRandomGen fakeEngine;
 

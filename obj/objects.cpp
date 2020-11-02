@@ -100,7 +100,6 @@ float EnergyCollector::distanceAt(const core::Vec3 &positionHit) const {
 }
 
 void EnergyCollector::collectEnergy(const core::RayHitData &hitdata) {
-  // TODO: Energy distribution between many collectors
   energy_ += hitdata.energy();
 }
 

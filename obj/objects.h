@@ -64,7 +64,7 @@ public:
   explicit EnergyCollector(
       const core::Vec3 &origin,
       float radius = constants::kDefaultEnergyCollectorRadius)
-      : energy_(0) {
+      : energy_(0.0f) {
     setRadius(radius);
     setOrigin(origin);
   }

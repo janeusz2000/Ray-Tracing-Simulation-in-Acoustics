@@ -79,7 +79,7 @@ void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
 
         // TODO: energy distribution between collectors
         // add energy to the closest collector
-        collectors_[closestCollectorIndex]->addEnergy(ray.getEnergy());
+        collectors_[closestCollectorIndex]->collectEnergy(*hitData);
       }
     }
 
@@ -92,7 +92,8 @@ void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
           2 * (closestHitData.normal().scalarProduct(ray.getDirection()) *
                closestHitData.normal());
 
-      core::Ray reflectedRay(closestHitData.collisionPoint(), newDir);
+      core::Ray reflectedRay(closestHitData.collisionPoint(), newDir,
+                             ray.getEnergy());
       rayTrace(reflectedRay, hitData, depth - 1);
     }
   }

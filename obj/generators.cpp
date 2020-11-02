@@ -40,7 +40,7 @@ core::Ray PointSource::generateRay(int xIter, int yIter) {
   return core::Ray(origin_,
                    leftCorner_ + u * core::Vec3(1, 0, 0) +
                        v * core::Vec3(0, 1, 0) - origin_,
-                   sourcePower_ / (numOfRaysPerRow_ * numOfRaysPerRow_));
+                   sourcePower_);
 }
 
 // GETTERS AND SETTERS
