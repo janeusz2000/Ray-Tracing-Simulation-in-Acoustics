@@ -3,8 +3,11 @@
 #include "gtest/gtest.h"
 
 using constants::kDefaultCollectorPopulation;
+using constants::kDefaultDepth;
 using constants::kDefaultEnergyCollectorRadius;
+using constants::kDefaultNumRaysPerRow;
 using constants::kDefaultSimulationRadius;
+using constants::kDefaultSourcePower;
 using constants::kSkipFreq;
 using constants::kSkipPath;
 using core::Ray;
@@ -20,8 +23,9 @@ const float kDefaultEnergyPerRay =
 class ReferencePlateTest : public ::testing::Test {
 public:
   ReferencePlateTest()
-      : sim(Simulator(kSkipFreq, 100, kDefaultCollectorPopulation,
-                      kDefaultSimulationRadius, kSkipPath, 3, 500)){};
+      : sim(Simulator(kSkipFreq, kDefaultNumRaysPerRow,
+                      kDefaultCollectorPopulation, kDefaultSimulationRadius,
+                      kSkipPath, kDefaultDepth, kDefaultSourcePower)){};
 
 protected:
   Simulator sim;
@@ -40,7 +44,7 @@ TEST_F(ReferencePlateTest, EnergyCollectionFromRay) {
 }
 
 TEST_F(ReferencePlateTest, TempDemo) {
-  // sim.run();
-
-  // ASSERT_TRUE(false);
+  sim.run();
+  sim.printEnergy();
+  ASSERT_TRUE(false);
 }

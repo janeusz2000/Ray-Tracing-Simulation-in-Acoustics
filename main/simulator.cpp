@@ -3,7 +3,7 @@
 Simulator::Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
                      float simulationRadius, std::string_view objPath,
                      int depth, float sourcePower)
-    : frequency_(frequency), numOfRaysPerRow_(numOfRaysPerRow_),
+    : frequency_(frequency), numOfRaysPerRow_(numOfRaysPerRow),
       manager_(SceneManager(collectors, simulationRadius)), depth_(depth),
       sourcePower_(sourcePower) {
   // TODO: no implementation yet
@@ -106,10 +106,10 @@ void Simulator::printEnergy() {
   std::cout << std::flush;
 }
 
-std::ostream &operator<<(std::ostream os, const Simulator &sim) {
+std::ostream &operator<<(std::ostream &os, const Simulator &sim) {
   return os << "SIMULATOR \n"
             << "Ray per row num: " << sim.numOfRaysPerRow() << "\n"
-            << "Frequency: " << sim.frequency() << "\n"
+            << "Frequency: " << sim.frequency() << " [Hz] \n"
             << "Depth: " << sim.depth() << "\n"
-            << "Source Power: " << sim.sourcePower();
+            << "Source Power: " << sim.sourcePower() << " [W] \n";
 }
