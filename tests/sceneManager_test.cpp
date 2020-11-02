@@ -18,6 +18,11 @@ using objects::TriangleObj;
 const core::Vec3 kVZero(0, 0, 0);
 
 class SceneManagerTest : public ::testing::Test {
+public:
+  SceneManagerTest()
+      : manager(SceneManager(constants::kDefaultCollectorPopulation,
+                             constants::kDefaultSimulationRadius)){};
+
 protected:
   bool performHitAtEnergyCollectors(const Ray &inputRay, RayHitData *hitData) {
     for (objects::EnergyCollector *energyCol : manager.getEnergyCollectors()) {

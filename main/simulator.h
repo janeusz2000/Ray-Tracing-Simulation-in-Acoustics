@@ -12,7 +12,7 @@
 #include <vector>
 
 // This class run simulation for specific frequency,
-// Calculates pressure from energy in collector in collectors
+// Calculates pressure from energy in collectors
 // Prepares pressure values for export
 
 class Simulator {

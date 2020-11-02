@@ -57,7 +57,7 @@ void Simulator::rayTrace(const core::Ray &ray, core::RayHitData *hitData,
     }
 
     // if sphereWall hit point is closer to ray then
-    // Triangle hits or does ray hit Sphere wall only.
+    // Triangle hit or does ray hit Sphere wall only.
     if (manager_.getSphereWall().hitObject(ray, frequency_, hitData)) {
       if ((ray.getOrigin() - hitData->origin()).magnitude() <
           (ray.getOrigin() - closestHitData.origin()).magnitude()) {

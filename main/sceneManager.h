@@ -15,9 +15,6 @@
 // This class is creating all necessary objects for simulation.
 class SceneManager {
 public:
-  SceneManager()
-      : SceneManager(constants::kDefaultCollectorPopulation,
-                     constants::kDefaultSimulationRadius){};
   SceneManager(int collectors, float simulationRadius);
 
   [[nodiscard]] bool loadModel(std::string_view objPath);
