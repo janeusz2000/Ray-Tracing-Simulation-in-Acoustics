@@ -5,8 +5,8 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h" // https://google.github.io/styleguide/cppguide.html#Namespaces
 
+using constants::kDefaultCollectorPopulation;
 using constants::kPi;
-using constants::kPopulation;
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -37,7 +37,7 @@ TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {
     std::cout << *collectorPtr << std::endl;
   }
 
-  ASSERT_EQ(manager.getEnergyCollectors().size(), kPopulation);
+  ASSERT_EQ(manager.getEnergyCollectors().size(), kDefaultCollectorPopulation);
 
   RayHitData hitData;
   Ray straightUp(kVZero, core::Vec3(0, 0, 1));

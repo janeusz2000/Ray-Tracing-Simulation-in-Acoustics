@@ -2,9 +2,10 @@
 
 Simulator::Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
                      float simulationRadius, std::string_view objPath,
-                     int depth)
+                     int depth, float sourcePower)
     : frequency_(frequency), numOfRaysPerRow_(numOfRaysPerRow_),
-      manager_(SceneManager(collectors, simulationRadius)), depth_(depth) {
+      manager_(SceneManager(collectors, simulationRadius)), depth_(depth),
+      sourcePower_(sourcePower) {
   // TODO: no implementation yet
   // model_ = manager_.getModelTriangles();
 
@@ -18,9 +19,9 @@ Simulator::Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
   model_ = manager_.getReferencePlate();
   collectors_ = manager_.getEnergyCollectors();
 
-  source_ =
-      generators::PointSource(frequency_, numOfRaysPerRow_,
-                              manager_.getSmapleSize(), &offsetGenerator_);
+  source_ = generators::PointSource(frequency_, numOfRaysPerRow_,
+                                    manager_.getSmapleSize(), &offsetGenerator_,
+                                    simulationRadius, sourcePower);
 }
 
 void Simulator::run() {

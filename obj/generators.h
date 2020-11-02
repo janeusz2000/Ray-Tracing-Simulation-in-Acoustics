@@ -45,11 +45,12 @@ struct FakeRandomGen : public RandomGen {
 class PointSource final {
 public:
   PointSource() = default;
-  explicit PointSource(
-      float freq, int numOfRaysPerRow, float SampleSize, RandomGen *randomGen,
-      core::Vec3 origin = core::Vec3(0, 0, constants::kDefaultSimulationRadius))
+  explicit PointSource(float freq, int numOfRaysPerRow, float SampleSize,
+                       RandomGen *randomGen, float simulationRadius,
+                       float sourcePower)
       : frequency_(freq), numOfRaysPerRow_(numOfRaysPerRow),
-        sampleSize_(SampleSize), origin_(origin), randomGen_(randomGen) {
+        sampleSize_(SampleSize), origin_(core::Vec3(0, 0, simulationRadius)),
+        randomGen_(randomGen), sourcePower_(sourcePower) {
     updateSampleSize();
   }
 
@@ -77,7 +78,7 @@ public:
 
 private:
   core::Vec3 origin_, leftCorner_;
-  float frequency_, sampleSize_;
+  float frequency_, sampleSize_, sourcePower_;
   size_t numOfRaysPerRow_;
 
   RandomGen *randomGen_;

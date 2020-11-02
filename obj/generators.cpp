@@ -37,8 +37,10 @@ core::Ray PointSource::generateRay(int xIter, int yIter) {
             static_cast<float>(numOfRaysPerRow_ - 1) * sampleSize_;
   float u = (static_cast<float>(yIter) + randomGen_->getNext()) /
             static_cast<float>(numOfRaysPerRow_ - 1) * sampleSize_;
-  return core::Ray(origin_, leftCorner_ + u * core::Vec3(1, 0, 0) +
-                                v * core::Vec3(0, 1, 0) - origin_);
+  return core::Ray(origin_,
+                   leftCorner_ + u * core::Vec3(1, 0, 0) +
+                       v * core::Vec3(0, 1, 0) - origin_,
+                   sourcePower_ / (numOfRaysPerRow_ * numOfRaysPerRow_));
 }
 
 // GETTERS AND SETTERS

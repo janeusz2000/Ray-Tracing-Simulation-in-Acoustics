@@ -16,7 +16,7 @@
 class SceneManager {
 public:
   SceneManager()
-      : SceneManager(constants::kPopulation,
+      : SceneManager(constants::kDefaultCollectorPopulation,
                      constants::kDefaultSimulationRadius){};
   SceneManager(int collectors, float simulationRadius);
 

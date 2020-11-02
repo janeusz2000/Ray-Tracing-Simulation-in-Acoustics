@@ -19,10 +19,12 @@ class Simulator {
 public:
   Simulator()
       : Simulator(constants::kSkipFreq, constants::kDefaultNumRaysPerRow,
-                  constants::kPopulation, constants::kDefaultSimulationRadius,
-                  constants::kSkipPath, constants::kDefaultDepth){};
+                  constants::kDefaultCollectorPopulation,
+                  constants::kDefaultSimulationRadius, constants::kSkipPath,
+                  constants::kDefaultDepth, constants::kDefaultSourcePower){};
   Simulator(float frequency, size_t numOfRaysPerRow, int collectors,
-            float simulationRadius, std::string_view objPath, int depth);
+            float simulationRadius, std::string_view objPath, int depth,
+            float sourcePower);
 
   // Im scared
   void run();
@@ -41,7 +43,7 @@ private:
   generators::FakeRandomGen offsetGenerator_;
   SceneManager manager_;
 
-  float frequency_;
+  float frequency_, sourcePower_;
   size_t numOfRaysPerRow_;
   int depth_;
   std::vector<objects::TriangleObj *> model_;
