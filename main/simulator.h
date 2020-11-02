@@ -39,7 +39,7 @@ private:
   Simulator &operator=(const Simulator &) = delete;
 
   generators::PointSource source_;
-  // TODO: I want to be able to change engine during the program
+  // TODO: I want to be able to change engine type when program is running
   generators::FakeRandomGen offsetGenerator_;
   SceneManager manager_;
 

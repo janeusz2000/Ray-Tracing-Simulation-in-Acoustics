@@ -43,8 +43,8 @@ TEST_F(ReferencePlateTest, EnergyCollectionFromRay) {
   ASSERT_EQ(hitData.energy(), kDefaultEnergyPerRay);
 }
 
-TEST_F(ReferencePlateTest, TempDemo) {
-  sim.run();
-  sim.printEnergy();
-  ASSERT_TRUE(false);
-}
+// TEST_F(ReferencePlateTest, TempDemo) {
+//   sim.run();
+//   sim.printEnergy();
+//   ASSERT_TRUE(false);
+// }
