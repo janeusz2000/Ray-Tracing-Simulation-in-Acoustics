@@ -23,9 +23,9 @@ const float kDefaultEnergyPerRay =
 class ReferencePlateTest : public ::testing::Test {
 public:
   ReferencePlateTest()
-      : sim(Simulator(kSkipFreq, kDefaultNumRaysPerRow,
-                      kDefaultCollectorPopulation, kDefaultSimulationRadius,
-                      kSkipPath, kDefaultDepth, kDefaultSourcePower)){};
+      : sim(kSkipFreq, kDefaultNumRaysPerRow, kDefaultCollectorPopulation,
+            kDefaultSimulationRadius, kSkipPath, kDefaultDepth,
+            kDefaultSourcePower){};
 
 protected:
   Simulator sim;
