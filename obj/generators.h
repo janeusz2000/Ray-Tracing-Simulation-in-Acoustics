@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "core/ray.h"
 #include "core/vec3.h"
+#include "main/model.h"
 
 #include <cmath>
 #include <initializer_list>
@@ -38,12 +39,18 @@ public:
 // determinated by sampleSize until numOfRay number is reached
 class PointSpeakerRayFactory : public RayFactory {
 public:
-  PointSpeakerRayFactory(int numOfRays, float simulationRadius);
-  bool genRay(core::Ray *ray) override;
+  PointSpeakerRayFactory(int numOfRays, Model *model);
+
+  [[nodiscard]] bool genRay(core::Ray *ray) override;
 
 private:
-  int numOfRays_;
-  float simulationRadius_;
+  int numOfRays_, currentRayNum_;
+  Model *model_;
+
+  // Edge values of the X and Y cooridantes
+  // in Vec3 used in direction calculation
+  float start_, stop_;
+  core::Vec3 origin_;
 };
 
 } // namespace generators

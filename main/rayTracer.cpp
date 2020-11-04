@@ -1,10 +1,11 @@
 #include "core/ray.h"
 #include "core/vec3.h"
+#include "main/model.h"
 #include "obj/objects.h"
 
 class RayTracer {
 public:
-  RayTracer(objects::Model *model);
+  RayTracer(Model *model);
 
   // TODO: write comment about hit data, that its required
   // return

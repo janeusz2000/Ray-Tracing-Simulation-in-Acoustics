@@ -10,6 +10,9 @@ cc_library(
         "main/sceneManager.cpp",
         "obj/generators.cpp",
         "obj/objects.cpp",
+        "main/model.cpp",
+        "main/simulator.cpp",
+        "main/rayTracer.cpp"
     ],
     hdrs = [
         "constants.h",
@@ -18,18 +21,11 @@ cc_library(
         "main/sceneManager.h",
         "obj/generators.h",
         "obj/objects.h",
-        "localUtilities.h"
+        "localUtilities.h",
+        "main/model.h",
+        "main/simulator.h",
+        "main/rayTracer.h",
     ],
-)
-cc_library(
-   name = "utilsVec3",
-    srcs = [
-        "core/vec3.cpp",
-    ],
-    hdrs = [
-        "constants.h",
-        "core/vec3.h",
-    ], 
 )
 
 cc_test(
@@ -38,24 +34,9 @@ cc_test(
         "tests/vec3_test.cpp",
     ],
     deps = [
-        ":utilsVec3",
+        ":utils",
         "@com_google_googletest//:gtest_main",
     ],
-)
-
-cc_library(
-   name = "utilsEnergyCollector",
-    srcs = [
-        "core/vec3.cpp",
-        "core/ray.cpp",
-        "obj/objects.cpp",
-    ],
-    hdrs = [
-        "constants.h",
-        "core/vec3.h",
-        "core/ray.h",
-        "obj/objects.h",
-    ], 
 )
 
 cc_test(
@@ -64,26 +45,9 @@ cc_test(
         "tests/energyCollector_test.cpp",
     ],
     deps = [
-        ":utilsEnergyCollector",
+        ":utils",
         "@com_google_googletest//:gtest_main",
     ],
-)
-
-cc_library(
-   name = "utilsGenerators",
-    srcs = [
-        "core/vec3.cpp",
-        "core/ray.cpp",
-        "obj/objects.cpp",
-        "obj/generators.cpp"
-    ],
-    hdrs = [
-        "constants.h",
-        "core/vec3.h",
-        "core/ray.h",
-        "obj/objects.h",
-        "obj/generators.h",
-    ], 
 )
 
 cc_test(
@@ -92,46 +56,19 @@ cc_test(
         "tests/generators_test.cpp",
     ],
     deps = [
-        ":utilsGenerators",
+        ":utils",
         "@com_google_googletest//:gtest_main",
     ],
 )
 
-cc_library(
-    name = "utilsRay",
-    srcs = [
-        "core/ray.cpp",
-        "core/vec3.cpp",
-    ],
-    hdrs = [
-        "core/ray.h",
-        "core/vec3.h",
-        "constants.h",
-    ],
-)
 cc_test(
     name = "ray_test",
     srcs = [
         "tests/ray_test.cpp",
     ],
     deps = [
-        ":utilsRay",
+        ":utils",
         "@com_google_googletest//:gtest_main",
-    ],
-)
-
-cc_library(
-    name = "utilsObject",
-    srcs = [
-        "core/ray.cpp",
-        "core/vec3.cpp",
-        "obj/objects.cpp"
-    ],
-    hdrs = [
-        "core/ray.h",
-        "core/vec3.h",
-        "constants.h",
-        "obj/objects.h",
     ],
 )
 
@@ -142,23 +79,8 @@ cc_test(
     ],
 
     deps = [
-        ":utilsObject",
+        ":utils",
         "@com_google_googletest//:gtest_main",
-    ],
-)
-
-cc_library(
-    name = "utilsTriangle",
-    srcs = [
-        "core/ray.cpp",
-        "core/vec3.cpp",
-        "obj/objects.cpp"
-    ],
-    hdrs = [
-        "core/ray.h",
-        "core/vec3.h",
-        "constants.h",
-        "obj/objects.h",
     ],
 )
 
@@ -168,31 +90,9 @@ cc_test(
         "tests/triangleObj_test.cpp",
     ],
     deps = [
-        ":utilsTriangle",
+        ":utils",
         "@com_google_googletest//:gtest_main",
     ],
-)
-
-cc_library(
-    name = "utilsSceneManager",
-    srcs = [
-        "main/sceneManager.cpp",
-        "obj/generators.cpp",
-        "obj/objects.cpp",
-        "core/ray.cpp",
-        "core/vec3.cpp",
-
-    ],
-    hdrs = [
-        "constants.h",
-        "localUtilities.h",
-        "main/sceneManager.h",
-        "obj/generators.h",
-        "obj/objects.h",
-        "core/ray.h",
-        "core/vec3.h",
-    ],
-
 )
 
 cc_test(
@@ -201,34 +101,9 @@ cc_test(
         "tests/sceneManager_test.cpp",
     ],
     deps = [    
-        ":utilsSceneManager",
+        ":utils",
         "@com_google_googletest//:gtest_main",
     ],
-)
-
-cc_library(
-    name = "utilsSimulator",
-    srcs = [
-        "main/sceneManager.cpp",
-        "main/simulator.cpp",
-        "obj/generators.cpp",
-        "obj/objects.cpp",
-        "core/ray.cpp",
-        "core/vec3.cpp",
-        "main/rayTracer.cpp",
-        
-    ],
-    hdrs = [
-        "constants.h",
-        "localUtilities.h",
-        "main/sceneManager.h",
-        "main/simulator.h",
-        "obj/generators.h",
-        "obj/objects.h",
-        "core/ray.h",
-        "core/vec3.h",
-        "main/rayTracer.h",
-    ]
 )
 
 cc_test(
@@ -237,7 +112,7 @@ cc_test(
         "tests/simulator_test.cpp",
     ],
     deps = [    
-        ":utilsSimulator",
+        ":utils",
         "@com_google_googletest//:gtest_main",
     ],
 )

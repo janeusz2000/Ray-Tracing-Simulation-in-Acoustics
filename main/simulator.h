@@ -13,12 +13,11 @@
 #include <vector>
 
 std::vector<std::unique_ptr<objects::EnergyCollector>>
-buildCollectors(const objects::Model &model, int numCollectors);
+buildCollectors(const Model &model, int numCollectors);
 
 class Simulator {
 public:
-  Simulator(RayTracer *tracer, objects::Model *model,
-            generators::RayFactory *source,
+  Simulator(RayTracer *tracer, Model *model, generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter)
       : tracer_(tracer), model_(model), source_(source),
         offsetter_(offsetter){};
@@ -30,7 +29,7 @@ public:
 
 private:
   RayTracer *tracer_;
-  objects::Model *model_;
+  Model *model_;
   generators::RayFactory *source_;
   generators::RandomRayOffseter *offsetter_;
 };
