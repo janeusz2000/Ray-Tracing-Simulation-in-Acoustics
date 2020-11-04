@@ -28,49 +28,6 @@ cc_library(
     ],
 )
 
-cc_test(
-    name = "vec3_test",
-    srcs = [
-        "tests/vec3_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-
-cc_test(
-    name = "energyCollector_test",
-    srcs = [
-        "tests/energyCollector_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-
-cc_test(
-    name = "generators_test",
-    srcs = [
-        "tests/generators_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-
-cc_test(
-    name = "ray_test",
-    srcs = [
-        "tests/ray_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
 
 cc_test(
     name = "object_utils_test",
@@ -84,27 +41,6 @@ cc_test(
     ],
 )
 
-cc_test(
-    name = "triangleObj_test",
-    srcs = [
-        "tests/triangleObj_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-
-cc_test(
-    name = "sceneManager_test",
-    srcs = [
-        "tests/sceneManager_test.cpp",
-    ],
-    deps = [    
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
 
 cc_test(
     name = "simulator_test",
