@@ -13,8 +13,11 @@
 #include <vector>
 
 // TODO: radius of each EnergyCOllector should be equal to
-// constants::kPi * simulationRadius / numCollectors
-// simulationRadius = 8 * model height
+// constants::kPi * simulationRadius / numCollectors, to equally cover 3D space
+// of between each other.
+// SimulationHeight need to meet to requirements:
+// simulationRadius must be equal to 8 * model height and can be less then 4
+// meters - this comes from ISO 17497-2:201
 std::vector<std::unique_ptr<objects::EnergyCollector>>
 buildCollectors(const Model &model, int numCollectors);
 
