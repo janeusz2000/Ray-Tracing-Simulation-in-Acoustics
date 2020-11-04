@@ -1,23 +1,8 @@
-#include "core.h"
-#include "objects.h"
-#include "randomGenerators.h"
 
 #include <memory>
 #include <string_view>
 #include <tuple>
 #include <vector>
-
-
-// TODO: define API for classes like simulator,
-//       SceneManager, Point Source etc. Write:
-//       - constructors, so that we know what dependencies
-//         they have
-//       - public API, so functions that other classes
-//         will use (wihtout unnecesarry clutter, nobody
-//         cares about getters/setters)
-//       - only header files
-//       - documentation/comments, how each class is
-//         going to be used
 
 class Vec3 {};
 
@@ -35,9 +20,9 @@ protected:
 // Abstract class of the generator
 class RayFactory {
 public:
-  // generates ray with properties determianted by each class
+  // generates ray with properties determinated by each class
   // example: Speaker source is a membrane that is generating
-  // rays that have origins where membrane is situaded and direction
+  // rays that have origins where membrane is situated and direction
   // parpendicular to surface where membrane is situated.
   // D: questions:
   //    a) how many distinct "classes" you can have?
@@ -45,7 +30,7 @@ public:
   //    swap
   //      the parameter mid simulation?
   // A:
-  //    a) In teh future i could have multipule soruces at once
+  //    a) In teh future i could have multipule sources at once
   //    b) I dont want to change offsetGenerator mid simulation,
   //    but for now I cannot determinate which one I will be using,
   //    so i want to have this choice.
@@ -63,7 +48,7 @@ public:
 
 class Model {
 public:
-  // Model that simulatuion will be performend on
+  // Model that simulation will be performend on
   std::vector<TriangleObj *> triangles() const;
   float simulationRadius() const;
 
@@ -75,7 +60,7 @@ class RayTracer {
 public:
   RayTracer(Model *model);
 
-  // TODO: write comment about hit data, that its requierd
+  // TODO: write comment about hit data, that its required
   // return
   enum class TraceResult { HIT_TRIANGLE, WENT_OUTSIDE_OF_SIMULATION_SPACE };
   TraceResult rayTrace(const Ray &ray, RayHitData *hitData);
