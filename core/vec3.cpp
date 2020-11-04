@@ -102,15 +102,13 @@ float Vec3::magnitudeSquared() const { return x_ * x_ + y_ * y_ + z_ * z_; }
 float Vec3::magnitude() const { return std::sqrt(this->magnitudeSquared()); }
 Vec3 Vec3::normalize() const { return (*this) / magnitude(); }
 
-bool operator==(const Vec3 &left, const Vec3 &right) {
-  return (std::abs(left.x() - right.x()) < constants::kAccuracy &&
-          std::abs(left.y() - right.y()) < constants::kAccuracy &&
-          std::abs(left.z() - right.z()) < constants::kAccuracy);
+bool Vec3::operator==(const Vec3 &other) const {
+  return (std::abs(x() - other.x()) < constants::kAccuracy &&
+          std::abs(y() - other.y()) < constants::kAccuracy &&
+          std::abs(z() - other.z()) < constants::kAccuracy);
 }
 
-bool operator!=(const Vec3 &left, const Vec3 &right) {
-  return !(left == right);
-}
+bool Vec3::operator!=(const Vec3 &other) const { return !(*this == other); }
 std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3) {
   return os << "Vec3(" << srcVec3.x() << ", " << srcVec3.y() << ", "
             << srcVec3.z() << ")";

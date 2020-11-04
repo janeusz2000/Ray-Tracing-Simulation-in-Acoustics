@@ -26,10 +26,9 @@ public:
   Vec3 &operator-=(float num);
   Vec3 &operator*=(float num);
   Vec3 operator-() { return *this * -1; }
+  bool operator==(const Vec3 &other) const;
+  bool operator!=(const Vec3 &other) const;
 
-  friend std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3);
-  friend bool operator==(const Vec3 &left, const Vec3 &right);
-  friend bool operator!=(const Vec3 &left, const Vec3 &right);
   friend Vec3 operator+(const Vec3 &left, const Vec3 &right);
   friend Vec3 operator+(const Vec3 &left, float right);
   friend Vec3 operator+(float left, const Vec3 &right);
@@ -38,6 +37,7 @@ public:
   friend Vec3 operator*(float num, const Vec3 &vec);
   friend Vec3 operator*(const Vec3 &vec, float num);
   friend Vec3 operator/(const Vec3 &vec, float num);
+  friend std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3);
 
   float scalarProduct(const Vec3 &other) const;
   Vec3 crossProduct(const Vec3 &other) const;

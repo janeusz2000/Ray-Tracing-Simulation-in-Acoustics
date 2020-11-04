@@ -17,7 +17,7 @@ public:
   float phaseAt(float freq, float time) const;
 
   friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
-  friend bool operator==(const Ray &left, const Ray &right);
+  bool operator==(const Ray &other) const;
 
   void setOrigin(const Vec3 &origin);
   Vec3 origin() const;

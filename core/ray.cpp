@@ -33,9 +33,8 @@ std::ostream &operator<<(std::ostream &os, const Ray &srcRay) {
             << ", energy: " << srcRay.energy();
 }
 
-bool operator==(const Ray &left, const Ray &right) {
-  return (left.origin() == right.origin() &&
-          left.direction() == right.direction());
+bool Ray::operator==(const Ray &other) const {
+  return (origin() == other.origin() && direction() == other.direction());
 }
 
 void Ray::setOrigin(const Vec3 &origin) { origin_ = origin; }
