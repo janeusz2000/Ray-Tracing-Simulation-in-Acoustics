@@ -45,7 +45,7 @@ public:
 
 private:
   int numOfRays_, currentRayNum_;
-  Model *model_;
+  float simulationHeight_, simulationSideSize_;
 
   // Edge values of the X and Y cooridantes
   // in Vec3 used in direction calculation

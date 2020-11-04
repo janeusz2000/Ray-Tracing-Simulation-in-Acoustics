@@ -3,14 +3,14 @@
 namespace generators {
 
 PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays, Model *model)
-    : numOfRays_(numOfRays), currentRayNum_(0), model_(model) {
+    : numOfRays_(numOfRays), currentRayNum_(0) {
 
-  float simulationHeight = 8 * model->height();
-  float simulationSideSize = model->sideSize() * 4 / 7;
+  simulationHeight_ = 8 * model->height();
+  simulationSideSize_ = model->sideSize() * 4 / 7;
 
-  origin_ = core::Vec3(0, 0, simulationHeight);
-  start_ = -simulationSideSize;
-  stop_ = simulationSideSize;
+  origin_ = core::Vec3(0, 0, simulationHeight_);
+  start_ = -simulationSideSize_;
+  stop_ = simulationSideSize_;
 };
 
 bool PointSpeakerRayFactory::genRay(core::Ray *ray) {
