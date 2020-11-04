@@ -11,77 +11,35 @@
 #include <random>
 
 namespace generators {
-struct RandomGen {
-  virtual ~RandomGen(){};
-  virtual float getNext() = 0;
-};
 
-struct UniformRandomGen : public RandomGen {
-  UniformRandomGen(float min, float max)
-      : engine_(std::random_device()()), dist_(min, max){};
-  float getNext() override { return dist_(engine_); }
-
-  std::mt19937_64 engine_;
-  std::uniform_real_distribution<float> dist_;
-};
-
-struct GaussianRandomGen : public RandomGen {
-  GaussianRandomGen(float mean, float standardDeviation)
-      : engine_(std::random_device()()), dist_(mean, standardDeviation){};
-  float getNext() override { return dist_(engine_); }
-
-  std::mt19937_64 engine_;
-  std::normal_distribution<float> dist_;
-};
-
-struct FakeRandomGen : public RandomGen {
-  float getNext() override { return 0; }
-};
-
-// This object is generating rays with the origin
-// of the point source position and direction calculated
-// from leftCorner position + x * Vec3(1, 0, 0) + y * Vec3(0, 1, 0)
-// and origin of the source position
-class PointSource final {
+// 
+struct RandomRayOffseter {
 public:
-  PointSource() = default;
-  explicit PointSource(float freq, int numOfRaysPerRow, float SampleSize,
-                       RandomGen *randomGen, float simulationRadius,
-                       float sourcePower)
-      : frequency_(freq), numOfRaysPerRow_(numOfRaysPerRow),
-        sampleSize_(SampleSize), origin_(core::Vec3(0, 0, simulationRadius)),
-        randomGen_(randomGen), sourcePower_(sourcePower) {
-    updateSampleSize();
+  core::Ray offsetRay(const core::Ray &ray) {
+    return core::Ray(ray.origin(), ray.direction() + core::Vec3(getNextAxisOffset(),
+                                                    getNextAxisOffset(), 0));
   }
 
-  bool operator==(const PointSource &other) const;
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const PointSource &pointSource);
+protected:
+  virtual float getNextAxisOffset() const = 0;
+};
 
-  void updateSampleSize();
-  core::Ray generateRay(int xIter, int yIter);
+class RayFactory {
+public:
+  // generates ray with properties determinated by each class
+  // example: Speaker source is a membrane that is generating
+  // rays that have origins where membrane is situated and direction
+  // parpendicular to surface where membrane is situated.
+  virtual bool genRay(core::Ray *ray) = 0;
+};
 
-  float frequency() const;
-  void setFrequency(float freq);
-
-  float sampleSize() const;
-  void setDiffusorSize(float diffusorSize);
-
-  size_t numOfRaysPerRow() const;
-  void setNumOfRaysPerRow(int raynum);
-
-  core::Vec3 origin() const;
-  void setOrigin(const core::Vec3 &point);
-
-  core::Vec3 getLeftCorner() const;
-  void setLeftCorner(const core::Vec3 &point);
-
-private:
-  core::Vec3 origin_, leftCorner_;
-  float frequency_, sampleSize_, sourcePower_;
-  size_t numOfRaysPerRow_;
-
-  RandomGen *randomGen_;
+// generates rays with origin at PointSource origin
+// and direction along Z axes down, with offset on XY
+// determinated by sampleSize until numOfRay number is reached
+class PointSpeakerRayFactory : public RayFactory {
+public:
+  PointSpeakerRayFactory(int numOfRays, float simulationRadius);
+  bool genRay(core::Ray *ray) override;
 };
 
 } // namespace generators

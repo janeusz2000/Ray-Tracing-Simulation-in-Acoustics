@@ -130,6 +130,16 @@ private:
   float area_;
 };
 
+class Model {
+public:
+  // Model that simulation will be performend on
+  std::vector<TriangleObj *> triangles() const;
+  float simulationRadius() const;
+
+  static std::unique_ptr<Model> NewLoadFromObjectFile(std::string_view path);
+  static std::unique_ptr<Model> NewReferenceModel(float sideSize);
+};
+
 } // namespace objects
 
 #endif

@@ -215,6 +215,7 @@ cc_library(
         "obj/objects.cpp",
         "core/ray.cpp",
         "core/vec3.cpp",
+        "main/rayTracer.cpp",
         
     ],
     hdrs = [
@@ -226,6 +227,7 @@ cc_library(
         "obj/objects.h",
         "core/ray.h",
         "core/vec3.h",
+        "main/rayTracer.h",
     ]
 )
 

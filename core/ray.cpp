@@ -28,29 +28,29 @@ float Ray::phaseAt(float freq, float time) const {
 }
 
 std::ostream &operator<<(std::ostream &os, const Ray &srcRay) {
-  return os << "RAY origin: " << srcRay.getOrigin()
-            << ", direction: " << srcRay.getDirection()
-            << ", energy: " << srcRay.getEnergy();
+  return os << "RAY origin: " << srcRay.origin()
+            << ", direction: " << srcRay.direction()
+            << ", energy: " << srcRay.energy();
 }
 
 bool operator==(const Ray &left, const Ray &right) {
-  return (left.getOrigin() == right.getOrigin() &&
-          left.getDirection() == right.getDirection());
+  return (left.origin() == right.origin() &&
+          left.direction() == right.direction());
 }
 
 void Ray::setOrigin(const Vec3 &origin) { origin_ = origin; }
 
-Vec3 Ray::getOrigin() const { return origin_; }
+Vec3 Ray::origin() const { return origin_; }
 
 void Ray::setDirection(const Vec3 &direction) {
   direction_ = direction.normalize();
 }
 
-Vec3 Ray::getDirection() const { return direction_; }
+Vec3 Ray::direction() const { return direction_; }
 
 void Ray::setEnergy(float num) { energy_ = num; }
 
-float Ray::getEnergy() const { return energy_; }
+float Ray::energy() const { return energy_; }
 
 bool RayHitData::operator==(const RayHitData &other) const {
   return (std::abs(other.time - time) <= constants::kAccuracy &&

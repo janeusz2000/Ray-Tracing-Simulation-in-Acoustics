@@ -18,11 +18,11 @@ Sphere::Sphere(const core::Vec3 &origin, float rad) {
 bool Sphere::hitObject(const core::Ray &ray, float freq,
                        core::RayHitData *hitData) {
 
-  core::Vec3 rVec3 = ray.getOrigin() - this->getOrigin();
+  core::Vec3 rVec3 = ray.origin() - this->getOrigin();
 
   // this calculates variables that are neccesary to calculate times at which
   // ray hits the object
-  float beta = 2 * rVec3.scalarProduct(ray.getDirection());
+  float beta = 2 * rVec3.scalarProduct(ray.direction());
   float gamma = rVec3.scalarProduct(rVec3) - radius_ * radius_;
   float discriminant = beta * beta - 4 * gamma;
 
@@ -166,7 +166,7 @@ bool TriangleObj::hitObject(const core::Ray &ray, float freq,
   // if ray direction is parpedicular to normal, there is no hit. It can be
   // translated into checking if scalarProduct of the ray.direction and normal
   // is close or equal to zero.
-  float normalDot = ray.getDirection().scalarProduct(normal_);
+  float normalDot = ray.direction().scalarProduct(normal_);
   if (std::abs(normalDot) <= constants::kAccuracy) {
     return false;
   }
@@ -174,7 +174,7 @@ bool TriangleObj::hitObject(const core::Ray &ray, float freq,
   // Following code calculates time at which ray
   // is hitting surface where triangle is positioned
   float time =
-      (-1 * (ray.getOrigin() - point3_)).scalarProduct(normal_) / normalDot;
+      (-1 * (ray.origin() - point3_)).scalarProduct(normal_) / normalDot;
 
   // Following code is making sure that ray doesn't hit the same object.
   if (time < constants::kHitAccuracy) {

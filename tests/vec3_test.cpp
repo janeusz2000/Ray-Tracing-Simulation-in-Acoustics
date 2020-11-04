@@ -4,7 +4,5 @@
 #include <cmath>
 #include <sstream>
 
-namespace core {
-
-
-} // namespace core
+namespace core {} // namespace core
+#include "gtest/gtest.h"

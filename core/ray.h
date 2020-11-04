@@ -20,11 +20,11 @@ public:
   friend bool operator==(const Ray &left, const Ray &right);
 
   void setOrigin(const Vec3 &origin);
-  Vec3 getOrigin() const;
+  Vec3 origin() const;
   void setDirection(const Vec3 &direction);
-  Vec3 getDirection() const;
+  Vec3 direction() const;
   void setEnergy(float num);
-  float getEnergy() const;
+  float energy() const;
 
 private:
   Vec3 origin_, direction_;
@@ -43,9 +43,9 @@ struct RayHitData {
 
   Vec3 normal() const { return normal_; }
   Vec3 collisionPoint() const { return ray_.at(time); }
-  Vec3 direction() const { return ray_.getDirection(); }
-  Vec3 origin() const { return ray_.getOrigin(); }
-  float energy() const { return ray_.getEnergy(); }
+  Vec3 direction() const { return ray_.direction(); }
+  Vec3 origin() const { return ray_.origin(); }
+  float energy() const { return ray_.energy(); }
   float phase() const { return ray_.phaseAt(frequency, time); }
   float frequency, time;
 
