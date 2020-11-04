@@ -17,7 +17,7 @@
 // of between each other.
 // SimulationHeight need to meet to requirements:
 // simulationRadius must be equal to 8 * model height and can be less then 4
-// meters - this comes from ISO 17497-2:201
+// meters - this comes from ISO 17497-2:2012
 std::vector<std::unique_ptr<objects::EnergyCollector>>
 buildCollectors(const Model &model, int numCollectors);
 
