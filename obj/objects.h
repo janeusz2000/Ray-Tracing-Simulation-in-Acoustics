@@ -12,6 +12,7 @@
 #include <vector>
 
 namespace objects {
+
 class Object {
 public:
   virtual ~Object(){};
@@ -28,7 +29,6 @@ protected:
 
 class Sphere : public Object {
 public:
-  Sphere() : Sphere(core::Vec3(0, 0, 0), /*rad=*/1){};
   explicit Sphere(const core::Vec3 &origin, float rad = 1);
 
   friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
@@ -52,7 +52,10 @@ protected:
 // point to the sphere collectors;
 class SphereWall : public Sphere {
 public:
-  explicit SphereWall(float radius) { setRadius(radius); }
+  explicit SphereWall(float radius)
+      : Sphere(core::Vec3(0, 0, 0), /*radius=*/1) {
+    setRadius(radius);
+  }
   SphereWall(const SphereWall &other) = default;
 
   friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);
@@ -60,10 +63,8 @@ public:
 
 class EnergyCollector : public Sphere {
 public:
-  explicit EnergyCollector(
-      const core::Vec3 &origin,
-      float radius = constants::kDefaultEnergyCollectorRadius)
-      : energy_(0.0f) {
+  explicit EnergyCollector(const core::Vec3 &origin, float radius)
+      : Sphere(origin, radius), energy_(0.0f) {
     setRadius(radius);
     setOrigin(origin);
   }

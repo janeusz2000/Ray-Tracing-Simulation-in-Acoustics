@@ -12,6 +12,8 @@
 #include <string_view>
 #include <vector>
 
+// TODO: radius of each EnergyCOllector should be equal to 
+// constants::kPi 
 std::vector<std::unique_ptr<objects::EnergyCollector>>
 buildCollectors(const Model &model, int numCollectors);
 

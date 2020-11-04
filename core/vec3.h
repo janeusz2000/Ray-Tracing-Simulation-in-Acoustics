@@ -15,8 +15,6 @@ class Vec3 {
 public:
   explicit Vec3(float x = 0, float y = 0, float z = 0) : x_(x), y_(y), z_(z){};
 
-  // TODO: this constructor is not needed because I can create Vec3 like that:
-  // Vec3{1,2 3};
   Vec3(std::initializer_list<float> initList);
   Vec3(const Vec3 &other) = default;
   ~Vec3() = default;
