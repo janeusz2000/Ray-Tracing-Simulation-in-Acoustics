@@ -138,6 +138,9 @@ public:
 
   static std::unique_ptr<Model> NewLoadFromObjectFile(std::string_view path);
   static std::unique_ptr<Model> NewReferenceModel(float sideSize);
+
+private:
+  std::vector<std::unique_ptr<TriangleObj>> triangles_;
 };
 
 } // namespace objects

@@ -12,12 +12,12 @@
 
 namespace generators {
 
-// 
 struct RandomRayOffseter {
 public:
   core::Ray offsetRay(const core::Ray &ray) {
-    return core::Ray(ray.origin(), ray.direction() + core::Vec3(getNextAxisOffset(),
-                                                    getNextAxisOffset(), 0));
+    return core::Ray(ray.origin(),
+                     ray.direction() + core::Vec3(getNextAxisOffset(),
+                                                  getNextAxisOffset(), 0));
   }
 
 protected:
@@ -40,6 +40,10 @@ class PointSpeakerRayFactory : public RayFactory {
 public:
   PointSpeakerRayFactory(int numOfRays, float simulationRadius);
   bool genRay(core::Ray *ray) override;
+
+private:
+  int numOfRays_;
+  float simulationRadius_;
 };
 
 } // namespace generators
