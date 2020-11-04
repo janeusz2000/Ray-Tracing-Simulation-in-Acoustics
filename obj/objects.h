@@ -22,13 +22,13 @@ public:
   void setOrigin(const core::Vec3 &origin);
   core::Vec3 getOrigin() const;
 
-private:
+protected:
   core::Vec3 origin_;
 };
 
 class Sphere : public Object {
 public:
-  Sphere() : radius_(1.0f){};
+  Sphere() : Sphere(core::Vec3(0, 0, 0), /*rad=*/1){};
   explicit Sphere(const core::Vec3 &origin, float rad = 1);
 
   friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
@@ -52,7 +52,6 @@ protected:
 // point to the sphere collectors;
 class SphereWall : public Sphere {
 public:
-  SphereWall() : SphereWall(constants::kDefaultSimulationRadius / 2){};
   explicit SphereWall(float radius) { setRadius(radius); }
   SphereWall(const SphereWall &other) = default;
 
@@ -94,7 +93,6 @@ public:
               const core::Vec3 &point2 = core::Vec3{0, 1, 0},
               const core::Vec3 &point3 = core::Vec3{0, 0, 1});
   TriangleObj(const TriangleObj &other);
-  ~TriangleObj() = default;
 
   TriangleObj &operator=(const TriangleObj &other);
   friend bool operator==(const TriangleObj &left, const TriangleObj &right);
@@ -129,8 +127,6 @@ private:
   core::Vec3 normal_, point1_, point2_, point3_;
   float area_;
 };
-
-
 
 } // namespace objects
 
