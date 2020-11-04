@@ -71,8 +71,7 @@ public:
 
   friend std::ostream &operator<<(std::ostream &os,
                                   const EnergyCollector &collector);
-  friend bool operator==(const EnergyCollector &left,
-                         const EnergyCollector &right);
+  bool operator==(const EnergyCollector &other) const;
   EnergyCollector &operator=(const EnergyCollector &other);
 
   float distanceAt(const core::Vec3 &positionHit) const;
@@ -96,7 +95,7 @@ public:
   TriangleObj(const TriangleObj &other);
 
   TriangleObj &operator=(const TriangleObj &other);
-  friend bool operator==(const TriangleObj &left, const TriangleObj &right);
+  bool operator==(const TriangleObj &other) const;
   friend bool operator!=(const TriangleObj &left, const TriangleObj &right);
   friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
 

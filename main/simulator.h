@@ -12,8 +12,9 @@
 #include <string_view>
 #include <vector>
 
-// TODO: radius of each EnergyCOllector should be equal to 
-// constants::kPi 
+// TODO: radius of each EnergyCOllector should be equal to
+// constants::kPi * simulationRadius / numCollectors
+// simulationRadius = 8 * model height
 std::vector<std::unique_ptr<objects::EnergyCollector>>
 buildCollectors(const Model &model, int numCollectors);
 

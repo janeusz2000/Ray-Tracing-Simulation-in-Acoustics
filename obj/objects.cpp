@@ -87,10 +87,9 @@ std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector) {
             << ", Radius: " << collector.getRadius();
 }
 
-bool operator==(const EnergyCollector &left, const EnergyCollector &right) {
-  return (left.getOrigin() == right.getOrigin() &&
-          left.getRadius() == right.getRadius() &&
-          left.getEnergy() == right.getEnergy());
+bool EnergyCollector::operator==(const EnergyCollector &other) const {
+  return (getOrigin() == other.getOrigin() &&
+          getRadius() == other.getRadius() && getEnergy() == other.getEnergy());
 }
 
 // METHODS
@@ -131,11 +130,11 @@ TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
   return *this;
 }
 // TODO: change this from friend bool operator== to bool operator ;)
-bool operator==(const TriangleObj &left, const TriangleObj &right) {
+bool TriangleObj::operator==(const TriangleObj &other) const {
   // if other triangle has the same points but declared in different order,
   // they will be still equal.
-  std::vector<core::Vec3> vertexVec = left.getPoints();
-  std::vector<core::Vec3> refVec = right.getPoints();
+  std::vector<core::Vec3> vertexVec = other.getPoints();
+  std::vector<core::Vec3> refVec = getPoints();
 
   for (size_t ind = 0; ind < vertexVec.size(); ++ind) {
     if (std::find(vertexVec.begin(), vertexVec.end(), refVec.at(ind)) ==
