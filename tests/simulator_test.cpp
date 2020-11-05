@@ -58,8 +58,33 @@ protected:
     }
     energyCollectors.clear();
   }
-};
 
+  void printCollectors() const {
+    for (const auto &collector : energyCollectors) {
+      std::cout << "Origin: " << collector->getOrigin() << "\n"
+                << "Radius: " << collector->getRadius() << "\n";
+    }
+  }
+};
+#define DEBUG
+#if defined(DEBUG)
+
+TEST_F(EnergyCollectorTest, Debug37) {
+  std::cout << "DEBUG 5" << std::endl;
+  const int numCollector = 5;
+  energyCollectors = buildCollectors(nonEmptyModel, numCollector);
+  printCollectors();
+  ASSERT_TRUE(false);
+}
+
+TEST_F(EnergyCollectorTest, Debug36) {
+  std::cout << "DEBUG 4" << std::endl;
+  const int numCollector = 4;
+  energyCollectors = buildCollectors(nonEmptyModel, numCollector);
+  printCollectors();
+  ASSERT_TRUE(false);
+}
+#else
 TEST_F(EnergyCollectorTest, ThrowingExceptionWhenEmpty) {
   ASSERT_THROW(buildCollectors(emptyModel, kSkipNumCollectors),
                std::invalid_argument);
@@ -107,3 +132,5 @@ TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
 }
+
+#endif

@@ -47,7 +47,7 @@ buildCollectors(const AbstractModel &model, int numCollectors) {
   float minDistance =
       4 * std::max<float>(
               {model.height(), model.sideSize(),
-               /*makes sure that minDistance is at least equal to 4 */ 1});
+               /*makes sure that minDistance is at least equal to 4 */ 1.0f});
 
   // Radius of EnergyCollectors that guarantees equally coverage of 3D space
   // between each collector
