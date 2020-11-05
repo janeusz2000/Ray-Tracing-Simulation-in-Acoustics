@@ -16,6 +16,7 @@ public:
 
   float height() const { return height_; }
   float sideSize() const { return sideSize_; }
+  bool empty() const { return triangles_.empty(); }
 
 private:
   std::vector<std::unique_ptr<objects::TriangleObj>> triangles_;

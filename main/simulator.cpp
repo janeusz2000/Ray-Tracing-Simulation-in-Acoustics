@@ -3,14 +3,26 @@
 std::vector<std::unique_ptr<objects::EnergyCollector>>
 buildCollectors(const Model &model, int numCollectors) {
 
+  // We need to check if model is empty, because we can't construct energy
+  // collectors around the model that doesn't exist.
+
+  if (model.empty()) {
+    throw std::invalid_argument("Empty model");
+  }
+
   // There are two possible configurations of EnergyCollectors:
+
   // a) when numCollectors is not even, we have one collector at Vec3(0, 0,
-  // height), and rest is equally distributed on 4 sides of the model. Thats why
-  // we need to make sure that for this case numCollectors - 1 % 4 == 0, to
-  // distribute collectors equally on each side. b) when numCollectors is even,
-  // the is no center collector, so in order to make sure, that collectors are
-  // distributed equally on each side, so thats why need to check if
-  // numCollectors % 4 == 0. That leaves two possible cases:
+  // height), where height is equal to 4 * max(modelHeight, modelSide) and rest
+  // is equally distributed on 4 sides of the model, in a way, tah distance
+  // between Vec3(0, 0, 0) and each collector remains equal to height. Thats why
+  // we need to make sure that for this case numCollectors - 1 % 4 == 0.
+
+  // b) second configuration is similar to the first one, but there is no
+  // center collector on Vec3(0, 0, height). So to make sure that this
+  // configuration is possible, we need to check if numCollectors % 4 == 0.
+
+  // This leaves two possible cases:
   // 1. numCollectors % 4 == 0
   // 2. numCollectors - 1 % 4 == 0
 
@@ -23,8 +35,12 @@ buildCollectors(const Model &model, int numCollectors) {
     throw std::invalid_argument(ss.str());
   }
 
-  // minimum distance from Vec3(0, 0, 0) that each collector must meet
-  float minDistance = 4 * std::max(model.height(), model.sideSize());
+  // Minimum distance from Vec3(0, 0, 0) that each collector must meet.
+  // Value of the minDistance can't be less then 4 [m]
+  float minDistance =
+      4 * std::max<float>(
+              {model.height(), model.sideSize(),
+               /*makes sure that minDistance is at least equal to 4 */ 1});
 
   // Radius of EnergyCollectors that guarantees equally coverage of 3D space
   // between each collector
@@ -48,7 +64,6 @@ buildCollectors(const Model &model, int numCollectors) {
   // model
   std::vector<core::Vec3> origins;
   for (int iteration = 0; iteration * 4 < numToGo; ++iteration) {
-
     float groundCoordinate =
         minDistance * std::cos(2 * constants::kPi * iteration / numToGo);
     float zCoordinate =
