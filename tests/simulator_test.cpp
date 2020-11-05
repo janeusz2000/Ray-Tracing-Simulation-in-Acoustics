@@ -21,7 +21,7 @@ private:
 class EnergyCollectorTest : public ::testing::Test {
 public:
   EnergyCollectorTest() : nonEmptyModel(false), emptyModel(true){};
-  enum class HitResult { MODEL_EMPTY, NO_HIT, HIT };
+  enum class HitResult { ENERGY_COLLECTORS_EMPTY, NO_HIT, HIT };
 
 protected:
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
@@ -32,7 +32,7 @@ protected:
                                               float frequency,
                                               core::RayHitData *hitData) {
     if (energyCollectors.empty()) {
-      return HitResult::MODEL_EMPTY;
+      return HitResult::ENERGY_COLLECTORS_EMPTY;
     }
 
     for (const auto &collector : energyCollectors) {
