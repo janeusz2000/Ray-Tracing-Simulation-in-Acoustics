@@ -6,7 +6,16 @@
 #include <memory>
 #include <vector>
 
-class Model {
+class AbstractModel {
+public:
+  // Model that simulation will be performend on
+  virtual std::vector<objects::TriangleObj *> triangles() const = 0;
+  virtual float height() const = 0;
+  virtual float sideSize() const = 0;
+  virtual bool empty() const = 0;
+};
+
+class Model : public AbstractModel {
 public:
   // Model that simulation will be performend on
   std::vector<objects::TriangleObj *> triangles() const;
@@ -16,7 +25,11 @@ public:
 
   float height() const { return height_; }
   float sideSize() const { return sideSize_; }
-  bool empty() const { return triangles_.empty(); }
+  bool empty() const {
+
+    /* return triangles_.empty(); */
+    return false;
+  }
 
 private:
   std::vector<std::unique_ptr<objects::TriangleObj>> triangles_;

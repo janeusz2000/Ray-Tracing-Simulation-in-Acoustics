@@ -1,7 +1,7 @@
 #include "main/simulator.h"
 
 std::vector<std::unique_ptr<objects::EnergyCollector>>
-buildCollectors(const Model &model, int numCollectors) {
+buildCollectors(const AbstractModel &model, int numCollectors) {
 
   // We need to check if model is empty, because we can't construct energy
   // collectors around the model that doesn't exist.

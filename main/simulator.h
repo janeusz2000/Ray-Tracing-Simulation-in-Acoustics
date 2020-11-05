@@ -21,11 +21,12 @@
 // used for measurements where point source is always at (0, 0,
 // 8*max(model.sideSize, model.height))
 std::vector<std::unique_ptr<objects::EnergyCollector>>
-buildCollectors(const Model &model, int numCollectors);
+buildCollectors(const AbstractModel &model, int numCollectors);
 
 class Simulator {
 public:
-  Simulator(RayTracer *tracer, Model *model, generators::RayFactory *source,
+  Simulator(RayTracer *tracer, AbstractModel *model,
+            generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter)
       : tracer_(tracer), model_(model), source_(source),
         offsetter_(offsetter){};
@@ -37,7 +38,7 @@ public:
 
 private:
   RayTracer *tracer_;
-  Model *model_;
+  AbstractModel *model_;
   generators::RayFactory *source_;
   generators::RandomRayOffseter *offsetter_;
 };
