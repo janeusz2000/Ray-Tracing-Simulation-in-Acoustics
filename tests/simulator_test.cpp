@@ -2,6 +2,7 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
+using constants::kPi;
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -85,18 +86,25 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 }
 
 TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
+  // This value will be used in actual simulation
   const int numCollector = 37;
-
   energyCollectors = buildCollectors(nonEmptyModel, numCollector);
+  // Because fake model height and size are equal to 0,
+  // collectors origin distance to Vec3(0, 0, 0) is always equal to 4.
+  const float collectorPositionRadius = 4;
+  const float refCollectorRadius = kPi * 4 / static_cast<float>(numCollector);
+
   ASSERT_EQ(energyCollectors.size(), numCollector);
 
   const Vec3 kVecZero(0, 0, 0);
   Ray straightUp(kVecZero, Vec3(0, 0, 1));
   RayHitData hitData;
-
   ASSERT_EQ(performHitCollector(straightUp, kSkipFrequency, &hitData),
             HitResult::HIT);
-            
+
+  Vec3 collisionPointStraightUp =
+      Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
+  ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
 }
 // ! OLD ENERGY COLLECTORS TEST
 /*

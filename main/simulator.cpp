@@ -51,7 +51,8 @@ buildCollectors(const AbstractModel &model, int numCollectors) {
 
   // Radius of EnergyCollectors that guarantees equally coverage of 3D space
   // between each collector
-  float energyCollectorRadius = constants::kPi * minDistance / numCollectors;
+  float energyCollectorRadius =
+      constants::kPi * minDistance / static_cast<float>(numCollectors);
 
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
   int numToGo;
