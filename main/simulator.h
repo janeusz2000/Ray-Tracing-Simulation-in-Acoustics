@@ -14,11 +14,15 @@
 
 // TODO: radius of each EnergyCOllector should be equal to
 // constants::kPi * simulationRadius / numCollectors, to equally cover 3D space
-// of between each other. Origin of EnergyCollectors must cross half circle with
+// of between each other.
+
+// Origin of EnergyCollectors must cross half circle with
 // origin at (0, 0, 0) and radius equal to 4 * maximum(model.height or
 // model.sideSize) and can't be less then 4 meters - this comes from ISO
-// 17497-2:2012: Point source in acoustics must be twice as high as mircophone
-// used for measurements where point source is always at (0, 0,
+// 17497-2:2012 that says:
+// "Point source in acoustics must be twice as high as mircophone
+// used for measurements."
+// In this simulator point source is always at (0, 0,
 // 8*max(model.sideSize, model.height))
 std::vector<std::unique_ptr<objects::EnergyCollector>>
 buildCollectors(const AbstractModel &model, int numCollectors);
