@@ -38,7 +38,7 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
                std::invalid_argument);
 
   // Test case when numCollector is less then 1:
-  const int numCollectorLessThenZero = -4;
+  const int numCollectorLessThenZero = 0;
   ASSERT_THROW(buildCollectors(nonEmptyModel, numCollectorLessThenZero),
                std::invalid_argument);
 
