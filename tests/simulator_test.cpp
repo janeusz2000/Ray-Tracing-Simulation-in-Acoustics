@@ -2,6 +2,10 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
+using core::Ray;
+using core::RayHitData;
+using core::Vec3;
+
 const int kSkipNumCollectors = 37;
 const float kSkipFrequency = 1000;
 
@@ -27,14 +31,13 @@ protected:
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
   FakeModel nonEmptyModel, emptyModel;
 
-  // performs hit at energy Collectors by modifying hitData.
+  // performs ray hit at energy Collectors by modifying hitData.
   // Returns:
   // ENERGY_COLLECTORS_EMPTY - when no energyCollectors where assigned
   // NO_HIT - when there was no hit
   // HIT - when hit occurred;
-  [[nodiscard]] HitResult performHitCollector(const core::Ray &ray,
-                                              float frequency,
-                                              core::RayHitData *hitData) {
+  [[nodiscard]] HitResult performHitCollector(const Ray &ray, float frequency,
+                                              RayHitData *hitData) {
     if (energyCollectors.empty()) {
       return HitResult::ENERGY_COLLECTORS_EMPTY;
     }
@@ -81,6 +84,20 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   ASSERT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase2));
 }
 
+TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
+  const int numCollector = 37;
+
+  energyCollectors = buildCollectors(nonEmptyModel, numCollector);
+  ASSERT_EQ(energyCollectors.size(), numCollector);
+
+  const Vec3 kVecZero(0, 0, 0);
+  Ray straightUp(kVecZero, Vec3(0, 0, 1));
+  RayHitData hitData;
+
+  ASSERT_EQ(performHitCollector(straightUp, kSkipFrequency, &hitData),
+            HitResult::HIT);
+            
+}
 // ! OLD ENERGY COLLECTORS TEST
 /*
 TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {
