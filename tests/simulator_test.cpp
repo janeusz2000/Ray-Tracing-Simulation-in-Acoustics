@@ -2,6 +2,55 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
+const int kSkipNumCollectors = 37;
+
+class FakeModel : public AbstractModel {
+
+public:
+  explicit FakeModel(bool empty) : empty_(empty){};
+  std::vector<objects::TriangleObj *> triangles() const override { return {}; }
+  float height() const override { return 0; }
+  float sideSize() const override { return 0; }
+  bool empty() const { return empty_; }
+
+private:
+  bool empty_;
+};
+
+class EnergyCollectorTest : public ::testing::Test {
+public:
+  EnergyCollectorTest() : nonEmptyModel(false), emptyModel(true){};
+
+protected:
+  std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
+  FakeModel nonEmptyModel, emptyModel;
+};
+
+TEST_F(EnergyCollectorTest, ThrowingExceptionWhenEmpty) {
+  ASSERT_THROW(buildCollectors(emptyModel, kSkipNumCollectors),
+               std::invalid_argument);
+  ASSERT_NO_THROW(buildCollectors(nonEmptyModel, kSkipNumCollectors));
+}
+
+TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
+  const int invalidNumCollector = 38;
+  ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollector),
+               std::invalid_argument);
+
+  // Test case when numCollector is less then 1:
+  const int numCollectorLessThenZero = -4;
+  ASSERT_THROW(buildCollectors(nonEmptyModel, numCollectorLessThenZero),
+               std::invalid_argument);
+
+  // Test case when numCollector - 1 % 4 = 0
+  const int validNumCollectorCase1 = 37;
+  ASSERT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase1));
+
+  // Test case when numCollector % 4 = 0
+  const int validNumCollectorCase2 = 36;
+  ASSERT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase2));
+}
+
 // ! OLD ENERGY COLLECTORS TEST
 /*
 TEST_F(SceneManagerTest, EnergyCollectorPositionsCheck) {

@@ -10,6 +10,13 @@ buildCollectors(const AbstractModel &model, int numCollectors) {
     throw std::invalid_argument("Empty model");
   }
 
+  // Obviously num of collectors less then 1 cannot be allowed
+  if (numCollectors < 1) {
+    std::stringstream ss;
+    ss << "Num collectors: " << numCollectors << " is less them 1";
+    throw std::invalid_argument(ss.str());
+  }
+
   // There are two possible configurations of EnergyCollectors:
 
   // a) when numCollectors is not even, we have one collector at Vec3(0, 0,
