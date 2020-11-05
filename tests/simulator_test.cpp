@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 const int kSkipNumCollectors = 37;
+const float kSkipFrequency = 1000;
 
 class FakeModel : public AbstractModel {
 
@@ -20,10 +21,28 @@ private:
 class EnergyCollectorTest : public ::testing::Test {
 public:
   EnergyCollectorTest() : nonEmptyModel(false), emptyModel(true){};
+  enum class HitResult { MODEL_EMPTY, NO_HIT, HIT };
 
 protected:
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
   FakeModel nonEmptyModel, emptyModel;
+
+  // performs hit at energy Collectors.
+  [[nodiscard]] HitResult performHitCollector(const core::Ray &ray,
+                                              float frequency,
+                                              core::RayHitData *hitData) {
+    if (energyCollectors.empty()) {
+      return HitResult::MODEL_EMPTY;
+    }
+
+    for (const auto &collector : energyCollectors) {
+      if (collector->hitObject(ray, kSkipFrequency, hitData)) {
+        return HitResult::HIT;
+      }
+    }
+
+    return HitResult::NO_HIT;
+  }
 };
 
 TEST_F(EnergyCollectorTest, ThrowingExceptionWhenEmpty) {
@@ -38,8 +57,8 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
                std::invalid_argument);
 
   // Test case when numCollector is less then 1:
-  const int numCollectorLessThenZero = 0;
-  ASSERT_THROW(buildCollectors(nonEmptyModel, numCollectorLessThenZero),
+  const int numCollectorLessThenOne = 0;
+  ASSERT_THROW(buildCollectors(nonEmptyModel, numCollectorLessThenOne),
                std::invalid_argument);
 
   // Test case when numCollector - 1 % 4 = 0
