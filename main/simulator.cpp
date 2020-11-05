@@ -64,10 +64,10 @@ buildCollectors(const AbstractModel &model, int numCollectors) {
   // model
   std::vector<core::Vec3> origins;
   for (int iteration = 0; iteration * 4 < numToGo; ++iteration) {
-    float groundCoordinate =
-        minDistance * std::cos(2 * constants::kPi * iteration / numToGo);
-    float zCoordinate =
-        minDistance * std::sin(2 * constants::kPi * iteration / numToGo);
+
+    float step = 2 * constants::kPi / numToGo;
+    float groundCoordinate = minDistance * std::cos(iteration * step);
+    float zCoordinate = minDistance * std::sin(iteration * step);
 
     origins = {core::Vec3(groundCoordinate, 0, zCoordinate),
                core::Vec3(0, -groundCoordinate, zCoordinate),
