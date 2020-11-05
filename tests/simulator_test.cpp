@@ -92,7 +92,8 @@ TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
   // Because fake model height and size are equal to 0,
   // collectors origin distance to Vec3(0, 0, 0) is always equal to 4.
   const float collectorPositionRadius = 4;
-  const float refCollectorRadius = kPi * 4 / static_cast<float>(numCollector);
+  const float refCollectorRadius =
+      kPi * collectorPositionRadius / static_cast<float>(numCollector);
 
   ASSERT_EQ(energyCollectors.size(), numCollector);
 
