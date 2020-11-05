@@ -27,7 +27,11 @@ protected:
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
   FakeModel nonEmptyModel, emptyModel;
 
-  // performs hit at energy Collectors.
+  // performs hit at energy Collectors by modifying hitData.
+  // Returns:
+  // ENERGY_COLLECTORS_EMPTY - when no energyCollectors where assigned
+  // NO_HIT - when there was no hit
+  // HIT - when hit occurred;
   [[nodiscard]] HitResult performHitCollector(const core::Ray &ray,
                                               float frequency,
                                               core::RayHitData *hitData) {
@@ -42,6 +46,13 @@ protected:
     }
 
     return HitResult::NO_HIT;
+  }
+
+  void TearDown() override {
+    if (energyCollectors.empty()) {
+      return;
+    }
+    energyCollectors.clear();
   }
 };
 
