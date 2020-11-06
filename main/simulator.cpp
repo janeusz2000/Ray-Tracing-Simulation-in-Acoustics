@@ -55,9 +55,9 @@ buildCollectors(const AbstractModel &model, int numCollectors) {
   // radius will cross simulation half-circle. Calculation will varies depending
   // on if number of collectors is even or not.
 
-  const int even = numCollectors % 2;
+  const int odd = numCollectors % 2;
   const float angle =
-      2 * constants::kPi / static_cast<float>(numCollectors + even - 2);
+      2 * constants::kPi / static_cast<float>(numCollectors + odd - 2);
 
   // After gathering previously mentioned angle, we can calculate radius of each
   // energy collector, from Law of Cosines:
@@ -70,13 +70,13 @@ buildCollectors(const AbstractModel &model, int numCollectors) {
 
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
   // When Num Collectors is not even, we need to put one collector at (0, 0,
-  // minRadius)
-  if (!even) {
+  // minRadius)`
+  if (odd) {
     energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
         core::Vec3(0, 0, minDistance), energyCollectorRadius));
   }
   // and decrease number remaining collectors to crete
-  const int numToGo = numCollectors - (even);
+  const int numToGo = numCollectors - (odd);
 
   // Remaining energy collectors:
   std::vector<core::Vec3> origins;
