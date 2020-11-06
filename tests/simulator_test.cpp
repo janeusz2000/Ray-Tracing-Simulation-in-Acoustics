@@ -9,6 +9,7 @@ using core::Vec3;
 
 const int kSkipNumCollectors = 37;
 const float kSkipFrequency = 1000;
+const Vec3 kVecZero(0, 0, 0);
 
 class FakeModel : public AbstractModel {
 
@@ -132,6 +133,29 @@ TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
+}
+
+TEST_F(EnergyCollectorTest, TestPositionsThatWereFixed) {
+  const int numCollector = 37;
+  const float collectorPositionRadius = 4;
+
+  energyCollectors = buildCollectors(nonEmptyModel, numCollector);
+  ASSERT_EQ(energyCollectors.size(), numCollector);
+
+  float invalidEnergyCollectorRadius =
+      2 * kPi * collectorPositionRadius / static_cast<float>(numCollector);
+
+  Ray previousNotHit1(kVecZero,
+                      Vec3(0, 1.01 * invalidEnergyCollectorRadius, 1));
+  RayHitData hitData;
+  ASSERT_EQ(performHitCollector(previousNotHit1, kSkipFrequency, &hitData),
+            HitResult::HIT);
+
+  Ray previousNotHit2(kVecZero,
+                      Vec3(0, -1.01 * invalidEnergyCollectorRadius, 1));
+
+  ASSERT_EQ(performHitCollector(previousNotHit2, kSkipFrequency, &hitData),
+            HitResult::HIT);
 }
 
 #endif
