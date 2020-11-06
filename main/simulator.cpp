@@ -49,33 +49,40 @@ buildCollectors(const AbstractModel &model, int numCollectors) {
               {model.height(), model.sideSize(),
                /*makes sure that minDistance is at least equal to 4 */ 1.0f});
 
-  // Radius of EnergyCollectors that guarantees equally coverage of 3D space
-  // between each collector
+  // For even number of ray collectors, in order to equally cover two simulation
+  // half-circle (half-circle that cross each collectors origin), we need to
+  // calculate angle between Vec3(0, 0, 0) and 2 points where energy collector
+  // radius will cross simulation half-circle. Calculation will varies depending
+  // on if number of collectors is even or not.
+
+  const int even = numCollectors % 2;
+  const float angle =
+      2 * constants::kPi / static_cast<float>(numCollectors + even - 2);
+
+  // After gathering previously mentioned angle, we can calculate radius of each
+  // energy collector, from Law of Cosines:
+  // https://en.wikipedia.org/wiki/Law_of_cosines
+  // and after couple fo transformations formula will look like this:
+  // r = R * sqrt(2 - 2 * cos(angle))
+
   float energyCollectorRadius =
-      constants::kPi * minDistance / static_cast<float>(numCollectors);
+      minDistance * static_cast<float>(std::sqrt(2 - 2 * std::cos(angle)));
 
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
-  int numToGo;
-
-  // If num Collector is even we do 1st case:
-  if (numCollectors % 2 == 0) {
-    numToGo = numCollectors;
-  }
-  // if num Collector is not even we do 2nd case:
-  else {
+  // When Num Collectors is not even, we need to put one collector at (0, 0,
+  // minRadius)
+  if (!even) {
     energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
         core::Vec3(0, 0, minDistance), energyCollectorRadius));
-    numToGo = numCollectors - 1;
   }
+  // and decrease number remaining collectors to crete
+  const int numToGo = numCollectors - (even);
 
-  // equally distribution of remaining number of collectors on each side of the
-  // model
+  // Remaining energy collectors:
   std::vector<core::Vec3> origins;
   for (int iteration = 0; iteration * 4 < numToGo; ++iteration) {
-
-    float step = 2 * constants::kPi / numCollectors;
-    float groundCoordinate = minDistance * std::cos(iteration * step);
-    float zCoordinate = minDistance * std::sin(iteration * step);
+    float groundCoordinate = minDistance * std::cos(iteration * angle);
+    float zCoordinate = minDistance * std::sin(iteration * angle);
 
     origins = {core::Vec3(groundCoordinate, 0, zCoordinate),
                core::Vec3(0, -groundCoordinate, zCoordinate),

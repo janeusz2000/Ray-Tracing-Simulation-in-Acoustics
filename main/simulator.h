@@ -6,6 +6,7 @@
 #include "obj/objects.h"
 #include "main/rayTracer.h"
 
+#include <cmath>
 #include <iostream>
 #include <limits>
 #include <sstream>

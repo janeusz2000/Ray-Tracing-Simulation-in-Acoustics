@@ -66,7 +66,7 @@ protected:
     }
   }
 };
-#define DEBUG
+// #define DEBUG
 #if defined(DEBUG)
 
 TEST_F(EnergyCollectorTest, Debug37) {
