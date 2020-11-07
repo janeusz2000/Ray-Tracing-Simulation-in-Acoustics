@@ -61,13 +61,6 @@ protected:
     return HitResult::NO_HIT;
   }
 
-  void TearDown() override {
-    if (energyCollectors.empty()) {
-      return;
-    }
-    energyCollectors.clear();
-  }
-
   void printCollectors() const {
     for (const auto &collector : energyCollectors) {
       std::cout << "Origin: " << collector->getOrigin() << "\n"
