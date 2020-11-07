@@ -69,8 +69,8 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
   const MockModel nonEmptyModel(false);
 
-  const int invalidNumCollector = 38;
-  ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollector),
+  const int invalidNumCollectors = 38;
+  ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollectors),
                std::invalid_argument);
 
   // Test case when numCollector is less then 1:
@@ -91,18 +91,18 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const MockModel nonEmptyModel(false);
 
   // This value will be used in actual simulation
-  const int numCollector = 37;
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollector);
+  const int numCollectors = 37;
+  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
 
   // TODO: THis should be done inside class fixture
   // Because fake model height and size are equal to 0,
   // collectors origin distance to Vec3(0, 0, 0) is always equal to 4.
   const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollector - 1);
+  const float collectorAngle = 2 * kPi / (numCollectors - 1);
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
-  ASSERT_EQ(energyCollectors.size(), numCollector);
+  ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
@@ -214,18 +214,18 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 }
 
 TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
-  const int numCollector = 37;
+  const int numCollectors = 37;
   const float collectorPositionRadius = 4;
 
   const MockModel nonEmptyModel(false);
 
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollector);
-  ASSERT_EQ(energyCollectors.size(), numCollector);
+  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+  ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   // this is how previous implementation was caclualating radius of energy
   // collector
   float invalidEnergyCollectorRadius =
-      2 * kPi * collectorPositionRadius / static_cast<float>(numCollector);
+      2 * kPi * collectorPositionRadius / static_cast<float>(numCollectors);
 
   RayHitData hitData;
   Ray previousNotHit1(kVecZero,
