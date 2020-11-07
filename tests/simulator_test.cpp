@@ -70,7 +70,7 @@ protected:
 };
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
-  MockModel nonEmptyModel(false);
+  const MockModel nonEmptyModel(false);
 
   const int invalidNumCollector = 38;
   ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollector),
@@ -91,7 +91,7 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
-  MockModel nonEmptyModel(false);
+  const MockModel nonEmptyModel(false);
 
   // This value will be used in actual simulation
   const int numCollector = 37;
@@ -165,7 +165,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
-  MockModel nonEmptyModel(false);
+  const MockModel nonEmptyModel(false);
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
 
   ASSERT_EQ(energyCollectors.size(), numCollectors);
@@ -220,7 +220,7 @@ TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
   const int numCollector = 37;
   const float collectorPositionRadius = 4;
 
-  MockModel nonEmptyModel(false);
+  const MockModel nonEmptyModel(false);
 
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollector);
   ASSERT_EQ(energyCollectors.size(), numCollector);
