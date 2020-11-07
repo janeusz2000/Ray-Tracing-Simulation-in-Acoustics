@@ -25,6 +25,7 @@ public:
               (const override));
   MOCK_METHOD(float, height, (), (const override));
   MOCK_METHOD(float, sideSize, (), (const override));
+  // TODO: how to return values with gMock model
   MOCK_METHOD(bool, empty, (), (const override));
 
 private:
@@ -33,13 +34,10 @@ private:
 
 class EnergyCollectorTest : public ::testing::Test {
 public:
-  EnergyCollectorTest() : nonEmptyModel(false), emptyModel(true){};
   enum class HitResult { ENERGY_COLLECTORS_EMPTY, NO_HIT, HIT };
 
 protected:
-  MockModel nonEmptyModel, emptyModel;
-
-  // performs ray hit at energy Collectors by modifying hitData.
+  // performs ray hit at given energyCollectors by modifying hitData.
   // Returns:
   // ENERGY_COLLECTORS_EMPTY - when no energyCollectors where assigned
   // NO_HIT - when there was no hit
@@ -71,6 +69,9 @@ protected:
   }
 };
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
+
+  MockModel nonEmptyModel(false);
+
   const int invalidNumCollector = 38;
   ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollector),
                std::invalid_argument);
@@ -90,6 +91,8 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
+  MockModel nonEmptyModel(false);
+
   // This value will be used in actual simulation
   const int numCollector = 37;
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollector);
@@ -162,7 +165,9 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
+  MockModel nonEmptyModel(false);
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   Ray straightUp(kVecZero, kVecUp);
@@ -214,6 +219,8 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
   const int numCollector = 37;
   const float collectorPositionRadius = 4;
+
+  MockModel nonEmptyModel(false);
 
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollector);
   ASSERT_EQ(energyCollectors.size(), numCollector);
