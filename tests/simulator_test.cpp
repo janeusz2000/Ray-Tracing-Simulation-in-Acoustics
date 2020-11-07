@@ -25,7 +25,6 @@ public:
               (const override));
   MOCK_METHOD(float, height, (), (const override));
   MOCK_METHOD(float, sideSize, (), (const override));
-  // TODO: how to return values with gMock model
   MOCK_METHOD(bool, empty, (), (const override));
 
 private:
