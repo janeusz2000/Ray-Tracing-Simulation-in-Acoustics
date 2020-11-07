@@ -7,6 +7,8 @@ class RayTracer {
 public:
   RayTracer(ModelInterface *model);
   enum class TraceResult { HIT_TRIANGLE, WENT_OUTSIDE_OF_SIMULATION_SPACE };
-  // hitData must be empty before passing it to rayTrace method
-  TraceResult rayTrace(const core::Ray &ray, core::RayHitData *hitData);
+  // hitData or ray cannot be nullptr. On every recursive loop hitData is
+  // modified - current state of RayHitData passed to method does not matter.
+  [[nodiscard]] TraceResult rayTrace(const core::Ray &ray,
+                                     core::RayHitData *hitData);
 };

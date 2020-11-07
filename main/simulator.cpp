@@ -3,9 +3,6 @@
 std::vector<std::unique_ptr<objects::EnergyCollector>>
 buildCollectors(const ModelInterface &model, int numCollectors) {
 
-  // We need to check if model is empty, because we can't construct energy
-  // collectors around the model that doesn't exist.
-
   if (model.empty()) {
     throw std::invalid_argument("Empty model");
   }
