@@ -26,11 +26,11 @@
 // In this simulator point source is always at (0, 0,
 // 8*max(model.sideSize, model.height))
 std::vector<std::unique_ptr<objects::EnergyCollector>>
-buildCollectors(const AbstractModel &model, int numCollectors);
+buildCollectors(const ModelInterface &model, int numCollectors);
 
 class Simulator {
 public:
-  Simulator(RayTracer *tracer, AbstractModel *model,
+  Simulator(RayTracer *tracer, ModelInterface *model,
             generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter)
       : tracer_(tracer), model_(model), source_(source),
@@ -43,7 +43,7 @@ public:
 
 private:
   RayTracer *tracer_;
-  AbstractModel *model_;
+  ModelInterface *model_;
   generators::RayFactory *source_;
   generators::RandomRayOffseter *offsetter_;
 };

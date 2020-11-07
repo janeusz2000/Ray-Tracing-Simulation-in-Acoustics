@@ -17,7 +17,7 @@ const Vec3 kVecY(0, 1, 0);
 
 float deg2rad(float deg) { return 2 * kPi * deg / 360; }
 
-class MockModel : public AbstractModel {
+class MockModel : public ModelInterface {
 
 public:
   explicit MockModel(bool empty) : empty_(empty){};

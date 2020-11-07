@@ -6,9 +6,9 @@
 #include <memory>
 #include <vector>
 
-class AbstractModel {
+class ModelInterface {
 public:
-  virtual ~AbstractModel(){};
+  virtual ~ModelInterface(){};
   // Model that simulation will be performend on
   virtual std::vector<objects::TriangleObj *> triangles() const = 0;
   virtual float height() const = 0;
@@ -18,7 +18,7 @@ public:
   }
 };
 
-class Model : public AbstractModel {
+class Model : public ModelInterface {
 public:
   // Model that simulation will be performend on
   std::vector<objects::TriangleObj *> triangles() const;

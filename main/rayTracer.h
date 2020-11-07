@@ -5,7 +5,7 @@
 
 class RayTracer {
 public:
-  RayTracer(AbstractModel *model);
+  RayTracer(ModelInterface *model);
   enum class TraceResult { HIT_TRIANGLE, WENT_OUTSIDE_OF_SIMULATION_SPACE };
   // hitData must be empty before passing it to rayTrace method
   TraceResult rayTrace(const core::Ray &ray, core::RayHitData *hitData);
