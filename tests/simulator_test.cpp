@@ -11,6 +11,8 @@ const int kSkipNumCollectors = 37;
 const float kSkipFrequency = 1000;
 const Vec3 kVecZero(0, 0, 0);
 
+float deg2rad(float deg) { return 2 * kPi * deg / 360; }
+
 class FakeModel : public AbstractModel {
 
 public:
@@ -40,6 +42,7 @@ protected:
   // HIT - when hit occurred;
   [[nodiscard]] HitResult performHitCollector(const Ray &ray, float frequency,
                                               RayHitData *hitData) {
+
     if (energyCollectors.empty()) {
       return HitResult::ENERGY_COLLECTORS_EMPTY;
     }
@@ -111,7 +114,7 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   ASSERT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase2));
 }
 
-TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
+TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorCheck) {
   // This value will be used in actual simulation
   const int numCollector = 37;
   energyCollectors = buildCollectors(nonEmptyModel, numCollector);
@@ -125,7 +128,11 @@ TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
   ASSERT_EQ(energyCollectors.size(), numCollector);
 
   const Vec3 kVecZero(0, 0, 0);
-  Ray straightUp(kVecZero, Vec3(0, 0, 1));
+  const Vec3 kVecUp(0, 0, 1);
+  const Vec3 kVecX(1, 0, 0);
+  const Vec3 kVecY(0, 1, 0);
+
+  Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
   ASSERT_EQ(performHitCollector(straightUp, kSkipFrequency, &hitData),
             HitResult::HIT);
@@ -133,6 +140,29 @@ TEST_F(EnergyCollectorTest, EnergyCollectorPositionCheck) {
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
+
+  Ray straightDown(kVecZero, -kVecUp);
+  ASSERT_EQ(performHitCollector(straightDown, kSkipFrequency, &hitData),
+            HitResult::NO_HIT)
+      << "Collision Point: " << hitData.collisionPoint();
+
+  Ray alongX(kVecZero, kVecX);
+  ASSERT_EQ(performHitCollector(alongX, kSkipFrequency, &hitData),
+            HitResult::HIT);
+
+  Ray alongY(kVecZero, kVecY);
+  ASSERT_EQ(performHitCollector(alongY, kSkipFrequency, &hitData),
+            HitResult::HIT);
+
+  Ray atSixty(kVecZero, Vec3(std::cos(deg2rad(60)), 0, std::sin(deg2rad(60))));
+  ASSERT_EQ(performHitCollector(atSixty, kSkipFrequency, &hitData),
+            HitResult::HIT);
+
+  Ray atSixtyXY(kVecZero, Vec3(std::cos(deg2rad(60)), std::cos(deg2rad(60)),
+                               std::sin(deg2rad(60))));
+  ASSERT_EQ(performHitCollector(atSixtyXY, kSkipFrequency, &hitData),
+            HitResult::NO_HIT)
+      << "Collision Point: " << hitData.collisionPoint();
 }
 
 TEST_F(EnergyCollectorTest, TestPositionsThatWereFixed) {
@@ -142,12 +172,14 @@ TEST_F(EnergyCollectorTest, TestPositionsThatWereFixed) {
   energyCollectors = buildCollectors(nonEmptyModel, numCollector);
   ASSERT_EQ(energyCollectors.size(), numCollector);
 
+  // this is how previous implementation was caclualating radius of energy
+  // collector
   float invalidEnergyCollectorRadius =
       2 * kPi * collectorPositionRadius / static_cast<float>(numCollector);
 
+  RayHitData hitData;
   Ray previousNotHit1(kVecZero,
                       Vec3(0, 1.01 * invalidEnergyCollectorRadius, 1));
-  RayHitData hitData;
   ASSERT_EQ(performHitCollector(previousNotHit1, kSkipFrequency, &hitData),
             HitResult::HIT);
 

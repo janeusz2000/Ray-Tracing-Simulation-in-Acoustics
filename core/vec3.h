@@ -25,7 +25,7 @@ public:
   Vec3 &operator-=(const Vec3 &other);
   Vec3 &operator-=(float num);
   Vec3 &operator*=(float num);
-  Vec3 operator-() { return *this * -1; }
+  Vec3 operator-() const { return *this * -1; }
   bool operator==(const Vec3 &other) const;
   bool operator!=(const Vec3 &other) const;
 
