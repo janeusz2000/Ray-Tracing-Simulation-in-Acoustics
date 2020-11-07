@@ -1,5 +1,6 @@
 #include "constants.h"
 #include "main/simulator.h"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 using constants::kPi;
@@ -16,14 +17,15 @@ const Vec3 kVecY(0, 1, 0);
 
 float deg2rad(float deg) { return 2 * kPi * deg / 360; }
 
-class FakeModel : public AbstractModel {
+class MockModel : public AbstractModel {
 
 public:
-  explicit FakeModel(bool empty) : empty_(empty){};
-  std::vector<objects::TriangleObj *> triangles() const override { return {}; }
-  float height() const override { return 0; }
-  float sideSize() const override { return 0; }
-  bool empty() const { return empty_; }
+  explicit MockModel(bool empty) : empty_(empty){};
+  MOCK_METHOD(std::vector<objects::TriangleObj *>, triangles, (),
+              (const override));
+  MOCK_METHOD(float, height, (), (const override));
+  MOCK_METHOD(float, sideSize, (), (const override));
+  MOCK_METHOD(bool, empty, (), (const override));
 
 private:
   bool empty_;
@@ -36,7 +38,7 @@ public:
 
 protected:
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
-  FakeModel nonEmptyModel, emptyModel;
+  MockModel nonEmptyModel, emptyModel;
 
   // performs ray hit at energy Collectors by modifying hitData.
   // Returns:
@@ -73,31 +75,6 @@ protected:
     }
   }
 };
-// #define DEBUG
-#if defined(DEBUG)
-
-TEST_F(EnergyCollectorTest, Debug37) {
-  std::cout << "DEBUG 5" << std::endl;
-  const int numCollector = 5;
-  energyCollectors = buildCollectors(nonEmptyModel, numCollector);
-  printCollectors();
-  ASSERT_TRUE(false);
-}
-
-TEST_F(EnergyCollectorTest, Debug36) {
-  std::cout << "DEBUG 4" << std::endl;
-  const int numCollector = 4;
-  energyCollectors = buildCollectors(nonEmptyModel, numCollector);
-  printCollectors();
-  ASSERT_TRUE(false);
-}
-#else
-TEST_F(EnergyCollectorTest, ThrowingExceptionWhenEmpty) {
-  ASSERT_THROW(buildCollectors(emptyModel, kSkipNumCollectors),
-               std::invalid_argument);
-  ASSERT_NO_THROW(buildCollectors(nonEmptyModel, kSkipNumCollectors));
-}
-
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   const int invalidNumCollector = 38;
   ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollector),
@@ -263,5 +240,3 @@ TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
   ASSERT_EQ(performHitCollector(previousNotHit2, kSkipFrequency, &hitData),
             HitResult::HIT);
 }
-
-#endif

@@ -8,6 +8,7 @@
 
 class AbstractModel {
 public:
+  virtual ~AbstractModel(){};
   // Model that simulation will be performend on
   virtual std::vector<objects::TriangleObj *> triangles() const = 0;
   virtual float height() const = 0;
