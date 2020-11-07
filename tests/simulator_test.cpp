@@ -1,6 +1,5 @@
 #include "constants.h"
 #include "main/simulator.h"
-#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 using constants::kPi;
@@ -21,11 +20,10 @@ class MockModel : public ModelInterface {
 
 public:
   explicit MockModel(bool empty) : empty_(empty){};
-  MOCK_METHOD(std::vector<objects::TriangleObj *>, triangles, (),
-              (const override));
-  MOCK_METHOD(float, height, (), (const override));
-  MOCK_METHOD(float, sideSize, (), (const override));
-  MOCK_METHOD(bool, empty, (), (const override));
+  std::vector<objects::TriangleObj *> triangles() const override { return {}; }
+  float height() const override { return 0; }
+  float sideSize() const override { return 0; }
+  bool empty() const override { return empty_; }
 
 private:
   bool empty_;
