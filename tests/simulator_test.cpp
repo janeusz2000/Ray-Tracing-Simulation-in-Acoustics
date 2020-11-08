@@ -16,10 +16,10 @@ const Vec3 kVecY(0, 1, 0);
 
 float deg2rad(float deg) { return 2 * kPi * deg / 360; }
 
-class MockModel : public ModelInterface {
+class FakeModel : public ModelInterface {
 
 public:
-  explicit MockModel(bool empty) : empty_(empty){};
+  explicit FakeModel(bool empty) : empty_(empty){};
   std::vector<objects::TriangleObj *> triangles() const override { return {}; }
   float height() const override { return 0; }
   float sideSize() const override { return 0; }
@@ -67,7 +67,7 @@ protected:
 };
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
-  const MockModel nonEmptyModel(false);
+  const FakeModel nonEmptyModel(false);
 
   const int invalidNumCollectors = 38;
   ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollectors),
@@ -88,7 +88,7 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
-  const MockModel nonEmptyModel(false);
+  const FakeModel nonEmptyModel(false);
 
   // This value will be used in actual simulation
   const int numCollectors = 37;
@@ -162,7 +162,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
-  const MockModel nonEmptyModel(false);
+  const FakeModel nonEmptyModel(false);
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
 
   ASSERT_EQ(energyCollectors.size(), numCollectors);
@@ -217,7 +217,7 @@ TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
   const int numCollectors = 37;
   const float collectorPositionRadius = 4;
 
-  const MockModel nonEmptyModel(false);
+  const FakeModel nonEmptyModel(false);
 
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
