@@ -19,11 +19,9 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
 
   if (!(numCollectors % 4 == 0 || (numCollectors - 1) % 4 == 0)) {
     std::stringstream ss;
-    ss << "invalid numCollectors value \n"
-       << "value %4 or value -1 % 4 should be equal to 0 \n"
-       << "numCollectors % 4 = " << numCollectors % 4 << "\n"
-       << "numCollectors -1 % 4 = " << numCollectors - 1 % 4;
-    throw std::invalid_argument(ss.str());
+    ss << "numCollectors or numCollectors-1 has to be divisible by 4, got "
+       << "numCollectors = " << numCollectors;
+    std::invalid_argument(ss.str());
   }
 
   // Minimum distance from Vec3(0, 0, 0) that each collector must meet.
