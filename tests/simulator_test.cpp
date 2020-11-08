@@ -35,14 +35,15 @@ protected:
   /// Returns true if hit occurred, false when did not.
   [[nodiscard]] bool performHitCollector(
       const Ray &ray,
-      std::vector<std::unique_ptr<objects::EnergyCollector>> *energyCollectors,
+      const std::vector<std::unique_ptr<objects::EnergyCollector>>
+          &energyCollectors,
       RayHitData *hitData) {
 
-    if (energyCollectors->empty()) {
+    if (energyCollectors.empty()) {
       return false;
     }
 
-    for (const auto &collector : *energyCollectors) {
+    for (const auto &collector : energyCollectors) {
       if (collector->hitObject(ray, kSkipFrequency, hitData)) {
         return true;
       }
@@ -52,8 +53,8 @@ protected:
   }
 
   void printCollectors(std::vector<std::unique_ptr<objects::EnergyCollector>>
-                           *energyCollectors) const {
-    for (const auto &collector : *energyCollectors) {
+                           energyCollectors) const {
+    for (const auto &collector : energyCollectors) {
       std::cout << "Origin: " << collector->getOrigin() << "\n"
                 << "Radius: " << collector->getRadius() << "\n";
     }
@@ -99,46 +100,46 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
-  ASSERT_EQ(performHitCollector(straightUp, &energyCollectors, &hitData), true);
+  ASSERT_EQ(performHitCollector(straightUp, energyCollectors, &hitData), true);
 
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
 
   Ray straightDown(kVecZero, -kVecUp);
-  ASSERT_EQ(performHitCollector(straightDown, &energyCollectors, &hitData),
+  ASSERT_EQ(performHitCollector(straightDown, energyCollectors, &hitData),
             false)
       << "Collision Point: " << hitData.collisionPoint();
 
   Ray alongX(kVecZero, kVecX);
-  ASSERT_EQ(performHitCollector(alongX, &energyCollectors, &hitData), true);
+  ASSERT_EQ(performHitCollector(alongX, energyCollectors, &hitData), true);
 
   ASSERT_EQ(alongX.at(collectorPositionRadius - refCollectorRadius),
             hitData.collisionPoint());
 
   Ray alongY(kVecZero, kVecY);
-  ASSERT_EQ(performHitCollector(alongY, &energyCollectors, &hitData), true);
+  ASSERT_EQ(performHitCollector(alongY, energyCollectors, &hitData), true);
 
   ASSERT_EQ(alongY.at(collectorPositionRadius - refCollectorRadius),
             hitData.collisionPoint());
 
   Ray atSixty(kVecZero, Vec3(std::cos(deg2rad(60)), 0, std::sin(deg2rad(60))));
-  ASSERT_EQ(performHitCollector(atSixty, &energyCollectors, &hitData), true);
+  ASSERT_EQ(performHitCollector(atSixty, energyCollectors, &hitData), true);
 
   Ray atSixtyOther(kVecZero,
                    Vec3(-std::cos(deg2rad(60)), 0, std::sin(deg2rad(60))));
-  ASSERT_EQ(performHitCollector(atSixtyOther, &energyCollectors, &hitData),
+  ASSERT_EQ(performHitCollector(atSixtyOther, energyCollectors, &hitData),
             true);
 
   Ray atSixtyXY(kVecZero, Vec3(std::cos(deg2rad(60)), std::cos(deg2rad(60)),
                                std::sin(deg2rad(60))));
-  ASSERT_EQ(performHitCollector(atSixtyXY, &energyCollectors, &hitData), false)
+  ASSERT_EQ(performHitCollector(atSixtyXY, energyCollectors, &hitData), false)
       << "Collision Point: " << hitData.collisionPoint();
 
   Ray atSixtyXYOther(kVecZero,
                      Vec3(-std::cos(deg2rad(60)), -std::cos(deg2rad(60)),
                           std::sin(deg2rad(60))));
-  ASSERT_EQ(performHitCollector(atSixtyXYOther, &energyCollectors, &hitData),
+  ASSERT_EQ(performHitCollector(atSixtyXYOther, energyCollectors, &hitData),
             false)
       << "Collision Point: " << hitData.collisionPoint();
 }
@@ -157,39 +158,39 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 
   Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
-  ASSERT_TRUE(performHitCollector(straightUp, &energyCollectors, &hitData));
+  ASSERT_TRUE(performHitCollector(straightUp, energyCollectors, &hitData));
 
   Ray straightDown(kVecZero, -kVecUp);
-  ASSERT_FALSE(performHitCollector(straightDown, &energyCollectors, &hitData))
+  ASSERT_FALSE(performHitCollector(straightDown, energyCollectors, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
   Ray alongX(kVecZero, kVecX);
-  ASSERT_TRUE(performHitCollector(alongX, &energyCollectors, &hitData));
+  ASSERT_TRUE(performHitCollector(alongX, energyCollectors, &hitData));
 
   ASSERT_EQ(alongX.at(collectorPositionRadius - refCollectorRadius),
             hitData.collisionPoint());
 
   Ray alongY(kVecZero, kVecY);
-  ASSERT_TRUE(performHitCollector(alongY, &energyCollectors, &hitData));
+  ASSERT_TRUE(performHitCollector(alongY, energyCollectors, &hitData));
 
   ASSERT_EQ(alongY.at(collectorPositionRadius - refCollectorRadius),
             hitData.collisionPoint());
 
   Ray at30(kVecZero, Vec3(std::cos(deg2rad(30)), 0, std::sin(deg2rad(30))));
-  ASSERT_TRUE(performHitCollector(at30, &energyCollectors, &hitData));
+  ASSERT_TRUE(performHitCollector(at30, energyCollectors, &hitData));
 
   Ray at30other(kVecZero,
                 Vec3(-std::cos(deg2rad(30)), 0, std::sin(deg2rad(30))));
-  ASSERT_TRUE(performHitCollector(at30other, &energyCollectors, &hitData));
+  ASSERT_TRUE(performHitCollector(at30other, energyCollectors, &hitData));
 
   Ray at30XY(kVecZero, Vec3(std::cos(deg2rad(30)), std::cos(deg2rad(30)),
                             std::sin(deg2rad(60))));
-  ASSERT_FALSE(performHitCollector(at30XY, &energyCollectors, &hitData))
+  ASSERT_FALSE(performHitCollector(at30XY, energyCollectors, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
   Ray at30XYOther(kVecZero, Vec3(-std::cos(deg2rad(30)), -std::cos(deg2rad(30)),
                                  std::sin(deg2rad(60))));
-  ASSERT_FALSE(performHitCollector(at30XYOther, &energyCollectors, &hitData))
+  ASSERT_FALSE(performHitCollector(at30XYOther, energyCollectors, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
 
@@ -210,12 +211,10 @@ TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
   RayHitData hitData;
   Ray previousNotHit1(kVecZero,
                       Vec3(0, 1.01 * invalidEnergyCollectorRadius, 1));
-  ASSERT_TRUE(
-      performHitCollector(previousNotHit1, &energyCollectors, &hitData));
+  ASSERT_TRUE(performHitCollector(previousNotHit1, energyCollectors, &hitData));
 
   Ray previousNotHit2(kVecZero,
                       Vec3(0, -1.01 * invalidEnergyCollectorRadius, 1));
 
-  ASSERT_TRUE(
-      performHitCollector(previousNotHit2, &energyCollectors, &hitData));
+  ASSERT_TRUE(performHitCollector(previousNotHit2, energyCollectors, &hitData));
 }
