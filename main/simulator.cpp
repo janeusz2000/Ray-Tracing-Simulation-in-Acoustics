@@ -6,26 +6,16 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   if (model.empty()) {
     throw std::invalid_argument("Empty model");
   }
-
-  // Obviously num of collectors less then 4 cannot be allowed
   if (numCollectors < 4) {
     std::stringstream ss;
     ss << "Num collectors: " << numCollectors << " is less them 4";
     throw std::invalid_argument(ss.str());
   }
 
-  // There are two possible configurations of EnergyCollectors:
-  // a) when numCollectors is not even, we have one collector at Vec3(0, 0,
-  // height), where height is equal to 4 * max(modelHeight, modelSide) and rest
-  // is equally distributed on 4 sides of the model, in a way, that distance
-  // between Vec3(0, 0, 0) and each collector remains always equal. Thats why
-  // we need to make sure that for this case numCollectors - 1 % 4 == 0.
-  // b) second configuration is similar to the first one, but there is no
-  // Energy collector at center (at Vec3(0, 0, height)). So to make sure that
-  // this configuration is possible, we need to check if numCollectors % 4 == 0.
-  // This leaves two possible cases:
-  // 1. numCollectors % 4 == 0
-  // 2. numCollectors - 1 % 4 == 0
+  // We distribute collectors along 4 quarter circles above the model, so
+  // |numCollectors| has to be divisible by 4. Or |numCollectors|-1 has to be
+  // divisible by 4 (if it is odd), in which case there is one more collector
+  // placed right above the model.
 
   if (!(numCollectors % 4 == 0 || (numCollectors - 1) % 4 == 0)) {
     std::stringstream ss;
