@@ -70,11 +70,11 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
   // Test case when numCollector - 1 % 4 = 0
   const int validNumCollectorCase1 = 37;
-  ASSERT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase1));
+  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase1));
 
   // Test case when numCollector % 4 = 0
   const int validNumCollectorCase2 = 36;
-  ASSERT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase2));
+  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase2));
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
