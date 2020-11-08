@@ -143,6 +143,21 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
+  const float collectorPositionRadius = 4;
+  const float collectorAngle = 2 * kPi / (numCollectors - 2);
+  const float refCollectorRadius =
+      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
+
+  Vec3 OriginOfPenultimateCollector =
+      energyCollectors[energyCollectors.size() - 2]->getOrigin();
+  Vec3 OriginOfLastCollector =
+      energyCollectors[energyCollectors.size() - 1]->getOrigin();
+  Vec3 refCollision =
+      (OriginOfLastCollector + OriginOfPenultimateCollector) / 2 -
+      Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
+
+  ASSERT_EQ(refCollision, hitData.collisionPoint());
+
   Ray straightDown(kVecZero, -kVecUp);
   ASSERT_FALSE(performHitCollector(energyCollectors, straightDown, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
@@ -150,10 +165,6 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   Ray alongX(kVecZero, kVecX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
 
-  const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 2);
-  const float refCollectorRadius =
-      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
   ASSERT_EQ(alongX.at(collectorPositionRadius - refCollectorRadius),
             hitData.collisionPoint());
 
