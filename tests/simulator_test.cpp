@@ -31,16 +31,13 @@ private:
 
 class EnergyCollectorTest : public ::testing::Test {
 protected:
-  // performs ray hit at given energyCollectors by modifying hitData.
-  /// Returns true if hit occurred, false when did not.
+  // performs ray hit at at given energy collectors, |hitData| is modified to
+  // hold information where ray hit energyCollector. Returns true if hit
+  // occurred, false when there was no hit
   [[nodiscard]] bool performHitCollector(
       const std::vector<std::unique_ptr<objects::EnergyCollector>>
           &energyCollectors,
       const Ray &ray, RayHitData *hitData) {
-
-    if (energyCollectors.empty()) {
-      return false;
-    }
 
     for (const auto &collector : energyCollectors) {
       if (collector->hitObject(ray, kSkipFrequency, hitData)) {
@@ -83,23 +80,18 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const FakeModel nonEmptyModel(false);
 
-  // This value will be used in actual simulation
   const int numCollectors = 37;
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
-
-  // TODO: THis should be done inside class fixture
-  // Because fake model height and size are equal to 0,
-  // collectors origin distance to Vec3(0, 0, 0) is always equal to 4.
-  const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 1);
-  const float refCollectorRadius =
-      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
-
-  ASSERT_EQ(energyCollectors.size(), numCollectors);
+  ASSERT_EQ(numCollectors, energyCollectors.size());
 
   Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
   ASSERT_EQ(performHitCollector(energyCollectors, straightUp, &hitData), true);
+
+  const float collectorPositionRadius = 4;
+  const float collectorAngle = 2 * kPi / (numCollectors - 1);
+  const float refCollectorRadius =
+      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
@@ -141,15 +133,10 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 }
 
 TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
-  const int numCollectors = 36;
-  const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 2);
-  const float refCollectorRadius =
-      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
-
   const FakeModel nonEmptyModel(false);
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
 
+  const int numCollectors = 36;
+  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   Ray straightUp(kVecZero, kVecUp);
@@ -163,6 +150,10 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   Ray alongX(kVecZero, kVecX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
 
+  const float collectorPositionRadius = 4;
+  const float collectorAngle = 2 * kPi / (numCollectors - 2);
+  const float refCollectorRadius =
+      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
   ASSERT_EQ(alongX.at(collectorPositionRadius - refCollectorRadius),
             hitData.collisionPoint());
 
@@ -191,14 +182,14 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 }
 
 TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
-  const int numCollectors = 37;
-  const float collectorPositionRadius = 4;
 
   const FakeModel nonEmptyModel(false);
+  const int numCollectors = 37;
 
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
+  const float collectorPositionRadius = 4;
   // this is how previous implementation was caclualating radius of energy
   // collector
   float invalidEnergyCollectorRadius =
