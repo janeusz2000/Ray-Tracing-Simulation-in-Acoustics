@@ -17,7 +17,7 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   // divisible by 4 (if it is odd), in which case there is one more collector
   // placed right above the model.
 
-  if (!(numCollectors % 4 == 0 || (numCollectors - 1) % 4 == 0)) {
+  if (numCollectors % 4 != 0 || (numCollectors - 1) % 4 != 0) {
     std::stringstream ss;
     ss << "numCollectors or numCollectors-1 has to be divisible by 4, got "
        << "numCollectors = " << numCollectors;
