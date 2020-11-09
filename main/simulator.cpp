@@ -8,7 +8,7 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   }
   if (numCollectors < 4) {
     std::stringstream ss;
-    ss << "Num collectors: " << numCollectors << " is less them 4";
+    ss << "numCollectors: " << numCollectors << " is less then 4";
     throw std::invalid_argument(ss.str());
   }
 

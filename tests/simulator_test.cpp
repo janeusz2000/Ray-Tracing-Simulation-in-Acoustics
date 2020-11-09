@@ -61,12 +61,26 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   const FakeModel nonEmptyModel(false);
 
   const int invalidNumCollectors = 38;
-  ASSERT_THROW(buildCollectors(nonEmptyModel, invalidNumCollectors),
-               std::invalid_argument);
+  try {
+    buildCollectors(nonEmptyModel, invalidNumCollectors);
+    FAIL() << "Expected throw std::invalid_argument";
+  } catch (const std::invalid_argument &e) {
+    EXPECT_STREQ("numCollectors or numCollectors-1 has to be "
+                 "divisible by 4, got numCollectors = 38",
+                 e.what());
+  } catch (...) {
+    FAIL() << "caught wrong exception";
+  }
 
   const int numCollectorLessThenOne = 3;
-  ASSERT_THROW(buildCollectors(nonEmptyModel, numCollectorLessThenOne),
-               std::invalid_argument);
+  try {
+    buildCollectors(nonEmptyModel, numCollectorLessThenOne);
+    FAIL() << "Expected throw std::invalid_argument";
+  } catch (const std::invalid_argument &e) {
+    EXPECT_STREQ("numCollectors: 3 is less then 4", e.what());
+  } catch (...) {
+    FAIL() << "Caught wrong exception";
+  }
 
   // Test case when numCollector - 1 % 4 = 0
   const int validNumCollectorCase1 = 37;
@@ -192,7 +206,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
       << "Collision Point: " << hitData.collisionPoint();
 }
 
-TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
+TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorHit) {
 
   const FakeModel nonEmptyModel(false);
   const int numCollectors = 37;
