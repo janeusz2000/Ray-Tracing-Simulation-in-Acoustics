@@ -18,11 +18,13 @@
 // centere on the model, oriented at the right angle to each other.
 // Their radius is equal to 4 * max(model height, model side),
 // but not less then 4.
+
 // Collectors are arranged uniformly on the circumference's, such that bottom
 // collectors are on the ground level.
 // In case of odd number of collectors, one collector is placed right above the
 // model. Radius of an energy collector is equal to distance between two
 // collectors.
+
 // Throws std::invalid_argument when |numCollectors| < 4 or when |numCollectors|
 // or |numCollectors|-1 is not divisible by 4.
 std::vector<std::unique_ptr<objects::EnergyCollector>>

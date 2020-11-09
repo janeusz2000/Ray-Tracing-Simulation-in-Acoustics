@@ -207,12 +207,12 @@ TEST_F(EnergyCollectorTest, PositionsThatWereFixedTest) {
       2 * kPi * collectorPositionRadius / static_cast<float>(numCollectors);
 
   RayHitData hitData;
-  Ray previousNotHit1(kVecZero,
-                      Vec3(0, 1.01 * invalidEnergyCollectorRadius, 1));
+  Ray previousNotHit1(kVecZero, Vec3(0, 1.01 * invalidEnergyCollectorRadius,
+                                     collectorPositionRadius));
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit1, &hitData));
 
-  Ray previousNotHit2(kVecZero,
-                      Vec3(0, -1.01 * invalidEnergyCollectorRadius, 1));
+  Ray previousNotHit2(kVecZero, Vec3(0, -1.01 * invalidEnergyCollectorRadius,
+                                     collectorPositionRadius));
 
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit2, &hitData));
 }
