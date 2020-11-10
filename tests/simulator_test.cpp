@@ -168,6 +168,10 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
       energyCollectors[energyCollectors.size() - 2]->getOrigin();
   Vec3 OriginOfLastCollector =
       energyCollectors[energyCollectors.size() - 1]->getOrigin();
+  // this comes from the fact, two origins of neighborhood collectors and
+  // collision point are creates equilateral triangle which side is equal to
+  // collector radius. Thats why collision point its just the point between two
+  // collectors origin - height of the equilateral triangle.
   Vec3 refCollision =
       (OriginOfLastCollector + OriginOfPenultimateCollector) / 2 -
       Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
