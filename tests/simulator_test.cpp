@@ -103,7 +103,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
-  ASSERT_EQ(performHitCollector(energyCollectors, straightUp, &hitData), true);
+  ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;
   const float collectorAngle = 2 * kPi / (numCollectors - 1);
