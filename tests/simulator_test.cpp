@@ -48,8 +48,8 @@ protected:
     return false;
   }
 
-  void printCollectors(std::vector<std::unique_ptr<objects::EnergyCollector>>
-                           energyCollectors) const {
+  void printCollectors(const std::vector<std::unique_ptr<objects::EnergyCollector>>
+                           &energyCollectors) const {
     for (const auto &collector : energyCollectors) {
       std::cout << "Origin: " << collector->getOrigin() << "\n"
                 << "Radius: " << collector->getRadius() << "\n";
