@@ -13,9 +13,7 @@ public:
   virtual std::vector<objects::TriangleObj *> triangles() const = 0;
   virtual float height() const = 0;
   virtual float sideSize() const = 0;
-  virtual bool empty() const {
-    return std::max<float>(height(), sideSize()) <= constants::kAccuracy;
-  }
+  virtual bool empty() const = 0;
 };
 
 class Model : public ModelInterface {
@@ -28,6 +26,9 @@ public:
 
   float height() const { return height_; }
   float sideSize() const { return sideSize_; }
+  bool empty() const override {
+    return std::max<float>(height(), sideSize()) <= constants::kAccuracy;
+  }
 
 private:
   std::vector<std::unique_ptr<objects::TriangleObj>> triangles_;
