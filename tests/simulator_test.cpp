@@ -212,7 +212,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
       << "Collision Point: " << hitData.collisionPoint();
 }
 
-TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitOddNnumber) {
+TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitOddNumber) {
 
   const FakeModel nonEmptyModel(false);
   const int numCollectors = 37;

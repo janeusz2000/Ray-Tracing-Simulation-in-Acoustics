@@ -16,7 +16,6 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   // |numCollectors| has to be divisible by 4. Or |numCollectors|-1 has to be
   // divisible by 4 (if it is odd), in which case there is one more collector
   // placed right above the model.
-
   if (numCollectors % 4 != 0 && (numCollectors - 1) % 4 != 0) {
     std::stringstream ss;
     ss << "numCollectors or numCollectors-1 has to be divisible by 4, got "
@@ -36,7 +35,6 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   // calculate angle between Vec3(0, 0, 0) and 2 points where energy collector
   // radius will cross simulation half-circle. Calculation will varies depending
   // on if number of collectors is even or not.
-
   const int numCollectorIsOdd = numCollectors % 2;
   const float angle = 2 * constants::kPi /
                       static_cast<float>(numCollectors + numCollectorIsOdd - 2);
@@ -45,8 +43,7 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   // energy collector, from Law of Cosines:
   // https://en.wikipedia.org/wiki/Law_of_cosines
   // and after couple fo transformations formula will look like this:
-  // r = R * sqrt(2 - 2 * cos(angle))
-
+  // r 0= R * sqrt(2 - 2 * cos(angle))
   float energyCollectorRadius =
       minDistance * static_cast<float>(std::sqrt(2 - 2 * std::cos(angle)));
 

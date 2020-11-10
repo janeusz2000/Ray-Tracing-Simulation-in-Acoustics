@@ -84,4 +84,7 @@
   "C_Cpp.vcFormat.indent.lambdaBracesWhenParameter": false,
   "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, IndentWidth: 2, ColumnLimit: 80 }",
   "todo-tree.tree.showBadges": false,
+  "cSpell.words": [
+    "STREQ"
+  ],
 }
