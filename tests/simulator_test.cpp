@@ -106,7 +106,6 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const float collectorAngle = 2 * kPi / (numCollectors - 1);
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
-
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
