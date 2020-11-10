@@ -16,6 +16,8 @@ const Vec3 kVecY(0, 1, 0);
 
 float deg2rad(float deg) { return 2 * kPi * deg / 360; }
 
+// TODO: add collision point check for every ray hit
+
 class FakeModel : public ModelInterface {
 
 public:
@@ -48,8 +50,9 @@ protected:
     return false;
   }
 
-  void printCollectors(const std::vector<std::unique_ptr<objects::EnergyCollector>>
-                           &energyCollectors) const {
+  void
+  printCollectors(const std::vector<std::unique_ptr<objects::EnergyCollector>>
+                      &energyCollectors) const {
     for (const auto &collector : energyCollectors) {
       std::cout << "Origin: " << collector->getOrigin() << "\n"
                 << "Radius: " << collector->getRadius() << "\n";
