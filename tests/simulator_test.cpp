@@ -236,3 +236,35 @@ TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitOddNumber) {
 
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit2, &hitData));
 }
+
+TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitEvenNumber) {
+
+  const FakeModel nonEmptyModel(false);
+  const int numCollectors = 20;
+
+  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+  ASSERT_EQ(energyCollectors.size(), numCollectors);
+
+  RayHitData hitData;
+  Ray straightUp(kVecZero, kVecUp);
+  ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
+
+  const float collectorPositionRadius = 4;
+  const float collectorAngle = 2 * kPi / (numCollectors - 2);
+  const float refCollectorRadius =
+      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
+
+  Vec3 OriginOfPenultimateCollector =
+      energyCollectors[energyCollectors.size() - 2]->getOrigin();
+  Vec3 OriginOfLastCollector =
+      energyCollectors[energyCollectors.size() - 1]->getOrigin();
+  // this comes from the fact, two origins of neighborhood collectors and
+  // collision point are creates equilateral triangle which side is equal to
+  // collector radius. Thats why collision point its just the point between two
+  // collectors origin - height of the equilateral triangle.
+  Vec3 refCollision =
+      (OriginOfLastCollector + OriginOfPenultimateCollector) / 2 -
+      Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
+
+  ASSERT_EQ(refCollision, hitData.collisionPoint());
+}
