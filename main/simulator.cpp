@@ -34,7 +34,7 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   // Those two cases can be shorten into:
   const int numCollectorReminder = numCollectors % 2;
   const float angleBetweenCollectors =
-      2 * constants::kPi / (numCollectors + numCollectorReminder - 2.0f);
+      2 * constants::kPi / (numCollectors + numCollectorReminder - 2);
 
   // radius of the two half-circles  is equal to the 4 times the biggest
   // dimension of the model and must be at least equal to 4.
