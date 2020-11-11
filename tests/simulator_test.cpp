@@ -75,23 +75,18 @@ protected:
     }
   }
 
-  std::pair<objects::EnergyCollector, objects::EnergyCollector>
-  topCollectorsXAxis(
+  std::pair<Vec3, Vec3> topXAxisCollectorsOrigin(
       const std::vector<std::unique_ptr<objects::EnergyCollector>>
           &energyCollectors) {
-    auto outputCollectors =
-        std::make_pair(objects::EnergyCollector(Vec3(0, 0, 0), 1),
-                       objects::EnergyCollector(Vec3(0, 0, 0), 1));
+    auto outputCollectorsOrigin = std::make_pair(Vec3(0, 0, 0), Vec3(0, 0, 0));
     for (const auto &collector : energyCollectors) {
-      if (collector->getOrigin().z() >=
-              outputCollectors.first.getOrigin().z() &&
-          collector->getOrigin().x() ==
-              outputCollectors.first.getOrigin().x()) {
-        outputCollectors.second = outputCollectors.first;
-        outputCollectors.first = *(collector.get());
+      if (collector->getOrigin().z() >= outputCollectorsOrigin.first.z() &&
+          collector->getOrigin().x() == outputCollectorsOrigin.first.x()) {
+        outputCollectorsOrigin.second = outputCollectorsOrigin.first;
+        outputCollectorsOrigin.first = collector.get()->getOrigin();
       }
     }
-    return outputCollectors;
+    return outputCollectorsOrigin;
   }
 };
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
@@ -187,15 +182,14 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
-  std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
-      topCollectorsXAxis(energyCollectors);
+  std::pair<Vec3, Vec3> topColOrigins =
+      topXAxisCollectorsOrigin(energyCollectors);
   // this comes from the fact, two origins of neighborhood collectors and
   // collision point are creates equilateral triangle which side is equal to
   // collector radius. Thats why collision point its just the point between two
   // collectors origin - height of the equilateral triangle.
-  Vec3 refCollision =
-      (topCol.first.getOrigin() + topCol.second.getOrigin()) / 2 -
-      Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
+  Vec3 refCollision = (topColOrigins.first + topColOrigins.second) / 2 -
+                      Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
   ASSERT_EQ(refCollision, hitData.collisionPoint());
 
   Ray straightDown(kVecZero, -kVecUp);
@@ -274,12 +268,10 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
-  std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
-      topCollectorsXAxis(energyCollectors);
+  std::pair<Vec3, Vec3> topColOrigins =
+      topXAxisCollectorsOrigin(energyCollectors);
   // See EvenNumOfEnergyCollectorTest for explanation
-  Vec3 refCollision =
-      (topCol.first.getOrigin() + topCol.second.getOrigin()) / 2 -
-      Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
-
+  Vec3 refCollision = (topColOrigins.first + topColOrigins.second) / 2 -
+                      Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
   ASSERT_EQ(refCollision, hitData.collisionPoint());
 }
