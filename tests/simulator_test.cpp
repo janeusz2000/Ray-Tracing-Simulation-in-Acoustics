@@ -62,7 +62,7 @@ protected:
   }
 
   std::pair<objects::EnergyCollector, objects::EnergyCollector>
-  topCollectors(const std::vector<std::unique_ptr<objects::EnergyCollector>>
+  topCollectorsXAxis(const std::vector<std::unique_ptr<objects::EnergyCollector>>
                     &energyCollectors) {
     auto outputCollectors =
         std::make_pair(objects::EnergyCollector(Vec3(0, 0, 0), 1),
@@ -185,7 +185,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
   std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
-      topCollectors(energyCollectors);
+      topCollectorsXAxis(energyCollectors);
   Vec3 OriginOfLastCollector = topCol.first.getOrigin();
   Vec3 OriginOfPenultimateCollector = topCol.second.getOrigin();
   // this comes from the fact, two origins of neighborhood collectors and
@@ -232,7 +232,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
       << "Collision Point: " << hitData.collisionPoint();
 }
 
-TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitOddNumber) {
+TEST_F(EnergyCollectorTest, PreviousBuggedNeartopCollectorsShouldHitOddNumber) {
 
   const FakeModel nonEmptyModel(false);
   const int numCollectors = 37;
@@ -257,7 +257,7 @@ TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitOddNumber) {
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit2, &hitData));
 }
 
-TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitEvenNumber) {
+TEST_F(EnergyCollectorTest, PreviousBuggedNeartopCollectorsShouldHitEvenNumber) {
 
   const FakeModel nonEmptyModel(false);
   const int numCollectors = 20;
@@ -275,7 +275,7 @@ TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitEvenNumber) {
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
   std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
-      topCollectors(energyCollectors);
+      topCollectorsXAxis(energyCollectors);
   Vec3 OriginOfLastCollector = topCol.first.getOrigin();
   Vec3 OriginOfPenultimateCollector = topCol.second.getOrigin();
   // See EvenNumOfEnergyCollectorTest for explanation
