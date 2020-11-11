@@ -68,8 +68,8 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
         collectorSphereRadius * std::sin(times * angleBetweenCollectors);
 
     origins = {core::Vec3(groundCoordinate, 0, zCoordinate),
-               core::Vec3(-groundCoordinate, 0, zCoordinate),
                core::Vec3(0, -groundCoordinate, zCoordinate),
+               core::Vec3(-groundCoordinate, 0, zCoordinate),
                core::Vec3(0, groundCoordinate, zCoordinate)};
 
     for (const core::Vec3 &origin : origins) {
