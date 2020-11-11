@@ -141,8 +141,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   Ray alongX(kVecZero, kVecX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
 
-  ASSERT_EQ(alongX.at(collectorPositionRadius - refCollectorRadius),
-            hitData.collisionPoint());
+  ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray alongY(kVecZero, kVecY);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
