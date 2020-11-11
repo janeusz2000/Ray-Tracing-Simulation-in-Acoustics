@@ -62,8 +62,9 @@ protected:
   }
 
   std::pair<objects::EnergyCollector, objects::EnergyCollector>
-  topCollectorsXAxis(const std::vector<std::unique_ptr<objects::EnergyCollector>>
-                    &energyCollectors) {
+  topCollectorsXAxis(
+      const std::vector<std::unique_ptr<objects::EnergyCollector>>
+          &energyCollectors) {
     auto outputCollectors =
         std::make_pair(objects::EnergyCollector(Vec3(0, 0, 0), 1),
                        objects::EnergyCollector(Vec3(0, 0, 0), 1));
@@ -186,16 +187,13 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 
   std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
       topCollectorsXAxis(energyCollectors);
-  Vec3 OriginOfLastCollector = topCol.first.getOrigin();
-  Vec3 OriginOfPenultimateCollector = topCol.second.getOrigin();
   // this comes from the fact, two origins of neighborhood collectors and
   // collision point are creates equilateral triangle which side is equal to
   // collector radius. Thats why collision point its just the point between two
   // collectors origin - height of the equilateral triangle.
   Vec3 refCollision =
-      (OriginOfLastCollector + OriginOfPenultimateCollector) / 2 -
+      (topCol.first.getOrigin() + topCol.second.getOrigin()) / 2 -
       Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
-
   ASSERT_EQ(refCollision, hitData.collisionPoint());
 
   Ray straightDown(kVecZero, -kVecUp);
@@ -232,7 +230,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
       << "Collision Point: " << hitData.collisionPoint();
 }
 
-TEST_F(EnergyCollectorTest, PreviousBuggedNeartopCollectorsShouldHitOddNumber) {
+TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
 
   const FakeModel nonEmptyModel(false);
   const int numCollectors = 37;
@@ -257,7 +255,7 @@ TEST_F(EnergyCollectorTest, PreviousBuggedNeartopCollectorsShouldHitOddNumber) {
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit2, &hitData));
 }
 
-TEST_F(EnergyCollectorTest, PreviousBuggedNeartopCollectorsShouldHitEvenNumber) {
+TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
 
   const FakeModel nonEmptyModel(false);
   const int numCollectors = 20;
@@ -276,11 +274,9 @@ TEST_F(EnergyCollectorTest, PreviousBuggedNeartopCollectorsShouldHitEvenNumber) 
 
   std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
       topCollectorsXAxis(energyCollectors);
-  Vec3 OriginOfLastCollector = topCol.first.getOrigin();
-  Vec3 OriginOfPenultimateCollector = topCol.second.getOrigin();
   // See EvenNumOfEnergyCollectorTest for explanation
   Vec3 refCollision =
-      (OriginOfLastCollector + OriginOfPenultimateCollector) / 2 -
+      (topCol.first.getOrigin() + topCol.second.getOrigin()) / 2 -
       Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
 
   ASSERT_EQ(refCollision, hitData.collisionPoint());
