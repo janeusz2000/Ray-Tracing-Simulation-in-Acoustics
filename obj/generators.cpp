@@ -2,7 +2,8 @@
 
 namespace generators {
 
-PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays, Model *model)
+PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays,
+                                               ModelInterface *model)
     : numOfRays_(numOfRays), currentRayNum_(0) {
 
   simulationHeight_ = 8 * model->height();

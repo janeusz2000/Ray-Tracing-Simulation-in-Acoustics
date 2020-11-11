@@ -39,7 +39,7 @@ public:
 // determinated by sampleSize until numOfRay number is reached
 class PointSpeakerRayFactory : public RayFactory {
 public:
-  PointSpeakerRayFactory(int numOfRays, Model *model);
+  PointSpeakerRayFactory(int numOfRays, ModelInterface *model);
 
   [[nodiscard]] bool genRay(core::Ray *ray) override;
 

@@ -6,24 +6,34 @@
 #include "obj/objects.h"
 #include "main/rayTracer.h"
 
+#include <cmath>
 #include <iostream>
 #include <limits>
 #include <sstream>
 #include <string_view>
 #include <vector>
 
-// TODO: radius of each EnergyCOllector should be equal to
-// constants::kPi * simulationRadius / numCollectors, to equally cover 3D space
-// of between each other.
-// SimulationHeight need to meet to requirements:
-// simulationRadius must be equal to 8 * model height and can be less then 4
-// meters - this comes from ISO 17497-2:2012
+// Constructs an array of Energy Collectors around specified model.
+// Energy Collectors are arranged in two half-circles, whose origin is
+// centere on the model, oriented at the right angle to each other.
+// Their radius is equal to 4 * max(model height, model side),
+// but not less then 4.
+
+// Collectors are arranged uniformly on the circumference's, such that bottom
+// collectors are on the ground level.
+// In case of odd number of collectors, one collector is placed right above the
+// model. Radius of an energy collector is equal to distance between two
+// collectors.
+
+// Throws std::invalid_argument when |numCollectors| < 4 or when |numCollectors|
+// or |numCollectors|-1 is not divisible by 4.
 std::vector<std::unique_ptr<objects::EnergyCollector>>
-buildCollectors(const Model &model, int numCollectors);
+buildCollectors(const ModelInterface &model, int numCollectors);
 
 class Simulator {
 public:
-  Simulator(RayTracer *tracer, Model *model, generators::RayFactory *source,
+  Simulator(RayTracer *tracer, ModelInterface *model,
+            generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter)
       : tracer_(tracer), model_(model), source_(source),
         offsetter_(offsetter){};
@@ -35,7 +45,7 @@ public:
 
 private:
   RayTracer *tracer_;
-  Model *model_;
+  ModelInterface *model_;
   generators::RayFactory *source_;
   generators::RandomRayOffseter *offsetter_;
 };
