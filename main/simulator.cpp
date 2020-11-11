@@ -23,45 +23,49 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
     throw std::invalid_argument(ss.str());
   }
 
-  // For even number of ray collectors, in order to equally cover two simulation
-  // half-circle (half-circle that cross each collectors
-  // origin), we need to  calculate angle between Vec3(0, 0, 0) and 2 points
-  // where energy collector radius will cross simulation half-circle.
-  // Calculation will varies depending on if number of collectors is even or
-  // not.
-  const int numCollectorIsOdd = numCollectors % 2;
-  const float angle = 2 * constants::kPi /
-                      static_cast<float>(numCollectors + numCollectorIsOdd - 2);
+  // We are placing collectors on two half-circles, such that distance between
+  // each collector on a given circle is equal to their radius.
 
-  // radius of the two half-circles  is equal to 4 times the biggest dimension
-  // of the model and must be at least equal to 4.
+  // For even number of collectors, on each half-circle we place N/2 collectors
+  // in total, with 2 collectors at the ground level. This divides the PI into
+  // N/2-1 segments.
+  // For odd number of collectors, we do the same and place 1 more collector at
+  // the top, so we divide PI into (N - 1) / 2 segments.
+  // Those two cases can be shorten into:
+  const int numCollectorReminder = numCollectors % 2;
+  const float angleBetweenCollectors =
+      2 * constants::kPi / (numCollectors + numCollectorReminder - 2.0f);
+
+  // radius of the two half-circles  is equal to the 4 times the biggest
+  // dimension of the model and must be at least equal to 4.
   float collectorSphereRadius =
       std::max(4.0f, 4 * std::max(model.height(), model.sideSize()));
 
-  // After gathering previously mentioned angle, we can calculate radius of each
-  // energy collector, from Law of Cosines:
-  // https://en.wikipedia.org/wiki/Law_of_cosines
-  // and after couple fo transformations formula will look like this:
-  // r = R * sqrt(2 - 2 * cos(angle))
+  // The radius of one collector (distance between collectors) can be then
+  // calculated with Law of cosines, as R *sqrt(2 - 2 *
+  // cos(angleBetweenCollectors)).
   float energyCollectorRadius =
-      collectorSphereRadius * std::sqrt(2.0f - 2 * std::cos(angle));
+      collectorSphereRadius *
+      std::sqrt(2.0f - 2 * std::cos(angleBetweenCollectors));
 
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
   // When Num Collectors is not even, we need to put one collector at (0, 0,
-  // minRadius)`
-  if (numCollectorIsOdd) {
+  // collectors)
+  if (numCollectorReminder == 1) {
     energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
         core::Vec3(0, 0, collectorSphereRadius), energyCollectorRadius));
   }
   // and decrease number remaining collectors to create remaining ones
-  const int numToGo = numCollectors - (numCollectorIsOdd);
+  const int numToGo = numCollectors - (numCollectorReminder);
 
   // Remaining energy collectors:
   std::vector<core::Vec3> origins;
   for (int times = 0; times * 4 < numToGo; ++times) {
 
-    float groundCoordinate = collectorSphereRadius * std::cos(times * angle);
-    float zCoordinate = collectorSphereRadius * std::sin(times * angle);
+    float groundCoordinate =
+        collectorSphereRadius * std::cos(times * angleBetweenCollectors);
+    float zCoordinate =
+        collectorSphereRadius * std::sin(times * angleBetweenCollectors);
 
     origins = {core::Vec3(groundCoordinate, 0, zCoordinate),
                core::Vec3(-groundCoordinate, 0, zCoordinate),

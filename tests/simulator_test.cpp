@@ -2,6 +2,8 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
+#include <utility>
+
 using constants::kPi;
 using core::Ray;
 using core::RayHitData;
@@ -57,6 +59,24 @@ protected:
       std::cout << "Origin: " << collector->getOrigin() << "\n"
                 << "Radius: " << collector->getRadius() << "\n";
     }
+  }
+
+  std::pair<objects::EnergyCollector, objects::EnergyCollector>
+  topCollectors(const std::vector<std::unique_ptr<objects::EnergyCollector>>
+                    &energyCollectors) {
+    auto outputCollectors =
+        std::make_pair(objects::EnergyCollector(Vec3(0, 0, 0), 1),
+                       objects::EnergyCollector(Vec3(0, 0, 0), 1));
+    for (const auto &collector : energyCollectors) {
+      if (collector->getOrigin().z() >=
+              outputCollectors.first.getOrigin().z() &&
+          collector->getOrigin().x() ==
+              outputCollectors.first.getOrigin().x()) {
+        outputCollectors.second = outputCollectors.first;
+        outputCollectors.first = *(collector.get());
+      }
+    }
+    return outputCollectors;
   }
 };
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
@@ -164,10 +184,10 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
-  Vec3 OriginOfPenultimateCollector =
-      energyCollectors[energyCollectors.size() - 2]->getOrigin();
-  Vec3 OriginOfLastCollector =
-      energyCollectors[energyCollectors.size() - 1]->getOrigin();
+  std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
+      topCollectors(energyCollectors);
+  Vec3 OriginOfLastCollector = topCol.first.getOrigin();
+  Vec3 OriginOfPenultimateCollector = topCol.second.getOrigin();
   // this comes from the fact, two origins of neighborhood collectors and
   // collision point are creates equilateral triangle which side is equal to
   // collector radius. Thats why collision point its just the point between two
@@ -254,14 +274,11 @@ TEST_F(EnergyCollectorTest, PreviousBuggedNearTopCollectorShouldHitEvenNumber) {
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
-  Vec3 OriginOfPenultimateCollector =
-      energyCollectors[energyCollectors.size() - 2]->getOrigin();
-  Vec3 OriginOfLastCollector =
-      energyCollectors[energyCollectors.size() - 1]->getOrigin();
-  // this comes from the fact, two origins of neighborhood collectors and
-  // collision point are creates equilateral triangle which side is equal to
-  // collector radius. Thats why collision point its just the point between two
-  // collectors origin - height of the equilateral triangle.
+  std::pair<objects::EnergyCollector, objects::EnergyCollector> topCol =
+      topCollectors(energyCollectors);
+  Vec3 OriginOfLastCollector = topCol.first.getOrigin();
+  Vec3 OriginOfPenultimateCollector = topCol.second.getOrigin();
+  // See EvenNumOfEnergyCollectorTest for explanation
   Vec3 refCollision =
       (OriginOfLastCollector + OriginOfPenultimateCollector) / 2 -
       Vec3(0, 0, refCollectorRadius * std::sqrt(3) / 2);
