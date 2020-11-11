@@ -2,8 +2,6 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
-#include <utility>
-
 #define ASSERT_EXCEPTION(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)                   \
   try {                                                                        \
     { TRY_BLOCK; }                                                             \
