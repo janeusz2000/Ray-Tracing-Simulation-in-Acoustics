@@ -4,6 +4,20 @@
 
 #include <utility>
 
+#define ASSERT_EXCEPTION(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)                   \
+  try {                                                                        \
+    { TRY_BLOCK; }                                                             \
+    FAIL() << "exception '" << MESSAGE << "' not thrown at all!";              \
+  } catch (const EXCEPTION_TYPE &e) {                                          \
+    EXPECT_STREQ(MESSAGE, e.what())                                            \
+        << " exception message is incorrect. Expected the following "          \
+           "message:\n\n"                                                      \
+        << MESSAGE << "\n";                                                    \
+  } catch (...) {                                                              \
+    FAIL() << "exception " << MESSAGE << " not thrown with expected type "     \
+           << #EXCEPTION_TYPE << "'!";                                         \
+  }
+
 using constants::kPi;
 using core::Ray;
 using core::RayHitData;
@@ -85,26 +99,15 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   const FakeModel nonEmptyModel(false);
 
   const int invalidNumCollectors = 38;
-  try {
-    buildCollectors(nonEmptyModel, invalidNumCollectors);
-    FAIL() << "Expected throw std::invalid_argument";
-  } catch (const std::invalid_argument &e) {
-    EXPECT_STREQ("numCollectors or numCollectors-1 has to be "
-                 "divisible by 4, got numCollectors = 38",
-                 e.what());
-  } catch (...) {
-    FAIL() << "caught wrong exception";
-  }
+  ASSERT_EXCEPTION(
+      buildCollectors(nonEmptyModel, invalidNumCollectors),
+      std::invalid_argument,
+      "numCollectors or numCollectors-1 has to be divisible by 4, got "
+      "numCollectors = 38");
 
   const int numCollectorLessThenOne = 3;
-  try {
-    buildCollectors(nonEmptyModel, numCollectorLessThenOne);
-    FAIL() << "Expected throw std::invalid_argument";
-  } catch (const std::invalid_argument &e) {
-    EXPECT_STREQ("numCollectors: 3 is less then 4", e.what());
-  } catch (...) {
-    FAIL() << "Caught wrong exception";
-  }
+  ASSERT_EXCEPTION(buildCollectors(nonEmptyModel, numCollectorLessThenOne),
+                   std::invalid_argument, "numCollectors: 3 is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
   const int validNumCollectorCase1 = 37;
