@@ -81,7 +81,7 @@ protected:
     auto outputCollectorsOrigin = std::make_pair(Vec3(0, 0, 0), Vec3(0, 0, 0));
     for (const auto &collector : energyCollectors) {
       if (collector->getOrigin().z() >= outputCollectorsOrigin.first.z() &&
-          collector->getOrigin().x() == outputCollectorsOrigin.first.x()) {
+          collector->getOrigin().x() == 0) {
         outputCollectorsOrigin.second = outputCollectorsOrigin.first;
         outputCollectorsOrigin.first = collector.get()->getOrigin();
       }
