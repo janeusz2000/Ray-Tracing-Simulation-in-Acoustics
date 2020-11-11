@@ -50,7 +50,7 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
 
   std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
   // When Num Collectors is not even, we need to put one collector at (0, 0,
-  // collectors)
+  // collectorSphereRadius)
   if (numCollectorReminder == 1) {
     energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
         core::Vec3(0, 0, collectorSphereRadius), energyCollectorRadius));
