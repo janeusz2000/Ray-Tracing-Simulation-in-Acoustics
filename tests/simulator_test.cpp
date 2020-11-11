@@ -91,39 +91,36 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
   const FakeModel nonEmptyModel(false);
 
-  const int invalidNumCollectors = 38;
+  
   ASSERT_EXCEPTION(
-      buildCollectors(nonEmptyModel, invalidNumCollectors),
+      buildCollectors(nonEmptyModel, 38),
       std::invalid_argument,
       "numCollectors or numCollectors-1 has to be divisible by 4, got "
       "numCollectors = 38");
 
-  const int numCollectorLessThenOne = 3;
-  ASSERT_EXCEPTION(buildCollectors(nonEmptyModel, numCollectorLessThenOne),
+  ASSERT_EXCEPTION(buildCollectors(nonEmptyModel, 3),
                    std::invalid_argument, "numCollectors: 3 is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
-  const int validNumCollectorCase1 = 37;
-  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase1));
+  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 37));
 
   // Test case when numCollector % 4 = 0
-  const int validNumCollectorCase2 = 36;
-  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase2));
+  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 36));
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const FakeModel nonEmptyModel(false);
 
-  const int numCollectors = 37;
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
-  ASSERT_EQ(numCollectors, energyCollectors.size());
+
+  auto energyCollectors = buildCollectors(nonEmptyModel, 37);
+  ASSERT_EQ(37, energyCollectors.size());
 
   Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 1);
+  const float collectorAngle = 2 * kPi / 36;
   const float refCollectorRadius = energyCollectors[0]->getRadius();
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
@@ -170,16 +167,15 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const FakeModel nonEmptyModel(false);
 
-  const int numCollectors = 36;
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
-  ASSERT_EQ(energyCollectors.size(), numCollectors);
+  auto energyCollectors = buildCollectors(nonEmptyModel, 36);
+  ASSERT_EQ(energyCollectors.size(), 36);
 
   Ray straightUp(kVecZero, kVecUp);
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 2);
+  const float collectorAngle = 2 * kPi / 34;
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
@@ -230,16 +226,15 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
 
   const FakeModel nonEmptyModel(false);
-  const int numCollectors = 37;
 
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
-  ASSERT_EQ(energyCollectors.size(), numCollectors);
+  auto energyCollectors = buildCollectors(nonEmptyModel, 37);
+  ASSERT_EQ(energyCollectors.size(), 37);
 
   const float collectorPositionRadius = 4;
   // this is how previous implementation was caclualating radius of energy
   // collector
   float invalidEnergyCollectorRadius =
-      2 * kPi * collectorPositionRadius / static_cast<float>(numCollectors);
+      2 * kPi * collectorPositionRadius / 37;
 
   RayHitData hitData;
   Ray previousNotHit1(kVecZero, Vec3(0, 1.01 * invalidEnergyCollectorRadius,
@@ -255,17 +250,15 @@ TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
 TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
 
   const FakeModel nonEmptyModel(false);
-  const int numCollectors = 20;
-
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
-  ASSERT_EQ(energyCollectors.size(), numCollectors);
+  auto energyCollectors = buildCollectors(nonEmptyModel, 20);
+  ASSERT_EQ(energyCollectors.size(), 20);
 
   RayHitData hitData;
   Ray straightUp(kVecZero, kVecUp);
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 2);
+  const float collectorAngle = 2 * kPi / 18;
   const float refCollectorRadius =
       collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
 
