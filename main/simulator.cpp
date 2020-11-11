@@ -72,7 +72,7 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
                core::Vec3(0, -groundCoordinate, zCoordinate),
                core::Vec3(0, groundCoordinate, zCoordinate)};
 
-    for (const core::Vec3 origin : origins) {
+    for (const core::Vec3 &origin : origins) {
       energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
           origin, energyCollectorRadius));
     }
