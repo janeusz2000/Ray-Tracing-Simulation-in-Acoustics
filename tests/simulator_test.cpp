@@ -91,15 +91,13 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
   const FakeModel nonEmptyModel(false);
 
-  
   ASSERT_EXCEPTION(
-      buildCollectors(nonEmptyModel, 38),
-      std::invalid_argument,
+      buildCollectors(nonEmptyModel, 38), std::invalid_argument,
       "numCollectors or numCollectors-1 has to be divisible by 4, got "
       "numCollectors = 38");
 
-  ASSERT_EXCEPTION(buildCollectors(nonEmptyModel, 3),
-                   std::invalid_argument, "numCollectors: 3 is less then 4");
+  ASSERT_EXCEPTION(buildCollectors(nonEmptyModel, 3), std::invalid_argument,
+                   "numCollectors: 3 is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
   const int validNumCollectorCase1 = 37;
@@ -238,7 +236,7 @@ TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
   // this is how previous implementation was caclualating radius of energy
   // collector
   float invalidEnergyCollectorRadius =
-      2 * kPi * collectorPositionRadius / static_cast<float>(numCollectors);
+      2 * kPi * collectorPositionRadius / numCollectors;
 
   RayHitData hitData;
   Ray previousNotHit1(kVecZero, Vec3(0, 1.01 * invalidEnergyCollectorRadius,
