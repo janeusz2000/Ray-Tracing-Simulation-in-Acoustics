@@ -40,7 +40,7 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_FALSE(sphere.hitObject(alongZAxisNoHit, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
-  Vec3 randomChosenVec3(42.123, 345.623, 234.235);
+  Vec3 randomChosenVec3(12.123, 5.623, 13.235);
   Ray randomChosenOriginRay(randomChosenVec3,
                             sphere.getOrigin() - randomChosenVec3);
   ASSERT_TRUE(sphere.hitObject(randomChosenOriginRay, kSkipFreq, &hitData));
@@ -75,4 +75,21 @@ TEST(SphereCollisionTest, RayHitInsideSphere) {
   Ray randomRayInsideSphere(randomChosenOriginInsideSphere,
                             Vec3(214.2345, 2345, 2235.456));
   ASSERT_TRUE(sphere.hitObject(randomRayInsideSphere, kSkipFreq, &hitData));
+}
+
+TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
+  Sphere sphere(kVecZero, 1);
+  RayHitData hitData;
+
+  Ray alongXAxis(Vec3(1, 0, 0), Vec3(1, 0, 0));
+  ASSERT_FALSE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData))
+      << "hit at: " << hitData.collisionPoint();
+
+  Ray alongYAxis(Vec3(0, 1, 0), Vec3(0, 1, 0));
+  ASSERT_FALSE(sphere.hitObject(alongYAxis, kSkipFreq, &hitData))
+      << "hit at: " << hitData.collisionPoint();
+
+  Ray alongZAxis(Vec3(0, 0, 1), Vec3(0, 0, 1));
+  ASSERT_FALSE(sphere.hitObject(alongZAxis, kSkipFreq, &hitData))
+      << "hit at: " << hitData.collisionPoint();
 }
