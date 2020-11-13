@@ -9,6 +9,8 @@ using objects::Sphere;
 const float kSkipFreq = 1000;
 const Vec3 kVecZero(0, 0, 0);
 
+float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
+
 TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
 
   Sphere sphere(kVecZero, 1);
@@ -52,6 +54,15 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_FALSE(
       sphere.hitObject(randomChosenOriginRayNoHit, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
+
+  // This comes from proportions of the pitagorus triangle where sides satisfy
+  // the equation : 3^2 + 4^2 = 5^5
+  Vec3 originFromAngle(0, -3, -4);
+  Ray rayToSphereOriginFromAngle(originFromAngle,
+                                 sphere.getOrigin() - originFromAngle);
+  ASSERT_TRUE(
+      sphere.hitObject(rayToSphereOriginFromAngle, kSkipFreq, &hitData));
+  ASSERT_FLOAT_EQ(5 - sphere.getRadius(), hitData.time);
 }
 
 TEST(SphereCollisionTest, RayHitInsideSphere) {
