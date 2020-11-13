@@ -87,7 +87,7 @@ std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector) {
             << ", Radius: " << collector.getRadius();
 }
 
-bool EnergyCollector::operator==(const EnergyCollector &other) const{
+bool EnergyCollector::operator==(const EnergyCollector &other) const {
   return (getOrigin() == other.getOrigin() &&
           getRadius() == other.getRadius() && getEnergy() == other.getEnergy());
 }

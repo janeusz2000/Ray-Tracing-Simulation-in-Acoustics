@@ -132,17 +132,17 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   Ray alongX(kVecZero, kVecX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
-  ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray alongY(kVecZero, kVecY);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
-  ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray at2Angle(kVecZero, Vec3(std::cos(2 * collectorAngle), 0,
                               std::sin(2 * collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   // TODO: This case doesn't work, find out why
-  // ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray at2AngleOther(kVecZero, Vec3(-std::cos(2 * collectorAngle), 0,
                                    std::sin(2 * collectorAngle)));
@@ -150,7 +150,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   ASSERT_TRUE(performHitCollector(energyCollectors, at2AngleOther, &hitData));
   // TODO: same shit
-  // ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray atSixtyXY(kVecZero, Vec3(std::cos(deg2rad(60)), std::cos(deg2rad(60)),
                                std::sin(deg2rad(60))));
@@ -195,23 +195,23 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 
   Ray alongX(kVecZero, kVecX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
-  ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray alongY(kVecZero, kVecY);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
-  ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray atAngle(kVecZero,
               Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
   // TODO: fix this
-  // ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray atAngleOther(
       kVecZero, Vec3(-std::cos(collectorAngle), 0, std::sin(collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngleOther, &hitData));
   // TODO: fix this
-  // ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray at30XY(kVecZero, Vec3(std::cos(deg2rad(30)), std::cos(deg2rad(30)),
                             std::sin(deg2rad(60))));
