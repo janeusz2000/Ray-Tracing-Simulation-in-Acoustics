@@ -7,10 +7,11 @@ using core::Vec3;
 using objects::Sphere;
 
 const double kSkipFreq = 1000;
+const Vec3 kVecZero(0, 0, 0);
 
 TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
 
-  Sphere sphere(Vec3(0, 0, 0), 1);
+  Sphere sphere(kVecZero, 1);
   RayHitData hitData;
   Ray alongYAxis(Vec3(0, -4, 0), Vec3(0, 1, 0));
   ASSERT_TRUE(sphere.hitObject(alongYAxis, kSkipFreq, &hitData));
@@ -43,14 +44,35 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   Ray randomChosenOriginRay(randomChosenVec3,
                             sphere.getOrigin() - randomChosenVec3);
   ASSERT_TRUE(sphere.hitObject(randomChosenOriginRay, kSkipFreq, &hitData));
-  ASSERT_EQ(
-      randomChosenOriginRay.at(randomChosenOriginRay.origin().magnitude() -
-                               sphere.getRadius()),
-      hitData.collisionPoint());
+  ASSERT_NEAR(randomChosenOriginRay.origin().magnitude() - sphere.getRadius(),
+              hitData.time, constants::kAccuracy);
 
   Ray randomChosenOriginRayNoHit(randomChosenVec3,
                                  randomChosenVec3 - sphere.getOrigin());
   ASSERT_FALSE(
       sphere.hitObject(randomChosenOriginRayNoHit, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
+}
+
+TEST(SphereCollisionTest, RayHitInsideSphere) {
+  Sphere sphere(kVecZero, 1);
+  RayHitData hitData;
+
+  Ray alongXAxis(kVecZero, Vec3(1, 0, 0));
+  ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
+  ASSERT_DOUBLE_EQ(sphere.getRadius(), hitData.time);
+
+  Ray alongYAxis(kVecZero, Vec3(0, 1, 0));
+  ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
+  ASSERT_DOUBLE_EQ(sphere.getRadius(), hitData.time);
+
+  Ray alongZAxis(kVecZero, Vec3(0, 0, 1));
+  ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
+  ASSERT_DOUBLE_EQ(sphere.getRadius(), hitData.time);
+
+  // TODO: figure out how to test time in this case
+  Vec3 randomChosenOriginInsideSphere = Vec3(0.213, 0.523, 0.123);
+  Ray randomRayInsideSphere(randomChosenOriginInsideSphere,
+                            Vec3(214.2345, 2345, 2235.456));
+  ASSERT_TRUE(sphere.hitObject(randomRayInsideSphere, kSkipFreq, &hitData));
 }
