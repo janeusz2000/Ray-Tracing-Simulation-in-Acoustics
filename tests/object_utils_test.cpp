@@ -12,13 +12,13 @@ using core::Ray;
 using core::RayHitData;
 using core::Vec3;
 
-const double kSkipFreq = 1000;
+const float kSkipFreq = 1000;
 
 namespace objects {
 
 TEST(SphereWallObjectTest, RayInsideSphereHit) {
   Vec3 kO(123, 1, 2);
-  const double kR = 3;
+  const float kR = 3;
   Sphere sphere(kO, kR);
 
   RayHitData ignore;
