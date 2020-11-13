@@ -4,7 +4,7 @@
 
 namespace core {
 
-Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
+Ray::Ray(const Vec3 &origin, const Vec3 &direction, double energy)
     : origin_(origin), energy_(energy) {
   if (direction == Vec3(0, 0, 0)) {
     throw std::invalid_argument("Direction  equal to Vec3(0, 0, 0)");
@@ -13,9 +13,9 @@ Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
   direction_ = direction.normalize();
 }
 
-Vec3 Ray::at(float time) const { return origin_ + time * direction_; }
+Vec3 Ray::at(double time) const { return origin_ + time * direction_; }
 
-float Ray::phaseAt(float freq, float time) const {
+double Ray::phaseAt(double freq, double time) const {
   if (freq <= constants::kAccuracy || time <= constants::kAccuracy) {
     std::stringstream ss;
     ss << "Could not calculate phase at, because input "
@@ -23,7 +23,7 @@ float Ray::phaseAt(float freq, float time) const {
        << freq << ", time: " << time;
     throw std::invalid_argument(ss.str());
   }
-  float waveLength = constants::kSoundSpeed / freq;
+  double waveLength = constants::kSoundSpeed / freq;
   return time / waveLength * 2 * constants::kPi;
 }
 
@@ -47,9 +47,9 @@ void Ray::setDirection(const Vec3 &direction) {
 
 Vec3 Ray::direction() const { return direction_; }
 
-void Ray::setEnergy(float num) { energy_ = num; }
+void Ray::setEnergy(double num) { energy_ = num; }
 
-float Ray::energy() const { return energy_; }
+double Ray::energy() const { return energy_; }
 
 bool RayHitData::operator==(const RayHitData &other) const {
   return (std::abs(other.time - time) <= constants::kAccuracy &&

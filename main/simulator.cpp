@@ -33,18 +33,18 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   // the top, so we divide PI into (N - 1) / 2 segments.
   // Those two cases can be shorten into:
   const int numCollectorReminder = numCollectors % 2;
-  const float angleBetweenCollectors =
+  const double angleBetweenCollectors =
       2 * constants::kPi / (numCollectors + numCollectorReminder - 2);
 
   // radius of the two half-circles  is equal to the 4 times the biggest
   // dimension of the model and must be at least equal to 4.
-  float collectorSphereRadius =
-      std::max(4.0f, 4 * std::max(model.height(), model.sideSize()));
+  double collectorSphereRadius =
+      std::max(4.0, 4 * std::max(model.height(), model.sideSize()));
 
   // The radius of one collector (distance between collectors) can be then
   // calculated with Law of cosines, as R *sqrt(2 - 2 *
   // cos(angleBetweenCollectors)).
-  float energyCollectorRadius =
+  double energyCollectorRadius =
       collectorSphereRadius *
       std::sqrt(2.0f - 2 * std::cos(angleBetweenCollectors));
 
@@ -62,9 +62,9 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   std::vector<core::Vec3> origins;
   for (int times = 0; times * 4 < numToGo; ++times) {
 
-    float groundCoordinate =
+    double groundCoordinate =
         collectorSphereRadius * std::cos(times * angleBetweenCollectors);
-    float zCoordinate =
+    double zCoordinate =
         collectorSphereRadius * std::sin(times * angleBetweenCollectors);
 
     origins = {core::Vec3(groundCoordinate, 0, zCoordinate),

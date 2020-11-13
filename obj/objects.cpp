@@ -10,32 +10,32 @@ core::Vec3 Sphere::normal(const core::Vec3 &surfacePoint) const {
   return (surfacePoint - getOrigin()).normalize();
 }
 
-Sphere::Sphere(const core::Vec3 &origin, float rad) {
+Sphere::Sphere(const core::Vec3 &origin, double rad) {
   this->setOrigin(origin);
   radius_ = rad;
 }
 
-bool Sphere::hitObject(const core::Ray &ray, float freq,
+bool Sphere::hitObject(const core::Ray &ray, double freq,
                        core::RayHitData *hitData) {
 
   core::Vec3 rVec3 = ray.origin() - this->getOrigin();
 
   // this calculates variables that are neccesary to calculate times at which
   // ray hits the object
-  float beta = 2 * rVec3.scalarProduct(ray.direction());
-  float gamma = rVec3.scalarProduct(rVec3) - radius_ * radius_;
-  float discriminant = beta * beta - 4 * gamma;
+  double beta = 2 * rVec3.scalarProduct(ray.direction());
+  double gamma = rVec3.scalarProduct(rVec3) - radius_ * radius_;
+  double discriminant = beta * beta - 4 * gamma;
 
   // when there is no intersection between ray and object
   if (discriminant < 0) {
     return false;
   }
-  float temp = std::sqrt(discriminant);
+  double temp = std::sqrt(discriminant);
 
   // hit times, both intersections. When there is only one
   // intersection - time is equal to 0;
-  float timeLow = (-beta - temp) / 2;
-  float timeHigh = (-beta + temp) / 2;
+  double timeLow = (-beta - temp) / 2;
+  double timeHigh = (-beta + temp) / 2;
 
   // No hit, both intersections are behind the ray
   if (timeHigh <= constants::kAccuracy) {
@@ -49,7 +49,7 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
   // NOTE: timeHigh is always positive, and timeLow is always less than timeHigh
   // so we use it when it is also positive (i.e when ray is outside of the
   // sphere).
-  float collisionTime = timeLow > 0 ? timeLow : timeHigh;
+  double collisionTime = timeLow > 0 ? timeLow : timeHigh;
   core::Vec3 collision = ray.at(collisionTime);
   *hitData = core::RayHitData(collisionTime, normal(collision), ray, freq);
   return true;
@@ -61,8 +61,8 @@ std::ostream &operator<<(std::ostream &os, const Sphere &sp) {
 }
 
 // GETTERS AND SETTERS
-void Sphere::setRadius(float rad) { radius_ = rad; }
-float Sphere::getRadius() const { return radius_; }
+void Sphere::setRadius(double rad) { radius_ = rad; }
+double Sphere::getRadius() const { return radius_; }
 
 std::ostream &operator<<(std::ostream &os, const SphereWall &sp) {
   return os << "SphereWall origin: " << sp.getOrigin()
@@ -94,7 +94,7 @@ bool EnergyCollector::operator==(const EnergyCollector &other) const {
 
 // METHODS
 
-float EnergyCollector::distanceAt(const core::Vec3 &positionHit) const {
+double EnergyCollector::distanceAt(const core::Vec3 &positionHit) const {
   return (getOrigin() - positionHit).magnitude();
 }
 
@@ -103,9 +103,9 @@ void EnergyCollector::collectEnergy(const core::RayHitData &hitdata) {
 }
 
 // GETTERS AND SETTERS
-void EnergyCollector::setEnergy(float en) { energy_ = en; }
-float EnergyCollector::getEnergy() const { return energy_; }
-void EnergyCollector::addEnergy(float en) { energy_ += en; }
+void EnergyCollector::setEnergy(double en) { energy_ = en; }
+double EnergyCollector::getEnergy() const { return energy_; }
+void EnergyCollector::addEnergy(double en) { energy_ += en; }
 
 // CONSTRUCTORS
 
@@ -160,19 +160,19 @@ core::Vec3 TriangleObj::normal(const core::Vec3 &surfacePoint) const {
   return normal_;
 }
 
-bool TriangleObj::hitObject(const core::Ray &ray, float freq,
+bool TriangleObj::hitObject(const core::Ray &ray, double freq,
                             core::RayHitData *hitData) {
   // if ray direction is parpedicular to normal, there is no hit. It can be
   // translated into checking if scalarProduct of the ray.direction and normal
   // is close or equal to zero.
-  float normalDot = ray.direction().scalarProduct(normal_);
+  double normalDot = ray.direction().scalarProduct(normal_);
   if (std::abs(normalDot) <= constants::kAccuracy) {
     return false;
   }
 
   // Following code calculates time at which ray
   // is hitting surface where triangle is positioned
-  float time =
+  double time =
       (-1 * (ray.origin() - point3_)).scalarProduct(normal_) / normalDot;
 
   // Following code is making sure that ray doesn't hit the same object.
@@ -195,14 +195,14 @@ bool TriangleObj::doesHit(const core::Vec3 &point) const {
   core::Vec3 vecC = point3_ - point;
 
   //  Area of the triangle made with point and w triangle points.
-  float alpha = vecB.crossProduct(vecC).magnitude() / 2;
-  float beta = vecC.crossProduct(vecA).magnitude() / 2;
-  float gamma = vecA.crossProduct(vecB).magnitude() / 2;
+  double alpha = vecB.crossProduct(vecC).magnitude() / 2;
+  double beta = vecC.crossProduct(vecA).magnitude() / 2;
+  double gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
   return alpha + beta + gamma - area_ <= constants::kHitAccuracy;
 }
 
-float TriangleObj::area() const { return area_; }
+double TriangleObj::area() const { return area_; }
 
 void TriangleObj::refreshAttributes() {
   this->recalculateArea();

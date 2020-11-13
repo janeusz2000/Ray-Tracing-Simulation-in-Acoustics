@@ -13,47 +13,48 @@ class Vec3 {
   // Z cord: represents down (-) to up (+) coordinates
 
 public:
-  explicit Vec3(float x = 0, float y = 0, float z = 0) : x_(x), y_(y), z_(z){};
+  explicit Vec3(double x = 0, double y = 0, double z = 0)
+      : x_(x), y_(y), z_(z){};
 
-  Vec3(std::initializer_list<float> initList);
+  Vec3(std::initializer_list<double> initList);
   Vec3(const Vec3 &other) = default;
   ~Vec3() = default;
 
   Vec3 &operator=(const Vec3 &other);
   Vec3 &operator+=(const Vec3 &other);
-  Vec3 &operator+=(float num);
+  Vec3 &operator+=(double num);
   Vec3 &operator-=(const Vec3 &other);
-  Vec3 &operator-=(float num);
-  Vec3 &operator*=(float num);
+  Vec3 &operator-=(double num);
+  Vec3 &operator*=(double num);
   Vec3 operator-() const { return *this * -1; }
   bool operator==(const Vec3 &other) const;
   bool operator!=(const Vec3 &other) const;
 
   friend Vec3 operator+(const Vec3 &left, const Vec3 &right);
-  friend Vec3 operator+(const Vec3 &left, float right);
-  friend Vec3 operator+(float left, const Vec3 &right);
+  friend Vec3 operator+(const Vec3 &left, double right);
+  friend Vec3 operator+(double left, const Vec3 &right);
   friend Vec3 operator-(const Vec3 &left, const Vec3 &right);
-  friend Vec3 operator-(const Vec3 &left, float right);
-  friend Vec3 operator*(float num, const Vec3 &vec);
-  friend Vec3 operator*(const Vec3 &vec, float num);
-  friend Vec3 operator/(const Vec3 &vec, float num);
+  friend Vec3 operator-(const Vec3 &left, double right);
+  friend Vec3 operator*(double num, const Vec3 &vec);
+  friend Vec3 operator*(const Vec3 &vec, double num);
+  friend Vec3 operator/(const Vec3 &vec, double num);
   friend std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3);
 
-  float scalarProduct(const Vec3 &other) const;
+  double scalarProduct(const Vec3 &other) const;
   Vec3 crossProduct(const Vec3 &other) const;
-  float magnitude() const;
-  float magnitudeSquared() const;
+  double magnitude() const;
+  double magnitudeSquared() const;
   Vec3 normalize() const;
 
-  float x() const;
-  void setX(float num);
-  float y() const;
-  void setY(float num);
-  float z() const;
-  void setZ(float num);
+  double x() const;
+  void setX(double num);
+  double y() const;
+  void setY(double num);
+  double z() const;
+  void setZ(double num);
 
 private:
-  float x_, y_, z_;
+  double x_, y_, z_;
 };
 
 } // namespace core

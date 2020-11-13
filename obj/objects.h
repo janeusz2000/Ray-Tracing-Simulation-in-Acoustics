@@ -17,7 +17,7 @@ class Object {
 public:
   virtual ~Object(){};
   virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
-  virtual bool hitObject(const core::Ray &ray, float freq,
+  virtual bool hitObject(const core::Ray &ray, double freq,
                          core::RayHitData *hitData) = 0;
 
   void setOrigin(const core::Vec3 &origin);
@@ -29,19 +29,19 @@ protected:
 
 class Sphere : public Object {
 public:
-  explicit Sphere(const core::Vec3 &origin, float rad = 1);
+  explicit Sphere(const core::Vec3 &origin, double rad = 1);
 
   friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
 
   core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
-  [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
+  [[nodiscard]] bool hitObject(const core::Ray &ray, double freq,
                                core::RayHitData *hitData) override;
 
-  float getRadius() const;
-  void setRadius(float rad);
+  double getRadius() const;
+  void setRadius(double rad);
 
 protected:
-  float radius_;
+  double radius_;
 };
 
 // When this object has two purposes: first - when ray hit this object, there is
@@ -52,7 +52,7 @@ protected:
 // point to the sphere collectors;
 class SphereWall : public Sphere {
 public:
-  explicit SphereWall(float radius)
+  explicit SphereWall(double radius)
       : Sphere(core::Vec3(0, 0, 0), /*radius=*/1) {
     setRadius(radius);
   }
@@ -63,7 +63,7 @@ public:
 
 class EnergyCollector : public Sphere {
 public:
-  explicit EnergyCollector(const core::Vec3 &origin, float radius)
+  explicit EnergyCollector(const core::Vec3 &origin, double radius)
       : Sphere(origin, radius), energy_(0.0f) {
     setRadius(radius);
     setOrigin(origin);
@@ -74,17 +74,17 @@ public:
   bool operator==(const EnergyCollector &other) const;
   EnergyCollector &operator=(const EnergyCollector &other);
 
-  float distanceAt(const core::Vec3 &positionHit) const;
+  double distanceAt(const core::Vec3 &positionHit) const;
   void collectEnergy(const core::RayHitData &hitdata);
 
-  void setEnergy(float en);
-  float getEnergy() const;
-  void addEnergy(float en);
+  void setEnergy(double en);
+  double getEnergy() const;
+  void addEnergy(double en);
   void setID(int id);
   int getID() const;
 
 private:
-  float energy_;
+  double energy_;
 };
 
 class TriangleObj : public Object {
@@ -101,10 +101,10 @@ public:
 
   core::Vec3
   normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
-  [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
+  [[nodiscard]] bool hitObject(const core::Ray &ray, double freq,
                                core::RayHitData *hitData) override;
 
-  float area() const;
+  double area() const;
   void refreshAttributes();
 
   core::Vec3 point1() const;
@@ -125,7 +125,7 @@ private:
   void recalculateArea();
   bool arePointsValid();
   core::Vec3 normal_, point1_, point2_, point3_;
-  float area_;
+  double area_;
 };
 
 } // namespace objects

@@ -22,7 +22,7 @@ public:
   }
 
 protected:
-  virtual float getNextAxisOffset() const = 0;
+  virtual double getNextAxisOffset() const = 0;
 };
 
 class RayFactory {
@@ -45,11 +45,11 @@ public:
 
 private:
   int numOfRays_, currentRayNum_;
-  float simulationHeight_, simulationSideSize_;
+  double simulationHeight_, simulationSideSize_;
 
   // Edge values of the X and Y cooridantes
   // in Vec3 used in direction calculation
-  float start_, stop_;
+  double start_, stop_;
   core::Vec3 origin_;
 };
 
