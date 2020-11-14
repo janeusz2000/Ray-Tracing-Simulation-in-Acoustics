@@ -175,7 +175,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   // collision point are creates equilateral triangle which side is equal to
   // collector radius. Thats why collision point its just the point between two
   // collectors origin - height of the equilateral triangle.
-  const float collisionTime = topColZCoord - refCollectorRadius * std::sqrt(3) / 2);
+  const float collisionTime = topColZCoord - refCollectorRadius * std::sqrt(3) / 2.0f;
   ASSERT_FLOAT_EQ(collisionTime, hitData.time);
 
   Ray straightDown(kVecZero, -kVecUp);
