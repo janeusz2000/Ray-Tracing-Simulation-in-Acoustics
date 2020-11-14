@@ -66,7 +66,7 @@ protected:
   }
 
   void printCollectors(const Collectors &energyCollectors) const {
-    int i = 0
+    int i = 0;
     for (const auto &collector : energyCollectors) {
       std::cout << i++ << " " << *collector << std::endl;
     }
@@ -80,6 +80,7 @@ protected:
     return maxZ;
   }
 };
+
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   // TODO: add a test when model is empty.
   const FakeModel nonEmptyModel(false);
