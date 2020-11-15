@@ -173,10 +173,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 2);
-  const float refCollectorRadius =
-      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
-
+  const float refCollectorRadius = energyCollectors[0]->getRadius();
   float topColZCoord = topCollectorZCoordinate(energyCollectors);
   // this comes from the fact, two origins of neighborhood collectors and
   // collision point are creates equilateral triangle which side is equal to
@@ -198,6 +195,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
+  const float collectorAngle = 2 * kPi / (numCollectors - 2);
   Ray atAngle(kVecZero,
               Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
@@ -261,10 +259,7 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 2);
-  const float refCollectorRadius =
-      collectorPositionRadius * std::sqrt(2 - 2 * std::cos(collectorAngle));
-
+  const float refCollectorRadius = energyCollectors[0]->getRadius();
   float topColZCoord = topCollectorZCoordinate(energyCollectors);
   // See EvenNumOfEnergyCollectorTest for explanation
   Vec3 refCollision(0, 0, topColZCoord - refCollectorRadius * std::sqrt(3) / 2);
