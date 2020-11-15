@@ -66,11 +66,9 @@ protected:
   }
 
   void printCollectors(const Collectors &energyCollectors) const {
+    int i = 0;
     for (const auto &collector : energyCollectors) {
-      std::cout << "x: " << collector->getOrigin().x()
-                << " y: " << collector->getOrigin().y()
-                << " z: " << collector->getOrigin().z()
-                << " rad: " << collector->getRadius() << "\n";
+      std::cout << i++ << " " << *collector << std::endl;
     }
   }
 
