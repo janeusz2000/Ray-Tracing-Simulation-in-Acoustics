@@ -2,6 +2,7 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
+// Checks if |TRY_BLOCK| throws right |EXCPETION_TYPE| with defined |Message|
 #define ASSERT_EXCEPTION(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)                   \
   try {                                                                        \
     { TRY_BLOCK; }                                                             \
