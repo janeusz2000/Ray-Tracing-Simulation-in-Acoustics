@@ -95,11 +95,9 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
                    "numCollectors: 3 is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
-  const int validNumCollectorCase1 = 37;
   EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 37));
 
   // Test case when numCollector % 4 = 0
-  const int validNumCollectorCase2 = 36;
   EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 36));
 }
 
