@@ -48,13 +48,13 @@ private:
 
 class EnergyCollectorTest : public ::testing::Test {
 protected:
+  using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+
   // performs ray hit at at given energy collectors, |hitData| is modified to
   // hold information where ray hit energyCollector. Returns true if hit
   // occurred, false when there was no hit
-  [[nodiscard]] bool performHitCollector(
-      const std::vector<std::unique_ptr<objects::EnergyCollector>>
-          &energyCollectors,
-      const Ray &ray, RayHitData *hitData) {
+  [[nodiscard]] bool performHitCollector(const Collectors &energyCollectors,
+                                         const Ray &ray, RayHitData *hitData) {
 
     for (const auto &collector : energyCollectors) {
       if (collector->hitObject(ray, kSkipFrequency, hitData)) {
@@ -65,9 +65,7 @@ protected:
     return false;
   }
 
-  void
-  printCollectors(const std::vector<std::unique_ptr<objects::EnergyCollector>>
-                      &energyCollectors) const {
+  void printCollectors(const Collectors &energyCollectors) const {
     for (const auto &collector : energyCollectors) {
       std::cout << "x: " << collector->getOrigin().x()
                 << " y: " << collector->getOrigin().y()
@@ -76,14 +74,10 @@ protected:
     }
   }
 
-  float topCollectorZCoordinate(
-      const std::vector<std::unique_ptr<objects::EnergyCollector>>
-          &energyCollectors) {
+  float topCollectorZCoordinate(const Collectors &energyCollectors) {
     float maxZ = 0;
     for (const auto &collector : energyCollectors) {
-      if (collector->getOrigin().z() > maxZ) {
-        maxZ = collector->getOrigin().z();
-      }
+      maxZ = std::max(maxZ, collector->getOrigin().z());
     }
     return maxZ;
   }
@@ -102,11 +96,11 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
   // Test case when numCollector - 1 % 4 = 0
   const int validNumCollectorCase1 = 37;
-  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase1));
+  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 37));
 
   // Test case when numCollector % 4 = 0
   const int validNumCollectorCase2 = 36;
-  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, validNumCollectorCase2));
+  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 36));
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
@@ -120,9 +114,8 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
-  const float collectorPositionRadius = 4;
-  const float collectorAngle = 2 * kPi / (numCollectors - 1);
   const float refCollectorRadius = energyCollectors[0]->getRadius();
+  const float collectorPositionRadius = 4;
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
@@ -139,6 +132,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
+  const float collectorAngle = 2 * kPi / (numCollectors - 1);
   Ray at2Angle(kVecZero, Vec3(std::cos(2 * collectorAngle), 0,
                               std::sin(2 * collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
