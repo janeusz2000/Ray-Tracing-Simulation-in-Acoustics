@@ -129,12 +129,12 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = 2 * kPi / (numCollectors - 1);
-  Ray at2Angle(kVecZero, Vec3(std::cos(2 * collectorAngle), 0,
-                              std::sin(2 * collectorAngle)));
+  Ray at2Angle(kVecZero, Vec3(std::cos(0.5 * collectorAngle), 0,
+                              std::sin(0.5 * collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   // TODO: This case doesn't work, find out why
-  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
-  // hitData.time);
+  // printCollectors(energyCollectors);
+  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray at2AngleOther(kVecZero, Vec3(-std::cos(2 * collectorAngle), 0,
                                    std::sin(2 * collectorAngle)));

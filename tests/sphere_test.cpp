@@ -63,6 +63,11 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_TRUE(
       sphere.hitObject(rayToSphereOriginFromAngle, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(5 - sphere.getRadius(), hitData.time);
+
+  Ray alongXOneHit(Vec3(-5, 0, 1), Vec3(1, 0, 0));
+  ASSERT_TRUE(sphere.hitObject(alongXOneHit, kSkipFreq, &hitData));
+  ASSERT_EQ(5, hitData.time);
+  ASSERT_EQ(Vec3(0, 0, 1), hitData.collisionPoint());
 }
 
 TEST(SphereCollisionTest, RayHitInsideSphere) {
@@ -102,5 +107,14 @@ TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
 
   Ray alongZAxis(Vec3(0, 0, 1), Vec3(0, 0, 1));
   ASSERT_FALSE(sphere.hitObject(alongZAxis, kSkipFreq, &hitData))
+      << "hit at: " << hitData.collisionPoint();
+}
+
+TEST(SphereCollisionTest, RayMissSphere) {
+  Sphere sphere(Vec3(15, 0, 0), 1);
+  RayHitData hitData;
+
+  Ray nextToSphere(Vec3(14 - constants::kAccuracy, 0, -5), Vec3(0, 0, 1));
+  ASSERT_FALSE(sphere.hitObject(nextToSphere, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 }
