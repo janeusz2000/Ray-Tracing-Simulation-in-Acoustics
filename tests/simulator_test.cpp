@@ -74,7 +74,7 @@ protected:
     }
   }
 
-  float topCollectorZCoordinate(const Collectors &energyCollectors) {
+  float getMaxZ(const Collectors &energyCollectors) {
     float maxZ = 0;
     for (const auto &collector : energyCollectors) {
       maxZ = std::max(maxZ, collector->getOrigin().z());
@@ -173,7 +173,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 
   const float collectorPositionRadius = 4;
   const float refCollectorRadius = energyCollectors[0]->getRadius();
-  float topColZCoord = topCollectorZCoordinate(energyCollectors);
+  float topColZCoord = getMaxZ(energyCollectors);
   // this comes from the fact, two origins of neighborhood collectors and
   // collision point are creates equilateral triangle which side is equal to
   // collector radius. Thats why collision point its just the point between two
@@ -259,7 +259,7 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
 
   const float collectorPositionRadius = 4;
   const float refCollectorRadius = energyCollectors[0]->getRadius();
-  float topColZCoord = topCollectorZCoordinate(energyCollectors);
+  float topColZCoord = getMaxZ(energyCollectors);
   // See EvenNumOfEnergyCollectorTest for explanation
   Vec3 refCollision(0, 0, topColZCoord - refCollectorRadius * std::sqrt(3) / 2);
   ASSERT_EQ(refCollision, hitData.collisionPoint());
