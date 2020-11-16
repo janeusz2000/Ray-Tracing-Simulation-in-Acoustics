@@ -3,7 +3,9 @@
 #include "gtest/gtest.h"
 
 // Checks if substring of thrown exception in |TRY_BLOCK| is equal to |MESSAGE|
-#define ASSERT_EXCEPTION(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)                   \
+// TODO: change implementation of the macro to check only msg inside exception
+// TODO: in a way, that there is no need to pass exception type
+#define ASSERT_EXCEPTION_MSG(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)               \
   try {                                                                        \
     { TRY_BLOCK; }                                                             \
     FAIL() << "exception '" << MESSAGE << "' not thrown at all!";              \
@@ -84,13 +86,13 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
   const FakeModel nonEmptyModel(false);
 
-  ASSERT_EXCEPTION(
+  ASSERT_EXCEPTION_MSG(
       buildCollectors(nonEmptyModel, 38), std::invalid_argument,
       "numCollectors or numCollectors-1 has to be divisible by 4, got "
       "numCollectors = 38");
 
-  ASSERT_EXCEPTION(buildCollectors(nonEmptyModel, 3), std::invalid_argument,
-                   "numCollectors: 3 is less then 4");
+  ASSERT_EXCEPTION_MSG(buildCollectors(nonEmptyModel, 3), std::invalid_argument,
+                       "numCollectors: 3 is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
   EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 37));
