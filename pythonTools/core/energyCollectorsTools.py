@@ -99,8 +99,36 @@ class CollectorReader:
     return EnergyCollector(Vec3(x, y, z), radius)
 
   def readFile(self):
-    with open("pythonTools/energyCollectors.txt") as f:
+    with open(self.path) as f:
       for line in f.data():
         self.objList.append(self.getReadCollector(line))
+    return self.objList
+  
+  def simulationRadius(self):
+    maximum = 0
+    for collector in self.objList:
+      maximum = max(maximum, collector.origin.z)  
+    return maximum  
+
+class Plotter:
+  def __init__(self, filePath):
+    self.reader = CollectorReader(filePath)
+    self.objList = self.reader.readFile()
+    self.simRadius = self.reader.simulationRadius()
+    self.objList.append(SphereWall(Vec3(0, 0, 0), self.simRadius))
+  
+  def plotXView(self):
+    for obj in self.objList:
+      obj.plotXSideView()
+    plt.title("X Side view")
+    plt.show()
+  
+  def plotYView(self):
+    for obj in self.objList:
+      obj.plotYSideView()
+    plt.title("Y Side view")
+    plt.show()
+    
+    
 
            

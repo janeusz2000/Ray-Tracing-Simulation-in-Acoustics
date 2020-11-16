@@ -1,4 +1,4 @@
-import pythonTools.energyCollectorsTools as tools
+import pythonTools.core.energyCollectorsTools as tools
 
 reader = tools.CollectorReader(filePath="skip")
 collector = reader.getReadCollector(collectorString="0 Energy Collector. Origin: Vec3(-4.234, 0.2345, 0.2356), Radius: 0.738147\n")
