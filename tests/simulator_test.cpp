@@ -216,8 +216,8 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
               Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
   // TODO: fix this
-  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
-  // hitData.time);
+  printCollectors(energyCollectors);
+  ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray atAngleOther(
       kVecZero, Vec3(-std::cos(collectorAngle), 0, std::sin(collectorAngle)));
