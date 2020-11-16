@@ -112,9 +112,9 @@ class CollectorReader:
 
 class Plotter:
   def __init__(self, filePath):
-    self.reader = CollectorReader(filePath)
-    self.objList = self.reader.readFile()
-    self.simRadius = self.reader.simulationRadius()
+    reader = CollectorReader(filePath)
+    self.objList = reader.readFile()
+    self.simRadius = reader.simulationRadius()
     self.objList.append(SphereWall(Vec3(0, 0, 0), self.simRadius))
   
   def plotXView(self):
