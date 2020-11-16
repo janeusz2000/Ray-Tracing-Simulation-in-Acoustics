@@ -91,16 +91,19 @@ class CollectorReader:
   def getReadCollector(self, collectorString):
     firstSlice = collectorString[collectorString.find("Vec3(")+5:]
     x = firstSlice[:firstSlice.find(',')]
+    print(x)
     secondSlice = firstSlice[firstSlice.find(',')+2:]
     y = secondSlice[:secondSlice.find(',')]
+    print(y)
     thirdSlice = secondSlice[firstSlice.find(',')+2:]
     z = thirdSlice[:thirdSlice.find(')')]
+    print(z)
     radius = thirdSlice[thirdSlice.find("Radius: ")+ 8: thirdSlice.find("\n")]
     return EnergyCollector(Vec3(x, y, z), radius)
 
   def readFile(self):
     with open(self.path) as f:
-      for line in f.data():
+      for line in f.readlines():
         self.objList.append(self.getReadCollector(line))
     return self.objList
   
