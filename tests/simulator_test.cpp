@@ -33,8 +33,6 @@ const Vec3 kVecY(0, 1, 0);
 
 float deg2rad(float deg) { return 2 * kPi * deg / 360; }
 
-// TODO: add collision point check for every ray hit
-
 class FakeModel : public ModelInterface {
 
 public:
@@ -67,6 +65,17 @@ protected:
     return false;
   }
 
+  float getCollectorRadius(const Collectors &energyCollectors) const {
+    return energyCollectors[0]->getRadius();
+  }
+
+  // returns value of angle between two neighborhood collectors and
+  // Vec3(0, 0, 0)
+  float getCollectorAngle(const Collectors &energyCollectors) const {
+    return 2 * kPi /
+           (energyCollectors.size() + (energyCollectors.size() % 2) - 2);
+  }
+
   void printCollectors(const Collectors &energyCollectors) const {
     int i = 0;
     for (const auto &collector : energyCollectors) {
@@ -80,6 +89,14 @@ protected:
       maxZ = std::max(maxZ, collector->getOrigin().z());
     }
     return maxZ;
+  }
+
+  float getMaxX(const Collectors &energyCollectors) {
+    float maxX = 0;
+    for (const auto &collector : energyCollectors) {
+      maxX = std::max(maxX, collector->getOrigin().x());
+    }
+    return maxX;
   }
 };
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
@@ -112,8 +129,8 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
-  const float refCollectorRadius = energyCollectors[0]->getRadius();
-  const float collectorPositionRadius = 4;
+  const float refCollectorRadius = getCollectorRadius(energyCollectors);
+  const float collectorPositionRadius = getMaxX(energyCollectors);
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
@@ -130,9 +147,9 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  const float collectorAngle = 2 * kPi / (numCollectors - 1);
-  Ray at2Angle(kVecZero, Vec3(std::cos(0.5 * collectorAngle), 0,
-                              std::sin(0.5 * collectorAngle)));
+  const float collectorAngle = getCollectorAngle(energyCollectors);
+  Ray at2Angle(kVecZero,
+               Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   // TODO: This case doesn't work, find out why
   // printCollectors(energyCollectors);
@@ -171,9 +188,9 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
-  const float collectorPositionRadius = 4;
-  const float refCollectorRadius = energyCollectors[0]->getRadius();
+  const float collectorPositionRadius = getMaxX(energyCollectors);
   float topColZCoord = getMaxZ(energyCollectors);
+  const float refCollectorRadius = getCollectorRadius(energyCollectors);
   // this comes from the fact, two origins of neighborhood collectors and
   // collision point are creates equilateral triangle which side is equal to
   // collector radius. Thats why collision point its just the point between two
@@ -194,7 +211,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  const float collectorAngle = 2 * kPi / (numCollectors - 2);
+  const float collectorAngle = getCollectorAngle(energyCollectors);
   Ray atAngle(kVecZero,
               Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
