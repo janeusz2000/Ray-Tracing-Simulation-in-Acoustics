@@ -1,7 +1,7 @@
 import pythonTools.core.energyCollectorsTools as tools
 
 def run():
-  plotter = tools.Plotter(filePath="pythonTools/energyCollectors.txt")
+  plotter = tools.Plotter(filePath="D:\\cpp_projects\\magisterkaCPP\\pythonTools\\energyCollectors.txt")
   plotter.plotXView()
   plotter.plotYView()
 
