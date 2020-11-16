@@ -85,7 +85,7 @@ protected:
   // exports |energyCollectors| as string representation to the
   // pythonTools/energyCollectors.txt
   [[nodicard]] bool exportCollectors(const Collectors &energyCollectors) const {
-    std::ofstream outFile("pythonTools/energyCollectors.txt",
+    std::ofstream outFile("pythonTools\\energyCollectors.txt",
                           std::ios_base::app);
     if (!outFile.good()) {
       return false;
