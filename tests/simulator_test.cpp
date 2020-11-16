@@ -2,7 +2,7 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
-// Checks if |TRY_BLOCK| throws right |EXCPETION_TYPE| with defined |Message|
+// Checks if substring of thrown exception in |TRY_BLOCK| is equal to |MESSAGE|
 #define ASSERT_EXCEPTION(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)                   \
   try {                                                                        \
     { TRY_BLOCK; }                                                             \
@@ -134,7 +134,8 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   // TODO: This case doesn't work, find out why
   // printCollectors(energyCollectors);
-  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
+  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
+  // hitData.time);
 
   Ray at2AngleOther(kVecZero, Vec3(-std::cos(2 * collectorAngle), 0,
                                    std::sin(2 * collectorAngle)));
