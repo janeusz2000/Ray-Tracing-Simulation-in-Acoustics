@@ -167,8 +167,8 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
                Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   // TODO: This case doesn't work, find out why
-  ASSERT_TRUE(
-      exportToTxt(energyCollectors, "pythonTools//energyCollectors.txt"));
+  // ASSERT_TRUE(
+  //     exportToTxt(energyCollectors, "pythonTools//energyCollectors.txt"));
   // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
   // hitData.time);
 
@@ -289,9 +289,7 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   RayHitData hitData;
   Ray straightUp(kVecZero, kVecUp);
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
-
-  const float collectorPositionRadius = 4;
-  const float refCollectorRadius = energyCollectors[0]->getRadius();
+  const float refCollectorRadius = getCollectorRadius(energyCollectors);
   float topColZCoord = getMaxZ(energyCollectors);
   // See EvenNumOfEnergyCollectorTest for explanation
   Vec3 refCollision(0, 0, topColZCoord - refCollectorRadius * std::sqrt(3) / 2);
