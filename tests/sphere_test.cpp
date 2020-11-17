@@ -1,6 +1,8 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h"
 
+#include <random>
+
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -9,11 +11,30 @@ using objects::Sphere;
 const float kSkipFreq = 1000;
 const Vec3 kVecZero(0, 0, 0);
 
+class RandomFloatGenerator {
+public:
+  RandomFloatGenerator(float min, float max)
+      : engine_(std::random_device()()), dist_(min, max){};
+  virtual ~RandomFloatGenerator(){};
+  virtual float getFloat() { return dist_(engine_); }
+
+private:
+  std::mt19937_64 engine_;
+  std::normal_distribution<float> dist_;
+};
+
 class SphereCollisionTest : public ::testing::Test {
+public:
+  SphereCollisionTest() : gen_(-1, 1){};
+
 protected:
   [[nodiscard]] bool isVecInsideSphere(const Vec3 &vec, const Sphere &sphere) {
     return (vec - sphere.getOrigin()).magnitude() < sphere.getRadius();
   }
+  Vec3 getRandomVec() {
+    return Vec3(gen_.getFloat(), gen_.getFloat(), gen_.getFloat());
+  }
+  RandomFloatGenerator gen_;
 };
 
 TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
@@ -59,7 +80,6 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
   ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
 
-  // TODO: figure out how to test time in this case
   Vec3 arbitraryChosenOriginInsideSphere(0.213, 0.523, 0.123);
   ASSERT_TRUE(isVecInsideSphere(arbitraryChosenOriginInsideSphere, sphere));
   Ray arbitraryRayInsideSphere(arbitraryChosenOriginInsideSphere,
@@ -71,6 +91,11 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
   Ray closeToEdge(closeToEdgeOrigin, Vec3(0, 0, 1));
   ASSERT_TRUE(sphere.hitObject(closeToEdge, kSkipFreq, &hitData));
   ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
+
+  Vec3 randomInsideSphere = getRandomVec().normalize() * 0.99;
+  ASSERT_TRUE(isVecInsideSphere(randomInsideSphere, sphere));
+  Ray randomInside(randomInsideSphere, getRandomVec());
+  ASSERT_TRUE(sphere.hitObject(randomInside, kSkipFreq, &hitData));
 }
 
 TEST_F(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
