@@ -279,6 +279,6 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   const float refCollectorRadius = energyCollectors[0]->getRadius();
   float topColZCoord = getMaxZ(energyCollectors);
   // See EvenNumOfEnergyCollectorTest for explanation
-  Vec3 refCollision(0, 0, topColZCoord - refCollectorRadius * std::sqrt(3) / 2);
-  ASSERT_EQ(refCollision, hitData.collisionPoint());
+  ASSERT_FLOAT_EQ(topColZCoord - refCollectorRadius * std::sqrt(3) / 2,
+                  hitData.time);
 }
