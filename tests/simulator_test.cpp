@@ -25,14 +25,14 @@ using core::Ray;
 using core::RayHitData;
 using core::Vec3;
 
+float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
+
 const int kSkipNumCollectors = 37;
 const float kSkipFrequency = 1000;
 const Vec3 kVecZero(0, 0, 0);
 const Vec3 kVecUp(0, 0, 1);
 const Vec3 kVecX(1, 0, 0);
 const Vec3 kVecY(0, 1, 0);
-
-float deg2rad(float deg) { return 2 * kPi * deg / 360; }
 
 class FakeModel : public ModelInterface {
 

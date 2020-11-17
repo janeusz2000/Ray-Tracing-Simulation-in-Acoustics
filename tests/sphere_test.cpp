@@ -9,10 +9,7 @@ using objects::Sphere;
 const float kSkipFreq = 1000;
 const Vec3 kVecZero(0, 0, 0);
 
-float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
-
 TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
-
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
   Ray alongYAxis(Vec3(0, -4, 0), Vec3(0, 1, 0));
