@@ -21,35 +21,18 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_FALSE(sphere.hitObject(alongYAxisNoHit, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
-  Ray alongXAxis(Vec3(-4, 0, 0), Vec3(1, 0, 0));
-  ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
-  ASSERT_FLOAT_EQ(alongXAxis.origin().magnitude() - sphere.getRadius(),
-                  hitData.time);
-
-  Ray alongXAxisNoHit(Vec3(4, 0, 0), Vec3(1, 0, 0));
-  ASSERT_FALSE(sphere.hitObject(alongYAxisNoHit, kSkipFreq, &hitData))
-      << "hit at: " << hitData.collisionPoint();
-
-  Ray alongZAxis(Vec3(0, 0, -4), Vec3(0, 0, 1));
-  ASSERT_TRUE(sphere.hitObject(alongZAxis, kSkipFreq, &hitData));
-  ASSERT_FLOAT_EQ(alongZAxis.origin().magnitude() - sphere.getRadius(),
-                  hitData.time);
-
-  Ray alongZAxisNoHit(Vec3(0, 0, 4), Vec3(0, 0, 1));
-  ASSERT_FALSE(sphere.hitObject(alongZAxisNoHit, kSkipFreq, &hitData))
-      << "hit at: " << hitData.collisionPoint();
-
-  Vec3 randomChosenVec3(12.123, 5.623, 13.235);
-  Ray randomChosenOriginRay(randomChosenVec3,
-                            sphere.getOrigin() - randomChosenVec3);
-  ASSERT_TRUE(sphere.hitObject(randomChosenOriginRay, kSkipFreq, &hitData));
-  ASSERT_NEAR(randomChosenOriginRay.origin().magnitude() - sphere.getRadius(),
+  Vec3 arbitraryChosenVec3(12.123, 5.623, 13.235);
+  Ray arbitraryChosenOriginRay(arbitraryChosenVec3,
+                               sphere.getOrigin() - arbitraryChosenVec3);
+  ASSERT_TRUE(sphere.hitObject(arbitraryChosenOriginRay, kSkipFreq, &hitData));
+  ASSERT_NEAR(arbitraryChosenOriginRay.origin().magnitude() -
+                  sphere.getRadius(),
               hitData.time, constants::kAccuracy);
 
-  Ray randomChosenOriginRayNoHit(randomChosenVec3,
-                                 randomChosenVec3 - sphere.getOrigin());
+  Ray arbitraryChosenOriginRayNoHit(arbitraryChosenVec3,
+                                    arbitraryChosenVec3 - sphere.getOrigin());
   ASSERT_FALSE(
-      sphere.hitObject(randomChosenOriginRayNoHit, kSkipFreq, &hitData))
+      sphere.hitObject(arbitraryChosenOriginRayNoHit, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
   // This comes from proportions of the pitagorus triangle where sides satisfy
@@ -84,10 +67,10 @@ TEST(SphereCollisionTest, RayHitInsideSphere) {
   ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
 
   // TODO: figure out how to test time in this case
-  Vec3 randomChosenOriginInsideSphere = Vec3(0.213, 0.523, 0.123);
-  Ray randomRayInsideSphere(randomChosenOriginInsideSphere,
-                            Vec3(214.2345, 2345, 2235.456));
-  ASSERT_TRUE(sphere.hitObject(randomRayInsideSphere, kSkipFreq, &hitData));
+  Vec3 arbitraryChosenOriginInsideSphere = Vec3(0.213, 0.523, 0.123);
+  Ray arbitraryRayInsideSphere(arbitraryChosenOriginInsideSphere,
+                               Vec3(214.2345, 2345, 2235.456));
+  ASSERT_TRUE(sphere.hitObject(arbitraryRayInsideSphere, kSkipFreq, &hitData));
 }
 
 TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
