@@ -18,8 +18,8 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_FLOAT_EQ(alongYAxis.origin().magnitude() - sphere.getRadius(),
                   hitData.time);
 
-  Ray alongYAxisNoHit(Vec3(0, 4, 0), Vec3(0, 1, 0));
-  ASSERT_FALSE(sphere.hitObject(alongYAxisNoHit, kSkipFreq, &hitData))
+  Ray alongYAxisOppposite(Vec3(0, 4, 0), Vec3(0, 1, 0));
+  ASSERT_FALSE(sphere.hitObject(alongYAxisOppposite, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
   Vec3 arbitraryVec3(12.123, 5.623, 13.235);
@@ -28,12 +28,6 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_NEAR((arbitraryVec3 - sphere.getOrigin()).magnitude() -
                   sphere.getRadius(),
               hitData.time, constants::kAccuracy);
-
-  Ray arbitraryOriginRayOpposite(arbitraryVec3,
-                                 arbitraryVec3 - sphere.getOrigin());
-  ASSERT_FALSE(
-      sphere.hitObject(arbitraryOriginRayOpposite, kSkipFreq, &hitData))
-      << "hit at: " << hitData.collisionPoint();
 
   // This comes from proportions of the pitagorus triangle where sides satisfy
   // the equation : 3^2 + 4^2 = 5^5
@@ -54,15 +48,7 @@ TEST(SphereCollisionTest, RayHitInsideSphere) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
 
-  Ray alongXAxis(kVecZero, Vec3(1, 0, 0));
-  ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
-  ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
-
-  Ray alongYAxis(kVecZero, Vec3(0, 1, 0));
-  ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
-  ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
-
-  Ray alongZAxis(kVecZero, Vec3(0, 0, 1));
+  Ray alongXAxis(sphere.getOrigin(), Vec3(1, 0, 0));
   ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
 
@@ -97,4 +83,8 @@ TEST(SphereCollisionTest, RayMissSphere) {
   Ray nextToSphere(Vec3(14 - constants::kAccuracy, 0, -5), Vec3(0, 0, 1));
   ASSERT_FALSE(sphere.hitObject(nextToSphere, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
+
+  Ray nextToSphereHit(Vec3(14, 0, -5), Vec3(0, 0, 1));
+  ASSERT_TRUE(sphere.hitObject(nextToSphereHit, kSkipFreq, &hitData));
+  ASSERT_FLOAT_EQ(5, hitData.time);
 }
