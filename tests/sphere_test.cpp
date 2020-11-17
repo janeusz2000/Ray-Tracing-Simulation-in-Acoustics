@@ -11,10 +11,10 @@ const Vec3 kVecZero(0, 0, 0);
 
 class SphereCollisionTest : public ::testing::Test {
 protected:
-  bool isVecInsideSphere(const Vec3 &vec, const Sphere &sphere) {
+  [[nodiscard]] bool isVecInsideSphere(const Vec3 &vec, const Sphere &sphere) {
     return (vec - sphere.getOrigin()).magnitude() < sphere.getRadius();
   }
-}
+};
 
 TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
   Sphere sphere(kVecZero, 1);
@@ -60,13 +60,20 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
   ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
 
   // TODO: figure out how to test time in this case
-  Vec3 arbitraryChosenOriginInsideSphere = Vec3(0.213, 0.523, 0.123);
+  Vec3 arbitraryChosenOriginInsideSphere(0.213, 0.523, 0.123);
+  ASSERT_TRUE(isVecInsideSphere(arbitraryChosenOriginInsideSphere, sphere));
   Ray arbitraryRayInsideSphere(arbitraryChosenOriginInsideSphere,
                                Vec3(214.2345, 2345, 2235.456));
   ASSERT_TRUE(sphere.hitObject(arbitraryRayInsideSphere, kSkipFreq, &hitData));
+
+  Vec3 closeToEdgeOrigin(0, 0, sphere.getRadius() - constants::kAccuracy);
+  ASSERT_TRUE(isVecInsideSphere(closeToEdgeOrigin, sphere));
+  Ray closeToEdge(closeToEdgeOrigin, Vec3(0, 0, 1));
+  ASSERT_TRUE(sphere.hitObject(closeToEdge, kSkipFreq, &hitData));
+  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
 }
 
-TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
+TEST_F(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
 
