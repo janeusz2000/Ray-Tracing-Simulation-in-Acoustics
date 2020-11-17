@@ -2,9 +2,10 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
-// Checks if substring of thrown exception in |TRY_BLOCK| is equal to |MESSAGE|
-// TODO: change implementation of the macro to check only msg inside exception
-// TODO: in a way, that there is no need to pass exception type
+// Checks if |TRY_BLOCK| throws right |EXCPETION_TYPE| with exception message
+// equal to const char* |MESSAGE|
+// TODO: check substring only, because every little change requirers of changing
+// TODO: whole test, which is not desired
 #define ASSERT_EXCEPTION_MSG(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)               \
   try {                                                                        \
     { TRY_BLOCK; }                                                             \
