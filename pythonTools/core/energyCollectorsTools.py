@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from os import read
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
-#python tools for visualisaztion of energy collectors
+#python tools for visualization of energy collectors
 
 class Vec3:
   def __init__(self, x, y, z):  
@@ -49,7 +49,7 @@ class EnergyCollector(ObjectInterface):
     collectorCircle.set_color('blue')
     plt.gca().add_patch(collectorCircle)
 
-    collectorOrigin = plt.Circle(position, radius = self.radius / 100)
+    collectorOrigin = plt.Circle(position, radius = self.radius / 20)
     collectorOrigin.set_fill(True)
     collectorOrigin.set_color('red')
     plt.gca().add_patch(collectorOrigin)
@@ -62,7 +62,7 @@ class EnergyCollector(ObjectInterface):
     collectorCircle.set_color('blue')
     plt.gca().add_patch(collectorCircle)
 
-    collectorOrigin = plt.Circle(position, radius = self.radius / 100)
+    collectorOrigin = plt.Circle(position, radius = self.radius / 20)
     collectorOrigin.set_fill(True)
     collectorOrigin.set_color('red')
     plt.gca().add_patch(collectorOrigin)
@@ -123,12 +123,24 @@ class Plotter:
     for obj in self.objList:
       obj.plotXSideView()
     plt.title("X Side view")
-    plt.show()
+    lim = 1.5 * self.simRadius
+    plt.ylim(0, lim)
+    plt.xlim(-lim, lim)
   
   def plotYView(self):
     for obj in self.objList:
       obj.plotYSideView()
     plt.title("Y Side view")
+    lim = 1.5 * self.simRadius
+    plt.ylim(0, lim)
+    plt.xlim(-lim, lim)
+
+  def plot(self):
+    plt.figure()
+    plt.subplot(2,1,1)
+    self.plotXView()
+    plt.subplot(2,1,2)
+    self.plotYView()
     plt.show()
     
     
