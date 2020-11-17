@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from os import read
 import matplotlib as plt
 
+#python tools for visualisaztion of energy collectors
+
 class Vec3:
   def __init__(self, x, y, z):  
     self.x = float(x)
