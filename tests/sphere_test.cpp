@@ -9,7 +9,14 @@ using objects::Sphere;
 const float kSkipFreq = 1000;
 const Vec3 kVecZero(0, 0, 0);
 
-TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
+class SphereCollisionTest : public ::testing::Test {
+protected:
+  bool isVecInsideSphere(const Vec3 &vec, const Sphere &sphere) {
+    return (vec - sphere.getOrigin()).magnitude() < sphere.getRadius();
+  }
+}
+
+TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
 
@@ -44,7 +51,7 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_EQ(Vec3(0, 0, 1), hitData.collisionPoint());
 }
 
-TEST(SphereCollisionTest, RayHitInsideSphere) {
+TEST_F(SphereCollisionTest, RayHitInsideSphere) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
 
@@ -66,17 +73,9 @@ TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
   Ray alongXAxis(Vec3(1, 0, 0), Vec3(1, 0, 0));
   ASSERT_FALSE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
-
-  Ray alongYAxis(Vec3(0, 1, 0), Vec3(0, 1, 0));
-  ASSERT_FALSE(sphere.hitObject(alongYAxis, kSkipFreq, &hitData))
-      << "hit at: " << hitData.collisionPoint();
-
-  Ray alongZAxis(Vec3(0, 0, 1), Vec3(0, 0, 1));
-  ASSERT_FALSE(sphere.hitObject(alongZAxis, kSkipFreq, &hitData))
-      << "hit at: " << hitData.collisionPoint();
 }
 
-TEST(SphereCollisionTest, RayMissSphere) {
+TEST_F(SphereCollisionTest, RayMissSphere) {
   Sphere sphere(Vec3(15, 0, 0), 1);
   RayHitData hitData;
 
