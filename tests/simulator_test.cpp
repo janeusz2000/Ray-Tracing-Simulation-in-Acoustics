@@ -169,7 +169,8 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   // TODO: This case doesn't work, find out why
   ASSERT_TRUE(exportToTxt(
       energyCollectors,
-      "D:\\cpp_projects\\magisterkaCPP\\pythonTools\\energyCollectors.txt"));
+      "D:\\cpp_projects\\magisterkaCPP\\pythonTools\\data\\energyCollectors."
+      "txt"));
   // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
   // hitData.time);
 

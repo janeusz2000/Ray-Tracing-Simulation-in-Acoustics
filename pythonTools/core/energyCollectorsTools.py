@@ -115,6 +115,7 @@ class CollectorReader:
 class Plotter:
   def __init__(self, filePath):
     reader = CollectorReader(filePath)
+    self.path = filePath
     self.objList = reader.readFile()
     self.simRadius = reader.simulationRadius()
     self.objList.append(SphereWall(Vec3(0, 0, 0), self.simRadius))
@@ -135,13 +136,15 @@ class Plotter:
     plt.ylim(0, lim)
     plt.xlim(-lim, lim)
 
-  def plot(self):
-    plt.figure()
+  def save(self, plot=False):
+    plt.figure(figsize=(8,8))
     plt.subplot(2,1,1)
     self.plotXView()
     plt.subplot(2,1,2)
     self.plotYView()
-    plt.show()
+    plt.savefig(self.path[:-3] + "png")
+    if plot:
+      plt.show()
     
     
 
