@@ -105,6 +105,10 @@ TEST_F(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
   Ray alongXAxis(Vec3(1, 0, 0), Vec3(1, 0, 0));
   ASSERT_FALSE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
+
+  Ray alongXAxisHit(Vec3(1 - constants::kAccuracy, 0, 0), Vec3(1, 0, 0));
+  ASSERT_TRUE(sphere.hitObject(alongXAxisHit, kSkipFreq, &hitData));
+  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
 }
 
 TEST_F(SphereCollisionTest, RayMissSphere) {
