@@ -12,6 +12,7 @@ const Vec3 kVecZero(0, 0, 0);
 TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
+
   Ray alongYAxis(Vec3(0, -4, 0), Vec3(0, 1, 0));
   ASSERT_TRUE(sphere.hitObject(alongYAxis, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(alongYAxis.origin().magnitude() - sphere.getRadius(),
@@ -21,18 +22,17 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_FALSE(sphere.hitObject(alongYAxisNoHit, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
-  Vec3 arbitraryChosenVec3(12.123, 5.623, 13.235);
-  Ray arbitraryChosenOriginRay(arbitraryChosenVec3,
-                               sphere.getOrigin() - arbitraryChosenVec3);
-  ASSERT_TRUE(sphere.hitObject(arbitraryChosenOriginRay, kSkipFreq, &hitData));
-  ASSERT_NEAR(arbitraryChosenOriginRay.origin().magnitude() -
+  Vec3 arbitraryVec3(12.123, 5.623, 13.235);
+  Ray arbitraryOriginRay(arbitraryVec3, sphere.getOrigin() - arbitraryVec3);
+  ASSERT_TRUE(sphere.hitObject(arbitraryOriginRay, kSkipFreq, &hitData));
+  ASSERT_NEAR((arbitraryVec3 - sphere.getOrigin()).magnitude() -
                   sphere.getRadius(),
               hitData.time, constants::kAccuracy);
 
-  Ray arbitraryChosenOriginRayNoHit(arbitraryChosenVec3,
-                                    arbitraryChosenVec3 - sphere.getOrigin());
+  Ray arbitraryOriginRayOpposite(arbitraryVec3,
+                                 arbitraryVec3 - sphere.getOrigin());
   ASSERT_FALSE(
-      sphere.hitObject(arbitraryChosenOriginRayNoHit, kSkipFreq, &hitData))
+      sphere.hitObject(arbitraryOriginRayOpposite, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
   // This comes from proportions of the pitagorus triangle where sides satisfy
