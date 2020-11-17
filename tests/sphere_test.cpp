@@ -18,7 +18,7 @@ public:
   virtual ~RandomFloatGenerator(){};
   virtual float getFloat() { return dist_(engine_); }
 
-private:
+protected:
   std::mt19937_64 engine_;
   std::normal_distribution<float> dist_;
 };
