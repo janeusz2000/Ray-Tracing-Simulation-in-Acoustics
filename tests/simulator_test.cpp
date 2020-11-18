@@ -262,7 +262,7 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;
-  const float refCollectorRadius = energyCollectors[0]->getRadius();
+  const float refCollectorRadius = getCollectorRadius(energyCollectors);
   float collectorsMaxZ = getMaxZ(energyCollectors);
   // See EvenNumOfEnergyCollectorTest for explanation
   ASSERT_FLOAT_EQ(collectorsMaxZ - refCollectorRadius * std::sqrt(3) / 2,
