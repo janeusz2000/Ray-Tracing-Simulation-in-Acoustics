@@ -49,14 +49,18 @@ protected:
   // occurred, false when there was no hit
   [[nodiscard]] bool performHitCollector(const Collectors &energyCollectors,
                                          const Ray &ray, RayHitData *hitData) {
-
+    bool hit = false;
+    RayHitData closestHitData;
     for (const auto &collector : energyCollectors) {
       if (collector->hitObject(ray, kSkipFrequency, hitData)) {
-        return true;
+        hit = true;
+        if (hitData->time < closestHitData.time) {
+          closestHitData = *hitData;
+        }
       }
     }
-
-    return false;
+    *hitData = closestHitData;
+    return hit;
   }
 
   float getCollectorRadius(const Collectors &energyCollectors) const {
@@ -156,9 +160,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const float collectorAngle = getCollectorAngle(energyCollectors);
   Ray at2Angle = getRayAtYAxisRotation(kVecZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
-  // TODO: This case doesn't work, find out why
-  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
-  // hitData.time);
+  ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray atSixtyXY = getRayAtXYAxisRotation(kVecZero, deg2rad(60));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXY, &hitData))
@@ -208,9 +210,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const float collectorAngle = getCollectorAngle(energyCollectors);
   Ray atAngle = getRayAtYAxisRotation(kVecZero, collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
-  // TODO: fix this
-  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
-  // hitData.time);
+  ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray at30XY(kVecZero, Vec3(std::cos(deg2rad(30)), std::cos(deg2rad(30)),
                             std::sin(deg2rad(60))));

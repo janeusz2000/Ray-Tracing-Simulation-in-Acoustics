@@ -6,6 +6,7 @@
 
 #include <initializer_list>
 #include <iostream>
+#include <limits>
 
 namespace core {
 class Ray {
@@ -32,7 +33,7 @@ private:
 };
 
 struct RayHitData {
-  RayHitData() = default;
+  RayHitData() : RayHitData(std::numeric_limits<float>::max(), kVecUp, Ray(kVecZero, kVecUp), 1000){};
   RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
       : time(t), ray_(ray), normal_(norm), frequency(freq){};
   ~RayHitData() = default;
