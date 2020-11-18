@@ -157,7 +157,6 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   Ray at2Angle = getRayAtYAxisRotation(kVecZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   // TODO: This case doesn't work, find out why
-  // printCollectors(energyCollectors);
   // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
   // hitData.time);
 
