@@ -85,7 +85,7 @@ protected:
     return maxZ;
   }
 
-  float getMaxX(const Collectors &energyCollectors) {
+  float getCollectorPositionRadius(const Collectors &energyCollectors) {
     float maxX = 0;
     for (const auto &collector : energyCollectors) {
       maxX = std::max(maxX, collector->getOrigin().x());
@@ -135,7 +135,8 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float refCollectorRadius = getCollectorRadius(energyCollectors);
-  const float collectorPositionRadius = getMaxX(energyCollectors);
+  const float collectorPositionRadius =
+      getCollectorPositionRadius(energyCollectors);
   Vec3 collisionPointStraightUp =
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
@@ -180,7 +181,8 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
-  const float collectorPositionRadius = getMaxX(energyCollectors);
+  const float collectorPositionRadius =
+      getCollectorPositionRadius(energyCollectors);
   float topColZCoord = getMaxZ(energyCollectors);
   const float refCollectorRadius = getCollectorRadius(energyCollectors);
   // this comes from the fact, two origins of neighborhood collectors and
