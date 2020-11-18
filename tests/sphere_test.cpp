@@ -3,13 +3,10 @@
 
 #include <random>
 
-using core::Ray;
-using core::RayHitData;
-using core::Vec3;
+using namespace core;
 using objects::Sphere;
 
 const float kSkipFreq = 1000;
-const Vec3 kVecZero(0, 0, 0);
 
 class RandomFloatGenerator {
 public:
@@ -41,12 +38,12 @@ TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
 
-  Ray alongYAxis(Vec3(0, -4, 0), Vec3(0, 1, 0));
+  Ray alongYAxis(Vec3(0, -4, 0), kVecY);
   ASSERT_TRUE(sphere.hitObject(alongYAxis, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(alongYAxis.origin().magnitude() - sphere.getRadius(),
                   hitData.time);
 
-  Ray alongYAxisOppposite(Vec3(0, 4, 0), Vec3(0, 1, 0));
+  Ray alongYAxisOppposite(Vec3(0, 4, 0), kVecY);
   ASSERT_FALSE(sphere.hitObject(alongYAxisOppposite, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
@@ -66,7 +63,7 @@ TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
       sphere.hitObject(rayToSphereOriginFromAngle, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(5 - sphere.getRadius(), hitData.time);
 
-  Ray alongXOneHit(Vec3(-5, 0, 1), Vec3(1, 0, 0));
+  Ray alongXOneHit(Vec3(-5, 0, 1), kVecX);
   ASSERT_TRUE(sphere.hitObject(alongXOneHit, kSkipFreq, &hitData));
   ASSERT_EQ(5, hitData.time);
   ASSERT_EQ(Vec3(0, 0, 1), hitData.collisionPoint());
@@ -76,7 +73,7 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
 
-  Ray alongXAxis(sphere.getOrigin(), Vec3(1, 0, 0));
+  Ray alongXAxis(sphere.getOrigin(), kVecX);
   ASSERT_TRUE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
 
@@ -88,7 +85,7 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
 
   Vec3 closeToEdgeOrigin(0, 0, sphere.getRadius() - constants::kAccuracy);
   ASSERT_TRUE(isVecInsideSphere(closeToEdgeOrigin, sphere));
-  Ray closeToEdge(closeToEdgeOrigin, Vec3(0, 0, 1));
+  Ray closeToEdge(closeToEdgeOrigin, kVecUp);
   ASSERT_TRUE(sphere.hitObject(closeToEdge, kSkipFreq, &hitData));
   ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
 
@@ -102,7 +99,7 @@ TEST_F(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
   Sphere sphere(kVecZero, 1);
   RayHitData hitData;
 
-  Ray alongXAxis(Vec3(1, 0, 0), Vec3(1, 0, 0));
+  Ray alongXAxis(Vec3(1, 0, 0), kVecX);
   ASSERT_FALSE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
@@ -115,11 +112,11 @@ TEST_F(SphereCollisionTest, RayMissSphere) {
   Sphere sphere(Vec3(15, 0, 0), 1);
   RayHitData hitData;
 
-  Ray nextToSphere(Vec3(14 - constants::kAccuracy, 0, -5), Vec3(0, 0, 1));
+  Ray nextToSphere(Vec3(14 - constants::kAccuracy, 0, -5), kVecUp);
   ASSERT_FALSE(sphere.hitObject(nextToSphere, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
 
-  Ray nextToSphereHit(Vec3(14, 0, -5), Vec3(0, 0, 1));
+  Ray nextToSphereHit(Vec3(14, 0, -5), kVecUp);
   ASSERT_TRUE(sphere.hitObject(nextToSphereHit, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(5, hitData.time);
 }

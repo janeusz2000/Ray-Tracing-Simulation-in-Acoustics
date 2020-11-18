@@ -52,9 +52,14 @@ public:
   float z() const;
   void setZ(float num);
 
+ 
 private:
   float x_, y_, z_;
 };
 
+static const Vec3 kVecZero(0, 0, 0);
+static const Vec3 kVecUp(0, 0, 1);
+static const Vec3 kVecX(1, 0, 0);
+static const Vec3 kVecY(0, 1, 0);
 } // namespace core
 #endif
