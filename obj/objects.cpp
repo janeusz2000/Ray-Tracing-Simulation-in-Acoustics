@@ -176,7 +176,7 @@ bool TriangleObj::hitObject(const core::Ray &ray, float freq,
       (-1 * (ray.origin() - point3_)).scalarProduct(normal_) / normalDot;
 
   // Following code is making sure that ray doesn't hit the same object.
-  if (time < constants::kHitAccuracy) {
+  if (time < constants::kAccuracy) {
     return false;
   }
 
@@ -199,7 +199,7 @@ bool TriangleObj::doesHit(const core::Vec3 &point) const {
   float beta = vecC.crossProduct(vecA).magnitude() / 2;
   float gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
-  return alpha + beta + gamma - area_ <= constants::kHitAccuracy;
+  return alpha + beta + gamma - area_ <= constants::kAccuracy;
 }
 
 float TriangleObj::area() const { return area_; }
