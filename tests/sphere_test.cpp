@@ -26,9 +26,6 @@ public:
   SphereCollisionTest() : gen_(0, 1){};
 
 protected:
-  [[nodiscard]] bool isVecInsideSphere(const Vec3 &vec, const Sphere &sphere) {
-    return (vec - sphere.getOrigin()).magnitude() < sphere.getRadius();
-  }
   Vec3 getRandomVec() {
     return Vec3(gen_.getFloat(), gen_.getFloat(), gen_.getFloat());
   }
@@ -79,19 +76,19 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
   ASSERT_FLOAT_EQ(sphere.getRadius(), hitData.time);
 
   Vec3 arbitraryChosenOriginInsideSphere(0.213, 0.523, 0.123);
-  ASSERT_TRUE(isVecInsideSphere(arbitraryChosenOriginInsideSphere, sphere));
+  ASSERT_TRUE(sphere.isVecInside(arbitraryChosenOriginInsideSphere));
   Ray arbitraryRayInsideSphere(arbitraryChosenOriginInsideSphere,
                                Vec3(214.2345, 2345, 2235.456));
   ASSERT_TRUE(sphere.hitObject(arbitraryRayInsideSphere, kSkipFreq, &hitData));
 
   Vec3 closeToEdgeOrigin(0, 0, sphere.getRadius() - constants::kAccuracy);
-  ASSERT_TRUE(isVecInsideSphere(closeToEdgeOrigin, sphere));
+  ASSERT_TRUE(sphere.isVecInside(closeToEdgeOrigin));
   Ray closeToEdge(closeToEdgeOrigin, kVecUp);
   ASSERT_TRUE(sphere.hitObject(closeToEdge, kSkipFreq, &hitData));
   ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
 
   Vec3 randomInsideSphere = getRandomVec().normalize() * 0.99;
-  ASSERT_TRUE(isVecInsideSphere(randomInsideSphere, sphere));
+  ASSERT_TRUE(sphere.isVecInside(randomInsideSphere));
   Ray randomInside(randomInsideSphere, getRandomVec());
   ASSERT_TRUE(sphere.hitObject(randomInside, kSkipFreq, &hitData));
 }

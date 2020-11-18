@@ -55,6 +55,10 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
   return true;
 }
 
+bool Sphere::isVecInside(const core::Vec3 &vec) const {
+  return (vec - origin_).magnitude() < radius_;
+}
+
 std::ostream &operator<<(std::ostream &os, const Sphere &sp) {
   return os << "Sphere origin: " << sp.getOrigin()
             << ", radius: " << sp.getRadius() << " [m]";
