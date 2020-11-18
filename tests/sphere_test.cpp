@@ -16,6 +16,8 @@ public:
   virtual ~RandomFloatGenerator(){};
   virtual float getFloat() { return dist_(engine_); }
 
+  Vec3 getRandomVec() { return Vec3(getFloat(), getFloat(), getFloat()); }
+
 protected:
   std::mt19937_64 engine_;
   std::normal_distribution<float> dist_;
@@ -23,13 +25,10 @@ protected:
 
 class SphereCollisionTest : public ::testing::Test {
 public:
-  SphereCollisionTest() : gen_(0, 1){};
+  SphereCollisionTest() : generator(0, 1){};
 
 protected:
-  Vec3 getRandomVec() {
-    return Vec3(gen_.getFloat(), gen_.getFloat(), gen_.getFloat());
-  }
-  RandomFloatGenerator gen_;
+  RandomFloatGenerator generator;
 };
 
 TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
@@ -87,9 +86,9 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
   ASSERT_TRUE(sphere.hitObject(closeToEdge, kSkipFreq, &hitData));
   ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
 
-  Vec3 randomInsideSphere = getRandomVec().normalize() * 0.99;
+  Vec3 randomInsideSphere = generator.getRandomVec().normalize() * 0.99;
   ASSERT_TRUE(sphere.isVecInside(randomInsideSphere));
-  Ray randomInside(randomInsideSphere, getRandomVec());
+  Ray randomInside(randomInsideSphere, generator.getRandomVec());
   ASSERT_TRUE(sphere.hitObject(randomInside, kSkipFreq, &hitData));
 }
 
