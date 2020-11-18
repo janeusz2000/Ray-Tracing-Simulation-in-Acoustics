@@ -11,7 +11,8 @@ const float kSkipFreq = 1000;
 class RandomFloatGenerator {
 public:
   RandomFloatGenerator(float mean, float standardDeviation)
-      : engine_(std::random_device()()), dist_(mean, standardDeviation){};
+      : engine_(static_cast<std::mt19937_64::result_type>(std::time(nullptr))),
+        dist_(mean, standardDeviation){};
   virtual ~RandomFloatGenerator(){};
   virtual float getFloat() { return dist_(engine_); }
 
