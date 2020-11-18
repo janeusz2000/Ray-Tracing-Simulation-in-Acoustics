@@ -133,7 +133,6 @@ TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
 
   return *this;
 }
-// TODO: change this from friend bool operator== to bool operator ;)
 bool TriangleObj::operator==(const TriangleObj &other) const {
   // if other triangle has the same points but declared in different order,
   // they will be still equal.
