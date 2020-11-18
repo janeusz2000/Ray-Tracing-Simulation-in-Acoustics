@@ -99,6 +99,17 @@ protected:
     }
     return maxX;
   }
+
+  // |xRotation| must be in radians
+  Ray getRayAtYAxisRotation(const Vec3 &origin, float xRotation) {
+    return Ray(origin, Vec3(std::cos(xRotation), 0, std::sin(xRotation)));
+  }
+
+  // |xyRotation| must be in radians
+  Ray getRayAtXYAxisRotation(const Vec3 &origin, float xyRotation) {
+    return Ray(origin, Vec3(std::cos(xyRotation), std::cos(xyRotation),
+                            std::sin(xyRotation)));
+  }
 };
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
@@ -149,31 +160,18 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = getCollectorAngle(energyCollectors);
-  Ray at2Angle(kVecZero,
-               Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
+  Ray at2Angle = getRayAtYAxisRotation(kVecZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   // TODO: This case doesn't work, find out why
   // printCollectors(energyCollectors);
   // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
   // hitData.time);
 
-  Ray at2AngleOther(kVecZero, Vec3(-std::cos(2 * collectorAngle), 0,
-                                   std::sin(2 * collectorAngle)));
-  std::cout << at2AngleOther << std::endl;
-
-  ASSERT_TRUE(performHitCollector(energyCollectors, at2AngleOther, &hitData));
-  // TODO: same shit
-  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
-  // hitData.time);
-
-  Ray atSixtyXY(kVecZero, Vec3(std::cos(deg2rad(60)), std::cos(deg2rad(60)),
-                               std::sin(deg2rad(60))));
+  Ray atSixtyXY = getRayAtXYAxisRotation(kVecZero, deg2rad(60));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray atSixtyXYOther(kVecZero,
-                     Vec3(-std::cos(deg2rad(60)), -std::cos(deg2rad(60)),
-                          std::sin(deg2rad(60))));
+  Ray atSixtyXYOther = getRayAtXYAxisRotation(kVecZero, deg2rad(120));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
@@ -213,16 +211,8 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = getCollectorAngle(energyCollectors);
-  Ray atAngle(kVecZero,
-              Vec3(std::cos(collectorAngle), 0, std::sin(collectorAngle)));
+  Ray atAngle = getRayAtYAxisRotation(kVecZero, collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
-  // TODO: fix this
-  // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
-  // hitData.time);
-
-  Ray atAngleOther(
-      kVecZero, Vec3(-std::cos(collectorAngle), 0, std::sin(collectorAngle)));
-  ASSERT_TRUE(performHitCollector(energyCollectors, atAngleOther, &hitData));
   // TODO: fix this
   // ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius,
   // hitData.time);
