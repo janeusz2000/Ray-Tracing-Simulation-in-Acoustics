@@ -85,12 +85,6 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
                                Vec3(214.2345, 2345, 2235.456));
   ASSERT_TRUE(sphere.hitObject(arbitraryRayInsideSphere, kSkipFreq, &hitData));
 
-  Vec3 closeToEdgeOrigin(0, 0, sphere.getRadius() - constants::kAccuracy);
-  ASSERT_TRUE(sphere.isVecInside(closeToEdgeOrigin));
-  Ray closeToEdge(closeToEdgeOrigin, kVecUp);
-  ASSERT_TRUE(sphere.hitObject(closeToEdge, kSkipFreq, &hitData));
-  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
-
   Vec3 randomInsideSphere = generator.getRandomVec().normalize() * 0.99;
   ASSERT_TRUE(sphere.isVecInside(randomInsideSphere));
   Ray randomInside(randomInsideSphere, generator.getRandomVec());
@@ -104,8 +98,7 @@ TEST_F(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
   Ray alongXAxis(kVecX, kVecX);
   ASSERT_FALSE(sphere.hitObject(alongXAxis, kSkipFreq, &hitData))
       << "hit at: " << hitData.collisionPoint();
-
   Ray alongXAxisHit(Vec3(1 - constants::kAccuracy, 0, 0), kVecX);
   ASSERT_TRUE(sphere.hitObject(alongXAxisHit, kSkipFreq, &hitData));
-  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
+  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy / 2);
 }
