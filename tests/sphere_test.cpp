@@ -10,8 +10,8 @@ const float kSkipFreq = 1000;
 
 class RandomFloatGenerator {
 public:
-  RandomFloatGenerator(float min, float max)
-      : engine_(std::random_device()()), dist_(min, max){};
+  RandomFloatGenerator(float mean, float standardDeviation)
+      : engine_(std::random_device()()), dist_(mean, standardDeviation){};
   virtual ~RandomFloatGenerator(){};
   virtual float getFloat() { return dist_(engine_); }
 
@@ -22,7 +22,7 @@ protected:
 
 class SphereCollisionTest : public ::testing::Test {
 public:
-  SphereCollisionTest() : gen_(-1, 1){};
+  SphereCollisionTest() : gen_(0, 1){};
 
 protected:
   [[nodiscard]] bool isVecInsideSphere(const Vec3 &vec, const Sphere &sphere) {
