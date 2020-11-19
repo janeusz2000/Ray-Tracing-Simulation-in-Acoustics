@@ -52,7 +52,6 @@ public:
   float z() const;
   void setZ(float num);
 
- 
 private:
   float x_, y_, z_;
 };
