@@ -17,8 +17,8 @@ public:
   static Ray makeRayFromSphericalCoords(const Vec3 &origin, const float psi,
                                         const float phi);
 
-  Ray(const Vec3 &origin = Vec3::kVecZero, const Vec3 &direction = Vec3::kVecZ,
-      float energy = 0);
+  explicit Ray(const Vec3 &origin = Vec3::kVecZero,
+               const Vec3 &direction = Vec3::kVecZ, float energy = 0);
 
   Vec3 at(float time) const;
   float phaseAt(float freq, float time) const;
