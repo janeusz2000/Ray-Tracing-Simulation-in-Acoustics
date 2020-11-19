@@ -14,8 +14,7 @@ public:
       : engine_(static_cast<std::mt19937_64::result_type>(std::time(nullptr))),
         dist_(mean, standardDeviation){};
   virtual ~RandomFloatGenerator(){};
-  virtual float getFloat() { return dist_(engine_); }
-
+  float getFloat() { return dist_(engine_); }
   Vec3 getRandomVec() { return Vec3(getFloat(), getFloat(), getFloat()); }
 
 protected:
