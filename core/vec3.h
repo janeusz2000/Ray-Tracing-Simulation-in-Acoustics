@@ -18,16 +18,17 @@ public:
   static const Vec3 kVecZ;
   static const Vec3 kVecX;
   static const Vec3 kVecY;
+
   // creates Vec3 object, which every coordinate is drawn from Normal
   // Distribution.
   static Vec3 getRandomVec();
+
   // X cord: represents left (-) to right (+) coordinates
   // Y cord: represents backwards (-) to forward (+) coordinates
   // Z cord: represents down (-) to up (+) coordinates
   explicit Vec3(float x = 0, float y = 0, float z = 0) : x_(x), y_(y), z_(z){};
 
   Vec3(std::initializer_list<float> initList);
-  Vec3(const Vec3 &other) = default;
   ~Vec3() = default;
 
   Vec3 &operator=(const Vec3 &other);
