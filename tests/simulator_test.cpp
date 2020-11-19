@@ -99,7 +99,6 @@ protected:
   }
 
   // |xRotation| must be in radians
-  // asdhfkasgdfjksdagfjkasdgfgasdfgaweufgauwegfuaksegfuakwegf
   Ray getRayAtYAxisRotation(const Vec3 &origin, float xRotation) {
     return Ray(origin, Vec3(std::cos(xRotation), 0, std::sin(xRotation)));
   }
