@@ -11,8 +11,6 @@
 #include <memory>
 #include <vector>
 
-
-
 namespace objects {
 
 class Object {
@@ -38,7 +36,7 @@ public:
   core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
   [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
                                core::RayHitData *hitData) override;
-  [[nodiscard]] bool isVecInside(const core::Vec3 &vec) const;
+  bool isVecInside(const core::Vec3 &vec) const;
   float getRadius() const;
   void setRadius(float rad);
 
