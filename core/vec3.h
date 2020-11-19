@@ -15,11 +15,11 @@ namespace core {
 class Vec3 {
 public:
   static const Vec3 kVecZero; // Vec3(0, 0, 0)
-  static const Vec3 kVecZ;    // Vec3(0, 0, 1)
   static const Vec3 kVecX;    // Vec3(1, 0, 0)
   static const Vec3 kVecY;    // Vec3(0, 1, 0)
+  static const Vec3 kVecZ;    // Vec3(0, 0, 1)
 
-  // creates Vec3 object, which every coordinate is drawn from Normal
+  // creates Vec3 object, which has every coordinate is drawn from Normal
   // Distribution.
   static Vec3 getRandomVec();
 
