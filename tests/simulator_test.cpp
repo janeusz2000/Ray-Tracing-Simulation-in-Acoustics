@@ -20,7 +20,9 @@
            << #EXCEPTION_TYPE << "'!";                                         \
   }
 using constants::kPi;
-using namespace core;
+using core::Ray;
+using core::RayHitData;
+using core::Vec3;
 
 float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
 
