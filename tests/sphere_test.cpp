@@ -62,9 +62,9 @@ TEST(SphereCollisionTest, RayHitInsideSphere) {
                                Vec3(214.2345, 2345, 2235.456));
   ASSERT_TRUE(sphere.hitObject(arbitraryRayInsideSphere, kSkipFreq, &hitData));
 
-  Vec3 randomInsideSphere = Vec3(12, 0.345, 3.457).normalize() * 0.99;
-  ASSERT_TRUE(sphere.isVecInside(randomInsideSphere));
-  Ray randomInside(randomInsideSphere, Vec3::kVecY);
+  Vec3 arbitraryInsideSphere = Vec3(12, 0.345, 3.457).normalize() * 0.99;
+  ASSERT_TRUE(sphere.isVecInside(arbitraryInsideSphere));
+  Ray randomInside(arbitraryInsideSphere, Vec3::kVecY);
   ASSERT_TRUE(sphere.hitObject(randomInside, kSkipFreq, &hitData));
 }
 
