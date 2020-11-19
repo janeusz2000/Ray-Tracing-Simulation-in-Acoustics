@@ -4,8 +4,8 @@
 
 namespace core {
 
-Ray Ray::createRayFromSphericalCoords(const Vec3 &origin, const float psi,
-                                      const float phi) {
+Ray Ray::makeRayFromSphericalCoords(const Vec3 &origin, const float psi,
+                                    const float phi) {
   return Ray(origin, Vec3(std::cos(phi) * std::cos(psi),
                           std::cos(phi) * std::sin(psi), std::sin(phi)));
 }

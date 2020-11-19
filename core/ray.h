@@ -14,8 +14,8 @@ public:
   // Returns Ray from |origin| and direction calculated from given spherical
   // coordinates, where |psiRotation| represents rotation on z-axis and |phi|
   // represents rotation on y-axis. Both |psi| and |phi| must be in radians.
-  static Ray createRayFromSphericalCoords(const Vec3 &origin, const float psi,
-                                          const float phi);
+  static Ray makeRayFromSphericalCoords(const Vec3 &origin, const float psi,
+                                        const float phi);
 
   Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1),
       float energy = 0);
