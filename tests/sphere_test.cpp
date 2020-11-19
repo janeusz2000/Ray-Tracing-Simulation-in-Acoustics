@@ -8,29 +8,7 @@ using objects::Sphere;
 
 const float kSkipFreq = 1000;
 
-class RandomFloatGenerator {
-public:
-  RandomFloatGenerator(float mean, float standardDeviation)
-      : engine_(static_cast<std::mt19937_64::result_type>(std::time(nullptr))),
-        dist_(mean, standardDeviation){};
-  virtual ~RandomFloatGenerator(){};
-  float getFloat() { return dist_(engine_); }
-  Vec3 getRandomVec() { return Vec3(getFloat(), getFloat(), getFloat()); }
-
-protected:
-  std::mt19937_64 engine_;
-  std::normal_distribution<float> dist_;
-};
-
-class SphereCollisionTest : public ::testing::Test {
-public:
-  SphereCollisionTest() : generator(0, 1){};
-
-protected:
-  RandomFloatGenerator generator;
-};
-
-TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
+TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   Sphere sphere(Vec3::kVecZero, 1);
   RayHitData hitData;
 
@@ -70,7 +48,7 @@ TEST_F(SphereCollisionTest, RayHitFromOutsideSphere) {
   ASSERT_EQ(Vec3(0, 0, 1), hitData.collisionPoint());
 }
 
-TEST_F(SphereCollisionTest, RayHitInsideSphere) {
+TEST(SphereCollisionTest, RayHitInsideSphere) {
   Sphere sphere(Vec3::kVecZero, 1);
   RayHitData hitData;
 
@@ -84,13 +62,13 @@ TEST_F(SphereCollisionTest, RayHitInsideSphere) {
                                Vec3(214.2345, 2345, 2235.456));
   ASSERT_TRUE(sphere.hitObject(arbitraryRayInsideSphere, kSkipFreq, &hitData));
 
-  Vec3 randomInsideSphere = generator.getRandomVec().normalize() * 0.99;
+  Vec3 randomInsideSphere = Vec3::getRandomVec().normalize() * 0.99;
   ASSERT_TRUE(sphere.isVecInside(randomInsideSphere));
-  Ray randomInside(randomInsideSphere, generator.getRandomVec());
+  Ray randomInside(randomInsideSphere, Vec3::getRandomVec());
   ASSERT_TRUE(sphere.hitObject(randomInside, kSkipFreq, &hitData));
 }
 
-TEST_F(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
+TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
   Sphere sphere(Vec3::kVecZero, 1);
   RayHitData hitData;
 

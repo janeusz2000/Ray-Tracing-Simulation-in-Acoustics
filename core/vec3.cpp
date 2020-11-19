@@ -1,14 +1,19 @@
 #include "vec3.h"
 
-#include <exception>
-#include <sstream>
-
 namespace core {
 
 const Vec3 Vec3::kVecZero(0, 0, 0);
 const Vec3 Vec3::kVecX(1, 0, 0);
 const Vec3 Vec3::kVecY(0, 1, 0);
 const Vec3 Vec3::kVecZ(0, 0, 1);
+
+std::mt19937_64 Vec3::engine_(
+    static_cast<std::mt19937_64::result_type>(std::time(nullptr)));
+std::normal_distribution<float> Vec3::dist_(0, 1);
+
+Vec3 Vec3::getRandomVec() {
+  return Vec3(dist_(engine_), dist_(engine_), dist_(engine_));
+}
 
 Vec3::Vec3(std::initializer_list<float> initList) {
   if (initList.size() != 3) {
