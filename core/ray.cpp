@@ -4,6 +4,12 @@
 
 namespace core {
 
+Ray Ray::createRayFromSphericalCoords(const Vec3 &origin, const float psi,
+                                      const float phi) {
+  return Ray(origin, Vec3(std::cos(phi) * std::cos(psi),
+                          std::cos(phi) * std::sin(psi), std::sin(phi)));
+}
+
 Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
     : origin_(origin), energy_(energy) {
   if (direction == Vec3(0, 0, 0)) {

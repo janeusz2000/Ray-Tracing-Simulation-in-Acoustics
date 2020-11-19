@@ -11,6 +11,12 @@
 namespace core {
 class Ray {
 public:
+  // Returns Ray from |origin| and direction calculated from given spherical
+  // coordinates, where |psiRotation| represents rotation on z-axis and |phi|
+  // represents rotation on y-axis. Both |psi| and |phi| must be in radians.
+  static Ray createRayFromSphericalCoords(const Vec3 &origin, const float psi,
+                                          const float phi);
+
   Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1),
       float energy = 0);
 
@@ -33,8 +39,9 @@ private:
 };
 
 struct RayHitData {
-  RayHitData() : RayHitData(std::numeric_limits<float>::max(), 
-      Vec3::kVecZ, Ray(Vec3::kVecZero, Vec3::kVecZ), 1000){};
+  RayHitData()
+      : RayHitData(std::numeric_limits<float>::max(), Vec3::kVecZ,
+                   Ray(Vec3::kVecZero, Vec3::kVecZ), 1000){};
   RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
       : time(t), ray_(ray), normal_(norm), frequency(freq){};
   ~RayHitData() = default;
