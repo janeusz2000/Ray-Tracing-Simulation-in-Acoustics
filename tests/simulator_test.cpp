@@ -71,9 +71,8 @@ protected:
 
   // returns value of angle between two neighborhood collectors and
   // Vec3(0, 0, 0)
-  float getCollectorAngle(const Collectors &energyCollectors) const {
-    return 2 * kPi /
-           (energyCollectors.size() + (energyCollectors.size() % 2) - 2);
+  float getCollectorAngle(const int numCollector) const {
+    return 2 * kPi / (numCollector + (numCollector % 2) - 2);
   }
 
   void printCollectors(const Collectors &energyCollectors) const {
@@ -160,7 +159,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  const float collectorAngle = getCollectorAngle(energyCollectors);
+  const float collectorAngle = getCollectorAngle(energyCollectors.size());
   Ray at2Angle = getRayAtYAxisRotation(Vec3::kVecZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
@@ -210,7 +209,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  const float collectorAngle = getCollectorAngle(energyCollectors);
+  const float collectorAngle = getCollectorAngle(energyCollectors.size());
   Ray atAngle = getRayAtYAxisRotation(Vec3::kVecZero, collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
