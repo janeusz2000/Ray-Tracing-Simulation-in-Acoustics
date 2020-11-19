@@ -131,9 +131,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const float refCollectorRadius = getCollectorRadius(energyCollectors);
   const float collectorPositionRadius =
       getCollectorPositionRadius(energyCollectors);
-  Vec3 collisionPointStraightUp =
-      Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
-  ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
+  ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray straightDown(Vec3::kVecZero, -Vec3::kVecZ);
   ASSERT_FALSE(performHitCollector(energyCollectors, straightDown, &hitData))
