@@ -210,9 +210,8 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray at30XYOther(Vec3::kVecZero,
-                  Vec3(-std::cos(deg2rad(30)), -std::cos(deg2rad(30)),
-                       std::sin(deg2rad(60))));
+  Ray at30XYOther = Ray::makeRayFromSphericalCoords(Vec3::kVecZero,
+                                                    deg2rad(210), deg2rad(30));
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
