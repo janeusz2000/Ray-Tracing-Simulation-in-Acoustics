@@ -15,20 +15,20 @@ Vec3 Vec3::getRandomVec() {
   return Vec3(dist_(engine_), dist_(engine_), dist_(engine_));
 }
 
-Vec3::Vec3(std::initializer_list<float> initList) {
-  if (initList.size() != 3) {
-    std::stringstream ss1;
-    ss1 << "Vec3 could not ve constructed: initializer_list size: "
-        << initList.size() << "When only allowed is size 3";
-    throw std::invalid_argument(ss1.str());
-  }
-  auto iterator = initList.begin();
-  x_ = *iterator;
-  iterator++;
-  y_ = *iterator;
-  iterator++;
-  z_ = *iterator;
-}
+// Vec3::Vec3(std::initializer_list<float> initList) {
+//   if (initList.size() != 3) {
+//     std::stringstream ss1;
+//     ss1 << "Vec3 could not ve constructed: initializer_list size: "
+//         << initList.size() << "When only allowed is size 3";
+//     throw std::invalid_argument(ss1.str());
+//   }
+//   auto iterator = initList.begin();
+//   x_ = *iterator;
+//   iterator++;
+//   y_ = *iterator;
+//   iterator++;
+//   z_ = *iterator;
+// }
 
 Vec3 operator+(const Vec3 &left, const Vec3 &right) {
   return Vec3(left.x() + right.x(), left.y() + right.y(), left.z() + right.z());
