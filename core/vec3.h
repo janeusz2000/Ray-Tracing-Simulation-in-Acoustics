@@ -61,6 +61,5 @@ private:
   float x_, y_, z_;
 };
 
-
 } // namespace core
 #endif
