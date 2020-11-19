@@ -27,9 +27,7 @@ public:
   // Y cord: represents backwards (-) to forward (+) coordinates
   // Z cord: represents down (-) to up (+) coordinates
   explicit Vec3(float x = 0, float y = 0, float z = 0) : x_(x), y_(y), z_(z){};
-
   Vec3(std::initializer_list<float> initList);
-  ~Vec3() = default;
 
   Vec3 &operator=(const Vec3 &other);
   Vec3 &operator+=(const Vec3 &other);
