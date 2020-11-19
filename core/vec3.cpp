@@ -5,6 +5,11 @@
 
 namespace core {
 
+const Vec3 Vec3::kVecZero(0, 0, 0);
+const Vec3 Vec3::kVecX(1, 0, 0);
+const Vec3 Vec3::kVecY(0, 1, 0);
+const Vec3 Vec3::kVecZ(0, 0, 1);
+
 Vec3::Vec3(std::initializer_list<float> initList) {
   if (initList.size() != 3) {
     std::stringstream ss1;

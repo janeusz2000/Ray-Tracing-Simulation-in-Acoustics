@@ -98,6 +98,7 @@ protected:
   }
 
   // |xRotation| must be in radians
+  // asdhfkasgdfjksdagfjkasdgfgasdfgaweufgauwegfuaksegfuakwegf
   Ray getRayAtYAxisRotation(const Vec3 &origin, float xRotation) {
     return Ray(origin, Vec3(std::cos(xRotation), 0, std::sin(xRotation)));
   }
@@ -134,7 +135,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(numCollectors, energyCollectors.size());
 
-  Ray straightUp(kVecZero, kVecUp);
+  Ray straightUp(Vec3::kVecZero, Vec3::kVecZ);
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
@@ -145,28 +146,28 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
       Vec3(0, 0, collectorPositionRadius - refCollectorRadius);
   ASSERT_EQ(hitData.collisionPoint(), collisionPointStraightUp);
 
-  Ray straightDown(kVecZero, -kVecUp);
+  Ray straightDown(Vec3::kVecZero, -Vec3::kVecZ);
   ASSERT_FALSE(performHitCollector(energyCollectors, straightDown, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray alongX(kVecZero, kVecX);
+  Ray alongX(Vec3::kVecZero, Vec3::kVecX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray alongY(kVecZero, kVecY);
+  Ray alongY(Vec3::kVecZero, Vec3::kVecY);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = getCollectorAngle(energyCollectors);
-  Ray at2Angle = getRayAtYAxisRotation(kVecZero, 2 * collectorAngle);
+  Ray at2Angle = getRayAtYAxisRotation(Vec3::kVecZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray atSixtyXY = getRayAtXYAxisRotation(kVecZero, deg2rad(60));
+  Ray atSixtyXY = getRayAtXYAxisRotation(Vec3::kVecZero, deg2rad(60));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray atSixtyXYOther = getRayAtXYAxisRotation(kVecZero, deg2rad(120));
+  Ray atSixtyXYOther = getRayAtXYAxisRotation(Vec3::kVecZero, deg2rad(120));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
@@ -178,7 +179,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
-  Ray straightUp(kVecZero, kVecUp);
+  Ray straightUp(Vec3::kVecZero, Vec3::kVecZ);
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
@@ -195,30 +196,31 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 
   ASSERT_EQ(refCollision, hitData.collisionPoint());
 
-  Ray straightDown(kVecZero, -kVecUp);
+  Ray straightDown(Vec3::kVecZero, -Vec3::kVecZ);
   ASSERT_FALSE(performHitCollector(energyCollectors, straightDown, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray alongX(kVecZero, kVecX);
+  Ray alongX(Vec3::kVecZero, Vec3::kVecX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray alongY(kVecZero, kVecY);
+  Ray alongY(Vec3::kVecZero, Vec3::kVecY);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = getCollectorAngle(energyCollectors);
-  Ray atAngle = getRayAtYAxisRotation(kVecZero, collectorAngle);
+  Ray atAngle = getRayAtYAxisRotation(Vec3::kVecZero, collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray at30XY(kVecZero, Vec3(std::cos(deg2rad(30)), std::cos(deg2rad(30)),
-                            std::sin(deg2rad(60))));
+  Ray at30XY(Vec3::kVecZero, Vec3(std::cos(deg2rad(30)), std::cos(deg2rad(30)),
+                                  std::sin(deg2rad(60))));
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray at30XYOther(kVecZero, Vec3(-std::cos(deg2rad(30)), -std::cos(deg2rad(30)),
-                                 std::sin(deg2rad(60))));
+  Ray at30XYOther(Vec3::kVecZero,
+                  Vec3(-std::cos(deg2rad(30)), -std::cos(deg2rad(30)),
+                       std::sin(deg2rad(60))));
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
@@ -238,12 +240,14 @@ TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
       2 * kPi * collectorPositionRadius / numCollectors;
 
   RayHitData hitData;
-  Ray previousNotHit1(kVecZero, Vec3(0, 1.01 * invalidEnergyCollectorRadius,
-                                     collectorPositionRadius));
+  Ray previousNotHit1(
+      Vec3::kVecZero,
+      Vec3(0, 1.01 * invalidEnergyCollectorRadius, collectorPositionRadius));
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit1, &hitData));
 
-  Ray previousNotHit2(kVecZero, Vec3(0, -1.01 * invalidEnergyCollectorRadius,
-                                     collectorPositionRadius));
+  Ray previousNotHit2(
+      Vec3::kVecZero,
+      Vec3(0, -1.01 * invalidEnergyCollectorRadius, collectorPositionRadius));
 
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit2, &hitData));
 }
@@ -257,7 +261,7 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   RayHitData hitData;
-  Ray straightUp(kVecZero, kVecUp);
+  Ray straightUp(Vec3::kVecZero, Vec3::kVecZ);
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;

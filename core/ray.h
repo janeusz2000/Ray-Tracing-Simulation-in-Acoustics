@@ -33,7 +33,8 @@ private:
 };
 
 struct RayHitData {
-  RayHitData() : RayHitData(std::numeric_limits<float>::max(), kVecUp, Ray(kVecZero, kVecUp), 1000){};
+  RayHitData() : RayHitData(std::numeric_limits<float>::max(), 
+      Vec3::kVecZ, Ray(Vec3::kVecZero, Vec3::kVecZ), 1000){};
   RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
       : time(t), ray_(ray), normal_(norm), frequency(freq){};
   ~RayHitData() = default;

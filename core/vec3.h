@@ -13,6 +13,11 @@ class Vec3 {
   // Z cord: represents down (-) to up (+) coordinates
 
 public:
+  static const Vec3 kVecZero;
+  static const Vec3 kVecZ;
+  static const Vec3 kVecX;
+  static const Vec3 kVecY;
+
   explicit Vec3(float x = 0, float y = 0, float z = 0) : x_(x), y_(y), z_(z){};
 
   Vec3(std::initializer_list<float> initList);
@@ -56,9 +61,6 @@ private:
   float x_, y_, z_;
 };
 
-static const Vec3 kVecZero(0, 0, 0);
-static const Vec3 kVecUp(0, 0, 1);
-static const Vec3 kVecX(1, 0, 0);
-static const Vec3 kVecY(0, 1, 0);
+
 } // namespace core
 #endif
