@@ -1,6 +1,6 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h"
-
+#include "constants.h"
 #include <random>
 
 using namespace core;

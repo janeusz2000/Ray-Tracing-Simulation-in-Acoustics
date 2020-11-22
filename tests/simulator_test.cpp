@@ -19,6 +19,7 @@
     FAIL() << "exception " << MESSAGE << " not thrown with expected type "     \
            << #EXCEPTION_TYPE << "'!";                                         \
   }
+
 using constants::kPi;
 using core::Ray;
 using core::RayHitData;

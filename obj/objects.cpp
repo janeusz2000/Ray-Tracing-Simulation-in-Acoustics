@@ -56,7 +56,7 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
 }
 
 bool Sphere::isVecInside(const core::Vec3 &vec) const {
-  return (vec - origin_).magnitude() < radius_;
+  return (vec - origin_).magnitude() <= radius_;
 }
 
 std::ostream &operator<<(std::ostream &os, const Sphere &sp) {
