@@ -14,14 +14,10 @@ namespace core {
 
 class Vec3 {
 public:
-  static const Vec3 kVecZero; // Vec3(0, 0, 0)
-  static const Vec3 kVecX;    // Vec3(1, 0, 0)
-  static const Vec3 kVecY;    // Vec3(0, 1, 0)
-  static const Vec3 kVecZ;    // Vec3(0, 0, 1)
-
-  // creates Vec3 object, which has every coordinate drawn from Normal
-  // Distribution.
-  static Vec3 getRandomVec();
+  static const Vec3 kZero;
+  static const Vec3 kX;
+  static const Vec3 kY;
+  static const Vec3 kZ;
 
   // X cord: represents left (-) to right (+) coordinates
   // Y cord: represents backwards (-) to forward (+) coordinates
@@ -63,8 +59,6 @@ public:
 
 private:
   float x_, y_, z_;
-  static std::mt19937_64 engine_;
-  static std::normal_distribution<float> dist_;
 };
 
 } // namespace core

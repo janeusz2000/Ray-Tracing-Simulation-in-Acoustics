@@ -124,7 +124,7 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(numCollectors, energyCollectors.size());
 
-  Ray straightUp(Vec3::kVecZero, Vec3::kVecZ);
+  Ray straightUp(Vec3::kZero, Vec3::kZ);
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
@@ -133,32 +133,31 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
       getCollectorPositionRadius(energyCollectors);
   ASSERT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray straightDown(Vec3::kVecZero, -Vec3::kVecZ);
+  Ray straightDown(Vec3::kZero, -Vec3::kZ);
   ASSERT_FALSE(performHitCollector(energyCollectors, straightDown, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray alongX(Vec3::kVecZero, Vec3::kVecX);
+  Ray alongX(Vec3::kZero, Vec3::kX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray alongY(Vec3::kVecZero, Vec3::kVecY);
+  Ray alongY(Vec3::kZero, Vec3::kY);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = getCollectorAngle(energyCollectors.size());
-  Ray at2Angle =
-      Ray::fromSphericalCoords(Vec3::kVecZero, 0, 2 * collectorAngle);
-  // getRayAtYAxisRotation(Vec3::kVecZero, 2 * collectorAngle);
+  Ray at2Angle = Ray::fromSphericalCoords(Vec3::kZero, 0, 2 * collectorAngle);
+  // getRayAtYAxisRotation(Vec3::kZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray atSixtyXY =
-      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(60), deg2rad(60));
+      Ray::fromSphericalCoords(Vec3::kZero, deg2rad(60), deg2rad(60));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
   Ray atSixtyXYOther =
-      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(120), deg2rad(120));
+      Ray::fromSphericalCoords(Vec3::kZero, deg2rad(120), deg2rad(120));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
@@ -170,7 +169,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
-  Ray straightUp(Vec3::kVecZero, Vec3::kVecZ);
+  Ray straightUp(Vec3::kZero, Vec3::kZ);
   RayHitData hitData;
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
@@ -187,30 +186,29 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 
   ASSERT_EQ(refCollision, hitData.collisionPoint());
 
-  Ray straightDown(Vec3::kVecZero, -Vec3::kVecZ);
+  Ray straightDown(Vec3::kZero, -Vec3::kZ);
   ASSERT_FALSE(performHitCollector(energyCollectors, straightDown, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray alongX(Vec3::kVecZero, Vec3::kVecX);
+  Ray alongX(Vec3::kZero, Vec3::kX);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongX, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray alongY(Vec3::kVecZero, Vec3::kVecY);
+  Ray alongY(Vec3::kZero, Vec3::kY);
   ASSERT_TRUE(performHitCollector(energyCollectors, alongY, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = getCollectorAngle(energyCollectors.size());
-  Ray atAngle = Ray::fromSphericalCoords(Vec3::kVecZero, 0, collectorAngle);
+  Ray atAngle = Ray::fromSphericalCoords(Vec3::kZero, 0, collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
-  Ray at30XY =
-      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(30), deg2rad(60));
+  Ray at30XY = Ray::fromSphericalCoords(Vec3::kZero, deg2rad(30), deg2rad(60));
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
   Ray at30XYOther =
-      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(210), deg2rad(30));
+      Ray::fromSphericalCoords(Vec3::kZero, deg2rad(210), deg2rad(30));
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
@@ -230,14 +228,12 @@ TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
       2 * kPi * collectorPositionRadius / numCollectors;
 
   RayHitData hitData;
-  Ray previousNotHit1(
-      Vec3::kVecZero,
-      Vec3(0, 1.01 * invalidEnergyCollectorRadius, collectorPositionRadius));
+  Ray previousNotHit1(Vec3::kZero, Vec3(0, 1.01 * invalidEnergyCollectorRadius,
+                                        collectorPositionRadius));
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit1, &hitData));
 
-  Ray previousNotHit2(
-      Vec3::kVecZero,
-      Vec3(0, -1.01 * invalidEnergyCollectorRadius, collectorPositionRadius));
+  Ray previousNotHit2(Vec3::kZero, Vec3(0, -1.01 * invalidEnergyCollectorRadius,
+                                        collectorPositionRadius));
 
   ASSERT_TRUE(performHitCollector(energyCollectors, previousNotHit2, &hitData));
 }
@@ -251,7 +247,7 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   RayHitData hitData;
-  Ray straightUp(Vec3::kVecZero, Vec3::kVecZ);
+  Ray straightUp(Vec3::kZero, Vec3::kZ);
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
   const float collectorPositionRadius = 4;

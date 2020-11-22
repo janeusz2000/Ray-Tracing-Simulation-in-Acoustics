@@ -18,8 +18,8 @@ public:
   static Ray fromSphericalCoords(const Vec3 &origin, float zRotation,
                                  float xyInclination);
 
-  explicit Ray(const Vec3 &origin = Vec3::kVecZero,
-               const Vec3 &direction = Vec3::kVecZ, float energy = 0);
+  explicit Ray(const Vec3 &origin = Vec3::kZero,
+               const Vec3 &direction = Vec3::kZ, float energy = 0);
 
   Vec3 at(float time) const;
   float phaseAt(float freq, float time) const;
@@ -41,8 +41,8 @@ private:
 
 struct RayHitData {
   RayHitData()
-      : RayHitData(std::numeric_limits<float>::max(), Vec3::kVecZ,
-                   Ray(Vec3::kVecZero, Vec3::kVecZ), 1000){};
+      : RayHitData(std::numeric_limits<float>::max(), Vec3::kZ,
+                   Ray(Vec3::kZero, Vec3::kZ), 1000){};
   RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
       : time(t), ray_(ray), normal_(norm), frequency(freq){};
   ~RayHitData() = default;

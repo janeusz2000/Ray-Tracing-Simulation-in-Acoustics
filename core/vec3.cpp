@@ -2,18 +2,10 @@
 
 namespace core {
 
-const Vec3 Vec3::kVecZero(0, 0, 0);
-const Vec3 Vec3::kVecX(1, 0, 0);
-const Vec3 Vec3::kVecY(0, 1, 0);
-const Vec3 Vec3::kVecZ(0, 0, 1);
-
-std::mt19937_64 Vec3::engine_(
-    static_cast<std::mt19937_64::result_type>(std::time(nullptr)));
-std::normal_distribution<float> Vec3::dist_(0, 1);
-
-Vec3 Vec3::getRandomVec() {
-  return Vec3(dist_(engine_), dist_(engine_), dist_(engine_));
-}
+const Vec3 Vec3::kZero(0, 0, 0);
+const Vec3 Vec3::kX(1, 0, 0);
+const Vec3 Vec3::kY(0, 1, 0);
+const Vec3 Vec3::kZ(0, 0, 1);
 
 Vec3 operator+(const Vec3 &left, const Vec3 &right) {
   return Vec3(left.x() + right.x(), left.y() + right.y(), left.z() + right.z());
