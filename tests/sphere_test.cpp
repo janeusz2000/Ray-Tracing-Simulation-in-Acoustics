@@ -1,9 +1,11 @@
+#include "constants.h"
 #include "obj/objects.h"
 #include "gtest/gtest.h"
-#include "constants.h"
 #include <random>
 
-using namespace core;
+using core::Ray;
+using core::RayHitData;
+using core::Vec3;
 using objects::Sphere;
 
 const float kSkipFreq = 1000;
@@ -68,7 +70,7 @@ TEST(SphereCollisionTest, RayHitInsideSphere) {
   ASSERT_TRUE(sphere.hitObject(randomInside, kSkipFreq, &hitData));
 }
 
-TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
+TEST(SphereCollisionTest, RayAtEdgeOfSphere) {
   Sphere sphere(Vec3::kZero, 1);
   RayHitData hitData;
 
@@ -77,5 +79,15 @@ TEST(SphereCollisionTest, RayAtEdgeOfSphereDontHit) {
       << "hit at: " << hitData.collisionPoint();
   Ray alongXAxisHit(Vec3(1 - constants::kAccuracy, 0, 0), Vec3::kX);
   ASSERT_TRUE(sphere.hitObject(alongXAxisHit, kSkipFreq, &hitData));
+  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy / 2);
+
+  // Prevents of getting ray inside to the sphere by
+  // floating point number error
+  Ray toOriginOfSphere(Vec3::kX, -Vec3::kX);
+  ASSERT_TRUE(sphere.hitObject(toOriginOfSphere, kSkipFreq, &hitData));
+  Vec3 xOffset(constants::kAccuracy, 0, 0);
+  Ray toOriginOfSphereFromOutside(Vec3::kX + xOffset, -Vec3::kX);
+  ASSERT_TRUE(
+      sphere.hitObject(toOriginOfSphereFromOutside, kSkipFreq, &hitData));
   ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy / 2);
 }

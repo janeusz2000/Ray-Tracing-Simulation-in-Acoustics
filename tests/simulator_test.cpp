@@ -148,7 +148,6 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   const float collectorAngle = getCollectorAngle(energyCollectors.size());
   Ray at2Angle = Ray::fromSphericalCoords(Vec3::kZero, 0, 2 * collectorAngle);
-  // getRayAtYAxisRotation(Vec3::kZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
@@ -182,10 +181,8 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   // collision point are creates equilateral triangle which side is equal to
   // collector radius. Thats why collision point its just the point between two
   // collectors origin - height of the equilateral triangle.
-  Vec3 refCollision(0, 0,
-                    collectorsMaxZ - refCollectorRadius * std::sqrt(3) / 2);
-
-  ASSERT_EQ(refCollision, hitData.collisionPoint());
+  ASSERT_FLOAT_EQ(collectorsMaxZ - refCollectorRadius * std::sqrt(3) / 2,
+                  hitData.time);
 
   Ray straightDown(Vec3::kZero, -Vec3::kZ);
   ASSERT_FALSE(performHitCollector(energyCollectors, straightDown, &hitData))

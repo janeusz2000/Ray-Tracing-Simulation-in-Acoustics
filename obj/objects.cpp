@@ -42,6 +42,8 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
     return false;
   }
 
+  // Prevents of getting ray inside to the sphere by
+  // floating point number error
   if (std::abs(timeLow) < constants::kAccuracy) {
     return false;
   }
