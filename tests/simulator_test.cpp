@@ -147,18 +147,18 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   const float collectorAngle = getCollectorAngle(energyCollectors.size());
   Ray at2Angle =
-      Ray::makeRayFromSphericalCoords(Vec3::kVecZero, 0, 2 * collectorAngle);
+      Ray::fromSphericalCoords(Vec3::kVecZero, 0, 2 * collectorAngle);
   // getRayAtYAxisRotation(Vec3::kVecZero, 2 * collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, at2Angle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray atSixtyXY =
-      Ray::makeRayFromSphericalCoords(Vec3::kVecZero, deg2rad(60), deg2rad(60));
+      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(60), deg2rad(60));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray atSixtyXYOther = Ray::makeRayFromSphericalCoords(
-      Vec3::kVecZero, deg2rad(120), deg2rad(120));
+  Ray atSixtyXYOther =
+      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(120), deg2rad(120));
   ASSERT_FALSE(performHitCollector(energyCollectors, atSixtyXYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }
@@ -200,18 +200,17 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   const float collectorAngle = getCollectorAngle(energyCollectors.size());
-  Ray atAngle =
-      Ray::makeRayFromSphericalCoords(Vec3::kVecZero, 0, collectorAngle);
+  Ray atAngle = Ray::fromSphericalCoords(Vec3::kVecZero, 0, collectorAngle);
   ASSERT_TRUE(performHitCollector(energyCollectors, atAngle, &hitData));
   ASSERT_FLOAT_EQ(collectorPositionRadius - refCollectorRadius, hitData.time);
 
   Ray at30XY =
-      Ray::makeRayFromSphericalCoords(Vec3::kVecZero, deg2rad(30), deg2rad(60));
+      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(30), deg2rad(60));
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XY, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 
-  Ray at30XYOther = Ray::makeRayFromSphericalCoords(Vec3::kVecZero,
-                                                    deg2rad(210), deg2rad(30));
+  Ray at30XYOther =
+      Ray::fromSphericalCoords(Vec3::kVecZero, deg2rad(210), deg2rad(30));
   ASSERT_FALSE(performHitCollector(energyCollectors, at30XYOther, &hitData))
       << "Collision Point: " << hitData.collisionPoint();
 }

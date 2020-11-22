@@ -11,11 +11,12 @@
 namespace core {
 class Ray {
 public:
-  // Returns Ray from |origin| and direction calculated from given spherical
-  // coordinates, where |psiRotation| represents rotation on z-axis and |phi|
-  // represents rotation on y-axis. Both |psi| and |phi| must be in radians.
-  static Ray makeRayFromSphericalCoords(const Vec3 &origin, const float psi,
-                                        const float phi);
+  // Returns Ray from |origin| and direction, which is calculated from given
+  // spherical coordinates, where |zRotation| represents rotation about z-axis
+  // and |xyInclination| represents inclination from the surface, that crosses x
+  // and y axis. Both |zRotation| and |xyInclination| value must be in radians.
+  static Ray fromSphericalCoords(const Vec3 &origin, float zRotation,
+                                 float xyInclination);
 
   explicit Ray(const Vec3 &origin = Vec3::kVecZero,
                const Vec3 &direction = Vec3::kVecZ, float energy = 0);
