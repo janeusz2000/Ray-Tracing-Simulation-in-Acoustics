@@ -14,8 +14,7 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   Sphere sphere(Vec3::kZero, 1);
   RayHitData hitData;
 
-  Vec3 inFrontOfSphereYAxis = -4 * Vec3::kY;
-  ASSERT_FALSE(sphere.isVecInside(inFrontOfSphereYAxis));
+  ASSERT_FALSE(sphere.isVecInside(-4 * Vec3::kY));
   Ray alongYAxis(Vec3(0, -4, 0), Vec3::kY);
   ASSERT_TRUE(sphere.hitObject(alongYAxis, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(alongYAxis.origin().magnitude() - sphere.getRadius(),
