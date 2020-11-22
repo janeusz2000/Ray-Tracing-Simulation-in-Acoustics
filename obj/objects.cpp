@@ -1,6 +1,5 @@
 #include "objects.h"
 
-
 namespace objects {
 
 void Object::setOrigin(const core::Vec3 &origin) { origin_ = origin; }
@@ -204,9 +203,7 @@ bool TriangleObj::doesHit(const core::Vec3 &point) const {
   float beta = vecC.crossProduct(vecA).magnitude() / 2;
   float gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
-  // In order to improve accuracy of this method we assume that sum of accuracy
-  // of each area is equal to constants::kAccuracy
-  return alpha + beta + gamma - area_ <= constants::kAccuracy;
+  return alpha + beta + gamma - area_ <= constants::kAreaAccuracy;
 }
 
 float TriangleObj::area() const { return area_; }
