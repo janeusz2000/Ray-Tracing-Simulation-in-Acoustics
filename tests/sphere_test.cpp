@@ -84,10 +84,21 @@ TEST(SphereCollisionTest, RayAtEdgeOfSphere) {
   // Prevents of getting ray inside to the sphere by
   // floating point number error
   Ray toOriginOfSphere(Vec3::kX, -Vec3::kX);
-  ASSERT_TRUE(sphere.hitObject(toOriginOfSphere, kSkipFreq, &hitData));
+  ASSERT_FALSE(sphere.hitObject(toOriginOfSphere, kSkipFreq, &hitData));
   Vec3 xOffset(constants::kAccuracy, 0, 0);
-  Ray toOriginOfSphereFromOutside(Vec3::kX + xOffset, -Vec3::kX);
+  Ray toOriginOfSphereFromOutside(Vec3::kX + 1.1 * xOffset, -Vec3::kX);
   ASSERT_TRUE(
       sphere.hitObject(toOriginOfSphereFromOutside, kSkipFreq, &hitData));
-  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy / 2);
+  ASSERT_NEAR(constants::kAccuracy, hitData.time, constants::kAccuracy);
+
+  Ray parpendicularToRadius(Vec3::kX, Vec3::kY);
+  ASSERT_FALSE(sphere.hitObject(parpendicularToRadius, kSkipFreq, &hitData));
+
+  Ray offsettedDirectionParpendicularToRadius(Vec3::kX, Vec3::kY - xOffset);
+  ASSERT_FALSE(sphere.hitObject(offsettedDirectionParpendicularToRadius,
+                                kSkipFreq, &hitData));
+  Ray offsettedParpendicularToRadius(Vec3::kX + xOffset,
+                                     Vec3::kY - 1000 * xOffset);
+  ASSERT_TRUE(
+      sphere.hitObject(offsettedParpendicularToRadius, kSkipFreq, &hitData));
 }
