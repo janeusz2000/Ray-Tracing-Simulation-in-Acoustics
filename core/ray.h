@@ -4,9 +4,9 @@
 #include "constants.h"
 #include "core/vec3.h"
 
-#include <initializer_list>
 #include <iostream>
 #include <limits>
+#include <sstream>
 
 namespace core {
 class Ray {

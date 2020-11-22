@@ -1,5 +1,5 @@
 #include "objects.h"
-#include <sstream>
+
 
 namespace objects {
 
@@ -199,11 +199,13 @@ bool TriangleObj::doesHit(const core::Vec3 &point) const {
   core::Vec3 vecB = point2_ - point;
   core::Vec3 vecC = point3_ - point;
 
-  //  Area of the triangle made with point and w triangle points.
+  // Area of the triangle made with point and w triangle points.
   float alpha = vecB.crossProduct(vecC).magnitude() / 2;
   float beta = vecC.crossProduct(vecA).magnitude() / 2;
   float gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
+  // In order to improve accuracy of this method we assume that sum of accuracy
+  // of each area is equal to constants::kAccuracy
   return alpha + beta + gamma - area_ <= constants::kAccuracy;
 }
 

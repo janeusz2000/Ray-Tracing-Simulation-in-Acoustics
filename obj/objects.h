@@ -5,10 +5,9 @@
 #include "core/ray.h"
 #include "core/vec3.h"
 
-#include <algorithm>
 #include <cmath>
-#include <initializer_list>
 #include <memory>
+#include <sstream>
 #include <vector>
 
 namespace objects {

@@ -1,6 +1,6 @@
 #include "ray.h"
 
-#include <sstream>
+
 
 namespace core {
 
