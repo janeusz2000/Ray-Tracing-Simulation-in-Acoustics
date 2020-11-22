@@ -27,7 +27,6 @@ using core::Vec3;
 
 float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
 
-const int kSkipNumCollectors = 37;
 const float kSkipFrequency = 1000;
 
 class FakeModel : public ModelInterface {
