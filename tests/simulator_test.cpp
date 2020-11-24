@@ -49,10 +49,12 @@ protected:
   // performs ray hit at at given energy collectors, |hitData| is modified to
   // hold information where ray hit energyCollector. Returns true if hit
   // occurred, false when there was no hit
+
   [[nodiscard]] bool performHitCollector(const Collectors &energyCollectors,
                                          const Ray &ray, RayHitData *hitData) {
     bool hit = false;
     RayHitData closestHitData;
+
     for (const auto &collector : energyCollectors) {
       if (collector->hitObject(ray, kSkipFrequency, hitData)) {
         hit = true;
@@ -83,6 +85,7 @@ protected:
   }
 
   float getMaxZ(const Collectors &energyCollectors) {
+
     float maxZ = 0;
     for (const auto &collector : energyCollectors) {
       maxZ = std::max(maxZ, collector->getOrigin().z());
@@ -98,8 +101,9 @@ protected:
     return maxX;
   }
 };
-TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
+TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
+  // TODO: add a test when model is empty.
   const FakeModel nonEmptyModel(false);
 
   ASSERT_EXCEPTION_MSG(
@@ -211,17 +215,16 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 }
 
 TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
-
   const FakeModel nonEmptyModel(false);
-  const int numCollectors = 37;
 
+  const int numCollectors = 37;
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   const float collectorPositionRadius = 4;
   // this is how previous implementation was caclualating radius of energy
   // collector
-  float invalidEnergyCollectorRadius =
+  const float invalidEnergyCollectorRadius =
       2 * kPi * collectorPositionRadius / numCollectors;
 
   RayHitData hitData;
@@ -236,10 +239,9 @@ TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
 }
 
 TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
-
   const FakeModel nonEmptyModel(false);
-  const int numCollectors = 20;
 
+  const int numCollectors = 20;
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
@@ -254,3 +256,4 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   ASSERT_FLOAT_EQ(collectorsMaxZ - refCollectorRadius * std::sqrt(3) / 2,
                   hitData.time);
 }
+
