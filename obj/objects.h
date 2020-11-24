@@ -5,6 +5,7 @@
 #include "core/ray.h"
 #include "core/vec3.h"
 
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <sstream>
