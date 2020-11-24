@@ -6,10 +6,6 @@
 #include "core/vec3.h"
 #include "main/model.h"
 
-#include <cmath>
-#include <initializer_list>
-#include <iostream>
-#include <random>
 
 namespace generators {
 

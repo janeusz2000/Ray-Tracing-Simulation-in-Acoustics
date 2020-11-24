@@ -4,14 +4,22 @@
 #include "constants.h"
 #include "core/vec3.h"
 
-#include <initializer_list>
 #include <iostream>
+#include <limits>
+#include <sstream>
 
 namespace core {
 class Ray {
 public:
-  Ray(const Vec3 &origin = Vec3(0, 0, 0), const Vec3 &direction = Vec3(0, 0, 1),
-      float energy = 0);
+  // Returns Ray from |origin| and direction, which is calculated from given
+  // spherical coordinates, where |zRotation| represents rotation about z-axis
+  // and |xyInclination| represents inclination from the surface, that crosses x
+  // and y axis. Both |zRotation| and |xyInclination| value must be in radians.
+  static Ray fromSphericalCoords(const Vec3 &origin, float zRotation,
+                                 float xyInclination);
+
+  explicit Ray(const Vec3 &origin = Vec3::kZero,
+               const Vec3 &direction = Vec3::kZ, float energy = 0);
 
   Vec3 at(float time) const;
   float phaseAt(float freq, float time) const;
@@ -32,7 +40,9 @@ private:
 };
 
 struct RayHitData {
-  RayHitData() = default;
+  RayHitData()
+      : RayHitData(std::numeric_limits<float>::max(), Vec3::kZ,
+                   Ray(Vec3::kZero, Vec3::kZ), 1000){};
   RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
       : time(t), ray_(ray), normal_(norm), frequency(freq){};
   ~RayHitData() = default;

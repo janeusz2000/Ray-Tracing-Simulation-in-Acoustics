@@ -94,7 +94,7 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
+# SxyInclinationnx documentation
 docs/_build/
 
 # PyBuilder
