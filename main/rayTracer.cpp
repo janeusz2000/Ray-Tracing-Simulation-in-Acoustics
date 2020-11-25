@@ -20,7 +20,7 @@ RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
   return TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
 }
 
-// Returns reflection Ray from point of hit stored in |hitData|:
+// Returns reflection Ray from hit point stored in |hitData|
 // http://paulbourke.net/geometry/reflected/
 core::Ray RayTracer::getReflected(core::RayHitData *hitData) const {
 
