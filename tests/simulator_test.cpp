@@ -2,6 +2,8 @@
 #include "main/simulator.h"
 #include "gtest/gtest.h"
 
+#include <fstream>
+
 // Checks if |TRY_BLOCK| throws right |EXCPETION_TYPE| with exception message
 // equal to const char* |MESSAGE|
 // TODO: check substring only, because every little change requirers of changing
@@ -82,6 +84,20 @@ protected:
     for (const auto &collector : energyCollectors) {
       std::cout << i++ << " " << *collector << std::endl;
     }
+  }
+  // exports |energyCollectors| as string representation to |path|
+  [[nodicard]] bool exportToTxt(const Collectors &energyCollectors,
+                                std::string_view path) const {
+    std::ofstream outFile(path.data());
+    if (!outFile.good()) {
+      return false;
+    }
+    int i = 0;
+    for (const auto &collector : energyCollectors) {
+      outFile << i++ << " " << *collector << "\n";
+    }
+    outFile.close();
+    return true;
   }
 
   float getMaxZ(const Collectors &energyCollectors) {
@@ -256,4 +272,3 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   ASSERT_FLOAT_EQ(collectorsMaxZ - refCollectorRadius * std::sqrt(3) / 2,
                   hitData.time);
 }
-
