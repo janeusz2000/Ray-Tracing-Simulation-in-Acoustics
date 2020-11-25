@@ -10,7 +10,7 @@ def run():
     modelPath= projectDirectory + "pythonTools\\data\\triangles.txt",
     collectorPath = projectDirectory + "pythonTools\\data\\energyCollectors.txt",
     sectionPath = projectDirectory + "pythonTools\\data\\sectionsData.txt" )
-  plotter.save( projectDirectory + "pythonTools\\data\\test", plot=True)
+  plotter.save( projectDirectory + "pythonTools\\data\\test", plot=False)
 
 if __name__ == "__main__":
   run()
