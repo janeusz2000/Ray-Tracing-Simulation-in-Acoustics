@@ -1,24 +1,11 @@
 #include "vec3.h"
 
-#include <exception>
-#include <sstream>
-
 namespace core {
 
-Vec3::Vec3(std::initializer_list<float> initList) {
-  if (initList.size() != 3) {
-    std::stringstream ss1;
-    ss1 << "Vec3 could not ve constructed: initializer_list size: "
-        << initList.size() << "When only allowed is size 3";
-    throw std::invalid_argument(ss1.str());
-  }
-  auto iterator = initList.begin();
-  x_ = *iterator;
-  iterator++;
-  y_ = *iterator;
-  iterator++;
-  z_ = *iterator;
-}
+const Vec3 Vec3::kZero(0, 0, 0);
+const Vec3 Vec3::kX(1, 0, 0);
+const Vec3 Vec3::kY(0, 1, 0);
+const Vec3 Vec3::kZ(0, 0, 1);
 
 Vec3 operator+(const Vec3 &left, const Vec3 &right) {
   return Vec3(left.x() + right.x(), left.y() + right.y(), left.z() + right.z());

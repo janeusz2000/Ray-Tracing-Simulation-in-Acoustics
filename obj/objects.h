@@ -7,8 +7,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <initializer_list>
 #include <memory>
+#include <sstream>
 #include <vector>
 
 namespace objects {
@@ -36,7 +36,7 @@ public:
   core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
   [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
                                core::RayHitData *hitData) override;
-
+  bool isVecInside(const core::Vec3 &vec) const;
   float getRadius() const;
   void setRadius(float rad);
 
@@ -45,11 +45,10 @@ protected:
 };
 
 // When this object has two purposes: first - when ray hit this object, there is
-// no longer need
-// to continue ray traceing. Second - the collision point is passed to energy
-// collector, and after that specific
-// amount of energy from ray is collected depends on the distance from collision
-// point to the sphere collectors;
+// no longer need to continue ray tracing. Second - the collision point is
+// passed to energy collector, and after that specific amount of energy from ray
+// is collected depends on the distance from collision point to the sphere
+// collectors;
 class SphereWall : public Sphere {
 public:
   explicit SphereWall(float radius)

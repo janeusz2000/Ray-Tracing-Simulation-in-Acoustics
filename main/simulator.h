@@ -38,10 +38,7 @@ public:
       : tracer_(tracer), model_(model), source_(source),
         offsetter_(offsetter){};
 
-  std::vector<float> run(float frequency, int numCollectors) {
-    std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
-        buildCollectors(*model_, numCollectors);
-  }
+  std::vector<float> run(float frequency, int numCollectors);
 
 private:
   RayTracer *tracer_;

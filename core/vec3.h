@@ -2,22 +2,24 @@
 #define VEC3_H
 
 #include "constants.h"
-#include <initializer_list>
+
 #include <iostream>
+#include <random>
+#include <sstream>
 
 namespace core {
 
 class Vec3 {
+public:
+  static const Vec3 kZero;
+  static const Vec3 kX;
+  static const Vec3 kY;
+  static const Vec3 kZ;
+
   // X cord: represents left (-) to right (+) coordinates
   // Y cord: represents backwards (-) to forward (+) coordinates
   // Z cord: represents down (-) to up (+) coordinates
-
-public:
   explicit Vec3(float x = 0, float y = 0, float z = 0) : x_(x), y_(y), z_(z){};
-
-  Vec3(std::initializer_list<float> initList);
-  Vec3(const Vec3 &other) = default;
-  ~Vec3() = default;
 
   Vec3 &operator=(const Vec3 &other);
   Vec3 &operator+=(const Vec3 &other);

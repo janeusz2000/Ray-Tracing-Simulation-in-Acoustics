@@ -1,5 +1,4 @@
 #include "objects.h"
-#include <sstream>
 
 namespace objects {
 
@@ -42,6 +41,8 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
     return false;
   }
 
+  // Prevents of getting ray inside to the sphere by
+  // floating point number error
   if (std::abs(timeLow) < constants::kAccuracy) {
     return false;
   }
@@ -53,6 +54,10 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
   core::Vec3 collision = ray.at(collisionTime);
   *hitData = core::RayHitData(collisionTime, normal(collision), ray, freq);
   return true;
+}
+
+bool Sphere::isVecInside(const core::Vec3 &vec) const {
+  return (vec - origin_).magnitude() <= radius_;
 }
 
 std::ostream &operator<<(std::ostream &os, const Sphere &sp) {
@@ -129,7 +134,6 @@ TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
 
   return *this;
 }
-// TODO: change this from friend bool operator== to bool operator ;)
 bool TriangleObj::operator==(const TriangleObj &other) const {
   // if other triangle has the same points but declared in different order,
   // they will be still equal.
@@ -176,7 +180,7 @@ bool TriangleObj::hitObject(const core::Ray &ray, float freq,
       (-1 * (ray.origin() - point3_)).scalarProduct(normal_) / normalDot;
 
   // Following code is making sure that ray doesn't hit the same object.
-  if (time < constants::kHitAccuracy) {
+  if (time < constants::kAccuracy) {
     return false;
   }
 
@@ -194,12 +198,12 @@ bool TriangleObj::doesHit(const core::Vec3 &point) const {
   core::Vec3 vecB = point2_ - point;
   core::Vec3 vecC = point3_ - point;
 
-  //  Area of the triangle made with point and w triangle points.
+  // Area of the triangle made with point and w triangle points.
   float alpha = vecB.crossProduct(vecC).magnitude() / 2;
   float beta = vecC.crossProduct(vecA).magnitude() / 2;
   float gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
-  return alpha + beta + gamma - area_ <= constants::kHitAccuracy;
+  return alpha + beta + gamma - area_ <= constants::kAreaAccuracy;
 }
 
 float TriangleObj::area() const { return area_; }

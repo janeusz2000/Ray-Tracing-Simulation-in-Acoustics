@@ -1,8 +1,15 @@
 #include "ray.h"
 
-#include <sstream>
+
 
 namespace core {
+
+Ray Ray::fromSphericalCoords(const Vec3 &origin, float zRotation,
+                             float xyInclination) {
+  return Ray(origin, Vec3(std::cos(xyInclination) * std::cos(zRotation),
+                          std::cos(xyInclination) * std::sin(zRotation),
+                          std::sin(xyInclination)));
+}
 
 Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
     : origin_(origin), energy_(energy) {
