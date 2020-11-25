@@ -231,7 +231,7 @@ class Plotter:
     plt.subplot(2,2,1)
     self.plotXYView()
 
-    plt.savefig(path[:-3] + "png")
+    plt.savefig(path)
     if plot:
       plt.show()
     
