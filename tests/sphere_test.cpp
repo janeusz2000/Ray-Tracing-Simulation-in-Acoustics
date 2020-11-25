@@ -14,13 +14,14 @@ TEST(SphereCollisionTest, RayHitFromOutsideSphere) {
   Sphere sphere(Vec3::kZero, 1);
   RayHitData hitData;
 
-  ASSERT_FALSE(sphere.isVecInside(-4 * Vec3::kY));
-  Ray alongYAxis(Vec3(0, -4, 0), Vec3::kY);
+  Vec3 inFrontOfSphere = -4 * Vec3::kY;
+  ASSERT_FALSE(sphere.isVecInside(inFrontOfSphere));
+  Ray alongYAxis(inFrontOfSphere, Vec3::kY);
   ASSERT_TRUE(sphere.hitObject(alongYAxis, kSkipFreq, &hitData));
   ASSERT_FLOAT_EQ(alongYAxis.origin().magnitude() - sphere.getRadius(),
                   hitData.time);
 
-  Vec3 behindSphereYAxis = 4 * Vec3::kY;
+  Vec3 behindSphereYAxis = -inFrontOfSphere;
   ASSERT_FALSE(sphere.isVecInside(behindSphereYAxis));
   Ray alongYAxisOppposite(behindSphereYAxis, Vec3::kY);
   ASSERT_FALSE(sphere.hitObject(alongYAxisOppposite, kSkipFreq, &hitData))
