@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from os import read
 import matplotlib.pyplot as plt
-
+import random
 #python tools for visualization of energy collectors
 
 class Vec3:
@@ -27,21 +27,24 @@ class Section(ObjectInterface):
     self.point1 = point1
     assert isinstance(point2, Vec3)
     self.point2 = point2
+    self.color = []
+    for _ in range(3):
+      self.color.append(random.random())
 
   def plotXSideView(self):
     xTemp = [self.point1.x, self.point2.x]
     yTemp = [self.point1.z, self.point2.z]
-    plt.plot(xTemp, yTemp)
+    plt.plot(xTemp, yTemp, color=self.color)
 
   def plotYSideView(self):
     xTemp = [self.point1.y, self.point2.y]
     yTemp = [self.point1.z, self.point2.z]
-    plt.plot(xTemp, yTemp)
+    plt.plot(xTemp, yTemp,color=self.color)
   
   def plotXYView(self):
     xTemp = [self.point1.x, self.point2.x]
     yTemp = [self.point1.y, self.point2.y]
-    plt.plot(xTemp, yTemp)
+    plt.plot(xTemp, yTemp, color=self.color)
 
 class EnergyCollector(ObjectInterface):
   def __init__(self, origin, radius):
@@ -121,6 +124,11 @@ class Triangle(ObjectInterface):
   def plotXSideView(self):
     triangle = plt.Polygon([[self.point1.x, self.point1.z],
        [self.point2.x, self.point2.z], [self.point3.x, self.point3.z]])
+    triangle.set_edgecolor("black")
+    color = []
+    for _ in range(3):
+      color.append(random.random())
+    triangle.set_fc(color)
     plt.gca().add_patch((triangle))
 
   def plotYSideView(self):
@@ -304,9 +312,9 @@ class Plotter:
   def save(self, path, plot=False):
     plt.figure(figsize=(9,9))
     
-    plt.subplot(2,2,2)
-    self.plotXView()
     plt.subplot(2,2,3)
+    self.plotXView()
+    plt.subplot(2,2,2)
     self.plotYView()
 
     plt.subplot(2,2,1)

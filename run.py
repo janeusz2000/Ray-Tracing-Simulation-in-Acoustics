@@ -8,7 +8,7 @@ projectDirectory = "D:\\cpp_projects\\magisterkaCPP\\"
 def run():
   plotter = tools.Plotter(
     modelPath= projectDirectory + "pythonTools\\data\\triangles.txt",
-    # collectorPath = projectDirectory + "pythonTools\\data\\energyCollectors.txt",
+    collectorPath = projectDirectory + "pythonTools\\data\\energyCollectors.txt",
     sectionPath = projectDirectory + "pythonTools\\data\\sectionsData.txt" )
   plotter.save( projectDirectory + "pythonTools\\data\\test", plot=True)
 
