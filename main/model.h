@@ -1,5 +1,5 @@
-#ifndef Model_H
-#define Model_H
+#ifndef MODEL_H
+#define MODEL_H
 
 #include "obj/objects.h"
 

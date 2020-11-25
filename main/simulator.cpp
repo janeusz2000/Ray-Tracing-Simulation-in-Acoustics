@@ -79,3 +79,11 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   }
   return energyCollectors;
 }
+
+std::vector<float> Simulator::run(float frequency, int numCollectors) {
+  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
+      buildCollectors(*model_, numCollectors);
+  
+  
+  return {};
+}

@@ -61,3 +61,13 @@ cc_test(
     ]
 )
 
+cc_test(
+    name = "rayTracer_test",
+    srcs = [
+        "tests/rayTracer_test.cpp",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ]
+)

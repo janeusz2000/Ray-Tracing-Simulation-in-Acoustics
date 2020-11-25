@@ -1,0 +1,51 @@
+#include "core/ray.h"
+#include "core/vec3.h"
+#include "main/model.h"
+#include "main/rayTracer.h"
+#include "obj/objects.h"
+#include "gtest/gtest.h"
+
+using core::Ray;
+using core::RayHitData;
+using core::Vec3;
+using objects::TriangleObj;
+
+const float kSkipFrequency = 1000;
+
+class FakeReferenceModel : public ModelInterface {
+public:
+  FakeReferenceModel() {
+    triangles_.push_back(
+        std::make_unique<TriangleObj>(Vec3::kX, Vec3::kZero, Vec3::kZ));
+    triangles_.push_back(
+        std::make_unique<TriangleObj>(Vec3::kX, Vec3::kX + Vec3::kZ, Vec3::kZ));
+  }
+
+  std::vector<TriangleObj *> triangles() const override {
+    std::vector<TriangleObj *> outputTriangles;
+    for (const auto &triangle : triangles_) {
+      outputTriangles.push_back(triangle.get());
+    }
+    return outputTriangles;
+  }
+
+  float height() const override { return 0; }
+  float sideSize() const override { return 0; }
+  bool empty() const { return triangles_.empty(); }
+
+private:
+  std::vector<std::unique_ptr<TriangleObj>> triangles_;
+};
+
+TEST(RayTracerTest, RayReflection) {
+  FakeReferenceModel model;
+  RayTracer rayTracer(&model);
+  RayHitData hitData;
+
+  Vec3 inFrontOfModel = Vec3::kX / 3 + Vec3::kZ / 3 - 5 * Vec3::kY;
+  Ray alongX(inFrontOfModel, Vec3::kY);
+  ASSERT_EQ(RayTracer::TraceResult::HIT_TRIANGLE,
+            rayTracer.rayTrace(alongX, kSkipFrequency, &hitData));
+  Ray reflectedRay(inFrontOfModel + 5 * Vec3::kY, -Vec3::kY);
+  ASSERT_EQ(reflectedRay, rayTracer.getReflected(&hitData));
+}
