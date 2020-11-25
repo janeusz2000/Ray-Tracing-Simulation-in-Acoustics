@@ -10,7 +10,7 @@ class Vec3:
     self.y = float(y)
     self.z = float(z)
 
-class objectInterface(ABC): 
+class ObjectInterface(ABC): 
   @abstractmethod
   def plotXSideView(self):
     return 
@@ -21,7 +21,7 @@ class objectInterface(ABC):
   def plotXYView(self):
     return 
 
-class Section(objectInterface):
+class Section(ObjectInterface):
   def __init__(self, point1, point2):
     assert isinstance(point1, Vec3)
     self.point1 = point1
@@ -43,7 +43,7 @@ class Section(objectInterface):
     yTemp = [self.point1.y, self.point2.y]
     plt.plot(xTemp, yTemp)
 
-class EnergyCollector(objectInterface):
+class EnergyCollector(ObjectInterface):
   def __init__(self, origin, radius):
     assert isinstance(origin, Vec3)
     self.origin = origin
@@ -88,7 +88,7 @@ class EnergyCollector(objectInterface):
     collectorOrigin.set_color('red')
     plt.gca().add_patch(collectorOrigin)
 
-class SphereWall(objectInterface):
+class SphereWall(ObjectInterface):
   def __init__(self, origin, radius):
     assert isinstance(origin, Vec3)
     self.origin = origin
@@ -112,7 +112,7 @@ class SphereWall(objectInterface):
     SimulationCircle.set_fill(False)
     plt.gca().add_patch(SimulationCircle)
 
-class Triangle(objectInterface):
+class Triangle(ObjectInterface):
   def __init__(self, point1, point2, point3):
     self.point1 = point1
     self.point2 = point2
