@@ -10,7 +10,7 @@ class Vec3:
     self.y = float(y)
     self.z = float(z)
 
-class ObjectInterface(ABC): 
+class objectInterface(ABC): 
   @abstractmethod
   def plotXSideView(self):
     return 
@@ -21,7 +21,7 @@ class ObjectInterface(ABC):
   def plotXYView(self):
     return 
 
-class Section(ObjectInterface):
+class Section(objectInterface):
   def __init__(self, point1, point2):
     assert isinstance(point1, Vec3)
     self.point1 = point1
@@ -43,7 +43,7 @@ class Section(ObjectInterface):
     yTemp = [self.point1.y, self.point2.y]
     plt.plot(xTemp, yTemp)
 
-class EnergyCollector(ObjectInterface):
+class EnergyCollector(objectInterface):
   def __init__(self, origin, radius):
     assert isinstance(origin, Vec3)
     self.origin = origin
@@ -88,7 +88,7 @@ class EnergyCollector(ObjectInterface):
     collectorOrigin.set_color('red')
     plt.gca().add_patch(collectorOrigin)
 
-class SphereWall(ObjectInterface):
+class SphereWall(objectInterface):
   def __init__(self, origin, radius):
     assert isinstance(origin, Vec3)
     self.origin = origin
@@ -112,12 +112,35 @@ class SphereWall(ObjectInterface):
     SimulationCircle.set_fill(False)
     plt.gca().add_patch(SimulationCircle)
 
-class CollectorReader:
-  def __init__(self, collectorFilePath, sectionFilePath=None):
+class Triangle(objectInterface):
+  def __init__(self, point1, point2, point3):
+    self.point1 = point1
+    self.point2 = point2
+    self.point3 = point3
+  
+  def plotXSideView(self):
+    triangle = plt.Polygon([[self.point1.x, self.point1.z],
+       [self.point2.x, self.point2.z], [self.point3.x, self.point3.z]])
+    plt.gca().add_patch((triangle))
+
+  def plotYSideView(self):
+    triangle = plt.Polygon([[self.point1.y, self.point1.z],
+        [self.point2.y, self.point2.z], [self.point3.y, self.point3.z]])
+    plt.gca().add_patch((triangle))
+
+  def plotXYView(self):
+    triangle = plt.Polygon([[self.point1.x, self.point1.y],
+        [self.point2.x, self.point2.y], [self.point3.x, self.point3.y]])
+    plt.gca().add_patch((triangle))
+
+class Reader:
+  def __init__(self, modelFilePath=None ,collectorFilePath=None, sectionFilePath=None):
+    self.modelFilePath = modelFilePath
     self.pathCollectors = collectorFilePath
     self.pathSections = sectionFilePath
-    self.objList = []
+    self.collectorList = []
     self.sectionList = []
+    self.triangles = []
   
   def getReadCollector(self, collectorString):
     firstSlice = collectorString[collectorString.find("Vec3(")+5:]
@@ -147,11 +170,36 @@ class CollectorReader:
     
     return Section(Vec3(x1, y1, z1), Vec3(x2, y2, z2))
 
+  def getReadTriangle(self, triangleString):
+
+    firstSlice = triangleString[triangleString.find("Vec3(")+5:]
+    x1 = firstSlice[:firstSlice.find(',')]
+    secondSlice = firstSlice[firstSlice.find(',')+2:]
+    y1 = secondSlice[:secondSlice.find(',')]
+    thirdSlice = secondSlice[secondSlice.find(',')+2:]
+    z1 = thirdSlice[:thirdSlice.find(')')]
+
+    firstSlice = thirdSlice[thirdSlice.find("Vec3(")+5:]
+    x2 = firstSlice[:firstSlice.find(',')]
+    secondSlice = firstSlice[firstSlice.find(',')+2:]
+    y2 = secondSlice[:secondSlice.find(',')]
+    thirdSlice = secondSlice[secondSlice.find(',')+2:]
+    z2 = thirdSlice[:thirdSlice.find(')')]
+
+    firstSlice = thirdSlice[thirdSlice.find("Vec3(")+5:]
+    x3 = firstSlice[:firstSlice.find(',')]
+    secondSlice = firstSlice[firstSlice.find(',')+2:]
+    y3 = secondSlice[:secondSlice.find(',')]
+    thirdSlice = secondSlice[secondSlice.find(',')+2:]
+    z3 = thirdSlice[:thirdSlice.find(')')]
+
+    return Triangle(Vec3(x1, y1, z1), Vec3(x2, y2,z2), Vec3(x3, y3, z3))
+
   def readCollectors(self):
     with open(self.pathCollectors) as f:
       for line in f.readlines():
-        self.objList.append(self.getReadCollector(line))
-    return self.objList
+        self.collectorList.append(self.getReadCollector(line))
+    return self.collectorList
 
   def readSection(self):
     if (self.pathSections is not None):
@@ -159,33 +207,56 @@ class CollectorReader:
         for line in f.readlines():
           self.sectionList.append(self.getReadSection(line))
       return self.sectionList
-  
+
+  def readTriangles(self):
+    if (self.modelFilePath is not None):
+      with open(self.modelFilePath) as f:
+        for line in f.readlines():
+          self.triangles.append(self.getReadTriangle(line))
+    return self.triangles
+
   def simulationRadius(self):
     maximum = 0
-    for collector in self.objList:
+    for collector in self.collectorList:
       maximum = max(maximum, collector.origin.z)  
     return maximum  
 
 class Plotter:
-  def __init__(self, collectorPath, sectionPath= None):
-    reader = CollectorReader(collectorPath, sectionPath)
+  def __init__(self, modelPath=None, collectorPath=None, sectionPath=None):
+    reader = Reader(modelPath ,collectorPath, sectionPath)
     self.collectorPath = collectorPath
     self.sectionPath = sectionPath 
-    self.objList = reader.readCollectors()
-    
+    self.modelPath = modelPath
+
+    if self.collectorPath is not None:
+      self.collectorList = reader.readCollectors()
+      self.simRadius = reader.simulationRadius()
+    else:
+      self.simRadius = 4
+      self.collectorList = []
+
     if (self.sectionPath is not None):
       self.sectionList = reader.readSection()
     else:
       self.sectionList = []
 
-    self.simRadius = reader.simulationRadius()
-    self.objList.append(SphereWall(Vec3(0, 0, 0), self.simRadius))
+    if self.modelPath is not None:
+      self.triangleList = reader.readTriangles()
+    else:
+      self.triangleList = []
+
+    self.collectorList.append(SphereWall(Vec3(0, 0, 0), self.simRadius))
   
   def plotXView(self):
-    for obj in self.objList:
-      obj.plotXSideView()
+    if self.collectorPath is not None:
+      for collector in self.collectorList:
+        collector.plotXSideView()
 
-    if self.sectionPath is not None:
+    if self.modelPath is not None:
+      for triangle in self.triangleList:
+        triangle.plotXSideView()
+
+    if (self.sectionPath is not None):
       for section in self.sectionList:
         section.plotXSideView()
     
@@ -195,12 +266,17 @@ class Plotter:
     plt.xlim(-lim, lim)
   
   def plotYView(self):
-    for obj in self.objList:
-      obj.plotYSideView()
+    if self.collectorPath is not None:
+      for collector in self.collectorList:
+        collector.plotYSideView()
     
     if self.sectionPath is not None:
       for section in self.sectionList:
         section.plotYSideView()
+
+    if self.modelPath is not None:
+      for triangle in self.triangleList:
+        triangle.plotYSideView()
 
     plt.title("YZ Side view")
     lim = 1.5 * self.simRadius
@@ -208,12 +284,17 @@ class Plotter:
     plt.xlim(-lim, lim)
 
   def plotXYView(self):
-    for obj in self.objList:
-      obj.plotXYView()
-    
+    if self.collectorPath is not None:
+      for collector in self.collectorList:
+        collector.plotXYView()
+      
     if self.sectionPath is not None:
       for section in self.sectionList:
         section.plotXYView()
+
+    if self.modelPath is not None:
+      for triangle in self.triangleList:
+        triangle.plotXYView()
 
     plt.title("XY Side view")
     lim = 1.5 * self.simRadius
@@ -234,6 +315,8 @@ class Plotter:
     plt.savefig(path)
     if plot:
       plt.show()
+
+
     
     
 

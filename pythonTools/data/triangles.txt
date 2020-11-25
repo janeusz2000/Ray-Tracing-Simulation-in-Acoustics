@@ -1,0 +1,2 @@
+Triangle Object, vertex: Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 1)
+Triangle Object, vertex: Vec3(1, 0, 0), Vec3(1, 0, 1), Vec3(0, 0, 1)

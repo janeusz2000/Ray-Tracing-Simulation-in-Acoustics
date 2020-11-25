@@ -53,10 +53,25 @@ protected:
     outFile.close();
     return true;
   }
+
+  [[nodiscard]] bool saveModel(const std::vector<TriangleObj *> &triangles,
+                               std::string_view path) {
+    std::ofstream outFile(path.data());
+    if (!outFile.good()) {
+      return false;
+    }
+    for (TriangleObj *triangle : triangles) {
+      outFile << *triangle << "\n";
+    }
+    return true;
+  }
 };
 
 TEST_F(RayTracerTest, RayReflection) {
   FakeReferenceModel model;
+  ASSERT_TRUE(saveModel(
+      model.triangles(),
+      "D:\\cpp_projects\\magisterkaCPP\\pythonTools\\data\\triangles.txt"));
   RayTracer rayTracer(&model);
   RayHitData hitData;
 
