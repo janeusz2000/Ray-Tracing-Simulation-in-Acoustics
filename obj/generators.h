@@ -6,6 +6,9 @@
 #include "core/vec3.h"
 #include "main/model.h"
 
+#include <exception>
+#include <utility>
+
 namespace generators {
 
 struct RandomRayOffseter {
@@ -31,7 +34,8 @@ public:
 
 // generates rays with origin at PointSource origin
 // and direction along Z axes down, with offset on XY
-// determinated by sampleSize until numOfRay number is reached
+// determinated by sampleSize until numOfRay number is reached.
+// Note that |numOfRays| must me square of the number.
 class PointSpeakerRayFactory : public RayFactory {
 public:
   PointSpeakerRayFactory(int numOfRays, ModelInterface *model);
@@ -41,11 +45,20 @@ public:
   core::Vec3 origin() const { return origin_; }
 
 private:
+  // Creates Ray based on grid the coordinates, that represent
+  // view from the top of the model. For [xPosition, yPosition] 
+  // equal to [0, 0], created Ray shoots at lower left
+  // corner of the model and when equal
+  // to [raysPerSideSize_, raysPerSideSize_] given Ray shoots at
+  // upper right corner of the model.
+  core::Ray createRay(int xPosition, int yPosition);
+
   ModelInterface *model_;
 
-  int numOfRaysPerModelSideSize_, currentRayNumX_, currentRayNumY_;
-  float simulationHeight_, simulationSideSize_;
-  core::Vec3 origin_, start_;
+  int raysPerSideSize_;
+  float simulationSideSize_;
+
+  core::Vec3 origin_;
 };
 
 } // namespace generators

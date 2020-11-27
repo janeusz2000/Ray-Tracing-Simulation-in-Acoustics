@@ -3,6 +3,7 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h"
 
+#include <exception>
 #include <vector>
 
 using core::Ray;
@@ -20,20 +21,27 @@ public:
   bool empty() const override { return false; }
 };
 
-TEST(PointSpeakerRayFactoryTest, RayGenerator) {
-  // FakeModel model;
-  // PointSpeakerRayFactory rayFactory(9, &model);
-  // Vec3 referenceDirection = Vec3(0, 0, model.height()) - rayFactory.origin();
+TEST(PointSpeakerRayFactoryTest, ExceptionThrow) {
+  FakeModel model;
+  ASSERT_THROW(PointSpeakerRayFactory factory(10, &model),
+               std::invalid_argument);
+}
 
-  // Ray current(Vec3::kZero, Vec3::kZ);
+TEST(PointSpeakerRayFactoryTest, RayGenerator) {
+  FakeModel model;
+  PointSpeakerRayFactory rayFactory(9, &model);
+  Ray current(Vec3::kZero, Vec3::kZ);
+
+  // Vec3 referenceDirection(0, 0, 1 - rayFactory.origin().z());
   // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceLeftLowerCorner(rayFactory.origin(),
-  //                              referenceDirection - Vec3::kX / 2 - Vec3::kY);
+  // Ray referenceLeftLowerCorner(
+  //     rayFactory.origin(), referenceDirection - Vec3::kX / 2 - Vec3::kY / 2);
   // ASSERT_EQ(referenceLeftLowerCorner, current);
 
   // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceLowerMiddle(rayFactory.origin(), referenceDirection -
-  // Vec3::kY); ASSERT_EQ(referenceLowerMiddle, current);
+  // Ray referenceLowerMiddle(rayFactory.origin(),
+  //                          referenceDirection - Vec3::kY / 2);
+  // ASSERT_EQ(referenceLowerMiddle, current);
 
   // ASSERT_TRUE(rayFactory.genRay(&current));
   // Ray referenceRightLowerCorner(rayFactory.origin(),
