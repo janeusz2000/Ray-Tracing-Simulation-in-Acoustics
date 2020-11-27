@@ -12,6 +12,8 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays,
     throw std::invalid_argument(ss.str());
   }
 
+  // TODO: create array of valid positions for direction calculation
+
   origin_ = core::Vec3(0, 0, 8 * model->height());
 };
 
