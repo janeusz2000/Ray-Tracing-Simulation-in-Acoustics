@@ -45,7 +45,7 @@ public:
   core::Vec3 origin() const { return origin_; }
 
 private:
-  // Creates Ray based on grid the coordinates, that represent
+  // Creates Ray based on the grid coordinates, that represent
   // view from the top of the model. For [xPosition, yPosition] 
   // equal to [0, 0], created Ray shoots at lower left
   // corner of the model and when equal
