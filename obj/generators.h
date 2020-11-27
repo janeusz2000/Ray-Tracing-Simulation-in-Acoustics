@@ -6,7 +6,6 @@
 #include "core/vec3.h"
 #include "main/model.h"
 
-
 namespace generators {
 
 struct RandomRayOffseter {
@@ -39,14 +38,14 @@ public:
 
   [[nodiscard]] bool genRay(core::Ray *ray) override;
 
-private:
-  int numOfRays_, currentRayNum_;
-  float simulationHeight_, simulationSideSize_;
+  core::Vec3 origin() const { return origin_; }
 
-  // Edge values of the X and Y cooridantes
-  // in Vec3 used in direction calculation
-  float start_, stop_;
-  core::Vec3 origin_;
+private:
+  ModelInterface *model_;
+
+  int numOfRaysPerModelSideSize_, currentRayNumX_, currentRayNumY_;
+  float simulationHeight_, simulationSideSize_;
+  core::Vec3 origin_, start_;
 };
 
 } // namespace generators

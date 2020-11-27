@@ -71,3 +71,14 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ]
 )
+
+cc_test(
+    name = "generator_test",
+    srcs = [
+        "tests/generator_test.cpp",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ]
+)
