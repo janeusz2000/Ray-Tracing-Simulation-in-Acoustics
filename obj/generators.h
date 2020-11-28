@@ -7,7 +7,6 @@
 #include "main/model.h"
 
 #include <exception>
-#include <utility>
 
 namespace generators {
 
@@ -51,6 +50,7 @@ public:
 private:
   core::Vec3 generateDirection() const;
   bool isRayAvailable() const;
+  void checkIfMembersAreValid() const;
   void prepareNextDirection();
 
   ModelInterface *model_;
@@ -58,7 +58,7 @@ private:
   // starting point of the grid that represents lower left corner of view from
   // the top of the model
   core::Vec3 gridStart_;
-  int xGridPosition_, yGridPosition_, raysPerSideSize_;
+  int numOfRays_, xGridPosition_, yGridPosition_, gridPositionMaxValue_;
   float sourcePower_;
 };
 
