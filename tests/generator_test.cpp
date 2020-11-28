@@ -62,19 +62,20 @@ TEST(PointSpeakerRayFactoryTest, RayGenerator) {
   Ray referenceRight(rayFactory.origin(), referenceDirection + Vec3::kX / 2);
   ASSERT_EQ(referenceRight, current);
 
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceLeftUpperCorner(
-  //     rayFactory.origin(), referenceDirection - Vec3::kX / 2 + Vec3::kY / 2);
-  // ASSERT_EQ(referenceLeftLowerCorner, current);
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceLeftUpperCorner(
+      rayFactory.origin(), referenceDirection - Vec3::kX / 2 + Vec3::kY / 2);
+  ASSERT_EQ(referenceLeftUpperCorner, current);
 
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceUpperMiddle(rayFactory.origin(), referenceDirection +
-  // Vec3::kY); ASSERT_EQ(referenceUpperMiddle, current);
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceUpperMiddle(rayFactory.origin(),
+                           referenceDirection + Vec3::kY / 2);
+  ASSERT_EQ(referenceUpperMiddle, current);
 
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceRightUpperCorner(rayFactory.origin(),
-  //                               referenceDirection + Vec3::kX + Vec3::kY);
-  // ASSERT_EQ(referenceRightUpperCorner, current);
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceRightUpperCorner(
+      rayFactory.origin(), referenceDirection + Vec3::kX / 2 + Vec3::kY / 2);
+  ASSERT_EQ(referenceRightUpperCorner, current);
 
-  // ASSERT_FALSE(rayFactory.genRay(&current));
+  ASSERT_FALSE(rayFactory.genRay(&current));
 }

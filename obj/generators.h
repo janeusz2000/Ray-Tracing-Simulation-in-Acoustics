@@ -50,7 +50,7 @@ public:
 
 private:
   core::Vec3 generateDirection() const;
-  bool isRayAvailable_;
+  bool isRayAvailable() const;
   void prepareNextDirection();
 
   ModelInterface *model_;

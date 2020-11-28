@@ -19,7 +19,7 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays, float sourcePower,
 };
 
 bool PointSpeakerRayFactory::genRay(core::Ray *ray) {
-  if (!isRayAvailable_) {
+  if (!isRayAvailable()) {
     return false;
   }
   *ray = core::Ray(origin_, generateDirection(), sourcePower_);
@@ -38,10 +38,7 @@ core::Vec3 PointSpeakerRayFactory::generateDirection() const {
 void PointSpeakerRayFactory::prepareNextDirection() {
   std::cout << "xPosition: " << xPosition_ << " yPosition: " << yPosition_
             << std::endl;
-  if (xPosition_ == raysPerSideSize_ - 1 &&
-      yPosition_ == raysPerSideSize_ - 1) {
-    isRayAvailable_ = false;
-  } else if (xPosition_ == raysPerSideSize_ - 1) {
+  if (xPosition_ == raysPerSideSize_ - 1) {
     xPosition_ = 0;
     yPosition_++;
   } else {
@@ -49,4 +46,7 @@ void PointSpeakerRayFactory::prepareNextDirection() {
   }
 }
 
+bool PointSpeakerRayFactory::isRayAvailable() const {
+  return (xPosition_ != 0 || yPosition_ != raysPerSideSize_);
+}
 } // namespace generators
