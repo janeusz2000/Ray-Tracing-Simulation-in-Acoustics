@@ -58,7 +58,7 @@ private:
   // starting point of the grid that represents lower left corner of view from
   // the top of the model
   core::Vec3 gridStart_;
-  int xPosition_, yPosition_, raysPerSideSize_;
+  int xGridPosition_, yGridPosition_, raysPerSideSize_;
   float sourcePower_;
 };
 

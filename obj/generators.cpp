@@ -5,7 +5,7 @@ namespace generators {
 PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays, float sourcePower,
                                                ModelInterface *model)
     : raysPerSideSize_(std::sqrt(numOfRays)), sourcePower_(sourcePower),
-      model_(model), xPosition_(0), yPosition_(0) {
+      model_(model), xGridPosition_(0), yGridPosition_(0) {
 
   if (raysPerSideSize_ * raysPerSideSize_ != numOfRays) {
     std::stringstream ss;
@@ -28,25 +28,23 @@ bool PointSpeakerRayFactory::genRay(core::Ray *ray) {
 }
 
 core::Vec3 PointSpeakerRayFactory::generateDirection() const {
-  float u = static_cast<float>(xPosition_) / (raysPerSideSize_ - 1) *
+  float u = static_cast<float>(xGridPosition_) / (raysPerSideSize_ - 1) *
             model_->sideSize();
-  float v = static_cast<float>(yPosition_) / (raysPerSideSize_ - 1) *
+  float v = static_cast<float>(yGridPosition_) / (raysPerSideSize_ - 1) *
             model_->sideSize();
   return gridStart_ + u * core::Vec3::kX + v * core::Vec3::kY - origin_;
 }
 
 void PointSpeakerRayFactory::prepareNextDirection() {
-  std::cout << "xPosition: " << xPosition_ << " yPosition: " << yPosition_
-            << std::endl;
-  if (xPosition_ == raysPerSideSize_ - 1) {
-    xPosition_ = 0;
-    yPosition_++;
+  if (xGridPosition_ == raysPerSideSize_ - 1) {
+    xGridPosition_ = 0;
+    yGridPosition_++;
   } else {
-    ++xPosition_;
+    ++xGridPosition_;
   }
 }
 
 bool PointSpeakerRayFactory::isRayAvailable() const {
-  return (xPosition_ != 0 || yPosition_ != raysPerSideSize_);
+  return (xGridPosition_ != 0 || yGridPosition_ != raysPerSideSize_);
 }
 } // namespace generators
