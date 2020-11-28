@@ -32,33 +32,34 @@ public:
   virtual bool genRay(core::Ray *ray) = 0;
 };
 
-// generates rays with origin at PointSource origin
+// Generates rays with origin at PointSource origin
 // and direction along Z axes down, with offset on XY
 // determinated by sampleSize until numOfRay number is reached.
-// Note that |numOfRays| must me square of the number.
+// |numOfRays| must me square of the number.
+// |sourcePower| determine how much energy each ray has.
+// TODO: change impelmentation that match representation which says, ray has
+// TODO: energy in defined in [J] when source power is defined in [W]
 class PointSpeakerRayFactory : public RayFactory {
 public:
-  PointSpeakerRayFactory(int numOfRays, ModelInterface *model);
+  PointSpeakerRayFactory(int numOfRays, float sourcePower,
+                         ModelInterface *model);
 
   [[nodiscard]] bool genRay(core::Ray *ray) override;
 
   core::Vec3 origin() const { return origin_; }
 
 private:
-  // Creates Ray based on the grid coordinates, that represent
-  // view from the top of the model. For [xPosition, yPosition] 
-  // equal to [0, 0], created Ray shoots at lower left
-  // corner of the model and when equal
-  // to [raysPerSideSize_, raysPerSideSize_] given Ray shoots at
-  // upper right corner of the model.
-  core::Ray createRay(int xPosition, int yPosition);
+  core::Vec3 generateDirection() const;
+  bool isRayAvailable_;
+  void prepareNextDirection();
 
   ModelInterface *model_;
-
-  int raysPerSideSize_;
-  float simulationSideSize_;
-
   core::Vec3 origin_;
+  // starting point of the grid that represents lower left corner of view from
+  // the top of the model
+  core::Vec3 gridStart_;
+  int xPosition_, yPosition_, raysPerSideSize_;
+  float sourcePower_;
 };
 
 } // namespace generators

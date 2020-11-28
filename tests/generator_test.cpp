@@ -12,6 +12,8 @@ using core::Vec3;
 using generators::PointSpeakerRayFactory;
 using objects::TriangleObj;
 
+const float kSkipPower = 0;
+
 class FakeModel : public ModelInterface {
 public:
   std::vector<TriangleObj *> triangles() const override { return {}; }
@@ -23,46 +25,46 @@ public:
 
 TEST(PointSpeakerRayFactoryTest, ExceptionThrow) {
   FakeModel model;
-  ASSERT_THROW(PointSpeakerRayFactory factory(10, &model),
+  ASSERT_THROW(PointSpeakerRayFactory factory(10, kSkipPower, &model),
                std::invalid_argument);
 }
 
 TEST(PointSpeakerRayFactoryTest, RayGenerator) {
   FakeModel model;
-  PointSpeakerRayFactory rayFactory(9, &model);
+  PointSpeakerRayFactory rayFactory(9, kSkipPower, &model);
   Ray current(Vec3::kZero, Vec3::kZ);
 
-  // Vec3 referenceDirection(0, 0, 1 - rayFactory.origin().z());
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceLeftLowerCorner(
-  //     rayFactory.origin(), referenceDirection - Vec3::kX / 2 - Vec3::kY / 2);
-  // ASSERT_EQ(referenceLeftLowerCorner, current);
+  Vec3 referenceDirection(0, 0, 1 - rayFactory.origin().z());
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceLeftLowerCorner(
+      rayFactory.origin(), referenceDirection - Vec3::kX / 2 - Vec3::kY / 2);
+  ASSERT_EQ(referenceLeftLowerCorner, current);
+
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceLowerMiddle(rayFactory.origin(),
+                           referenceDirection - Vec3::kY / 2);
+  ASSERT_EQ(referenceLowerMiddle, current);
+
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceRightLowerCorner(
+      rayFactory.origin(), referenceDirection + Vec3::kX / 2 - Vec3::kY / 2);
+  ASSERT_EQ(referenceRightLowerCorner, current);
+
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceLeft(rayFactory.origin(), referenceDirection - Vec3::kX / 2);
+  ASSERT_EQ(referenceLeft, current);
+
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceMiddle(rayFactory.origin(), referenceDirection);
+  ASSERT_EQ(referenceMiddle, current);
+
+  ASSERT_TRUE(rayFactory.genRay(&current));
+  Ray referenceRight(rayFactory.origin(), referenceDirection + Vec3::kX / 2);
+  ASSERT_EQ(referenceRight, current);
 
   // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceLowerMiddle(rayFactory.origin(),
-  //                          referenceDirection - Vec3::kY / 2);
-  // ASSERT_EQ(referenceLowerMiddle, current);
-
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceRightLowerCorner(rayFactory.origin(),
-  //                               referenceDirection + Vec3::kX - Vec3::kY);
-  // ASSERT_EQ(referenceRightLowerCorner, current);
-
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceLeft(rayFactory.origin(), referenceDirection - Vec3::kX);
-  // ASSERT_EQ(referenceLeft, current);
-
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceMiddle(rayFactory.origin(), referenceDirection);
-  // ASSERT_EQ(referenceMiddle, current);
-
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceRight(rayFactory.origin(), referenceDirection + Vec3::kX);
-  // ASSERT_EQ(referenceRight, current);
-
-  // ASSERT_TRUE(rayFactory.genRay(&current));
-  // Ray referenceLeftUpperCorner(rayFactory.origin(),
-  //                              referenceDirection - Vec3::kX + Vec3::kY);
+  // Ray referenceLeftUpperCorner(
+  //     rayFactory.origin(), referenceDirection - Vec3::kX / 2 + Vec3::kY / 2);
   // ASSERT_EQ(referenceLeftLowerCorner, current);
 
   // ASSERT_TRUE(rayFactory.genRay(&current));

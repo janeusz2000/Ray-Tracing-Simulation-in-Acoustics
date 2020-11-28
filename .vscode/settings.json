@@ -76,7 +76,8 @@
     "xstring": "cpp",
     "xtr1common": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "regex": "cpp"
   },
   "C_Cpp.vcFormat.indent.braces": true,
   "C_Cpp.vcFormat.indent.accessSpecifiers": true,

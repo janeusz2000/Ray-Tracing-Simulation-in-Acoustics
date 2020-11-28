@@ -2,9 +2,10 @@
 
 namespace generators {
 
-PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays,
+PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays, float sourcePower,
                                                ModelInterface *model)
-    : raysPerSideSize_(std::sqrt(numOfRays)), model_(model) {
+    : raysPerSideSize_(std::sqrt(numOfRays)), sourcePower_(sourcePower),
+      model_(model), xPosition_(0), yPosition_(0) {
 
   if (raysPerSideSize_ * raysPerSideSize_ != numOfRays) {
     std::stringstream ss;
@@ -12,23 +13,40 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays,
     throw std::invalid_argument(ss.str());
   }
 
-  // TODO: create array of valid positions for direction calculation
-
-  origin_ = core::Vec3(0, 0, 8 * model->height());
+  origin_ = 8 * model_->height() * core::Vec3::kZ;
+  gridStart_ = -1 * model_->sideSize() / 2 * (core::Vec3::kX + core::Vec3::kY) +
+               model_->height() * core::Vec3::kZ;
 };
 
-bool PointSpeakerRayFactory::genRay(core::Ray *ray) { return true; }
+bool PointSpeakerRayFactory::genRay(core::Ray *ray) {
+  if (!isRayAvailable_) {
+    return false;
+  }
+  *ray = core::Ray(origin_, generateDirection(), sourcePower_);
+  prepareNextDirection();
+  return true;
+}
 
-core::Ray PointSpeakerRayFactory::createRay(int xPosition, int yPosition) {
+core::Vec3 PointSpeakerRayFactory::generateDirection() const {
+  float u = static_cast<float>(xPosition_) / (raysPerSideSize_ - 1) *
+            model_->sideSize();
+  float v = static_cast<float>(yPosition_) / (raysPerSideSize_ - 1) *
+            model_->sideSize();
+  return gridStart_ + u * core::Vec3::kX + v * core::Vec3::kY - origin_;
+}
 
-  // TODO: change this for the instruction described in comment
-
-  core::Vec3 direction =
-      model_->height() * core::Vec3::kZ +
-      static_cast<float>(xPosition) / raysPerSideSize_ * core::Vec3::kX +
-      static_cast<float>(yPosition) / raysPerSideSize_ * core::Vec3::kY -
-      origin_;
-  return core::Ray(origin_, direction);
+void PointSpeakerRayFactory::prepareNextDirection() {
+  std::cout << "xPosition: " << xPosition_ << " yPosition: " << yPosition_
+            << std::endl;
+  if (xPosition_ == raysPerSideSize_ - 1 &&
+      yPosition_ == raysPerSideSize_ - 1) {
+    isRayAvailable_ = false;
+  } else if (xPosition_ == raysPerSideSize_ - 1) {
+    xPosition_ = 0;
+    yPosition_++;
+  } else {
+    ++xPosition_;
+  }
 }
 
 } // namespace generators
