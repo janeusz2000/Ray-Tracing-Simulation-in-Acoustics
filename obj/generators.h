@@ -22,8 +22,7 @@ public:
 protected:
   virtual float getNextAxisOffset() const = 0;
 };
-// generates ray with properties determinated by each class
-// properties.
+
 class RayFactory {
 public:
   virtual bool genRay(core::Ray *ray) = 0;
