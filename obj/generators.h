@@ -22,13 +22,10 @@ public:
 protected:
   virtual float getNextAxisOffset() const = 0;
 };
-
+// generates ray with properties determinated by each class
+// properties.
 class RayFactory {
 public:
-  // generates ray with properties determinated by each class
-  // example: Speaker source is a membrane that is generating
-  // rays that have origins where membrane is situated and direction
-  // parpendicular to surface where membrane is situated.
   virtual bool genRay(core::Ray *ray) = 0;
 };
 
@@ -58,7 +55,8 @@ private:
   float sourcePower_;
   // Parameters describe the mesh created from the top view of the model.
   // [xMeshPosition, yMeshPosition] equal to [0, 0] represents lower lef corner
-  // of the mesh.
+  // of the mesh, whereas equal to [meshPositionMaxValue, meshPositionMaxValue]
+  // represents upper right corner of the mesh.
   core::Vec3 meshStart_;
   int xMeshPosition_, yMeshPosition_, meshPositionMaxValue_;
 };
