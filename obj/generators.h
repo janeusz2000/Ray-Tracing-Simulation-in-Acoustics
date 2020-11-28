@@ -7,6 +7,7 @@
 #include "main/model.h"
 
 #include <exception>
+#include <sstream>
 
 namespace generators {
 
@@ -35,9 +36,7 @@ public:
 // and direction along Z axes down, with offset on XY
 // determinated by sampleSize until numOfRay number is reached.
 // |numOfRays| must me square of the number.
-// |sourcePower| determine how much energy each ray has.
-// TODO: change impelmentation that match representation which says, ray has
-// TODO: energy in defined in [J] when source power is defined in [W]
+// |sourcePower| represents power of the source in [W]
 class PointSpeakerRayFactory : public RayFactory {
 public:
   PointSpeakerRayFactory(int numOfRays, float sourcePower,
@@ -55,11 +54,13 @@ private:
 
   ModelInterface *model_;
   core::Vec3 origin_;
-  // starting point of the grid that represents lower left corner of view from
-  // the top of the model
-  core::Vec3 gridStart_;
-  int numOfRays_, xGridPosition_, yGridPosition_, gridPositionMaxValue_;
+  int numOfRays_;
   float sourcePower_;
+  // Parameters describe the mesh created from the top view of the model.
+  // [xMeshPosition, yMeshPosition] equal to [0, 0] represents lower lef corner
+  // of the mesh.
+  core::Vec3 meshStart_;
+  int xMeshPosition_, yMeshPosition_, meshPositionMaxValue_;
 };
 
 } // namespace generators
