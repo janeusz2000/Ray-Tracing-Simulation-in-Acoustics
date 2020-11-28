@@ -53,7 +53,7 @@ private:
   int numOfRays_;
   float sourcePower_;
   // Parameters describe the mesh created from the top view of the model.
-  // [xMeshPosition, yMeshPosition] equal to [0, 0] represents lower lef corner
+  // [xMeshPosition, yMeshPosition] equal to [0, 0] represents lower left corner
   // of the mesh, whereas equal to [meshPositionMaxValue, meshPositionMaxValue]
   // represents upper right corner of the mesh.
   core::Vec3 meshStart_;
