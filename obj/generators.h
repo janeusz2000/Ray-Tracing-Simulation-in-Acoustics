@@ -42,6 +42,8 @@ public:
 
   [[nodiscard]] bool genRay(core::Ray *ray) override;
 
+  core::Vec3 origin() const { return origin_; }
+
 private:
   // TODO: explain what rayIndexAtXAxis and rayIndexAtYAxis is.
   core::Vec3 getDirection(int rayIndexAtXAxis, int rayIndexAtYAxis) const;

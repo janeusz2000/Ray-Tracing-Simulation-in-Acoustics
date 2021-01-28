@@ -69,9 +69,9 @@ protected:
 
 TEST_F(RayTracerTest, RayReflection) {
   FakeReferenceModel model;
-  ASSERT_TRUE(saveModel(
-      model.triangles(),
-      "D:\\cpp_projects\\magisterkaCPP\\pythonTools\\data\\triangles.txt"));
+  // ASSERT_TRUE(saveModel(
+  //     model.triangles(),
+  //     "D:\\cpp_projects\\magisterkaCPP\\pythonTools\\data\\triangles.txt"));
   RayTracer rayTracer(&model);
   RayHitData hitData;
 
@@ -81,7 +81,7 @@ TEST_F(RayTracerTest, RayReflection) {
             rayTracer.rayTrace(alongX, kSkipFrequency, &hitData));
   Ray reflectedRay(inFrontOfModel + 5 * Vec3::kY, -Vec3::kY);
   ASSERT_EQ(reflectedRay, rayTracer.getReflected(&hitData));
-  ASSERT_TRUE(saveReachedPositions(
-      hitData,
-      "D:\\cpp_projects\\magisterkaCPP\\pythonTools\\data\\sectionsData.txt"));
+  // ASSERT_TRUE(saveReachedPositions(
+  //     hitData,
+  //     "D:\\cpp_projects\\magisterkaCPP\\pythonTools\\data\\sectionsData.txt"));
 }

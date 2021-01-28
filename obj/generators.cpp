@@ -30,7 +30,7 @@ bool PointSpeakerRayFactory::genRay(core::Ray *ray) {
   *ray = core::Ray(
       origin_,
       getDirection(currentRayIndexAlongXAxis_, currentRayIndexAlongYAxis_),
-      sourcePower_ / (numOfRaysAlongEachAxis_ * numOfRaysAlongEachAxis_);
+      sourcePower_ / (numOfRaysAlongEachAxis_ * numOfRaysAlongEachAxis_));
   updateCurrentRayIndexes();
   return true;
 }
@@ -43,13 +43,12 @@ void PointSpeakerRayFactory::checkIfClassMembersAreValid() const {
        << numOfRaysAlongEachAxis_;
     throw std::invalid_argument(ss.str());
   }
-  if (sourcePower_)
-    < 0 {
-      std::stringstream ss;
-      ss << "|sourcePower| power cannot be less then zero! \n|sourcePower|: "
-         << sourcePower_;
-      throw std::invalid_argument(ss.str());
-    }
+  if (sourcePower_ < 0) {
+    std::stringstream ss;
+    ss << "|sourcePower| power cannot be less then zero! \n|sourcePower|: "
+       << sourcePower_;
+    throw std::invalid_argument(ss.str());
+  }
 
   if (model_->empty()) {
     throw std::invalid_argument("Model cannot be Empty!");
