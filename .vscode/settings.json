@@ -85,7 +85,10 @@
   "C_Cpp.clang_format_fallbackStyle": "null",
   "todo-tree.tree.showBadges": false,
   "cSpell.words": [
+    "Offseter",
     "STREQ"
   ],
   "editor.formatOnSave": true,
+  "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, IndentWidth: 2, ColumnLimit: 80 }",
+  "editor.minimap.maxColumn": 80,
 }

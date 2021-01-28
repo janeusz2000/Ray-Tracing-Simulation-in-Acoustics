@@ -11,7 +11,7 @@ const float kAreaAccuracy = 0.0001;
 // Measured in 20'C at 1000 hPa
 const float kSoundSpeed = 343.216;
 const float kPi = std::acos(-1);
-
+const int kSimulationHeight = 8; // [m]
 } // namespace constants
 
 #endif

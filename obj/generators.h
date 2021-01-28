@@ -28,36 +28,38 @@ public:
   virtual bool genRay(core::Ray *ray) = 0;
 };
 
-// Generates rays with origin at PointSource origin
-// and direction along Z axes down, with offset on XY
-// determinated by sampleSize until numOfRay number is reached.
-// |numOfRays| must me square of the number.
-// |sourcePower| represents power of the source in [W]
+// Generates rays aimed at given model from predetermined |origin| of the
+// PointSpeakerRayFactory with genRay() method until number of generated Rays
+// equal to |numOfRaysAlongEachAxis|^2 is reached.
 class PointSpeakerRayFactory : public RayFactory {
 public:
-  PointSpeakerRayFactory(int numOfRays, float sourcePower,
+  // |numOfRaysAlongEachAxis| must be greater than 0,
+  // |sourcePower| cannot be less then 0,
+  //               represents power of the source in [W],
+  // |model| must not be empty.
+  PointSpeakerRayFactory(int numOfRaysAlongEachAxis, float sourcePower,
                          ModelInterface *model);
 
   [[nodiscard]] bool genRay(core::Ray *ray) override;
 
-  core::Vec3 origin() const { return origin_; }
-
 private:
-  core::Vec3 generateDirection() const;
+  // TODO: explain what rayIndexAtXAxis and rayIndexAtYAxis is.
+  core::Vec3 getDirection(int rayIndexAtXAxis, int rayIndexAtYAxis) const;
   bool isRayAvailable() const;
-  void checkIfMembersAreValid() const;
-  void prepareNextDirection();
+  // Checks if:
+  // |numOfRaysAlongEachAxis| is equal or less then 0,
+  // |sourcePower| less then 0,
+  // |model| is empty.
+  void checkIfClassMembersAreValid() const;
+  void updateCurrentRayIndexes();
 
   ModelInterface *model_;
   core::Vec3 origin_;
-  int numOfRays_;
+  int numOfRaysAlongEachAxis_;
   float sourcePower_;
-  // Parameters describe the mesh created from the top view of the model.
-  // [xMeshPosition, yMeshPosition] equal to [0, 0] represents lower left corner
-  // of the mesh, whereas equal to [meshPositionMaxValue, meshPositionMaxValue]
-  // represents upper right corner of the mesh.
-  core::Vec3 meshStart_;
-  int xMeshPosition_, yMeshPosition_, meshPositionMaxValue_;
+  // TODO: explain this better because this is really bad.
+  core::Vec3 targetReferenceDirection_;
+  int currentRayIndexAlongXAxis_, currentRayIndexAlongYAxis_;
 };
 
 } // namespace generators

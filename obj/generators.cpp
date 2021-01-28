@@ -2,61 +2,80 @@
 
 namespace generators {
 
-PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRays, float sourcePower,
+PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
+                                               float sourcePower,
                                                ModelInterface *model)
-    : numOfRays_(numOfRays), meshPositionMaxValue_(std::sqrt(numOfRays) - 1),
-      sourcePower_(sourcePower), model_(model), xMeshPosition_(0),
-      yMeshPosition_(0) {
+    : numOfRaysAlongEachAxis_(numOfRaysAlongEachAxis),
+      sourcePower_(sourcePower), model_(model), currentRayIndexAlongXAxis_(0),
+      currentRayIndexAlongYAxis_(0) {
 
-  checkIfMembersAreValid();
-  origin_ = 8 * model_->height() * core::Vec3::kZ;
-  meshStart_ = -1 * model_->sideSize() / 2 * (core::Vec3::kX + core::Vec3::kY) +
-               model_->height() * core::Vec3::kZ;
+  checkIfClassMembersAreValid();
+
+  // Comes from the requirements of the ISO 17497-2:2012, which says that point
+  // source must be placed at least twice as high as the microphone radius
+  // array. Because microphone radius array is equal to:
+  // |kSimulationHeight| / 2 * model.height(), we can assume:
+  origin_ = constants::kSimulationHeight * model_->height() * core::Vec3::kZ;
+
+  using core::Vec3;
+  targetReferenceDirection_ =
+      -1 * model_->sideSize() / 2 * (Vec3::kX + Vec3::kY) +
+      model_->height() * Vec3::kZ - origin_;
 };
 
 bool PointSpeakerRayFactory::genRay(core::Ray *ray) {
   if (!isRayAvailable()) {
     return false;
   }
-  *ray = core::Ray(origin_, generateDirection(), sourcePower_ / numOfRays_);
-  prepareNextDirection();
+  *ray = core::Ray(
+      origin_,
+      getDirection(currentRayIndexAlongXAxis_, currentRayIndexAlongYAxis_),
+      sourcePower_ / (numOfRaysAlongEachAxis_ * numOfRaysAlongEachAxis_);
+  updateCurrentRayIndexes();
   return true;
 }
 
-void PointSpeakerRayFactory::checkIfMembersAreValid() const {
-  if (numOfRays_ <= 0) {
+void PointSpeakerRayFactory::checkIfClassMembersAreValid() const {
+  if (numOfRaysAlongEachAxis_ <= 0) {
     std::stringstream ss;
-    ss << "|numOfRays| cannot be equal or less then zero! \n|numOfRays|: "
-       << numOfRays_;
+    ss << "|numOfRaysAlongEachAxis| cannot be equal or less then zero! "
+          "\n|numOfRaysAlongEachAxis|: "
+       << numOfRaysAlongEachAxis_;
     throw std::invalid_argument(ss.str());
   }
-  if ((meshPositionMaxValue_ + 1) * (meshPositionMaxValue_ + 1) != numOfRays_) {
-    throw std::invalid_argument(
-        "|numOfRays| must be a  square of another number");
-  }
+  if (sourcePower_)
+    < 0 {
+      std::stringstream ss;
+      ss << "|sourcePower| power cannot be less then zero! \n|sourcePower|: "
+         << sourcePower_;
+      throw std::invalid_argument(ss.str());
+    }
+
   if (model_->empty()) {
-    throw std::invalid_argument("Model Empty!");
+    throw std::invalid_argument("Model cannot be Empty!");
   }
 }
 
-core::Vec3 PointSpeakerRayFactory::generateDirection() const {
-  float u = static_cast<float>(xMeshPosition_) / meshPositionMaxValue_ *
-            model_->sideSize();
-  float v = static_cast<float>(yMeshPosition_) / meshPositionMaxValue_ *
-            model_->sideSize();
-  return meshStart_ + u * core::Vec3::kX + v * core::Vec3::kY - origin_;
+core::Vec3 PointSpeakerRayFactory::getDirection(int rayIndexAtXAxis,
+                                                int rayIndexAtYAxis) const {
+  float u = static_cast<float>(rayIndexAtXAxis) /
+            (numOfRaysAlongEachAxis_ - 1) * model_->sideSize();
+  float v = static_cast<float>(rayIndexAtYAxis) /
+            (numOfRaysAlongEachAxis_ - 1) * model_->sideSize();
+  return targetReferenceDirection_ + u * core::Vec3::kX + v * core::Vec3::kY;
 }
 
-void PointSpeakerRayFactory::prepareNextDirection() {
-  if (xMeshPosition_ == meshPositionMaxValue_) {
-    xMeshPosition_ = 0;
-    ++yMeshPosition_;
+void PointSpeakerRayFactory::updateCurrentRayIndexes() {
+  if (currentRayIndexAlongXAxis_ == numOfRaysAlongEachAxis_ - 1) {
+    currentRayIndexAlongXAxis_ = 0;
+    ++currentRayIndexAlongYAxis_;
   } else {
-    ++xMeshPosition_;
+    ++currentRayIndexAlongXAxis_;
   }
 }
 
 bool PointSpeakerRayFactory::isRayAvailable() const {
-  return (xMeshPosition_ != 0 || yMeshPosition_ != meshPositionMaxValue_ + 1);
+  return (currentRayIndexAlongXAxis_ != 0 ||
+          currentRayIndexAlongYAxis_ != numOfRaysAlongEachAxis_);
 }
 } // namespace generators
