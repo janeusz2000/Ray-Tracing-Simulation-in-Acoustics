@@ -20,7 +20,7 @@ public:
   }
 
 protected:
-  virtual float getNextAxisOffset() const = 0;
+  virtual float getNextAxisOffset() = 0;
 };
 
 class RayFactory {
@@ -45,23 +45,15 @@ public:
   core::Vec3 origin() const { return origin_; }
 
 private:
-  // TODO: explain what rayIndexAtXAxis and rayIndexAtYAxis is.
-  core::Vec3 getDirection(int rayIndexAtXAxis, int rayIndexAtYAxis) const;
+  core::Vec3 getDirection(int currentRayIndex) const;
   bool isRayAvailable() const;
-  // Checks if:
-  // |numOfRaysAlongEachAxis| is equal or less then 0,
-  // |sourcePower| less then 0,
-  // |model| is empty.
-  void checkIfClassMembersAreValid() const;
-  void updateCurrentRayIndexes();
 
   ModelInterface *model_;
   core::Vec3 origin_;
   int numOfRaysAlongEachAxis_;
-  float sourcePower_;
-  // TODO: explain this better because this is really bad.
+  int currentRayIndex_;
+  float energyPerRay_;
   core::Vec3 targetReferenceDirection_;
-  int currentRayIndexAlongXAxis_, currentRayIndexAlongYAxis_;
 };
 
 } // namespace generators

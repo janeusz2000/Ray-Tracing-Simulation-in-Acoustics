@@ -52,13 +52,11 @@ Vec3 &Vec3::operator-=(float num) {
   return *this;
 }
 
-Vec3 operator*(float num, const Vec3 &vec) {
-  return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
-}
-
 Vec3 operator*(const Vec3 &vec, float num) {
   return Vec3(vec.x() * num, vec.y() * num, vec.z() * num);
 }
+
+Vec3 operator*(float num, const Vec3 &vec) { return vec * num; }
 
 Vec3 &Vec3::operator*=(float num) {
   x_ *= num;

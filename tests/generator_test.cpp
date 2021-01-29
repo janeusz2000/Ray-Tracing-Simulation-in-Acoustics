@@ -23,21 +23,16 @@ public:
   bool empty() const override { return false; }
 };
 
-// TEST(PointSpeakerRayFactoryTest, ExceptionThrow) {
-//   FakeModel model;
-//   ASSERT_THROW(PointSpeakerRayFactory factory(10, kSkipPower, &model),
-//                std::invalid_argument);
-// }
-
 TEST(PointSpeakerRayFactoryTest, RayGenerator) {
   FakeModel model;
-  PointSpeakerRayFactory rayFactory(3, kSkipPower, &model);
-  Ray current(Vec3::kZero, Vec3::kZ);
+  int numOfRaysPerEachAxis = 3;
+  PointSpeakerRayFactory rayFactory(numOfRaysPerEachAxis, kSkipPower, &model);
 
-  Vec3 referenceDirection(0, 0, 1 - rayFactory.origin().z());
+  Ray current(Vec3::kZero, Vec3::kZ);
   ASSERT_TRUE(rayFactory.genRay(&current));
-  Ray referenceLeftLowerCorner(
-      rayFactory.origin(), referenceDirection - Vec3::kX / 2 - Vec3::kY / 2);
+  Vec3 referenceDirection(0, 0, 1 - rayFactory.origin().z());
+  Ray referenceLeftLowerCorner(rayFactory.origin(),
+                               referenceDirection - (Vec3::kX + Vec3::kY) / 2);
   ASSERT_EQ(referenceLeftLowerCorner, current);
 
   ASSERT_TRUE(rayFactory.genRay(&current));
