@@ -12,14 +12,14 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
 
   if (numOfRaysAlongEachAxis_ <= 0) {
     std::stringstream ss;
-    ss << "|numOfRaysAlongEachAxis| cannot be equal or less then zero! "
+    ss << "|numOfRaysAlongEachAxis| cannot be equal or less than zero! "
           "\n|numOfRaysAlongEachAxis|: "
        << numOfRaysAlongEachAxis_;
     throw std::invalid_argument(ss.str());
   }
   if (sourcePower < 0) {
     std::stringstream ss;
-    ss << "|sourcePower| power cannot be less then zero! \n|sourcePower|: "
+    ss << "|sourcePower| power cannot be less than zero! \n|sourcePower|: "
        << sourcePower;
     throw std::invalid_argument(ss.str());
   }
@@ -27,16 +27,15 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
     throw std::invalid_argument("Model cannot be Empty!");
   }
 
-  using core::Vec3;
   // Comes from the requirements of the ISO 17497-2:2012, which says that point
   // source must be placed at least twice as high as the microphone radius
   // array. Because microphone radius array is equal to:
   // |kSimulationHeight| / 2 * model.height(), we can assume:
-  origin_ = Vec3(0, 0, constants::kSimulationHeight * model_->height());
+  origin_ = core::Vec3(0, 0, constants::kSimulationHeight * model_->height());
 
   float sizeFactor = -0.5 * model_->sideSize();
   targetReferenceDirection_ =
-      Vec3(sizeFactor, sizeFactor, model->height()) - origin_;
+      core::Vec3(sizeFactor, sizeFactor, model->height()) - origin_;
 };
 
 bool PointSpeakerRayFactory::genRay(core::Ray *ray) {

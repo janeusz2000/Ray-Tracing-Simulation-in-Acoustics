@@ -6,8 +6,8 @@
 #include <memory>
 #include <vector>
 
-// Holds all Triangle Objects that represent model in simulation and adds
-// some utilities for it.
+// Holds all Triangle Objects that together represent model
+// and holds all shape properties.
 class ModelInterface {
 public:
   virtual ~ModelInterface(){};

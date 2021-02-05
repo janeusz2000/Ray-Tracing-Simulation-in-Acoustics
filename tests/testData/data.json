@@ -1,0 +1,93 @@
+energyCollectors = [
+      {
+         "number": 0,
+         "x": 0,
+         "y": 0,
+         "z": 4,
+         "radius": 0.697246
+      },
+      {
+         "number": 1,
+         "x": 0,
+         "y": -4,
+         "z": 0,
+         "radius": 0.697246
+      },
+      {
+         "number": 2,
+         "x": 0,
+         "y": 4,
+         "z": 0,
+         "radius": 0.697246
+      },
+      {
+         "number": 3,
+         "x": -4,
+         "y": 0,
+         "z": 0,
+         "radius": 0.697246
+      },
+      {
+         "number": 4,
+         "x": 0,
+         "y": 4,
+         "z": 0,
+         "radius": 0.697246
+      },
+      {
+         "number": 5,
+         "x": 3.93923,
+         "y": 0,
+         "z": 0.694593,
+         "radius": 0.697246
+      },
+      {
+         "number": 6,
+         "x": 0,
+         "y": -3.93923,
+         "z": 0.694593,
+         "radius": 0.697246
+      },
+      {
+         "number": 7,
+         "x": -3.93923,
+         "y": 0,
+         "z": 0.694593,
+         "radius": 0.697246
+      },
+      {
+         "number": 8,
+         "x": 0,
+         "y": 3.93923,
+         "z": 0.694593,
+         "radius": 0.697246
+      }
+   ]
+// 9 Energy Collector. Origin: Vec3(3.75877, 0, 1.36808), Radius: 0.697246
+// 10 Energy Collector. Origin: Vec3(0, -3.75877, 1.36808), Radius: 0.697246
+// 11 Energy Collector. Origin: Vec3(-3.75877, 0, 1.36808), Radius: 0.697246
+// 12 Energy Collector. Origin: Vec3(0, 3.75877, 1.36808), Radius: 0.697246
+// 13 Energy Collector. Origin: Vec3(3.4641, 0, 2), Radius: 0.697246
+// 14 Energy Collector. Origin: Vec3(0, -3.4641, 2), Radius: 0.697246
+// 15 Energy Collector. Origin: Vec3(-3.4641, 0, 2), Radius: 0.697246
+// 16 Energy Collector. Origin: Vec3(0, 3.4641, 2), Radius: 0.697246
+// 17 Energy Collector. Origin: Vec3(3.06418, 0, 2.57115), Radius: 0.697246
+// 18 Energy Collector. Origin: Vec3(0, -3.06418, 2.57115), Radius: 0.697246
+// 19 Energy Collector. Origin: Vec3(-3.06418, 0, 2.57115), Radius: 0.697246
+// 20 Energy Collector. Origin: Vec3(0, 3.06418, 2.57115), Radius: 0.697246
+// 21 Energy Collector. Origin: Vec3(2.57115, 0, 3.06418), Radius: 0.697246
+// 22 Energy Collector. Origin: Vec3(0, -2.57115, 3.06418), Radius: 0.697246
+// 23 Energy Collector. Origin: Vec3(-2.57115, 0, 3.06418), Radius: 0.697246
+// 24 Energy Collector. Origin: Vec3(0, 2.57115, 3.06418), Radius: 0.697246
+// 25 Energy Collector. Origin: Vec3(2, 0, 3.4641), Radius: 0.697246
+// 26 Energy Collector. Origin: Vec3(0, -2, 3.4641), Radius: 0.697246
+// 27 Energy Collector. Origin: Vec3(-2, 0, 3.4641), Radius: 0.697246
+// 28 Energy Collector. Origin: Vec3(0, 2, 3.4641), Radius: 0.697246
+// 29 Energy Collector. Origin: Vec3(1.36808, 0, 3.75877), Radius: 0.697246
+// 30 Energy Collector. Origin: Vec3(0, -1.36808, 3.75877), Radius: 0.697246
+// 31 Energy Collector. Origin: Vec3(-1.36808, 0, 3.75877), Radius: 0.697246
+// 32 Energy Collector. Origin: Vec3(0, 1.36808, 3.75877), Radius: 0.697246
+// 33 Energy Collector. Origin: Vec3(0.694592, 0, 3.93923), Radius: 0.697246
+// 34 Energy Collector. Origin: Vec3(0, -0.694592, 3.93923), Radius: 0.697246
+// 35 Energy Collector. Origin: Vec3(-0.694592, 0, 3.93923), Radius: 0.697246
+// 36 Energy Collector. Origin: Vec3(0, 0.694592, 3.93923), Radius: 0.697246
