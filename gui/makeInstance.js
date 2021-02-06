@@ -4,7 +4,7 @@ export function makeInstance(geometry, color, x, y, z) {
   const material =
       new THREE.MeshPhongMaterial({color, opacity : 0.5, transparent : true});
 
-  const cube = new THREE.Mesh(geometry, material);
-  cube.position.set(x, y, z);
-  return cube;
+  const object = new THREE.Mesh(geometry, material);
+  object.position.set(x, y, z);
+  return object;
 }

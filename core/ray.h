@@ -44,7 +44,7 @@ struct RayHitData {
       : RayHitData(std::numeric_limits<float>::max(), Vec3::kZ,
                    Ray(Vec3::kZero, Vec3::kZ), 1000){};
   RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
-      : time(t), ray_(ray), normal_(norm), frequency(freq){};
+      : time(t), frequency(freq), ray_(ray), normal_(norm){};
   ~RayHitData() = default;
   RayHitData(const RayHitData &) = default;
 
@@ -57,12 +57,11 @@ struct RayHitData {
   Vec3 origin() const { return ray_.origin(); }
   float energy() const { return ray_.energy(); }
   float phase() const { return ray_.phaseAt(frequency, time); }
-  float frequency, time;
+  float time, frequency;
 
 private:
-  Vec3 normal_;
-
   Ray ray_;
+  Vec3 normal_;
 };
 } // namespace core
 

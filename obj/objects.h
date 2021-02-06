@@ -79,8 +79,6 @@ public:
   void setEnergy(float en);
   float getEnergy() const;
   void addEnergy(float en);
-  void setID(int id);
-  int getID() const;
 
 private:
   float energy_;

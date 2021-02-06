@@ -1,8 +1,10 @@
 #include "constants.h"
 #include "main/simulator.h"
+#include "nlohmann/json.hpp"
 #include "gtest/gtest.h"
 
 #include <fstream>
+#include <iostream>
 
 // Checks if |TRY_BLOCK| throws right |EXCPETION_TYPE| with exception message
 // equal to const char* |MESSAGE|
@@ -26,6 +28,7 @@ using constants::kPi;
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
+using Json = nlohmann::json;
 
 float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
 
@@ -86,16 +89,28 @@ protected:
     }
   }
   // exports |energyCollectors| as string representation to |path|
-  [[nodicard]] bool exportToTxt(const Collectors &energyCollectors,
-                                std::string_view path) const {
+  bool exportToJson(const Collectors &energyCollectors,
+                    std::string_view path) const {
     std::ofstream outFile(path.data());
     if (!outFile.good()) {
       return false;
     }
-    int i = 0;
+
+    Json outArray = Json::array();
+    int currentCollectorNumber = 0;
     for (const auto &collector : energyCollectors) {
-      outFile << i++ << " " << *collector << "\n";
+      Vec3 collectorOrigin = collector->getOrigin();
+      float radius = collector->getRadius();
+      Json energyCollector = {{"number", currentCollectorNumber},
+                              {"x", collectorOrigin.x()},
+                              {"y", collectorOrigin.y()},
+                              {"z", collectorOrigin.z()},
+                              {"radius", radius}};
+      outArray.push_back(energyCollector);
+      ++currentCollectorNumber;
     }
+
+    outFile << outArray;
     outFile.close();
     return true;
   }
@@ -142,6 +157,8 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   const int numCollectors = 37;
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+  ASSERT_TRUE(exportToJson(energyCollectors,
+                           "/mnt/c/cpp/dCoeffReyTracer/energyCollectors.json"));
   ASSERT_EQ(numCollectors, energyCollectors.size());
 
   Ray straightUp(Vec3::kZero, Vec3::kZ);
@@ -198,8 +215,8 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const float refCollectorRadius = getCollectorRadius(energyCollectors);
   // this comes from the fact, two origins of neighborhood collectors and
   // collision point are creates equilateral triangle which side is equal to
-  // collector radius. Thats why collision point its just the point between two
-  // collectors origin - height of the equilateral triangle.
+  // collector radius. Thats why collision point its just the point between
+  // two collectors origin - height of the equilateral triangle.
   ASSERT_FLOAT_EQ(collectorsMaxZ - refCollectorRadius * std::sqrt(3) / 2,
                   hitData.time);
 
@@ -265,7 +282,6 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   Ray straightUp(Vec3::kZero, Vec3::kZ);
   ASSERT_TRUE(performHitCollector(energyCollectors, straightUp, &hitData));
 
-  const float collectorPositionRadius = 4;
   const float refCollectorRadius = getCollectorRadius(energyCollectors);
   float collectorsMaxZ = getMaxZ(energyCollectors);
   // See EvenNumOfEnergyCollectorTest for explanation

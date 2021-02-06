@@ -5,10 +5,10 @@ namespace generators {
 PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
                                                float sourcePower,
                                                ModelInterface *model)
-    : numOfRaysAlongEachAxis_(numOfRaysAlongEachAxis),
+    : model_(model), numOfRaysAlongEachAxis_(numOfRaysAlongEachAxis),
+      currentRayIndex_(0),
       energyPerRay_(sourcePower /
-                    (numOfRaysAlongEachAxis * numOfRaysAlongEachAxis)),
-      model_(model), currentRayIndex_(0) {
+                    (numOfRaysAlongEachAxis * numOfRaysAlongEachAxis)) {
 
   if (numOfRaysAlongEachAxis_ <= 0) {
     std::stringstream ss;
