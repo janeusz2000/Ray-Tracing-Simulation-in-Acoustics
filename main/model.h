@@ -3,8 +3,10 @@
 
 #include "obj/objects.h"
 
+#include <algorithm>
 #include <memory>
 #include <vector>
+
 
 // Holds all Triangle Objects that together represent model
 // and holds all shape properties.
@@ -20,16 +22,25 @@ public:
 
 class Model : public ModelInterface {
 public:
+  static std::unique_ptr<Model> NewLoadFromObjectFile(std::string_view path);
+  // Creates Model object that represent perfectly flat square on XY surface at
+  // Z = 0, positioned at the middle of the simulation.
+  // This model is made out of two equal-arm / rectangular Triangle Objects,
+  // where |sideSize| represents sides length at a right angle.
+  static std::unique_ptr<Model> NewReferenceModel(float sideSize);
+
+  Model(const std::vector<std::unique_ptr<objects::TriangleObj>> &triangles);
   std::vector<objects::TriangleObj *> triangles() const;
 
-  float height() const { return height_; }
-  float sideSize() const { return sideSize_; }
   bool empty() const override {
     return std::max<float>(height(), sideSize()) <= constants::kAccuracy;
   }
 
-  static std::unique_ptr<Model> NewLoadFromObjectFile(std::string_view path);
-  static std::unique_ptr<Model> NewReferenceModel(float sideSize);
+  void setHeight(const float height) { height_ = height_; }
+  float height() const { return height_; }
+
+  void setSideSize(const float sideSize) { sideSize_ = sideSize; }
+  float sideSize() const { return sideSize_; }
 
 private:
   std::vector<std::unique_ptr<objects::TriangleObj>> triangles_;
