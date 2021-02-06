@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string_view>
 
 // Checks if |TRY_BLOCK| throws right |EXCPETION_TYPE| with exception message
 // equal to const char* |MESSAGE|
@@ -91,28 +92,26 @@ protected:
   // exports |energyCollectors| as string representation to |path|
   bool exportToJson(const Collectors &energyCollectors,
                     std::string_view path) const {
-    std::ofstream outFile(path.data());
-    if (!outFile.good()) {
-      return false;
-    }
+    std::ofstream outFile("/tmp/energyCollectors.json");
+    if (outFile.good()) {
+      Json outArray = Json::array();
+      int currentCollectorNumber = 0;
+      for (const auto &collector : energyCollectors) {
+        Vec3 collectorOrigin = collector->getOrigin();
+        float radius = collector->getRadius();
+        Json energyCollector = {{"number", currentCollectorNumber},
+                                {"x", collectorOrigin.x()},
+                                {"y", collectorOrigin.y()},
+                                {"z", collectorOrigin.z()},
+                                {"radius", radius}};
+        outArray.push_back(energyCollector);
+        ++currentCollectorNumber;
+      }
 
-    Json outArray = Json::array();
-    int currentCollectorNumber = 0;
-    for (const auto &collector : energyCollectors) {
-      Vec3 collectorOrigin = collector->getOrigin();
-      float radius = collector->getRadius();
-      Json energyCollector = {{"number", currentCollectorNumber},
-                              {"x", collectorOrigin.x()},
-                              {"y", collectorOrigin.y()},
-                              {"z", collectorOrigin.z()},
-                              {"radius", radius}};
-      outArray.push_back(energyCollector);
-      ++currentCollectorNumber;
+      outFile << outArray;
+      outFile.close();
+      return true;
     }
-
-    outFile << outArray;
-    outFile.close();
-    return true;
   }
 
   float getMaxZ(const Collectors &energyCollectors) {

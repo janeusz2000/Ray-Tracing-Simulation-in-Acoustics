@@ -37,6 +37,7 @@ cc_test(
         "@github_nlohmann_json//:json",
         "@com_google_googletest//:gtest_main",
     ],
+    size = "medium",
 )
 
 cc_test(

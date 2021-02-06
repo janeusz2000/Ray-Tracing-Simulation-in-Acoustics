@@ -1,4 +1,4 @@
-import data from './data.json';
+import energyCollectors from './energyCollectors.json';
 import {hsl} from './hsl';
 import {makeInstance} from './makeInstance';
 
@@ -21,14 +21,14 @@ export function makeCollector(number, x, y, z, radius, scene) {
 }
 
 export function getEnergyCollectors() {
-  return data.map(collector => new EnergyCollector(collector));
+  return energyCollectors.map(collector => new EnergyCollector(collector));
 }
 
 export function addEnergyCollectors(scene) {
-  const energyCollectors = getEnergyCollectors();
+  const collectors = getEnergyCollectors();
 
-  energyCollectors.forEach(energyCollector => makeCollector(
-                               energyCollector.number, energyCollector.x,
-                               energyCollector.y, energyCollector.z,
-                               energyCollector.radius, scene));
+  collectors.forEach(energyCollector => makeCollector(
+                         energyCollector.number, energyCollector.x,
+                         energyCollector.y, energyCollector.z,
+                         energyCollector.radius, scene));
 }
