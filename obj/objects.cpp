@@ -158,8 +158,6 @@ std::ostream &operator<<(std::ostream &os, const TriangleObj &object) {
             << object.point2() << ", " << object.point3();
 }
 
-// METHODS
-
 core::Vec3 TriangleObj::normal(const core::Vec3 &surfacePoint) const {
   return normal_;
 }
@@ -235,9 +233,6 @@ bool TriangleObj::arePointsValid() {
     ss << "area of triangle is too small: " << area();
     throw std::invalid_argument(ss.str());
   }
-
-  core::Vec3 alpha = point1_ - point2_;
-  core::Vec3 beta = point1_ - point3_;
   return true;
 }
 
