@@ -16,7 +16,7 @@ const float kSkipPower = 0;
 
 class FakeModel : public ModelInterface {
 public:
-  std::vector<TriangleObj *> triangles() const override { return {}; }
+  const std::vector<TriangleObj> &triangles() const override { return {}; }
 
   float height() const override { return 1; }
   float sideSize() const override { return 1; }

@@ -39,7 +39,9 @@ class FakeModel : public ModelInterface {
 
 public:
   explicit FakeModel(bool empty) : empty_(empty){};
-  std::vector<objects::TriangleObj *> triangles() const override { return {}; }
+  const std::vector<objects::TriangleObj> &triangles() const override {
+    return {};
+  }
   float height() const override { return 0; }
   float sideSize() const override { return 0; }
   bool empty() const override { return empty_; }

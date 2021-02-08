@@ -18,18 +18,12 @@ const float kSkipFrequency = 1000;
 class FakeReferenceModel : public ModelInterface {
 public:
   FakeReferenceModel() {
-    triangles_.push_back(
-        std::make_unique<TriangleObj>(Vec3::kX, Vec3::kZero, Vec3::kZ));
-    triangles_.push_back(
-        std::make_unique<TriangleObj>(Vec3::kX, Vec3::kX + Vec3::kZ, Vec3::kZ));
+    triangles_.push_back(TriangleObj(Vec3::kX, Vec3::kZero, Vec3::kZ));
+    triangles_.push_back(TriangleObj(Vec3::kX, Vec3::kX + Vec3::kZ, Vec3::kZ));
   }
 
-  std::vector<TriangleObj *> triangles() const override {
-    std::vector<TriangleObj *> outputTriangles;
-    for (const auto &triangle : triangles_) {
-      outputTriangles.push_back(triangle.get());
-    }
-    return outputTriangles;
+  const std::vector<TriangleObj> &triangles() const override {
+    return triangles_;
   }
 
   float height() const override { return 0; }
@@ -37,7 +31,7 @@ public:
   bool empty() const { return triangles_.empty(); }
 
 private:
-  std::vector<std::unique_ptr<TriangleObj>> triangles_;
+  std::vector<TriangleObj> triangles_;
 };
 
 class RayTracerTest : public ::testing::Test {

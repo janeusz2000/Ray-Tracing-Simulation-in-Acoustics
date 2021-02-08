@@ -1,7 +1,5 @@
 #include "ray.h"
 
-
-
 namespace core {
 
 Ray Ray::fromSphericalCoords(const Vec3 &origin, float zRotation,

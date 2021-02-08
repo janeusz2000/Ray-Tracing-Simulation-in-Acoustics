@@ -5,8 +5,8 @@ RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
                                            core::RayHitData *hitData) {
   bool hit = false;
   core::RayHitData closestHitData;
-  for (objects::TriangleObj *triangle : model_->triangles()) {
-    if (triangle->hitObject(ray, frequency, hitData)) {
+  for (objects::TriangleObj triangle : model_->triangles()) {
+    if (triangle.hitObject(ray, frequency, hitData)) {
       hit = true;
       if (closestHitData.time > hitData->time) {
         closestHitData = *hitData;

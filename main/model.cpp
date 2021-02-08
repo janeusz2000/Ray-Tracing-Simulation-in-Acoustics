@@ -1,33 +1,18 @@
 #include "main/model.h"
 
-std::vector<objects::TriangleObj *> Model::triangles() const {
-  std::vector<objects::TriangleObj *> outputTriangles;
-  outputTriangles.reserve(triangles_.size());
-  for (const auto &triangle : triangles_) {
-    outputTriangles.push_back(triangle.get());
-  }
-  return outputTriangles;
+const std::vector<objects::TriangleObj> &Model::triangles() const {
+  return triangles_;
 }
 
-Model::Model(
-    const std::vector<std::unique_ptr<objects::TriangleObj>> &triangles)
+Model::Model(const std::vector<objects::TriangleObj> &triangles)
     : triangles_(triangles) {
 
-  // finding maximum side and maximum height that will cover whole model
+  // finding maximum side length and maximum height of the model.
   float maxSideSize = 0, maxHeight = 0;
   for (const auto &triangle : triangles_) {
 
-    float tempMaxSideSize = std::max(std::abs(triangle->getOrigin().x()),
-                                     std::abs(triangle->getOrigin().y()));
-    if (maxSideSize < tempMaxSideSize) {
-      maxSideSize = tempMaxSideSize;
-    }
-
-    float tempMaxHeight = std::abs(triangle->getOrigin().z());
-
-    if (maxHeight < tempMaxHeight) {
-      maxHeight = tempMaxHeight;
-    }
+    maxSideSize = std::max(maxSideSize, getMaxSide(triangle.getPoints()));
+    maxHeight = std::max(maxHeight, getMaxHeight(triangle.getPoints()));
   }
 
   setSideSize(maxSideSize);
@@ -40,11 +25,31 @@ std::unique_ptr<Model> Model::NewReferenceModel(float size) {
       core::Vec3(-size / 2, size / 2, 0), core::Vec3(size / 2, size / 2, 0),
       core::Vec3(size / 2, -size / 2, 0), core::Vec3(-size / 2, -size / 2, 0)};
 
-  std::vector<std::unique_ptr<objects::TriangleObj>> objects = {
-      std::make_unique<objects::TriangleObj>(
-          clockWiseOrigins[1], clockWiseOrigins[2], clockWiseOrigins[3]),
-      std::make_unique<objects::TriangleObj>(
-          clockWiseOrigins[3], clockWiseOrigins[0], clockWiseOrigins[1])};
+  std::vector<objects::TriangleObj> objects = {
+      objects::TriangleObj(clockWiseOrigins[1], clockWiseOrigins[2],
+                           clockWiseOrigins[3]),
+      objects::TriangleObj(clockWiseOrigins[3], clockWiseOrigins[0],
+                           clockWiseOrigins[1])};
 
   return std::make_unique<Model>(objects);
+}
+
+bool Model::empty() const {
+  return std::max<float>(height(), sideSize()) <= constants::kAccuracy;
+}
+
+float Model::getMaxSide(const std::vector<core::Vec3> &points) const {
+  float maxSide = 0;
+  for (const core::Vec3 &point : points) {
+    maxSide = std::max(std::abs(point.x()), std::abs(point.y()));
+  }
+  return maxSide;
+}
+
+float Model::getMaxHeight(const std::vector<core::Vec3> &points) const {
+  float maxHeight = 0;
+  for (const core::Vec3 &point : points) {
+    maxHeight = std::max(maxHeight, point.z());
+  }
+  return maxHeight;
 }

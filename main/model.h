@@ -7,13 +7,12 @@
 #include <memory>
 #include <vector>
 
-
 // Holds all Triangle Objects that together represent model
 // and holds all shape properties.
 class ModelInterface {
 public:
   virtual ~ModelInterface(){};
-  virtual std::vector<objects::TriangleObj *> triangles() const = 0;
+  virtual const std::vector<objects::TriangleObj> &triangles() const = 0;
   virtual float height() const = 0;
   virtual float sideSize() const = 0;
   // returns true if there is no object assigned to a model.
@@ -29,12 +28,10 @@ public:
   // where |sideSize| represents sides length at a right angle.
   static std::unique_ptr<Model> NewReferenceModel(float sideSize);
 
-  Model(const std::vector<std::unique_ptr<objects::TriangleObj>> &triangles);
-  std::vector<objects::TriangleObj *> triangles() const;
+  Model(const std::vector<objects::TriangleObj> &triangles);
+  const std::vector<objects::TriangleObj> &triangles() const;
 
-  bool empty() const override {
-    return std::max<float>(height(), sideSize()) <= constants::kAccuracy;
-  }
+  bool empty() const override;
 
   void setHeight(const float height) { height_ = height_; }
   float height() const { return height_; }
@@ -43,7 +40,10 @@ public:
   float sideSize() const { return sideSize_; }
 
 private:
-  std::vector<std::unique_ptr<objects::TriangleObj>> triangles_;
+  float getMaxSide(const std::vector<core::Vec3> &points) const;
+  float getMaxHeight(const std::vector<core::Vec3> &points) const;
+
+  std::vector<objects::TriangleObj> triangles_;
   float height_, sideSize_;
 };
 
