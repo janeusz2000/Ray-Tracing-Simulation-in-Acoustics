@@ -16,11 +16,17 @@ const float kSkipPower = 0;
 
 class FakeModel : public ModelInterface {
 public:
-  const std::vector<TriangleObj> &triangles() const override { return {}; }
+  FakeModel() : triangles_({}){};
+  const std::vector<TriangleObj> &triangles() const override {
+    return triangles_;
+  }
 
   float height() const override { return 1; }
   float sideSize() const override { return 1; }
   bool empty() const override { return false; }
+
+private:
+  std::vector<TriangleObj> triangles_;
 };
 
 TEST(PointSpeakerRayFactoryTest, RayGenerator) {

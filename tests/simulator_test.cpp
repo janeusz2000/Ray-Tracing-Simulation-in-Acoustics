@@ -29,6 +29,7 @@ using constants::kPi;
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
+using objects::TriangleObj;
 using Json = nlohmann::json;
 
 float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
@@ -38,15 +39,16 @@ const float kSkipFrequency = 1000;
 class FakeModel : public ModelInterface {
 
 public:
-  explicit FakeModel(bool empty) : empty_(empty){};
-  const std::vector<objects::TriangleObj> &triangles() const override {
-    return {};
+  explicit FakeModel(bool empty) : triangles_({}), empty_(empty){};
+  const std::vector<TriangleObj> &triangles() const override {
+    return triangles_;
   }
   float height() const override { return 0; }
   float sideSize() const override { return 0; }
   bool empty() const override { return empty_; }
 
 private:
+  std::vector<TriangleObj> triangles_;
   bool empty_;
 };
 
