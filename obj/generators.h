@@ -13,10 +13,9 @@ namespace generators {
 
 struct RandomRayOffseter {
 public:
-  core::Ray offsetRay(const core::Ray &ray) {
-    return core::Ray(ray.origin(),
-                     ray.direction() + core::Vec3(getNextAxisOffset(),
-                                                  getNextAxisOffset(), 0));
+  void offsetRay(core::Ray *ray) {
+    ray->setDirection(ray->direction() +
+                      core::Vec3(getNextAxisOffset(), getNextAxisOffset(), 0));
   }
 
 protected:

@@ -37,9 +37,9 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
       2 * constants::kPi / (numCollectors + numCollectorReminder - 2);
 
   // radius of the two half-circles  is equal to the 4 times the biggest
-  // dimension of the model and must be at least equal to 4.
-  float collectorSphereRadius =
-      std::max(4.0f, 4 * std::max(model.height(), model.sideSize()));
+  // dimension of the model and must be at least equal to 4, which is equal to
+  // SphereWall radius.
+  const float collectorSphereRadius = getSphereWallRadius(model);
 
   // The radius of one collector (distance between collectors) can be then
   // calculated with Law of cosines, as R *sqrt(2 - 2 *
@@ -80,10 +80,75 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   return energyCollectors;
 }
 
+const float getSphereWallRadius(const ModelInterface &model) {
+  return std::max(4.0f, 4 * std::max(model.height(), model.sideSize()));
+}
+
+// TODO: create class hierarchy for this function, to try different algorithms
+// of collection.
+void collectEnergy(
+    std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+    core::RayHitData *hitData) {
+
+  core::Vec3 reachedPosition = hitData->collisionPoint();
+  for (auto &energyCollector : collectors) {
+    if (energyCollector->isVecInside(reachedPosition)) {
+      float distanceToOrigin =
+          (energyCollector->getOrigin() - reachedPosition).magnitude();
+
+      // The closer ray hits origin of the energy Collector, the more energy
+      // energyCollector collects.
+      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
+      energyCollector->addEnergy(energyRatio * hitData->energy());
+
+      // TODO: Phase impact on the collect energy. (new class)
+    }
+  }
+}
+
 std::vector<float> Simulator::run(float frequency, int numCollectors) {
   std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
       buildCollectors(*model_, numCollectors);
-  
-  
-  return {};
+
+  objects::SphereWall sphereWall(getSphereWallRadius(*model_));
+
+  core::Ray currentRay;
+  core::RayHitData hitData;
+  while (source_->genRay(&currentRay)) {
+
+    // Ray-Trace until Rays excape the model.
+    RayTracer::TraceResult hitResult =
+        RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
+    do {
+      hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
+      currentRay = tracer_->getReflected(&hitData);
+    } while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE);
+
+    if (!sphereWall.hitObject(currentRay, frequency, &hitData)) {
+      std::stringstream ss;
+      ss << "Ray went outside of the simulation! \n"
+         << "Ray Origin: " << hitData.origin() << "\n"
+         << "Ray Direction: " << hitData.direction() << "\n"
+         << "Collision Point: " << hitData.collisionPoint() << "\n"
+         << "Sphere Wall Radius: " << sphereWall.getRadius();
+      throw std::logic_error(ss.str());
+    };
+
+    // TODO: tracking every hit position and saving it to json file, for
+    // visualization via new object
+
+    collectEnergy(collectors, &hitData);
+  }
+
+  return getEnergyFromGivenCollectors(collectors);
+}
+
+std::vector<float> Simulator::getEnergyFromGivenCollectors(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors) {
+  std::vector<float> output;
+  output.reserve(collectors.size());
+  for (auto &collector : collectors) {
+    output.push_back(collector->getEnergy());
+  }
+  return output;
 }
