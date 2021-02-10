@@ -24,6 +24,9 @@ cc_library(
         "main/simulator.h",
         "main/rayTracer.h",
     ],
+    deps  = [
+        "@github_nlohmann_json//:json",
+    ],
 )
 
 
@@ -34,7 +37,6 @@ cc_test(
     ],
     deps = [
         ":utils",
-        "@github_nlohmann_json//:json",
         "@com_google_googletest//:gtest_main",
     ],
     size = "medium",

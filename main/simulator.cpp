@@ -152,3 +152,37 @@ std::vector<float> Simulator::getEnergyFromGivenCollectors(
   }
   return output;
 }
+
+PositionTracker::PositionTracker(std::string_view path) : path_(path.data()){};
+
+void PositionTracker::initializeNewTracking() { currentTracking_.clear(); }
+void PositionTracker::addNewPositionToCurrentTracking(
+    const core::RayHitData &hitData) {
+  currentTracking_.push_back(hitData);
+}
+void PositionTracker::endCurrentTracking() {
+  trackings_.push_back(currentTracking_);
+}
+
+void PositionTracker::saveAsJson() const {
+  using Json = nlohmann::json;
+
+  Json outputJson = Json::array();
+  for (const auto &tracking : trackings_) {
+    Json trackingJson = Json::array();
+    for (const core::RayHitData &hitData : tracking) {
+      Json hitDataJson = {{"x", hitData.collisionPoint().x()},
+                          {"y", hitData.collisionPoint().y()},
+                          {"z", hitData.collisionPoint().z()},
+                          {"energy", hitData.energy()}};
+      trackingJson.push_back(hitDataJson);
+    }
+    outputJson.push_back(trackingJson);
+  }
+  std::ofstream outFile(path_ + "/trackingData.json");
+  if (!outFile.good()) {
+    throw std::invalid_argument("Invalid path to the object!");
+  }
+  outFile << outputJson;
+  outFile.close();
+}

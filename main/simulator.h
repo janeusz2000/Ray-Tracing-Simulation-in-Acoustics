@@ -3,15 +3,18 @@
 
 #include "main/rayTracer.h"
 #include "main/sceneManager.h"
+#include "nlohmann/json.hpp"
 #include "obj/generators.h"
 #include "obj/objects.h"
 
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <limits>
 #include <sstream>
 #include <string_view>
 #include <vector>
+
 
 // Constructs an array of Energy Collectors around specified model.
 // Energy Collectors are arranged in two half-circles, whose origin is
@@ -63,19 +66,24 @@ private:
   generators::RandomRayOffseter *offsetter_;
 };
 
-// Tracks all reached position by rays in the simulation and saves them to given
-// path of the json file.
+// Tracks all reached position by rays in the simulation and
+// saves them to files in the given path.
 class PositionTracker {
 public:
   PositionTracker(std::string_view path);
 
   // Initialize new tracking of the ray
-  void createNewTracking();
-
-  void addNewPositionToCurrentTracking(const core::Vec3 &position,
-                                       const float energy);
+  void initializeNewTracking();
+  void addNewPositionToCurrentTracking(const core::RayHitData &hitData);
   void endCurrentTracking();
-  void save();
+  void clearTracking();
+
+  void saveAsJson() const;
+
+private:
+  std::string path_;
+  std::vector<core::RayHitData> currentTracking_;
+  std::vector<std::vector<core::RayHitData>> trackings_;
 };
 
 #endif
