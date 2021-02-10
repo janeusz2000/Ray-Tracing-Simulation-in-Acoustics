@@ -128,9 +128,9 @@ void PositionTracker::saveAsJson() const {
   for (const auto &tracking : trackings_) {
     Json trackingJson = Json::array();
     for (const core::RayHitData &hitData : tracking) {
-      Json hitDataJson = {{"x", hitData.collisionPoint().x()},
-                          {"y", hitData.collisionPoint().y()},
-                          {"z", hitData.collisionPoint().z()},
+      Json hitDataJson = {{"x", hitData.origin().x()},
+                          {"y", hitData.origin().y()},
+                          {"z", hitData.origin().z()},
                           {"energy", hitData.energy()}};
       trackingJson.push_back(hitDataJson);
     }
