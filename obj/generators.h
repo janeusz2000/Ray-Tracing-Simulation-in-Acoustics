@@ -8,10 +8,11 @@
 
 #include <exception>
 #include <sstream>
+#include <vector>
 
 namespace generators {
 
-struct RandomRayOffseter {
+class RandomRayOffseter {
 public:
   void offsetRay(core::Ray *ray) {
     ray->setDirection(ray->direction() +
@@ -20,6 +21,11 @@ public:
 
 protected:
   virtual float getNextAxisOffset() = 0;
+};
+
+class FakeOffseter : public RandomRayOffseter {
+protected:
+  float getNextAxisOffset() override { return 0; }
 };
 
 class RayFactory {

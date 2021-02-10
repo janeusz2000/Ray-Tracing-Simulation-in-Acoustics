@@ -15,7 +15,6 @@
 #include <string_view>
 #include <vector>
 
-
 // Constructs an array of Energy Collectors around specified model.
 // Energy Collectors are arranged in two half-circles, whose origin is
 // centere on the model, oriented at the right angle to each other.
@@ -42,30 +41,6 @@ void collectEnergy(
     std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
     core::RayHitData *hitData);
 
-// Performs ray-tracing simulation on given model.
-class Simulator {
-public:
-  Simulator(RayTracer *tracer, ModelInterface *model,
-            generators::RayFactory *source,
-            generators::RandomRayOffseter *offsetter)
-      : tracer_(tracer), model_(model), source_(source),
-        offsetter_(offsetter){};
-
-  // Runs the simulation and returns vector of float that represent result
-  // energy collected by energyCollectors. Index of the float correspond with
-  // index of builded energy collector.
-  std::vector<float> run(float frequency, int numCollectors);
-
-private:
-  std::vector<float> getEnergyFromGivenCollectors(
-      const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors);
-
-  RayTracer *tracer_;
-  ModelInterface *model_;
-  generators::RayFactory *source_;
-  generators::RandomRayOffseter *offsetter_;
-};
-
 // Tracks all reached position by rays in the simulation and
 // saves them to files in the given path.
 class PositionTracker {
@@ -84,6 +59,33 @@ private:
   std::string path_;
   std::vector<core::RayHitData> currentTracking_;
   std::vector<std::vector<core::RayHitData>> trackings_;
+};
+
+// Performs ray-tracing simulation on given model.
+class Simulator {
+public:
+  Simulator(RayTracer *tracer, ModelInterface *model,
+            generators::RayFactory *source,
+            generators::RandomRayOffseter *offsetter,
+            PositionTracker *positionTracker)
+      : tracer_(tracer), model_(model), source_(source), offsetter_(offsetter),
+        positionTracker_(positionTracker){};
+
+  // Runs the simulation and returns vector of float that represent result
+  // energy collected by energyCollectors. Index of the float correspond with
+  // index of builded energy collector.
+  std::vector<float> run(float frequency, int numCollectors);
+
+private:
+  std::vector<float> getEnergyFromGivenCollectors(
+      const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors);
+
+  RayTracer *tracer_;
+  ModelInterface *model_;
+  generators::RayFactory *source_;
+  generators::RandomRayOffseter *offsetter_;
+
+  PositionTracker *positionTracker_;
 };
 
 #endif

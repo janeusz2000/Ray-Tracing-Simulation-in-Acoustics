@@ -106,55 +106,12 @@ void collectEnergy(
   }
 }
 
-std::vector<float> Simulator::run(float frequency, int numCollectors) {
-  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
-      buildCollectors(*model_, numCollectors);
-
-  objects::SphereWall sphereWall(getSphereWallRadius(*model_));
-
-  core::Ray currentRay;
-  core::RayHitData hitData;
-  while (source_->genRay(&currentRay)) {
-
-    // Ray-Trace until Rays excape the model.
-    RayTracer::TraceResult hitResult =
-        RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
-    do {
-      hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
-      currentRay = tracer_->getReflected(&hitData);
-    } while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE);
-
-    if (!sphereWall.hitObject(currentRay, frequency, &hitData)) {
-      std::stringstream ss;
-      ss << "Ray went outside of the simulation! \n"
-         << "Ray Origin: " << hitData.origin() << "\n"
-         << "Ray Direction: " << hitData.direction() << "\n"
-         << "Collision Point: " << hitData.collisionPoint() << "\n"
-         << "Sphere Wall Radius: " << sphereWall.getRadius();
-      throw std::logic_error(ss.str());
-    };
-
-    // TODO: tracking every hit position and saving it to json file, for
-    // visualization via new object
-
-    collectEnergy(collectors, &hitData);
-  }
-
-  return getEnergyFromGivenCollectors(collectors);
-}
-
-std::vector<float> Simulator::getEnergyFromGivenCollectors(
-    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors) {
-  std::vector<float> output;
-  output.reserve(collectors.size());
-  for (auto &collector : collectors) {
-    output.push_back(collector->getEnergy());
-  }
-  return output;
-}
-
 PositionTracker::PositionTracker(std::string_view path) : path_(path.data()){};
 
+void PositionTracker::clearTracking() {
+  currentTracking_.clear();
+  trackings_.clear();
+}
 void PositionTracker::initializeNewTracking() { currentTracking_.clear(); }
 void PositionTracker::addNewPositionToCurrentTracking(
     const core::RayHitData &hitData) {
@@ -181,8 +138,66 @@ void PositionTracker::saveAsJson() const {
   }
   std::ofstream outFile(path_ + "/trackingData.json");
   if (!outFile.good()) {
-    throw std::invalid_argument("Invalid path to the object!");
+    std::stringstream ss;
+    ss << "Invalid path to the object!"
+       << "\n"
+       << "path: " << path_ + "/trackingData.json";
+
+    throw std::invalid_argument(ss.str());
   }
   outFile << outputJson;
   outFile.close();
+}
+
+std::vector<float> Simulator::run(float frequency, int numCollectors) {
+  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
+      buildCollectors(*model_, numCollectors);
+
+  objects::SphereWall sphereWall(getSphereWallRadius(*model_));
+
+  core::Ray currentRay;
+  core::RayHitData hitData;
+
+  positionTracker_->clearTracking();
+  while (source_->genRay(&currentRay)) {
+
+    // Ray-Trace until Rays excape the model.
+    positionTracker_->initializeNewTracking();
+    RayTracer::TraceResult hitResult =
+        RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
+    do {
+      hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
+      currentRay = tracer_->getReflected(&hitData);
+
+      positionTracker_->addNewPositionToCurrentTracking(hitData);
+
+    } while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE);
+
+    if (!sphereWall.hitObject(currentRay, frequency, &hitData)) {
+      std::stringstream ss;
+      ss << "Ray went outside of the simulation! \n"
+         << "Ray Origin: " << hitData.origin() << "\n"
+         << "Ray Direction: " << hitData.direction() << "\n"
+         << "Collision Point: " << hitData.collisionPoint() << "\n"
+         << "Sphere Wall Radius: " << sphereWall.getRadius();
+      throw std::logic_error(ss.str());
+    };
+
+    positionTracker_->addNewPositionToCurrentTracking(hitData);
+    positionTracker_->endCurrentTracking();
+
+    collectEnergy(collectors, &hitData);
+  }
+
+  return getEnergyFromGivenCollectors(collectors);
+}
+
+std::vector<float> Simulator::getEnergyFromGivenCollectors(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors) {
+  std::vector<float> output;
+  output.reserve(collectors.size());
+  for (auto &collector : collectors) {
+    output.push_back(collector->getEnergy());
+  }
+  return output;
 }
