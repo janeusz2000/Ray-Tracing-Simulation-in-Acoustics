@@ -3,9 +3,6 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h"
 
-#include <exception>
-#include <vector>
-
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -79,4 +76,14 @@ TEST(PointSpeakerRayFactoryTest, RayGenerator) {
   ASSERT_EQ(referenceRightUpperCorner, current);
 
   ASSERT_FALSE(rayFactory.genRay(&current));
+}
+
+TEST(PointSpeakerRayFactoryTest, energyDivisionAcrossRaysTest) {
+  // FakeModel model;
+  // int numOfRaysPerEachAxis = 1;
+  // float power = 900;
+  // PointSpeakerRayFactory singleRayFactory(numOfRaysPerEachAxis, power,
+  // &model);
+
+  // Ray skipRay(singe)
 }

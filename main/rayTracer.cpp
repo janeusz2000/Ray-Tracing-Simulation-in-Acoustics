@@ -31,3 +31,5 @@ core::Ray RayTracer::getReflected(core::RayHitData *hitData) const {
 
   return core::Ray(hitData->collisionPoint(), newDirection, hitData->energy());
 }
+
+// TODO: put sphere wall here instead of simulator

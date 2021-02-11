@@ -31,6 +31,7 @@ protected:
 class RayFactory {
 public:
   virtual bool genRay(core::Ray *ray) = 0;
+  virtual core::Vec3 origin() const = 0;
 };
 
 // Generates rays aimed at given model from predetermined |origin| of the
@@ -47,7 +48,7 @@ public:
 
   [[nodiscard]] bool genRay(core::Ray *ray) override;
 
-  core::Vec3 origin() const { return origin_; }
+  core::Vec3 origin() const override { return origin_; }
 
 private:
   core::Vec3 getDirection(int currentRayIndex) const;

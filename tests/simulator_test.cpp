@@ -59,7 +59,6 @@ protected:
   // performs ray hit at at given energy collectors, |hitData| is modified to
   // hold information where ray hit energyCollector. Returns true if hit
   // occurred, false when there was no hit
-
   [[nodiscard]] bool performHitCollector(const Collectors &energyCollectors,
                                          const Ray &ray, RayHitData *hitData) {
     bool hit = false;

@@ -19,7 +19,7 @@ Model::Model(const std::vector<objects::TriangleObj> &triangles)
   setHeight(maxHeight);
 }
 
-std::unique_ptr<Model> Model::NewReferenceModel(float size) {
+Model Model::NewReferenceModel(float size) {
 
   std::vector<core::Vec3> clockWiseOrigins = {
       core::Vec3(-size / 2, size / 2, 0), core::Vec3(size / 2, size / 2, 0),
@@ -31,7 +31,7 @@ std::unique_ptr<Model> Model::NewReferenceModel(float size) {
       objects::TriangleObj(clockWiseOrigins[3], clockWiseOrigins[0],
                            clockWiseOrigins[1])};
 
-  return std::make_unique<Model>(objects);
+  return Model(objects);
 }
 
 bool Model::empty() const {

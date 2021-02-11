@@ -21,7 +21,8 @@ cc_library(
         "obj/objects.cpp",
         "main/model.cpp",
         "main/simulator.cpp",
-        "main/rayTracer.cpp"
+        "main/rayTracer.cpp",
+        "main/positionTracker.cpp",
     ],
     hdrs = [
         "constants.h",
@@ -33,6 +34,7 @@ cc_library(
         "main/model.h",
         "main/simulator.h",
         "main/rayTracer.h",
+        "main/positionTracker.h"
     ],
     deps  = [
         "@github_nlohmann_json//:json",
@@ -69,6 +71,17 @@ cc_test(
     name = "sphereCollision_test",
     srcs = [
         "tests/sphere_test.cpp",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ]
+)
+
+cc_test(
+    name = "main_test",
+    srcs = [
+        "tests/main_test.cpp",
     ],
     deps = [
         ":utils",

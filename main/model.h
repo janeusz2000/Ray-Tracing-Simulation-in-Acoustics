@@ -21,12 +21,12 @@ public:
 
 class Model : public ModelInterface {
 public:
-  static std::unique_ptr<Model> NewLoadFromObjectFile(std::string_view path);
+  static Model NewLoadFromObjectFile(std::string_view path);
   // Creates Model object that represent perfectly flat square on XY surface at
   // Z = 0, positioned at the middle of the simulation.
   // This model is made out of two equal-arm / rectangular Triangle Objects,
   // where |sideSize| represents sides length at a right angle.
-  static std::unique_ptr<Model> NewReferenceModel(float sideSize);
+  static Model NewReferenceModel(float sideSize);
 
   Model(const std::vector<objects::TriangleObj> &triangles);
   const std::vector<objects::TriangleObj> &triangles() const;

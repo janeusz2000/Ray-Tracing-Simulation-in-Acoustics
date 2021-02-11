@@ -31,7 +31,10 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
   // source must be placed at least twice as high as the microphone radius
   // array. Because microphone radius array is equal to:
   // |kSimulationHeight| / 2 * model.height(), we can assume:
-  origin_ = core::Vec3(0, 0, constants::kSimulationHeight * model_->height());
+  origin_ =
+      core::Vec3(0, 0,
+                 std::max(static_cast<float>(constants::kSimulationHeight),
+                          constants::kSimulationHeight * model_->height()));
 
   float sizeFactor = -0.5 * model_->sideSize();
   targetReferenceDirection_ =
@@ -47,6 +50,10 @@ bool PointSpeakerRayFactory::genRay(core::Ray *ray) {
   return true;
 }
 core::Vec3 PointSpeakerRayFactory::getDirection(int currentRayIndex) const {
+  if (numOfRaysAlongEachAxis_ == 1) {
+    return -core::Vec3::kZ;
+  }
+
   int xIndex = currentRayIndex % numOfRaysAlongEachAxis_;
   int yIndex = currentRayIndex / numOfRaysAlongEachAxis_;
 

@@ -12,15 +12,15 @@ int main() {
   float frequency = 1e3;
 
   int numOfCollectors = 37;
-  int numOrFaysAlongEachAxis = 1e3;
+  int numOfRaysAlongEachAxis = 9;
 
-  std::unique_ptr<Model> model = Model::NewReferenceModel(modelSize);
-  RayTracer rayTracer(model.get());
+  Model model = Model::NewReferenceModel(modelSize);
+  RayTracer rayTracer(&model);
   PositionTracker positionTracker("./data");
-  generators::PointSpeakerRayFactory pointSpeaker(numOrFaysAlongEachAxis,
-                                                  sourcePower, model.get());
+  generators::PointSpeakerRayFactory pointSpeaker(numOfRaysAlongEachAxis,
+                                                  sourcePower, &model);
   generators::FakeOffseter rayOffseter;
-  Simulator simulator(&rayTracer, model.get(), &pointSpeaker, &rayOffseter,
+  Simulator simulator(&rayTracer, &model, &pointSpeaker, &rayOffseter,
                       &positionTracker);
 
   std::vector<float> energies = simulator.run(frequency, numOfCollectors);
