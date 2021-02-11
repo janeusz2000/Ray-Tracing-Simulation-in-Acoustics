@@ -1,4 +1,4 @@
-import {addEnergyCollectors, addModel} from './addObjects';
+import {addEnergyCollectors, addModel, getTracking} from './addObjects';
 import {animate} from './animate';
 import {prepareScene} from './prepareScene';
 
@@ -13,4 +13,5 @@ var controls = new OrbitControls(camera, renderer.domElement);
 prepareScene(scene, renderer, camera, controls);
 addEnergyCollectors(scene);
 addModel(scene);
+getTracking(scene);
 animate(scene, renderer, camera, controls);

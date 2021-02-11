@@ -66,16 +66,20 @@ void PositionTracker::saveAsJson() const {
         first = false;
         continue;
       }
-      Json hitDataJson = {{"start",
-                           {{"x", hitData.origin().x()},
-                            {"y", hitData.origin().y()},
-                            {"z", hitData.origin().z()},
-                            {"energy", hitData.energy()}}},
-                          {"end",
-                           {{"x", hitData.collisionPoint().x()},
-                            {"y", hitData.collisionPoint().y()},
-                            {"z", hitData.collisionPoint().z()},
-                            {"energy", hitData.energy()}}}};
+      Json hitDataJson = {
+          {"origin",
+           {{"x", hitData.origin().x()},
+            {"y", hitData.origin().y()},
+            {"z", hitData.origin().z()}}},
+          {"direction",
+           {
+               {"x", hitData.direction().x()},
+               {"y", hitData.direction().y()},
+               {"z", hitData.direction().z()},
+           }},
+          {"energy", hitData.energy()},
+          {"length",
+           (hitData.origin() - hitData.collisionPoint()).magnitude()}};
       trackingJson.push_back(hitDataJson);
     }
     outputJson.push_back(trackingJson);

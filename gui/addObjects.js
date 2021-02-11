@@ -1,4 +1,5 @@
 import model from '../data/model.json';
+import trackingData from '../data/trackingData.json';
 
 import energyCollectors from './energyCollectors.json';
 import {hsl} from './hsl';
@@ -77,4 +78,32 @@ export function addEnergyCollectors(scene) {
                          energyCollector.number, energyCollector.x,
                          energyCollector.y, energyCollector.z,
                          energyCollector.radius, scene));
+}
+
+export function getRandomColorAttribute() {
+  const color = new THREE.Color(0xffffff);
+  color.setHex(Math.random() * 0xffffff);
+  return color;
+}
+
+export function getTracking(scene) {
+  for (var index = 0; index < trackingData.length; index++) {
+    const color = getRandomColorAttribute();
+
+    var currentTracking = trackingData[index];
+    for (var rayTrackIndex = 0; rayTrackIndex < currentTracking.length;
+         rayTrackIndex++) {
+
+      const currentRay = currentTracking[rayTrackIndex];
+
+      const direction =
+          new THREE.Vector3(currentRay.direction.x, currentRay.direction.z,
+                            currentRay.direction.y);
+      const origin = new THREE.Vector3(currentRay.origin.x, currentRay.origin.z,
+                                       currentRay.origin.y);
+      const length = currentRay.length;
+      const arrow = new THREE.ArrowHelper(direction, origin, length, color);
+      scene.add(arrow);
+    }
+  }
 }
