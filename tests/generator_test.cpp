@@ -3,6 +3,7 @@
 #include "obj/objects.h"
 #include "gtest/gtest.h"
 
+using constants::kSimulationHeight;
 using core::Ray;
 using core::RayHitData;
 using core::Vec3;
@@ -26,7 +27,22 @@ private:
   std::vector<TriangleObj> triangles_;
 };
 
-TEST(PointSpeakerRayFactoryTest, RayGenerator) {
+TEST(PointSpeakerRayFactoryTest, SingleRayTest) {
+  FakeModel model;
+  int numOfRaysPerEachAxis = 1;
+  float power = 900;
+  PointSpeakerRayFactory singleRayFactory(numOfRaysPerEachAxis, power, &model);
+
+  Ray ray;
+  ASSERT_TRUE(singleRayFactory.genRay(&ray));
+
+  Ray referenceRay(Vec3(0, 0, kSimulationHeight), -Vec3::kZ, power);
+  ASSERT_EQ(ray, referenceRay);
+
+  ASSERT_FALSE(singleRayFactory.genRay(&ray));
+}
+
+TEST(PointSpeakerRayFactoryTest, RayDistributionAtModelTest) {
   FakeModel model;
   int numOfRaysPerEachAxis = 3;
   PointSpeakerRayFactory rayFactory(numOfRaysPerEachAxis, kSkipPower, &model);
@@ -76,14 +92,4 @@ TEST(PointSpeakerRayFactoryTest, RayGenerator) {
   ASSERT_EQ(referenceRightUpperCorner, current);
 
   ASSERT_FALSE(rayFactory.genRay(&current));
-}
-
-TEST(PointSpeakerRayFactoryTest, energyDivisionAcrossRaysTest) {
-  // FakeModel model;
-  // int numOfRaysPerEachAxis = 1;
-  // float power = 900;
-  // PointSpeakerRayFactory singleRayFactory(numOfRaysPerEachAxis, power,
-  // &model);
-
-  // Ray skipRay(singe)
 }
