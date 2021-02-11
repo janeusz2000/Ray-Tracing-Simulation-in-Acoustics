@@ -117,7 +117,6 @@ std::vector<float> Simulator::run(float frequency, int numCollectors) {
   core::RayHitData hitData;
 
   while (source_->genRay(&currentRay)) {
-    std::cout << "Current Ray: " << currentRay << std::endl;
 
     // Ray-Trace until Rays excape the model.
     positionTracker_->initializeNewTracking();

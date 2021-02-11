@@ -21,7 +21,12 @@ void PositionTracker::saveAsJson() const {
   Json outputJson = Json::array();
   for (const auto &tracking : trackings_) {
     Json trackingJson = Json::array();
+    bool first = true;
     for (const core::RayHitData &hitData : tracking) {
+      if (first) { // ! TODO: this is bad. Fix it! 3;)
+        first = false;
+        continue;
+      }
       Json hitDataJson = {{"start",
                            {{"x", hitData.origin().x()},
                             {"y", hitData.origin().y()},
@@ -45,6 +50,6 @@ void PositionTracker::saveAsJson() const {
 
     throw std::invalid_argument(ss.str());
   }
-  outFile << outputJson.dump(2);
+  outFile << outputJson.dump(1);
   outFile.close();
 }
