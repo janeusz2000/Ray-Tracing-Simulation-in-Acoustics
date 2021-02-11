@@ -8,7 +8,6 @@
 #include "obj/generators.h"
 #include "obj/objects.h"
 
-
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -49,7 +48,7 @@ public:
   Simulator(RayTracer *tracer, ModelInterface *model,
             generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter,
-            PositionTracker *positionTracker)
+            trackers::PositionTracker *positionTracker)
       : tracer_(tracer), model_(model), source_(source), offsetter_(offsetter),
         positionTracker_(positionTracker){};
 
@@ -67,7 +66,7 @@ private:
   generators::RayFactory *source_;
   generators::RandomRayOffseter *offsetter_;
 
-  PositionTracker *positionTracker_;
+  trackers::PositionTracker *positionTracker_;
 };
 
 #endif

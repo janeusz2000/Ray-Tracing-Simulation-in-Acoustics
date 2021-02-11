@@ -15,8 +15,10 @@ int main() {
   int numOfRaysAlongEachAxis = 9;
 
   Model model = Model::NewReferenceModel(modelSize);
+  trackers::saveModelToJson("./data", &model);
+
   RayTracer rayTracer(&model);
-  PositionTracker positionTracker("./data");
+  trackers::PositionTracker positionTracker("./data");
   generators::PointSpeakerRayFactory pointSpeaker(numOfRaysAlongEachAxis,
                                                   sourcePower, &model);
   generators::FakeOffseter rayOffseter;

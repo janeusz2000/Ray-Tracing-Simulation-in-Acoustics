@@ -14,7 +14,10 @@ class MainTest : public ::testing::Test {
 public:
   MainTest()
       : sourcePower_(500), frequency_(1e3), numOfCollectors_(37),
-        numOfRayAlongEachAxis_(1), model_(Model::NewReferenceModel(1.0)){};
+        numOfRayAlongEachAxis_(1), model_(Model::NewReferenceModel(1.0)) {
+
+    trackers::saveModelToJson("/tmp", &model_);
+  }
 
 protected:
   float sourcePower_;
@@ -27,7 +30,7 @@ protected:
 TEST_F(MainTest, buildingSimulation) {
 
   RayTracer rayTracer(&model_);
-  PositionTracker positionTracker("/tmp");
+  trackers::PositionTracker positionTracker("/tmp");
   PointSpeakerRayFactory pointSpeaker(numOfRayAlongEachAxis_, sourcePower_,
                                       &model_);
 
