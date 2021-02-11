@@ -102,7 +102,10 @@ export function getTracking(scene) {
       const origin = new THREE.Vector3(currentRay.origin.x, currentRay.origin.z,
                                        currentRay.origin.y);
       const length = currentRay.length;
-      const arrow = new THREE.ArrowHelper(direction, origin, length, color);
+      const energy = currentRay.energy;
+      const arrowSize = energy * trackingData.length / 5000;
+      const arrow = new THREE.ArrowHelper(direction, origin, length, color,
+                                          arrowSize, arrowSize / 2);
       scene.add(arrow);
     }
   }

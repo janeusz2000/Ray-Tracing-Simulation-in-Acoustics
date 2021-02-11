@@ -36,7 +36,7 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
                  std::max(static_cast<float>(constants::kSimulationHeight),
                           constants::kSimulationHeight * model_->height()));
 
-  float sizeFactor = -0.5 * model_->sideSize();
+  float sizeFactor = -model_->sideSize();
   targetReferenceDirection_ =
       core::Vec3(sizeFactor, sizeFactor, model->height()) - origin_;
 };
@@ -57,9 +57,9 @@ core::Vec3 PointSpeakerRayFactory::getDirection(int currentRayIndex) const {
   int xIndex = currentRayIndex % numOfRaysAlongEachAxis_;
   int yIndex = currentRayIndex / numOfRaysAlongEachAxis_;
 
-  float u = static_cast<float>(xIndex) / (numOfRaysAlongEachAxis_ - 1) *
+  float u = 2 * static_cast<float>(xIndex) / (numOfRaysAlongEachAxis_ - 1) *
             model_->sideSize();
-  float v = static_cast<float>(yIndex) / (numOfRaysAlongEachAxis_ - 1) *
+  float v = 2 * static_cast<float>(yIndex) / (numOfRaysAlongEachAxis_ - 1) *
             model_->sideSize();
 
   return targetReferenceDirection_ + core::Vec3(u, v, 0);
