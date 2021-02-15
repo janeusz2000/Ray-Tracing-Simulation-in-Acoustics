@@ -24,6 +24,8 @@ Model Model::NewLoadFromObjectFile(std::string_view path) {
   // TODO: delete triangle if area is to small
   // TODO: check if path of the file is good
   // TODO: check why objects are turned
+  // TODO: check when first element is v or f if data is good
+  // TODO: find out why only few of the triangles are being imported.
 
   std::vector<core::Vec3> points;
   std::vector<objects::TriangleObj> triangles;
