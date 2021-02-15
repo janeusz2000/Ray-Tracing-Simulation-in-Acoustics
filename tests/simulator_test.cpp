@@ -159,8 +159,6 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
   const int numCollectors = 37;
   auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
-  ASSERT_TRUE(exportToJson(energyCollectors,
-                           "/mnt/c/cpp/dCoeffReyTracer/energyCollectors.json"));
   ASSERT_EQ(numCollectors, energyCollectors.size());
 
   Ray straightUp(Vec3::kZero, Vec3::kZ);
