@@ -19,6 +19,47 @@ Model::Model(const std::vector<objects::TriangleObj> &triangles)
   setHeight(maxHeight);
 }
 
+Model Model::NewLoadFromObjectFile(std::string_view path) {
+  std::vector<core::Vec3> points;
+  std::vector<objects::TriangleObj> triangles;
+  std::ifstream objFile;
+  objFile.open(path.data());
+
+  for (std::string line; std::getline(objFile, line);) {
+    std::stringstream ss(line);
+    std::istream_iterator<std::string> begin(ss);
+    std::istream_iterator<std::string> end;
+    std::vector<std::string> stringWords(begin, end);
+
+    if (stringWords[0] == "v") {
+
+      float x = std::stof(stringWords[1]);
+      float y = std::stof(stringWords[2]);
+      float z = std::stof(stringWords[3]);
+      points.push_back(core::Vec3(x, y, z));
+
+    } else if (stringWords[0] == "f") {
+      std::vector<int> facePoints;
+      for (size_t wordIndex = 1; wordIndex < stringWords.size(); ++wordIndex) {
+
+        size_t found = stringWords[wordIndex].find("/");
+        if (found != std::string::npos) {
+          facePoints.push_back(
+              std::stoi(stringWords[wordIndex].substr(0, found)) - 1);
+        } else {
+          facePoints.push_back(std::stoi(stringWords[wordIndex]) - 1);
+        }
+      }
+      core::Vec3 point1 = points[facePoints[0]];
+      core::Vec3 point2 = points[facePoints[1]];
+      core::Vec3 point3 = points[facePoints[2]];
+
+      triangles.push_back(objects::TriangleObj(point1, point2, point3));
+    }
+  }
+  return Model(triangles);
+}
+
 Model Model::NewReferenceModel(float size) {
 
   std::vector<core::Vec3> clockWiseOrigins = {

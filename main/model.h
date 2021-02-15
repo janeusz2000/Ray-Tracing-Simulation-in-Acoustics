@@ -4,7 +4,12 @@
 #include "obj/objects.h"
 
 #include <algorithm>
+#include <fstream>
+#include <iterator>
 #include <memory>
+#include <sstream>
+#include <string>
+#include <string_view>
 #include <vector>
 
 // Holds all Triangle Objects that together represent model

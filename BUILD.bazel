@@ -11,6 +11,16 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "build.v1.1",
+    srcs = [
+        "ApplicationBuild/build.v1.1.cpp",
+    ],
+    deps = [
+        ":utils",
+    ],
+)
+
 cc_library(
     name = "utils",
     srcs = [
@@ -52,6 +62,18 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
     size = "medium",
+)
+
+cc_test(
+    name = "learningObjFile_test",
+    srcs = [
+        "tests/readingObjFiles_test.cpp",
+    ],
+
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
 )
 
 cc_test(
