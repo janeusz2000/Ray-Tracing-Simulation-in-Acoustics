@@ -20,6 +20,11 @@ Model::Model(const std::vector<objects::TriangleObj> &triangles)
 }
 
 Model Model::NewLoadFromObjectFile(std::string_view path) {
+
+  // TODO: delete triangle if area is to small
+  // TODO: check if path of the file is good
+  // TODO: check why objects are turned
+
   std::vector<core::Vec3> points;
   std::vector<objects::TriangleObj> triangles;
   std::ifstream objFile;
