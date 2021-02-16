@@ -1,7 +1,7 @@
 # **Acoustic Diffusion Coefficient Simulation via Ray-Tracing**
 *by Mateusz Janik*
 
-'''python
+'''
 if True:
    continue
 '''
