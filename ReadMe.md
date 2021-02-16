@@ -1,12 +1,9 @@
 # **Acoustic Diffusion Coefficient Simulation via Ray-Tracing**
 *by Mateusz Janik*
 
-'''
-if True:
-   continue
-'''
-
-
+```diff
+! Under Development
+```
 
 <p align="center">
 <img src="githubContent/demo.gif" alt="animated" />
