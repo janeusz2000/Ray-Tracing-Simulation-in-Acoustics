@@ -21,18 +21,23 @@ Model::Model(const std::vector<objects::TriangleObj> &triangles)
 
 Model Model::NewLoadFromObjectFile(std::string_view path) {
 
-  // TODO: delete triangle if area is to small
-  // TODO: check if path of the file is good
-  // TODO: check why objects are turned
-  // TODO: check when first element is v or f if data is good
   // TODO: find out why only few of the triangles are being imported.
 
   std::vector<core::Vec3> points;
   std::vector<objects::TriangleObj> triangles;
   std::ifstream objFile;
-  objFile.open(path.data());
 
-  for (std::string line; std::getline(objFile, line);) {
+  // Check if file exist at given path
+  objFile.open(path.data());
+  if (!objFile.good()) {
+    std::stringstream errorStream;
+    errorStream << "Invalid path of the .obj \n"
+                << "Path: " << path.data();
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  int lineNumber = 1;
+  for (std::string line; std::getline(objFile, line); ++lineNumber) {
     std::stringstream ss(line);
     std::istream_iterator<std::string> begin(ss);
     std::istream_iterator<std::string> end;
@@ -40,9 +45,16 @@ Model Model::NewLoadFromObjectFile(std::string_view path) {
 
     if (stringWords[0] == "v") {
 
+      // Checks if point declaration is valid
+      if (stringWords.size() != 4) {
+        std::stringstream errorString;
+        errorString << "Invalid point declaration in object file at:\n"
+                    << "line: " << lineNumber;
+      }
+
       float x = std::stof(stringWords[1]);
-      float y = std::stof(stringWords[2]);
-      float z = std::stof(stringWords[3]);
+      float z = std::stof(stringWords[2]);
+      float y = std::stof(stringWords[3]);
       points.push_back(core::Vec3(x, y, z));
 
     } else if (stringWords[0] == "f") {
@@ -57,11 +69,32 @@ Model Model::NewLoadFromObjectFile(std::string_view path) {
           facePoints.push_back(std::stoi(stringWords[wordIndex]) - 1);
         }
       }
+
+      // Check if current line in .obj contains triangle
+      if (facePoints.size() > 3) {
+        std::stringstream errorStringStream;
+        errorStringStream << "Objects must consit of triangles only! \n"
+                          << "line: " << lineNumber << ", in: " << path.data()
+                          << "\n"
+                          << "Acquired points: \n[";
+        for (const auto &str : facePoints) {
+          errorStringStream << str << ", ";
+        }
+        throw std::invalid_argument(errorStringStream.str());
+      }
+
       core::Vec3 point1 = points[facePoints[0]];
       core::Vec3 point2 = points[facePoints[1]];
       core::Vec3 point3 = points[facePoints[2]];
 
-      triangles.push_back(objects::TriangleObj(point1, point2, point3));
+      try {
+        objects::TriangleObj triangle(point1, point2, point3);
+        triangles.push_back(objects::TriangleObj(point1, point2, point3));
+      } catch (const std::exception &e) {
+        std::cout << "WARNING! \n"
+                  << e.what() << "\n"
+                  << "It wont be included in simulation" << std::endl;
+      }
     }
   }
   return Model(triangles);
