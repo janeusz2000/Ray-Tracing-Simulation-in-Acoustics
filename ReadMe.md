@@ -29,13 +29,13 @@ positions, which are arranged uniformly on the circumference's (as you can see o
 To use this project, you will need to follow few steps.
 
 1. Make sure you have installed:
-- ![Bazel](https://bazel.build/)
-- ![NPM](https://www.npmjs.com/)
-- ![Webpack](https://webpack.js.org/)
-- ![ThreeJS](https://threejs.org/)
+- [Bazel](https://bazel.build/)
+- [NPM](https://www.npmjs.com/)
+- [Webpack](https://webpack.js.org/)
+- [ThreeJS](https://threejs.org/)
 
 2. Check if your model consist only triangles. If not, you can download
-![Blender](https://www.blender.org/) and triangulate your model. Also make sure that model
+[Blender](https://www.blender.org/) and triangulate your model. Also make sure that model
 is aligned at the center (0, 0, 0).
 
 3. Run local server with opened *./gui/index.html* in your browser.
