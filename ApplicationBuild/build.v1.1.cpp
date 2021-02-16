@@ -13,7 +13,7 @@ int main() {
   float frequency = 1e3;
 
   int numOfCollectors = 37;
-  int numOfRaysAlongEachAxis = 9;
+  int numOfRaysAlongEachAxis = 15;
 
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path);
   trackers::saveModelToJson("./data", model.get());
@@ -25,6 +25,12 @@ int main() {
   generators::FakeOffseter rayOffseter;
   Simulator simulator(&rayTracer, model.get(), &pointSpeaker, &rayOffseter,
                       &positionTracker);
+
+  // TODO: we build collector two times: change architecture to be able to build
+  // it only once.
+  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
+      buildCollectors(model.get(), numOfCollectors);
+  exportCollectorsToJson(collectors, "./data/energyCollectors.json");
 
   std::vector<float> energies = simulator.run(frequency, numOfCollectors);
   positionTracker.saveAsJson();

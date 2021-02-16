@@ -31,10 +31,17 @@
 // Throws std::invalid_argument when |numCollectors| < 4 or when |numCollectors|
 // or |numCollectors|-1 is not divisible by 4.
 std::vector<std::unique_ptr<objects::EnergyCollector>>
-buildCollectors(const ModelInterface &model, int numCollectors);
+buildCollectors(const ModelInterface *model, int numCollectors);
 
-// Calculates maximum radius of the sphere that limits size of the simulation
-// Rays cannot reach any position outside of the SphereWall object.
+// Saves positions of the energyCollectors to the Json file at given path.
+void exportCollectorsToJson(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>>
+        &energyCollectors,
+    std::string_view path);
+
+// Calculates maximum radius of the sphere that limits size of the
+// simulation Rays cannot reach any position outside of the SphereWall
+// object.
 const float getSphereWallRadius(const ModelInterface &model);
 
 // Adds energy to the right collector if position hit occurred inside it.

@@ -1,9 +1,9 @@
 #include "main/simulator.h"
 
 std::vector<std::unique_ptr<objects::EnergyCollector>>
-buildCollectors(const ModelInterface &model, int numCollectors) {
+buildCollectors(const ModelInterface *model, int numCollectors) {
 
-  if (model.empty()) {
+  if (model->empty()) {
     throw std::invalid_argument("Empty model");
   }
   if (numCollectors < 4) {
@@ -39,7 +39,7 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   // radius of the two half-circles  is equal to the 4 times the biggest
   // dimension of the model and must be at least equal to 4, which is equal to
   // SphereWall radius.
-  const float collectorSphereRadius = getSphereWallRadius(model);
+  const float collectorSphereRadius = getSphereWallRadius(*model);
 
   // The radius of one collector (distance between collectors) can be then
   // calculated with Law of cosines, as R *sqrt(2 - 2 *
@@ -80,6 +80,38 @@ buildCollectors(const ModelInterface &model, int numCollectors) {
   return energyCollectors;
 }
 
+// exports |energyCollectors| as string representation to |path|
+void exportCollectorsToJson(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>>
+        &energyCollectors,
+    std::string_view path) {
+
+  std::ofstream outFile(path.data());
+  if (!outFile.good()) {
+    std::stringstream errorStream;
+    errorStream << "File at path: " << path.data() << ", doesn't exist!";
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  using Json = nlohmann::json;
+  Json outArray = Json::array();
+  int currentCollectorNumber = 0;
+  for (const auto &collector : energyCollectors) {
+    core::Vec3 collectorOrigin = collector->getOrigin();
+    float radius = collector->getRadius();
+    Json energyCollector = {{"number", currentCollectorNumber},
+                            {"x", collectorOrigin.x()},
+                            {"y", collectorOrigin.y()},
+                            {"z", collectorOrigin.z()},
+                            {"radius", radius}};
+    outArray.push_back(energyCollector);
+    ++currentCollectorNumber;
+  }
+
+  outFile << outArray.dump(1);
+  outFile.close();
+}
+
 const float getSphereWallRadius(const ModelInterface &model) {
   return std::max(constants::kSimulationHeight / 2.0f,
                   4 * std::max(model.height(), model.sideSize()));
@@ -109,7 +141,7 @@ void collectEnergy(
 
 std::vector<float> Simulator::run(float frequency, int numCollectors) {
   std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
-      buildCollectors(*model_, numCollectors);
+      buildCollectors(model_, numCollectors);
 
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
@@ -130,18 +162,10 @@ std::vector<float> Simulator::run(float frequency, int numCollectors) {
 
     } while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE);
 
-    if (!sphereWall.hitObject(currentRay, frequency, &hitData)) {
-      std::stringstream ss;
-      ss << "Ray went outside of the simulation! \n"
-         << "Ray Origin: " << hitData.origin() << "\n"
-         << "Ray Direction: " << hitData.direction() << "\n"
-         << "Collision Point: " << hitData.collisionPoint() << "\n"
-         << "Sphere Wall Radius: " << sphereWall.getRadius();
-      throw std::logic_error(ss.str());
-    };
-
-    positionTracker_->addNewPositionToCurrentTracking(hitData);
-    positionTracker_->endCurrentTracking();
+    if (sphereWall.hitObject(currentRay, frequency, &hitData)) {
+      positionTracker_->addNewPositionToCurrentTracking(hitData);
+      positionTracker_->endCurrentTracking();
+    }
 
     collectEnergy(collectors, &hitData);
   }

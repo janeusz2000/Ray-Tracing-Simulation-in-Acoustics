@@ -13,7 +13,7 @@ export function prepareScene(scene, renderer, camera, controls) {
   controls.dampingFactor = 0.01;
   controls.screenSpacePanning = false;
   controls.minDistance = 1;
-  controls.maxDistance = 20;
+  controls.maxDistance = 40;
   controls.rotateSpeed = 0.01;
   controls.maxPolarAngle = Math.PI / 2;
 

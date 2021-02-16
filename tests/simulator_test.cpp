@@ -92,30 +92,6 @@ protected:
       std::cout << i++ << " " << *collector << std::endl;
     }
   }
-  // exports |energyCollectors| as string representation to |path|
-  bool exportToJson(const Collectors &energyCollectors,
-                    std::string_view path) const {
-    std::ofstream outFile("/tmp/energyCollectors.json");
-    if (outFile.good()) {
-      Json outArray = Json::array();
-      int currentCollectorNumber = 0;
-      for (const auto &collector : energyCollectors) {
-        Vec3 collectorOrigin = collector->getOrigin();
-        float radius = collector->getRadius();
-        Json energyCollector = {{"number", currentCollectorNumber},
-                                {"x", collectorOrigin.x()},
-                                {"y", collectorOrigin.y()},
-                                {"z", collectorOrigin.z()},
-                                {"radius", radius}};
-        outArray.push_back(energyCollector);
-        ++currentCollectorNumber;
-      }
-
-      outFile << outArray;
-      outFile.close();
-      return true;
-    }
-  }
 
   float getMaxZ(const Collectors &energyCollectors) {
 
@@ -140,25 +116,26 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   const FakeModel nonEmptyModel(false);
 
   ASSERT_EXCEPTION_MSG(
-      buildCollectors(nonEmptyModel, 38), std::invalid_argument,
+      buildCollectors(&nonEmptyModel, 38), std::invalid_argument,
       "numCollectors or numCollectors-1 has to be divisible by 4, got "
       "numCollectors = 38");
 
-  ASSERT_EXCEPTION_MSG(buildCollectors(nonEmptyModel, 3), std::invalid_argument,
+  ASSERT_EXCEPTION_MSG(buildCollectors(&nonEmptyModel, 3),
+                       std::invalid_argument,
                        "numCollectors: 3 is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
-  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 37));
+  EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, 37));
 
   // Test case when numCollector % 4 = 0
-  EXPECT_NO_THROW(buildCollectors(nonEmptyModel, 36));
+  EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, 36));
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const FakeModel nonEmptyModel(false);
 
   const int numCollectors = 37;
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(numCollectors, energyCollectors.size());
 
   Ray straightUp(Vec3::kZero, Vec3::kZ);
@@ -202,7 +179,7 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const FakeModel nonEmptyModel(false);
 
   const int numCollectors = 36;
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   Ray straightUp(Vec3::kZero, Vec3::kZ);
@@ -251,7 +228,7 @@ TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
   const FakeModel nonEmptyModel(false);
 
   const int numCollectors = 37;
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   const float collectorPositionRadius = 4;
@@ -275,7 +252,7 @@ TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   const FakeModel nonEmptyModel(false);
 
   const int numCollectors = 20;
-  auto energyCollectors = buildCollectors(nonEmptyModel, numCollectors);
+  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   RayHitData hitData;

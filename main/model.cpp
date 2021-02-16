@@ -14,7 +14,6 @@ Model::Model(const std::vector<objects::TriangleObj> &triangles)
     maxSideSize = std::max(maxSideSize, getMaxSide(triangle.getPoints()));
     maxHeight = std::max(maxHeight, getMaxHeight(triangle.getPoints()));
   }
-
   setSideSize(maxSideSize);
   setHeight(maxHeight);
 }
@@ -49,6 +48,8 @@ std::unique_ptr<Model> Model::NewLoadFromObjectFile(std::string_view path) {
                     << "line: " << lineNumber;
       }
 
+      // Z coordinate in .obj files represents y coordinate in this
+      // simulation.
       float x = std::stof(stringWords[1]);
       float z = std::stof(stringWords[2]);
       float y = std::stof(stringWords[3]);
@@ -67,6 +68,7 @@ std::unique_ptr<Model> Model::NewLoadFromObjectFile(std::string_view path) {
         }
       }
 
+      // TODO: create triangles from polygons istead of requireing triangles
       // Check if current line in .obj contains triangle
       if (facePoints.size() > 3) {
         std::stringstream errorStringStream;

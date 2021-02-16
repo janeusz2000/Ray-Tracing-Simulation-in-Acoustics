@@ -19,7 +19,7 @@ class FakeReferenceModel : public ModelInterface {
 public:
   FakeReferenceModel() {
     triangles_.push_back(TriangleObj(Vec3::kX, Vec3::kZero, Vec3::kZ));
-    triangles_.push_back(TriangleObj(Vec3::kX, Vec3::kX + Vec3::kZ, Vec3::kZ));
+    triangles_.push_back(TriangleObj(Vec3::kX, Vec3(1, 0, 1), Vec3::kZ));
   }
 
   const std::vector<TriangleObj> &triangles() const override {
