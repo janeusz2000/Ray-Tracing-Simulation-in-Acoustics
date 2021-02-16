@@ -42,7 +42,7 @@ is aligned at the center (0, 0, 0).
 
 4. Create build file, with specified properties of the simulation. It should look like this:
 
-```C++
+```cpp
 #include "main/model.h"
 #include "main/rayTracer.h"
 #include "main/simulator.h"
