@@ -14,9 +14,10 @@ class MainTest : public ::testing::Test {
 public:
   MainTest()
       : sourcePower_(500), frequency_(1e3), numOfCollectors_(37),
-        numOfRayAlongEachAxis_(1), model_(Model::NewReferenceModel(1.0)) {
+        numOfRayAlongEachAxis_(1) {
+    model_ = Model::NewReferenceModel(1.0);
 
-    trackers::saveModelToJson("/tmp", &model_);
+    trackers::saveModelToJson("/tmp", model_.get());
   }
 
 protected:
@@ -24,18 +25,18 @@ protected:
   float frequency_;
   int numOfCollectors_;
   int numOfRayAlongEachAxis_;
-  Model model_;
+  std::unique_ptr<Model> model_;
 };
 
 TEST_F(MainTest, buildingSimulation) {
 
-  RayTracer rayTracer(&model_);
+  RayTracer rayTracer(model_.get());
   trackers::PositionTracker positionTracker("/tmp");
   PointSpeakerRayFactory pointSpeaker(numOfRayAlongEachAxis_, sourcePower_,
-                                      &model_);
+                                      model_.get());
 
   FakeOffseter rayOffseter;
-  Simulator simulator(&rayTracer, &model_, &pointSpeaker, &rayOffseter,
+  Simulator simulator(&rayTracer, model_.get(), &pointSpeaker, &rayOffseter,
                       &positionTracker);
 
   std::vector<float> energies = simulator.run(frequency_, numOfCollectors_);

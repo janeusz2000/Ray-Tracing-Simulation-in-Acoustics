@@ -19,10 +19,7 @@ Model::Model(const std::vector<objects::TriangleObj> &triangles)
   setHeight(maxHeight);
 }
 
-Model Model::NewLoadFromObjectFile(std::string_view path) {
-
-  // TODO: find out why only few of the triangles are being imported.
-
+std::unique_ptr<Model> Model::NewLoadFromObjectFile(std::string_view path) {
   std::vector<core::Vec3> points;
   std::vector<objects::TriangleObj> triangles;
   std::ifstream objFile;
@@ -97,10 +94,10 @@ Model Model::NewLoadFromObjectFile(std::string_view path) {
       }
     }
   }
-  return Model(triangles);
+  return std::make_unique<Model>(triangles);
 }
 
-Model Model::NewReferenceModel(float size) {
+std::unique_ptr<Model> Model::NewReferenceModel(float size) {
 
   std::vector<core::Vec3> clockWiseOrigins = {
       core::Vec3(-size / 2, size / 2, 0), core::Vec3(size / 2, size / 2, 0),
@@ -112,7 +109,7 @@ Model Model::NewReferenceModel(float size) {
       objects::TriangleObj(clockWiseOrigins[3], clockWiseOrigins[0],
                            clockWiseOrigins[1])};
 
-  return Model(objects);
+  return std::make_unique<Model>(objects);
 }
 
 bool Model::empty() const {
