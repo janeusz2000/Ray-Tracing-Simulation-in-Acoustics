@@ -16,11 +16,7 @@ jobs:
       - name: Setup Bazel
         uses: abhinavsingh/setup-bazel@v3
       - name: Run all tests
-<<<<<<< HEAD
         run: bazel test --config=_gcc --collect_code_coverage :all
       - name: After success
         run: bash <(curl -s https://codecov.io/bash)
 
-=======
-        run: bazel test --config=_gcc :all
->>>>>>> parent of 45c12aa... coverage in CI?
