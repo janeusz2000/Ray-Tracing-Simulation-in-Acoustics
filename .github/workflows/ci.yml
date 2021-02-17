@@ -16,4 +16,7 @@ jobs:
       - name: Setup Bazel
         uses: abhinavsingh/setup-bazel@v3
       - name: Run all tests
-        run: bazel test --config=_gcc :all
+        run: bazel test --config=_gcc --collect_code_coverage :all
+      - after_success:
+        run: bash <(curl -s https://codecov.io/bash)
+
