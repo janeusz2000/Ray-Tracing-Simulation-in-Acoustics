@@ -114,7 +114,7 @@ bazel-bin/build.v1.1
 ```Bash
 npm start
 ```
-8. in the browser you should see the magic :smirk:
+8. in the browser you should see magic :smirk:
 
 ---
 

@@ -21,17 +21,6 @@ cc_binary(
     ],
 )
 
-cc_binary(
-    name = "test_coverage",
-    srcs = [
-        "tests/simulator_test.cpp",
-    ],
-    deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-
 cc_library(
     name = "utils",
     srcs = [
