@@ -20,7 +20,6 @@ jobs:
       - uses: actions/checkout@master
       - uses: codecov/codecov-action@v1
         with:
-          token: ${{a45029ea-3da5-4312-9529-14e2a2e89529}} # not required for public repos
           flags: unittests # optional
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
