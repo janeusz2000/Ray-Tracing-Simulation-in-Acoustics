@@ -1,1 +1,3 @@
-/mnt/c/cpp/dCoeffReyTracer/.bazelrc
+test --test_output=errors
+build -c opt
+build:_gcc --cxxopt=-std=c++17
