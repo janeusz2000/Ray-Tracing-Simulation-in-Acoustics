@@ -14,6 +14,8 @@
 ## Description:
 ---
 
+bla bla bla
+
 This is development of the new method of simulating acoustic diffusion coefficient which
 is supposed to be much faster then commonly used Finite Element Method, with similar
 results. The idea is to model how reflected energy is distributed across microphone
