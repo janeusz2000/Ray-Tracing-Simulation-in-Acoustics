@@ -15,31 +15,6 @@
 #include <string_view>
 #include <vector>
 
-namespace collectionRules {
-
-// defines how energy collectors collect energy in the simulation
-struct CollectEnergyInterface {
-  virtual void collectEnergy(
-      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
-      core::RayHitData *hitData) = 0;
-};
-
-// The futher away from origin of energy collectors ray hits, the less energy it
-// puts in the energy collector - left energy scales lineary. When distanece
-// betwen hit position and energyCollector origin is equal or bigger then radius
-// of the energyCollector, none energy is put inside the energy Collector. Phase
-// impact of the wave is not considered here.
-struct LinearEnergyCollection : public CollectEnergyInterface {
-  void collectEnergy(
-      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
-      core::RayHitData *hitData) override;
-};
-
-// TODO: Create Rules for no linear collection
-// TODO: Create Rules for phase impact of the simulation
-// TODO: Create Combined Rules of collection
-} // namespace collectionRules
-
 // Constructs an array of Energy Collectors around specified model.
 // Energy Collectors are arranged in two half-circles, whose origin is
 // centere on the model, oriented at the right angle to each other.
@@ -49,7 +24,7 @@ struct LinearEnergyCollection : public CollectEnergyInterface {
 // Collectors are arranged uniformly on the circumference's, such that bottom
 // collectors are on the ground level.
 // In case of odd number of collectors, one collector is placed right above the
-// model. Radius of an energy collector is equal to distance between two
+// model. Radius of an energy collector is equal to distance between twoenergy
 // collectors.
 
 // Throws std::invalid_argument when |numCollectors| < 4 or when |numCollectors|

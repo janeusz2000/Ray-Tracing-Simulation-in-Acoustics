@@ -10,7 +10,7 @@
 // Checks if |TRY_BLOCK| throws right |EXCPETION_TYPE| with exception message
 // equal to const char* |MESSAGE|
 // TODO: check substring only, because every little change requirers of changing
-// TODO: whole test, which is not desired
+// whole test, which is not desired
 #define ASSERT_EXCEPTION_MSG(TRY_BLOCK, EXCEPTION_TYPE, MESSAGE)               \
   try {                                                                        \
     { TRY_BLOCK; }                                                             \
@@ -35,6 +35,7 @@ using Json = nlohmann::json;
 float deg2rad(float deg) { return 2 * constants::kPi * deg / 360; }
 
 const float kSkipFrequency = 1000;
+const int kSkipNumber = 37;
 
 class FakeModel : public ModelInterface {
 
@@ -97,6 +98,7 @@ protected:
 
     float maxZ = 0;
     for (const auto &collector : energyCollectors) {
+
       maxZ = std::max(maxZ, collector->getOrigin().z());
     }
     return maxZ;
@@ -111,8 +113,16 @@ protected:
   }
 };
 
+TEST_F(EnergyCollectorTest, ModelEmptyNotBuildingCollectors) {
+  const FakeModel emptyModel(true);
+  ASSERT_EXCEPTION_MSG(buildCollectors(&emptyModel, kSkipNumber),
+                       std::invalid_argument, "Model cannot be Empty!");
+
+  const FakeModel nonEmptyModel(false);
+  EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, kSkipNumber));
+}
+
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
-  // TODO: add a test when model is empty.
   const FakeModel nonEmptyModel(false);
 
   ASSERT_EXCEPTION_MSG(

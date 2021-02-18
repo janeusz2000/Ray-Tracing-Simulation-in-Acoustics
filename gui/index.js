@@ -15,3 +15,5 @@ addEnergyCollectors(scene);
 addModel(scene);
 getTracking(scene);
 animate(scene, renderer, camera, controls);
+
+// TODO: dCoefficient caluclation per frequency

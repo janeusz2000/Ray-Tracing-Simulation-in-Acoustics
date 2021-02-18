@@ -64,4 +64,29 @@ private:
 
 } // namespace generators
 
+namespace collectionRules {
+
+// defines how energy collectors collect energy in the simulation
+struct CollectEnergyInterface {
+  virtual void collectEnergy(
+      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+      core::RayHitData *hitData) = 0;
+};
+
+// The futher away from origin of energy collectors ray hits, the less energy it
+// puts in the energy collector - left energy scales lineary. When distanece
+// betwen hit position and energyCollector origin is equal or bigger then radius
+// of the energyCollector, none energy is put inside the energy Collector. Phase
+// impact of the wave is not considered here.
+struct LinearEnergyCollection : public CollectEnergyInterface {
+  void collectEnergy(
+      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+      core::RayHitData *hitData) override;
+};
+
+// TODO: Create Rules for no linear collection
+// TODO: Create Rules for phase impact of the simulation
+// TODO: Create Combined Rules of collection
+} // namespace collectionRules
+
 #endif

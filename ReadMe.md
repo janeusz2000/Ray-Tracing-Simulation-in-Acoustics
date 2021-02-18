@@ -44,6 +44,7 @@ To use this project, you will need to follow few steps.
 #include <algorithm>
 #include <string>
 
+// TODO: make it simpler
 int main() {
 
   // Path to your model
@@ -76,7 +77,6 @@ int main() {
   std::vector<float> energies = simulator.run(frequency, numOfCollectors);
   positionTracker.saveAsJson();
 
-  // TODO: D coefficient calculation based on this
   std::for_each(energies.begin(), energies.end(),
                 [](float i) { std::cout << i << " "; });
   return 0;
