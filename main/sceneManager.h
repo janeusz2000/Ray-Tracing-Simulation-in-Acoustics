@@ -8,10 +8,15 @@
 #include "obj/generators.h"
 #include "obj/objects.h"
 
+#include <future>
 #include <memory>
+#include <queue>
 #include <string_view>
+#include <thread>
+#include <utility>
 #include <vector>
 
+// Holds all needed information to perform simulation.
 struct SimulationProperties {
   explicit SimulationProperties(
       std::string_view dataPath, const std::vector<float> &frequencies /*[Hz]*/,
@@ -23,14 +28,15 @@ struct SimulationProperties {
         sourcePower_(sourcePower), numOfCollectors_(numOfCollectors),
         numOfRaySquared_(numOfRaySquared) {}
 
-  const std::vector<float> frequencies() const { return frequencies_; }
+  const std::vector<float> &frequencies() const { return frequencies_; }
   collectionRules::CollectEnergyInterface *energyCollectionRules() {
     return energyCollectionRules_;
   }
-  const float sourcePower() const { return sourcePower_; }
-  const int numOfCollectors() const { return numOfCollectors_; }
-  const int numOfRaySquared() const { return numOfRaySquared_; }
+  const float &sourcePower() const { return sourcePower_; }
+  const int &numOfCollectors() const { return numOfCollectors_; }
+  const int &numOfRaySquared() const { return numOfRaySquared_; }
   const char *dataPath() const { return dataPath_.data(); }
+
   collectionRules::CollectEnergyInterface *collectionRules() {
     return energyCollectionRules_;
   }
@@ -47,7 +53,8 @@ private:
 // This class is creating all necessary objects for simulation.
 class SceneManager {
 public:
-  SceneManager(Model *model, const SimulationProperties &simulationProperties);
+  explicit SceneManager(Model *model,
+                        const SimulationProperties &simulationProperties);
 
   void run();
 

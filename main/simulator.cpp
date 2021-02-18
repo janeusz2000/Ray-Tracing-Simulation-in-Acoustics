@@ -1,6 +1,6 @@
 #include "main/simulator.h"
 
-std::vector<std::unique_ptr<objects::EnergyCollector>>
+std::vector<objects::EnergyCollector>
 buildCollectors(const ModelInterface *model, int numCollectors) {
 
   if (model->empty()) {
@@ -48,11 +48,12 @@ buildCollectors(const ModelInterface *model, int numCollectors) {
       collectorSphereRadius *
       std::sqrt(2.0f - 2 * std::cos(angleBetweenCollectors));
 
-  std::vector<std::unique_ptr<objects::EnergyCollector>> energyCollectors;
+  std::vector<objects::EnergyCollector> energyCollectors;
+  energyCollectors.reserve(numCollectors);
   // When Num Collectors is not even, we need to put one collector at (0, 0,
   // collectorSphereRadius)
   if (numCollectorReminder == 1) {
-    energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
+    energyCollectors.push_back(objects::EnergyCollector(
         core::Vec3(0, 0, collectorSphereRadius), energyCollectorRadius));
   }
   // and decrease number remaining collectors to create remaining ones
@@ -73,8 +74,8 @@ buildCollectors(const ModelInterface *model, int numCollectors) {
                core::Vec3(0, groundCoordinate, zCoordinate)};
 
     for (const core::Vec3 &origin : origins) {
-      energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
-          origin, energyCollectorRadius));
+      energyCollectors.push_back(
+          objects::EnergyCollector(origin, energyCollectorRadius));
     }
   }
   return energyCollectors;
@@ -117,10 +118,11 @@ const float getSphereWallRadius(const ModelInterface &model) {
                   4 * std::max(model.height(), model.sideSize()));
 }
 
-std::vector<float> Simulator::run(
-    float frequency,
-    std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors) {
+void Simulator::run(float frequency,
+                    std::vector<objects::EnergyCollector> &collectors,
+                    std::promise<std::vector<float>> *promise) {
 
+  std::cout << "THREAD: frequency: " << frequency << "started!" << std::endl;
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
   core::Ray currentRay;
@@ -131,34 +133,35 @@ std::vector<float> Simulator::run(
     // TODO: dont track all rays -> sample them, to increase performance and
     // readability
     // Ray-Trace until Rays excape the model.
-    positionTracker_->initializeNewTracking();
+    // positionTracker_->initializeNewTracking();
     RayTracer::TraceResult hitResult =
         RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
     do {
       hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
       currentRay = tracer_->getReflected(&hitData);
 
-      positionTracker_->addNewPositionToCurrentTracking(hitData);
+      // positionTracker_->addNewPositionToCurrentTracking(hitData);
 
     } while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE);
 
     if (sphereWall.hitObject(currentRay, frequency, &hitData)) {
-      positionTracker_->addNewPositionToCurrentTracking(hitData);
-      positionTracker_->endCurrentTracking();
+      // positionTracker_->addNewPositionToCurrentTracking(hitData);
+      // positionTracker_->endCurrentTracking();
     }
 
     energyCollectionRules_->collectEnergy(collectors, &hitData);
   }
 
-  return getEnergyFromGivenCollectors(collectors);
+  promise->set_value(getEnergyFromGivenCollectors(collectors));
+  std::cout << "THREAD: frequency: " << frequency << "ended!" << std::endl;
 }
 
 std::vector<float> Simulator::getEnergyFromGivenCollectors(
-    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors) {
+    const std::vector<objects::EnergyCollector> &collectors) {
   std::vector<float> output;
   output.reserve(collectors.size());
   for (auto &collector : collectors) {
-    output.push_back(collector->getEnergy());
+    output.push_back(collector.getEnergy());
   }
   return output;
 }

@@ -9,6 +9,7 @@
 
 #include <cmath>
 #include <fstream>
+#include <future>
 #include <iostream>
 #include <limits>
 #include <sstream>
@@ -29,7 +30,7 @@
 
 // Throws std::invalid_argument when |numCollectors| < 4 or when |numCollectors|
 // or |numCollectors|-1 is not divisible by 4.
-std::vector<std::unique_ptr<objects::EnergyCollector>>
+std::vector<objects::EnergyCollector>
 buildCollectors(const ModelInterface *model, int numCollectors);
 
 // Saves positions of the energyCollectors to the Json file at given path.
@@ -58,13 +59,12 @@ public:
   // Runs the simulation and returns vector of float that represent result
   // energy collected by energyCollectors. Index of the float correspond
   // with index of builded energy collector.
-  std::vector<float>
-  run(float frequency,
-      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors);
+  void run(float frequency, std::vector<objects::EnergyCollector> &collectors,
+           std::promise<std::vector<float>> *promise);
 
 private:
   std::vector<float> getEnergyFromGivenCollectors(
-      const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors);
+      const std::vector<objects::EnergyCollector> &collectors);
 
   RayTracer *tracer_;
   ModelInterface *model_;

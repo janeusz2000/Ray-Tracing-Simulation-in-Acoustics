@@ -1,22 +1,22 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 
-cc_binary(
-    name = "build.v1.1",
-    srcs = [
-        "ApplicationBuild/build.v1.1.cpp",
-    ],
-    deps = [
-        ":utils",
-    ],
-)
+# cc_binary(
+#     name = "build.v1.1",
+#     srcs = [
+#         "ApplicationBuild/build.v1.1.cpp",
+#     ],
+#     deps = [
+#         ":utils",
+#     ],
+# )
 
 cc_library(
     name = "utils",
     srcs = [
         "core/ray.cpp",
         "core/vec3.cpp",
-        "main/sceneManager.cpp",
+        # "main/sceneManager.cpp",
         "obj/generators.cpp",
         "obj/objects.cpp",
         "main/model.cpp",
@@ -28,7 +28,7 @@ cc_library(
         "constants.h",
         "core/ray.h",
         "core/vec3.h",
-        "main/sceneManager.h",
+        # "main/sceneManager.h",
         "obj/generators.h",
         "obj/objects.h",
         "main/model.h",

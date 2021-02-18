@@ -40,9 +40,15 @@ TEST_F(MainTest, buildingSimulation) {
   Simulator simulator(&rayTracer, model_.get(), &pointSpeaker, &rayOffseter,
                       &positionTracker, &energyCollectionRules);
 
-  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
+  std::vector<objects::EnergyCollector> collectors =
       buildCollectors(model_.get(), numOfCollectors_);
-  std::vector<float> energies = simulator.run(frequency_, collectors);
-  positionTracker.saveAsJson();
+  std::promise<std::vector<float>> accumulatedPromise;
+  std::future<std::vector<float>> accumulatedFuture =
+      accumulatedPromise.get_future();
+
+  simulator.run(frequency_, collectors, &accumulatedPromise);
+  std::vector<float> result = accumulatedFuture.get();
+  ASSERT_TRUE(result.size() > 0);
+  // positionTracker.saveAsJson();
   // FAIL();
 }

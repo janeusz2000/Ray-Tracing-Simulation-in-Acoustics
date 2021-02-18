@@ -55,18 +55,18 @@ private:
 
 class EnergyCollectorTest : public ::testing::Test {
 protected:
-  using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+  using Collectors = std::vector<objects::EnergyCollector>;
 
   // performs ray hit at at given energy collectors, |hitData| is modified to
   // hold information where ray hit energyCollector. Returns true if hit
   // occurred, false when there was no hit
-  [[nodiscard]] bool performHitCollector(const Collectors &energyCollectors,
+  [[nodiscard]] bool performHitCollector(Collectors &energyCollectors,
                                          const Ray &ray, RayHitData *hitData) {
     bool hit = false;
     RayHitData closestHitData;
 
-    for (const auto &collector : energyCollectors) {
-      if (collector->hitObject(ray, kSkipFrequency, hitData)) {
+    for (auto &collector : energyCollectors) {
+      if (collector.hitObject(ray, kSkipFrequency, hitData)) {
         hit = true;
         if (hitData->time < closestHitData.time) {
           closestHitData = *hitData;
@@ -78,7 +78,7 @@ protected:
   }
 
   float getCollectorRadius(const Collectors &energyCollectors) const {
-    return energyCollectors[0]->getRadius();
+    return energyCollectors[0].getRadius();
   }
 
   // returns value of angle between two neighborhood collectors and
@@ -90,7 +90,7 @@ protected:
   void printCollectors(const Collectors &energyCollectors) const {
     int i = 0;
     for (const auto &collector : energyCollectors) {
-      std::cout << i++ << " " << *collector << std::endl;
+      std::cout << i++ << " " << collector << std::endl;
     }
   }
 
@@ -99,7 +99,7 @@ protected:
     float maxZ = 0;
     for (const auto &collector : energyCollectors) {
 
-      maxZ = std::max(maxZ, collector->getOrigin().z());
+      maxZ = std::max(maxZ, collector.getOrigin().z());
     }
     return maxZ;
   }
@@ -107,7 +107,7 @@ protected:
   float getCollectorPositionRadius(const Collectors &energyCollectors) {
     float maxX = 0;
     for (const auto &collector : energyCollectors) {
-      maxX = std::max(maxX, collector->getOrigin().x());
+      maxX = std::max(maxX, collector.getOrigin().x());
     }
     return maxX;
   }
