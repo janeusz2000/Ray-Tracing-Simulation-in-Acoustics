@@ -3,7 +3,6 @@
 
 #include "main/positionTracker.h"
 #include "main/rayTracer.h"
-#include "main/sceneManager.h"
 #include "nlohmann/json.hpp"
 #include "obj/generators.h"
 #include "obj/objects.h"
@@ -15,6 +14,31 @@
 #include <sstream>
 #include <string_view>
 #include <vector>
+
+namespace collectionRules {
+
+// defines how energy collectors collect energy in the simulation
+struct CollectEnergyInterface {
+  virtual void collectEnergy(
+      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+      core::RayHitData *hitData) = 0;
+};
+
+// The futher away from origin of energy collectors ray hits, the less energy it
+// puts in the energy collector - left energy scales lineary. When distanece
+// betwen hit position and energyCollector origin is equal or bigger then radius
+// of the energyCollector, none energy is put inside the energy Collector. Phase
+// impact of the wave is not considered here.
+struct LinearEnergyCollection : public CollectEnergyInterface {
+  void collectEnergy(
+      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+      core::RayHitData *hitData) override;
+};
+
+// TODO: Create Rules for no linear collection
+// TODO: Create Rules for phase impact of the simulation
+// TODO: Create Combined Rules of collection
+} // namespace collectionRules
 
 // Constructs an array of Energy Collectors around specified model.
 // Energy Collectors are arranged in two half-circles, whose origin is
@@ -44,24 +68,21 @@ void exportCollectorsToJson(
 // object.
 const float getSphereWallRadius(const ModelInterface &model);
 
-// Adds energy to the right collector if position hit occurred inside it.
-void collectEnergy(
-    std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
-    core::RayHitData *hitData);
-
 // Performs ray-tracing simulation on given model.
 class Simulator {
 public:
   Simulator(RayTracer *tracer, ModelInterface *model,
             generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter,
-            trackers::PositionTracker *positionTracker)
+            trackers::PositionTracker *positionTracker,
+            collectionRules::CollectEnergyInterface *energyCollectionRules)
       : tracer_(tracer), model_(model), source_(source), offsetter_(offsetter),
-        positionTracker_(positionTracker){};
+        positionTracker_(positionTracker),
+        energyCollectionRules_(energyCollectionRules){};
 
   // Runs the simulation and returns vector of float that represent result
-  // energy collected by energyCollectors. Index of the float correspond with
-  // index of builded energy collector.
+  // energy collected by energyCollectors. Index of the float correspond
+  // with index of builded energy collector.
   std::vector<float>
   run(float frequency,
       std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors);
@@ -76,6 +97,7 @@ private:
   generators::RandomRayOffseter *offsetter_;
 
   trackers::PositionTracker *positionTracker_;
+  collectionRules::CollectEnergyInterface *energyCollectionRules_;
 };
 
 #endif

@@ -23,8 +23,10 @@ int main() {
   generators::PointSpeakerRayFactory pointSpeaker(numOfRaysAlongEachAxis,
                                                   sourcePower, model.get());
   generators::FakeOffseter rayOffseter;
+  collectionRules::LinearEnergyCollection energyCollectionRules;
+
   Simulator simulator(&rayTracer, model.get(), &pointSpeaker, &rayOffseter,
-                      &positionTracker);
+                      &positionTracker, &energyCollectionRules);
 
   // TODO: we build collector two times: change architecture to be able to build
   // it only once.

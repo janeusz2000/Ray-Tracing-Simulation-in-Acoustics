@@ -16,14 +16,17 @@
 class SceneManager {
 public:
   SceneManager(Model *model, const std::vector<float> &frequencies /*[Hz]*/,
-               std::string_view dataPath, float sourcePower = 500 /*[W]*/,
-               int numOfCollectors = 37, int numOfRayRaysSquared = 1000);
+               std::string_view dataPath,
+               collectionRules::CollectEnergyInterface *energyCollectionRules,
+               float sourcePower = 500 /*[W]*/, int numOfCollectors = 37,
+               int numOfRayRaysSquared = 1000);
 
   void run();
 
 private:
   Model *model_;
   std::vector<float> frequencies_;
+  collectionRules::CollectEnergyInterface *energyCollectionRules_;
   int numOfCollectors_;
 
   RayTracer raytracer_;

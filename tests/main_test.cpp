@@ -34,10 +34,11 @@ TEST_F(MainTest, buildingSimulation) {
   trackers::PositionTracker positionTracker("/tmp");
   PointSpeakerRayFactory pointSpeaker(numOfRayAlongEachAxis_, sourcePower_,
                                       model_.get());
+  collectionRules::LinearEnergyCollection energyCollectionRules;
 
   FakeOffseter rayOffseter;
   Simulator simulator(&rayTracer, model_.get(), &pointSpeaker, &rayOffseter,
-                      &positionTracker);
+                      &positionTracker, &energyCollectionRules);
 
   std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
       buildCollectors(model_.get(), numOfCollectors_);

@@ -117,28 +117,6 @@ const float getSphereWallRadius(const ModelInterface &model) {
                   4 * std::max(model.height(), model.sideSize()));
 }
 
-// TODO: create class hierarchy for this function, to try different algorithms
-// of collection.
-void collectEnergy(
-    std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
-    core::RayHitData *hitData) {
-
-  core::Vec3 reachedPosition = hitData->collisionPoint();
-  for (auto &energyCollector : collectors) {
-    if (energyCollector->isVecInside(reachedPosition)) {
-      float distanceToOrigin =
-          (energyCollector->getOrigin() - reachedPosition).magnitude();
-
-      // The closer ray hits origin of the energy Collector, the more energy
-      // energyCollector collects.
-      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
-      energyCollector->addEnergy(energyRatio * hitData->energy());
-
-      // TODO: Phase impact on the collect energy. (new class)
-    }
-  }
-}
-
 std::vector<float> Simulator::run(
     float frequency,
     std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors) {
@@ -169,7 +147,7 @@ std::vector<float> Simulator::run(
       positionTracker_->endCurrentTracking();
     }
 
-    collectEnergy(collectors, &hitData);
+    energyCollectionRules_->collectEnergy(collectors, &hitData);
   }
 
   return getEnergyFromGivenCollectors(collectors);
@@ -183,4 +161,21 @@ std::vector<float> Simulator::getEnergyFromGivenCollectors(
     output.push_back(collector->getEnergy());
   }
   return output;
+}
+void collectionRules::LinearEnergyCollection::collectEnergy(
+    std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+    core::RayHitData *hitData) {
+
+  core::Vec3 reachedPosition = hitData->collisionPoint();
+  for (auto &energyCollector : collectors) {
+    if (energyCollector->isVecInside(reachedPosition)) {
+      float distanceToOrigin =
+          (energyCollector->getOrigin() - reachedPosition).magnitude();
+
+      // The closer ray hits origin of the energy Collector, the more energy
+      // energyCollector collects.
+      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
+      energyCollector->addEnergy(energyRatio * hitData->energy());
+    };
+  }
 }

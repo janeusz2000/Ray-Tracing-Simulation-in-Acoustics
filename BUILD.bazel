@@ -2,16 +2,6 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 
 cc_binary(
-    name = "build.v1.0",
-    srcs = [
-        "ApplicationBuild/build.v1.0.cpp",
-    ],
-    deps = [
-        ":utils",
-    ],
-)
-
-cc_binary(
     name = "build.v1.1",
     srcs = [
         "ApplicationBuild/build.v1.1.cpp",
