@@ -11,6 +11,9 @@ SceneManager::SceneManager(Model *model,
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
 }
 
+// TODO: fix nullptr promise
+// TODO: fix iterations
+// TODO: code is dirty -> clean it
 void SceneManager::run() {
   Simulator simulator(&raytracer_, model_, &pointSpeaker_, offseter_.get(),
                       &tracker_, simulationProperties_.energyCollectionRules());

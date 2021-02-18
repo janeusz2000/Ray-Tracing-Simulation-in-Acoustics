@@ -16,6 +16,7 @@
 #include <utility>
 #include <vector>
 
+// TODO: This constructor is too long, fix it ;-)
 // Holds all needed information to perform simulation.
 struct SimulationProperties {
   explicit SimulationProperties(
