@@ -7,8 +7,6 @@
 
 int main() {
 
-  float modelSize = 1.0;
-  float sourcePower = 500;
   float frequency = 1e3;
 
   int numOfCollectors = 37;

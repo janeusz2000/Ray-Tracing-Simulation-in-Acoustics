@@ -29,13 +29,11 @@ To use this project, you will need to follow few steps.
 - [Webpack](https://webpack.js.org/)
 - [ThreeJS](https://threejs.org/)
 
-2. Check if your model consist only triangles. If not, you can download
-[Blender](https://www.blender.org/) and triangulate your model. Also make sure that model
-is aligned at the center (0, 0, 0).
+1. Make sure that your model is positioned at the middle of simulation [x, y, z] = (0, 0, 0);
 
-3. Run local server with opened *./gui/index.html* in your browser.
+2. Run local server with opened *./gui/index.html* in your browser.
 
-4. Create build file, with specified properties of the simulation. It should look like this:
+3. Create build file, with specified properties of the simulation. It should look like this:
 
 ```cpp
 #include "main/model.h"

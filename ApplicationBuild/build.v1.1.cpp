@@ -8,7 +8,7 @@
 
 int main() {
 
-  std::string path = "./models/monkey.obj";
+  std::string path = "./models/monkeyfull.obj";
   float sourcePower = 500;
   float frequency = 1e3;
 

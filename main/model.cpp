@@ -68,31 +68,22 @@ std::unique_ptr<Model> Model::NewLoadFromObjectFile(std::string_view path) {
         }
       }
 
-      // TODO: create triangles from polygons istead of requireing triangles
-      // Check if current line in .obj contains triangle
-      if (facePoints.size() > 3) {
-        std::stringstream errorStringStream;
-        errorStringStream << "Objects must consit of triangles only! \n"
-                          << "line: " << lineNumber << ", in: " << path.data()
-                          << "\n"
-                          << "Acquired points: \n[";
-        for (const auto &str : facePoints) {
-          errorStringStream << str << ", ";
+      // Number of triangles to be made from one polygon
+      int numberOfTriangles = facePoints.size() - 2;
+      for (int triangleIndex = 0; triangleIndex < numberOfTriangles;
+           ++triangleIndex) {
+        core::Vec3 point1 = points[facePoints[0]];
+        core::Vec3 point2 = points[facePoints[triangleIndex + 1]];
+        core::Vec3 point3 = points[facePoints[triangleIndex + 2]];
+
+        try {
+          objects::TriangleObj triangle(point1, point2, point3);
+          triangles.push_back(triangle);
+        } catch (const std::exception &e) {
+          std::cout << "WARNING! \n"
+                    << e.what() << "\n"
+                    << "It wont be included in simulation" << std::endl;
         }
-        throw std::invalid_argument(errorStringStream.str());
-      }
-
-      core::Vec3 point1 = points[facePoints[0]];
-      core::Vec3 point2 = points[facePoints[1]];
-      core::Vec3 point3 = points[facePoints[2]];
-
-      try {
-        objects::TriangleObj triangle(point1, point2, point3);
-        triangles.push_back(objects::TriangleObj(point1, point2, point3));
-      } catch (const std::exception &e) {
-        std::cout << "WARNING! \n"
-                  << e.what() << "\n"
-                  << "It wont be included in simulation" << std::endl;
       }
     }
   }
