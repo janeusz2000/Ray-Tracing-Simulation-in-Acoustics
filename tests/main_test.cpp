@@ -39,7 +39,9 @@ TEST_F(MainTest, buildingSimulation) {
   Simulator simulator(&rayTracer, model_.get(), &pointSpeaker, &rayOffseter,
                       &positionTracker);
 
-  std::vector<float> energies = simulator.run(frequency_, numOfCollectors_);
+  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
+      buildCollectors(model_.get(), numOfCollectors_);
+  std::vector<float> energies = simulator.run(frequency_, collectors);
   positionTracker.saveAsJson();
   // FAIL();
 }

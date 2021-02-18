@@ -32,7 +32,7 @@ int main() {
       buildCollectors(model.get(), numOfCollectors);
   exportCollectorsToJson(collectors, "./data/energyCollectors.json");
 
-  std::vector<float> energies = simulator.run(frequency, numOfCollectors);
+  std::vector<float> energies = simulator.run(frequency, collectors);
   positionTracker.saveAsJson();
 
   std::for_each(energies.begin(), energies.end(),

@@ -139,9 +139,9 @@ void collectEnergy(
   }
 }
 
-std::vector<float> Simulator::run(float frequency, int numCollectors) {
-  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
-      buildCollectors(model_, numCollectors);
+std::vector<float> Simulator::run(
+    float frequency,
+    std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors) {
 
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
@@ -150,6 +150,8 @@ std::vector<float> Simulator::run(float frequency, int numCollectors) {
 
   while (source_->genRay(&currentRay)) {
 
+    // TODO: dont track all rays -> sample them, to increase performance and
+    // readability
     // Ray-Trace until Rays excape the model.
     positionTracker_->initializeNewTracking();
     RayTracer::TraceResult hitResult =

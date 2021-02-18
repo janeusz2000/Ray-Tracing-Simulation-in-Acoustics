@@ -13,14 +13,7 @@
 
 ## Description:
 ---
-
-bla bla bla
-
-This is development of the new method of simulating acoustic diffusion coefficient which
-is supposed to be much faster then commonly used Finite Element Method, with similar
-results. The idea is to model how reflected energy is distributed across microphone
-positions, which are arranged uniformly on the circumference's (as you can see on the gif
-: yellow spheres). Microphones properties, source position and simulation size are based on the **ISO 17497-2:2012**.
+This is the development of the new method of simulating acoustic diffusion coefficient, which is supposed to be much faster than commonly used Finite Element Method, with similar results. The idea is to model how reflected acoustic energy is distributed across microphone different positions, which are arranged uniformly on the circumference's (as you can see on the gif: yellow spheres). Microphones properties, source position and simulation size are based on the recommendation of **ISO 17497-2:2012**.
 
 ---
 

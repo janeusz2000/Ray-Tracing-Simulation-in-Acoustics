@@ -62,7 +62,9 @@ public:
   // Runs the simulation and returns vector of float that represent result
   // energy collected by energyCollectors. Index of the float correspond with
   // index of builded energy collector.
-  std::vector<float> run(float frequency, int numCollectors);
+  std::vector<float>
+  run(float frequency,
+      std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors);
 
 private:
   std::vector<float> getEnergyFromGivenCollectors(

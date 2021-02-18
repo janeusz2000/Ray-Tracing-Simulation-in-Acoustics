@@ -25,7 +25,10 @@ int main() {
   Simulator simulator(&rayTracer, model.get(), &pointSpeaker, &rayOffseter,
                       &positionTracker);
 
-  std::vector<float> energies = simulator.run(frequency, numOfCollectors);
+  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
+      buildCollectors(model.get(), numOfCollectors);
+
+  std::vector<float> energies = simulator.run(frequency, collectors);
   positionTracker.saveAsJson();
 
   std::for_each(energies.begin(), energies.end(),
