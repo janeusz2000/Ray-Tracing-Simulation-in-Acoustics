@@ -8,6 +8,7 @@
 #include "obj/generators.h"
 #include "obj/objects.h"
 
+#include <chrono>
 #include <future>
 #include <memory>
 #include <queue>
@@ -23,7 +24,7 @@ struct SimulationProperties {
       std::string_view dataPath, const std::vector<float> &frequencies /*[Hz]*/,
       collectionRules::CollectEnergyInterface *energyCollectionRules,
       float sourcePower = 500 /*[W]*/, int numOfCollectors = 37,
-      int numOfRaySquared = 1000)
+      int numOfRaySquared = 15)
       : dataPath_(dataPath.data()), frequencies_(frequencies),
         energyCollectionRules_(energyCollectionRules),
         sourcePower_(sourcePower), numOfCollectors_(numOfCollectors),
@@ -33,6 +34,7 @@ struct SimulationProperties {
   collectionRules::CollectEnergyInterface *energyCollectionRules() {
     return energyCollectionRules_;
   }
+
   const float &sourcePower() const { return sourcePower_; }
   const int &numOfCollectors() const { return numOfCollectors_; }
   const int &numOfRaySquared() const { return numOfRaySquared_; }

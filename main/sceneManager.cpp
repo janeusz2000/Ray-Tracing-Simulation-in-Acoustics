@@ -13,55 +13,24 @@ SceneManager::SceneManager(Model *model,
 
 void SceneManager::run() {
   using energies = std::vector<float>;
-  using energiesPerFrequency = std::pair<energies, float>;
-  using Collectors = std::vector<objects::EnergyCollector>;
 
   Simulator simulator(&raytracer_, model_, &pointSpeaker_, offseter_.get(),
                       &tracker_, simulationProperties_.energyCollectionRules());
   std::vector<float> frequencies = simulationProperties_.frequencies();
+  std::vector<energies> futureVec;
 
-  const size_t processorsNumber = std::thread::hardware_concurrency();
-  if (processorsNumber == 0) {
-    throw std::invalid_argument("hardware concurrency is not supported");
-  }
-  size_t numberOfUsedProcessors = 0;
-
-  std::vector<std::future<energiesPerFrequency>> futureVec;
-  std::vector<std::thread> threads;
-  auto currentFrequencyIterator = frequencies.cbegin();
-  while (true) {
-    while (numberOfUsedProcessors < processorsNumber) {
-      float frequency = *currentFrequencyIterator;
-      int numOfCollectors = simulationProperties_.numOfCollectors();
-      Collectors collectors = buildCollectors(model_, numOfCollectors);
-
-      std::promise<energiesPerFrequency> promise;
-      futureVec.push_back(promise.get_future());
-      threads.push_back(std::thread(&Simulator::run, &simulator,
-                                    std::ref(frequency), std::ref(collectors),
-                                    std::ref(promise)));
-
-      ++currentFrequencyIterator;
-      ++numberOfUsedProcessors;
-    }
-
-    for (std::thread &thread : threads) {
-      if (thread.joinable()) {
-        thread.join();
-        --numberOfUsedProcessors;
-      }
-    }
-
-    if (numberOfUsedProcessors == 0 &&
-        currentFrequencyIterator == frequencies.cend()) {
-      break;
-    }
+  for (float freq : frequencies) {
+    Collectors collectors =
+        buildCollectors(model_, simulationProperties_.numOfCollectors());
+    exportCollectorsToJson(collectors, "./data/energyCollectors.json");
+    futureVec.push_back(simulator.run(freq, collectors));
+    tracker_.saveAsJson();
   }
 
-  for (auto &future : futureVec) {
-    energiesPerFrequency data = future.get();
-    std::cout << "Frequency: " << data.second << ", data: [ ";
-    for (const auto &energy : data.first) {
+  std::cout << "===== RAPORT =====" << std::endl;
+  for (size_t index = 0; index < frequencies.size(); ++index) {
+    std::cout << "Frequency: " << frequencies[index] << ", data: [";
+    for (const auto &energy : futureVec[index]) {
       std::cout << energy << ", ";
     }
     std::cout << "]" << std::endl;

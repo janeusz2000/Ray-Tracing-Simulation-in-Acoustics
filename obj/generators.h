@@ -68,8 +68,9 @@ namespace collectionRules {
 
 // defines how energy collectors collect energy in the simulation
 struct CollectEnergyInterface {
-  virtual void collectEnergy(std::vector<objects::EnergyCollector> &collectors,
-                             core::RayHitData *hitData) = 0;
+  virtual void collectEnergy(
+      const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+      core::RayHitData *hitData) = 0;
 };
 
 // The futher away from origin of energy collectors ray hits, the less energy it
@@ -78,8 +79,9 @@ struct CollectEnergyInterface {
 // of the energyCollector, none energy is put inside the energy Collector. Phase
 // impact of the wave is not considered here.
 struct LinearEnergyCollection : public CollectEnergyInterface {
-  void collectEnergy(std::vector<objects::EnergyCollector> &collectors,
-                     core::RayHitData *hitData) override;
+  void collectEnergy(
+      const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+      core::RayHitData *hitData) override;
 };
 
 // TODO: Create Rules for no linear collection

@@ -1,7 +1,6 @@
 #include "main/simulator.h"
 
-std::vector<objects::EnergyCollector>
-buildCollectors(const ModelInterface *model, int numCollectors) {
+Collectors buildCollectors(const ModelInterface *model, int numCollectors) {
 
   if (model->empty()) {
     throw std::invalid_argument("Model cannot be Empty!");
@@ -48,12 +47,12 @@ buildCollectors(const ModelInterface *model, int numCollectors) {
       collectorSphereRadius *
       std::sqrt(2.0f - 2 * std::cos(angleBetweenCollectors));
 
-  std::vector<objects::EnergyCollector> energyCollectors;
+  Collectors energyCollectors;
   energyCollectors.reserve(numCollectors);
   // When Num Collectors is not even, we need to put one collector at (0, 0,
   // collectorSphereRadius)
   if (numCollectorReminder == 1) {
-    energyCollectors.push_back(objects::EnergyCollector(
+    energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
         core::Vec3(0, 0, collectorSphereRadius), energyCollectorRadius));
   }
   // and decrease number remaining collectors to create remaining ones
@@ -74,18 +73,16 @@ buildCollectors(const ModelInterface *model, int numCollectors) {
                core::Vec3(0, groundCoordinate, zCoordinate)};
 
     for (const core::Vec3 &origin : origins) {
-      energyCollectors.push_back(
-          objects::EnergyCollector(origin, energyCollectorRadius));
+      energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
+          origin, energyCollectorRadius));
     }
   }
   return energyCollectors;
 }
 
 // exports |energyCollectors| as string representation to |path|
-void exportCollectorsToJson(
-    const std::vector<std::unique_ptr<objects::EnergyCollector>>
-        &energyCollectors,
-    std::string_view path) {
+void exportCollectorsToJson(const Collectors &energyCollectors,
+                            std::string_view path) {
 
   std::ofstream outFile(path.data());
   if (!outFile.good()) {
@@ -118,13 +115,10 @@ const float getSphereWallRadius(const ModelInterface &model) {
                   4 * std::max(model.height(), model.sideSize()));
 }
 
-void Simulator::run(float frequency,
-                    std::vector<objects::EnergyCollector> &collectors,
-                    std::promise<energiesPerFrequency> &promise) {
+std::vector<float> Simulator::run(float frequency,
+                                  const Collectors &collectors) {
 
-  std::cout << "THREAD: frequency: " << frequency << "started!" << std::endl;
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
-
   core::Ray currentRay;
   core::RayHitData hitData;
 
@@ -133,36 +127,33 @@ void Simulator::run(float frequency,
     // TODO: dont track all rays -> sample them, to increase performance and
     // readability
     // Ray-Trace until Rays excape the model.
-    // positionTracker_->initializeNewTracking();
+    positionTracker_->initializeNewTracking();
     RayTracer::TraceResult hitResult =
         RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
     do {
       hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
       currentRay = tracer_->getReflected(&hitData);
 
-      // positionTracker_->addNewPositionToCurrentTracking(hitData);
+      positionTracker_->addNewPositionToCurrentTracking(hitData);
 
     } while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE);
 
     if (sphereWall.hitObject(currentRay, frequency, &hitData)) {
-      // positionTracker_->addNewPositionToCurrentTracking(hitData);
-      // positionTracker_->endCurrentTracking();
+      positionTracker_->addNewPositionToCurrentTracking(hitData);
+      positionTracker_->endCurrentTracking();
     }
 
     energyCollectionRules_->collectEnergy(collectors, &hitData);
   }
 
-  promise.set_value(std::make_pair<std::vector<float>, float>(
-      getEnergyFromGivenCollectors(collectors), std::move(frequency)));
-  std::cout << "THREAD: frequency: " << frequency << "ended!" << std::endl;
+  return getEnergyFromGivenCollectors(collectors);
 }
 
-std::vector<float> Simulator::getEnergyFromGivenCollectors(
-    const std::vector<objects::EnergyCollector> &collectors) {
+Energies Simulator::getEnergyFromGivenCollectors(const Collectors &collectors) {
   std::vector<float> output;
   output.reserve(collectors.size());
   for (auto &collector : collectors) {
-    output.push_back(collector.getEnergy());
+    output.push_back(collector->getEnergy());
   }
   return output;
 }
