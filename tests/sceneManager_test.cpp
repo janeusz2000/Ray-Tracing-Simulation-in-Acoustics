@@ -1,16 +1,54 @@
 #include "main/model.h"
 #include "main/sceneManager.h"
+#include "main/trackers.h"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 #include <memory>
 
-class SceneManagerSimple : ::testing::Test {
+using collectionRules::LinearEnergyCollection;
+using trackers::PositionTrackerInterface;
+
+using Energies = std::vector<float>;
+using EnergiesPerFrequency = std::vector<Energies>;
+
+const float kSkipFreq = 1000;
+
+class FakeTracker : public PositionTrackerInterface {
 public:
-  SceneManagerSimple() {
+  void initializeNewTracking() override{};
+  void
+  addNewPositionToCurrentTracking(const core::RayHitData &hitData) override{};
+  void endCurrentTracking() override{};
+  void clearTracking() override{};
+  void save() const override{};
+};
+
+class SceneManagerSimpleTest : public ::testing::Test {
+public:
+  SceneManagerSimpleTest() {
     float modelSize = 1.0; // [m]
-    model_ = Model::NewReferenceModel(modelSize);
+    model = Model::NewReferenceModel(modelSize);
   };
 
 protected:
-  std::unique_ptr<Model> model_;
+  std::unique_ptr<Model> model;
+  FakeTracker tracker;
+  LinearEnergyCollection energyCollectionRules;
 };
+
+TEST_F(SceneManagerSimpleTest, repetitiveCollectionOfEnergyTest) {
+  float sourcePower = 500;
+  int numOfCollectors = 37;
+  int numOfRaysSquared = 1;
+
+  std::vector<float> frequencies = {kSkipFreq, kSkipFreq};
+
+  SimulationProperties simulationProperties(frequencies, &energyCollectionRules,
+                                            sourcePower, numOfCollectors,
+                                            numOfRaysSquared);
+
+  SceneManager singleRaySimulation(model.get(), simulationProperties, &tracker);
+  EnergiesPerFrequency result = singleRaySimulation.run();
+  ASSERT_THAT(result[0], result[1]);
+}

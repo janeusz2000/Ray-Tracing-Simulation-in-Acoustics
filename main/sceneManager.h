@@ -8,24 +8,19 @@
 #include "obj/generators.h"
 #include "obj/objects.h"
 
-#include <chrono>
-#include <future>
 #include <memory>
-#include <queue>
 #include <string_view>
-#include <thread>
-#include <utility>
 #include <vector>
 
 // TODO: This constructor is too long, fix it ;-)
 // Holds all needed information to perform simulation.
 struct SimulationProperties {
   explicit SimulationProperties(
-      std::string_view dataPath, const std::vector<float> &frequencies /*[Hz]*/,
+      const std::vector<float> &frequencies /*[Hz]*/,
       collectionRules::CollectEnergyInterface *energyCollectionRules,
       float sourcePower = 500 /*[W]*/, int numOfCollectors = 37,
       int numOfRaySquared = 15)
-      : dataPath_(dataPath.data()), frequencies_(frequencies),
+      : frequencies_(frequencies),
         energyCollectionRules_(energyCollectionRules),
         sourcePower_(sourcePower), numOfCollectors_(numOfCollectors),
         numOfRaySquared_(numOfRaySquared) {}
@@ -38,14 +33,12 @@ struct SimulationProperties {
   float sourcePower() const { return sourcePower_; }
   int numOfCollectors() const { return numOfCollectors_; }
   int numOfRaySquared() const { return numOfRaySquared_; }
-  const char *dataPath() const { return dataPath_.data(); }
 
   collectionRules::CollectEnergyInterface *collectionRules() {
     return energyCollectionRules_;
   }
 
 private:
-  std::string_view dataPath_;
   std::vector<float> frequencies_;
   collectionRules::CollectEnergyInterface *energyCollectionRules_;
   float sourcePower_;
@@ -56,11 +49,14 @@ private:
 // This class is creating all necessary objects for simulation.
 class SceneManager {
 public:
+  using energies = std::vector<float>;
+  using energiesPerFrequency = std::vector<energies>;
+
   explicit SceneManager(Model *model,
                         const SimulationProperties &simulationProperties,
                         trackers::PositionTrackerInterface *tracker);
 
-  void run();
+  energiesPerFrequency run();
 
 private:
   Model *model_;

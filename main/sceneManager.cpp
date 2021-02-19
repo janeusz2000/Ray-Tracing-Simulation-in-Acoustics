@@ -10,11 +10,10 @@ SceneManager::SceneManager(Model *model,
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
 }
 
-void SceneManager::run() {
-  using energies = std::vector<float>;
+std::vector<std::vector<float>> SceneManager::run() {
 
   std::vector<float> frequencies = simulationProperties_.frequencies();
-  std::vector<energies> futureVec;
+  energiesPerFrequency outputEnergiesPerFrequency;
 
   for (float freq : frequencies) {
     generators::PointSpeakerRayFactory pointSpeaker(
@@ -26,18 +25,8 @@ void SceneManager::run() {
     Collectors collectors =
         buildCollectors(model_, simulationProperties_.numOfCollectors());
 
-    exportCollectorsToJson(collectors, "./data/energyCollectors.json");
-
-    futureVec.push_back(simulator.run(freq, collectors));
+    outputEnergiesPerFrequency.push_back(simulator.run(freq, collectors));
     tracker_->save();
   }
-
-  std::cout << "===== RAPORT =====" << std::endl;
-  for (size_t index = 0; index < frequencies.size(); ++index) {
-    std::cout << "Frequency: " << frequencies[index] << ", data: [";
-    for (const auto &energy : futureVec[index]) {
-      std::cout << energy << ", ";
-    }
-    std::cout << "]" << std::endl;
-  }
+  return outputEnergiesPerFrequency;
 }
