@@ -119,6 +119,7 @@ std::vector<float> Simulator::run(float frequency,
                                   const Collectors &collectors) {
 
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
+
   core::Ray currentRay;
   core::RayHitData hitData;
 
@@ -156,4 +157,22 @@ Energies Simulator::getEnergyFromGivenCollectors(const Collectors &collectors) {
     output.push_back(collector->getEnergy());
   }
   return output;
+}
+
+void collectionRules::LinearEnergyCollection::collectEnergy(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+    core::RayHitData *hitData) {
+
+  core::Vec3 reachedPosition = hitData->collisionPoint();
+  for (auto &energyCollector : collectors) {
+    if (energyCollector->isVecInside(reachedPosition)) {
+      float distanceToOrigin =
+          (energyCollector->getOrigin() - reachedPosition).magnitude();
+
+      // The closer ray hits origin of the energy Collector, the more energy
+      // energyCollector collects.
+      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
+      energyCollector->addEnergy(energyRatio * hitData->energy());
+    };
+  }
 }

@@ -3,9 +3,7 @@
 SceneManager::SceneManager(Model *model,
                            const SimulationProperties &simulationProperties)
     : model_(model), simulationProperties_(simulationProperties),
-      raytracer_(model), tracker_(simulationProperties.dataPath()),
-      pointSpeaker_(simulationProperties.numOfRaySquared(),
-                    simulationProperties.sourcePower(), model) {
+      raytracer_(model), tracker_(simulationProperties.dataPath()) {
 
   offseter_ = std::make_unique<generators::FakeOffseter>();
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
@@ -14,15 +12,21 @@ SceneManager::SceneManager(Model *model,
 void SceneManager::run() {
   using energies = std::vector<float>;
 
-  Simulator simulator(&raytracer_, model_, &pointSpeaker_, offseter_.get(),
-                      &tracker_, simulationProperties_.energyCollectionRules());
   std::vector<float> frequencies = simulationProperties_.frequencies();
   std::vector<energies> futureVec;
 
   for (float freq : frequencies) {
+    generators::PointSpeakerRayFactory pointSpeaker(
+        simulationProperties_.numOfRaySquared(),
+        simulationProperties_.sourcePower(), model_);
+    Simulator simulator(&raytracer_, model_, &pointSpeaker, offseter_.get(),
+                        &tracker_,
+                        simulationProperties_.energyCollectionRules());
     Collectors collectors =
         buildCollectors(model_, simulationProperties_.numOfCollectors());
+
     exportCollectorsToJson(collectors, "./data/energyCollectors.json");
+
     futureVec.push_back(simulator.run(freq, collectors));
     tracker_.saveAsJson();
   }

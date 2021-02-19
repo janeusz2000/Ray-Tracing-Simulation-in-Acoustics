@@ -69,21 +69,3 @@ bool PointSpeakerRayFactory::isRayAvailable() const {
   return (currentRayIndex_ < numOfRaysAlongEachAxis_ * numOfRaysAlongEachAxis_);
 }
 } // namespace generators
-
-void collectionRules::LinearEnergyCollection::collectEnergy(
-    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
-    core::RayHitData *hitData) {
-
-  core::Vec3 reachedPosition = hitData->collisionPoint();
-  for (auto &energyCollector : collectors) {
-    if (energyCollector->isVecInside(reachedPosition)) {
-      float distanceToOrigin =
-          (energyCollector->getOrigin() - reachedPosition).magnitude();
-
-      // The closer ray hits origin of the energy Collector, the more energy
-      // energyCollector collects.
-      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
-      energyCollector->addEnergy(energyRatio * hitData->energy());
-    };
-  }
-}

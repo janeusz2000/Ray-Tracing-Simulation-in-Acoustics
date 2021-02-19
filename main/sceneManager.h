@@ -35,9 +35,9 @@ struct SimulationProperties {
     return energyCollectionRules_;
   }
 
-  const float &sourcePower() const { return sourcePower_; }
-  const int &numOfCollectors() const { return numOfCollectors_; }
-  const int &numOfRaySquared() const { return numOfRaySquared_; }
+  float sourcePower() const { return sourcePower_; }
+  int numOfCollectors() const { return numOfCollectors_; }
+  int numOfRaySquared() const { return numOfRaySquared_; }
   const char *dataPath() const { return dataPath_.data(); }
 
   collectionRules::CollectEnergyInterface *collectionRules() {
@@ -67,7 +67,6 @@ private:
 
   RayTracer raytracer_;
   trackers::PositionTracker tracker_;
-  generators::PointSpeakerRayFactory pointSpeaker_;
 
   std::unique_ptr<generators::RandomRayOffseter> offseter_;
   std::unique_ptr<Model> referenceModel_;
