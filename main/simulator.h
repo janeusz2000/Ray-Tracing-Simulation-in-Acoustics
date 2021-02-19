@@ -56,11 +56,12 @@ public:
         positionTracker_(positionTracker),
         energyCollectionRules_(energyCollectionRules){};
 
+  using energiesPerFrequency = std::pair<std::vector<float>, float>;
   // Runs the simulation and returns vector of float that represent result
   // energy collected by energyCollectors. Index of the float correspond
   // with index of builded energy collector.
   void run(float frequency, std::vector<objects::EnergyCollector> &collectors,
-           std::promise<std::vector<float>> *promise);
+           std::promise<energiesPerFrequency> &promise);
 
 private:
   std::vector<float> getEnergyFromGivenCollectors(

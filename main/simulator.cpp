@@ -120,7 +120,7 @@ const float getSphereWallRadius(const ModelInterface &model) {
 
 void Simulator::run(float frequency,
                     std::vector<objects::EnergyCollector> &collectors,
-                    std::promise<std::vector<float>> *promise) {
+                    std::promise<energiesPerFrequency> &promise) {
 
   std::cout << "THREAD: frequency: " << frequency << "started!" << std::endl;
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
@@ -152,7 +152,8 @@ void Simulator::run(float frequency,
     energyCollectionRules_->collectEnergy(collectors, &hitData);
   }
 
-  promise->set_value(getEnergyFromGivenCollectors(collectors));
+  promise.set_value(std::make_pair<std::vector<float>, float>(
+      getEnergyFromGivenCollectors(collectors), std::move(frequency)));
   std::cout << "THREAD: frequency: " << frequency << "ended!" << std::endl;
 }
 

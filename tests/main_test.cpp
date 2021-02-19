@@ -42,13 +42,14 @@ TEST_F(MainTest, buildingSimulation) {
 
   std::vector<objects::EnergyCollector> collectors =
       buildCollectors(model_.get(), numOfCollectors_);
-  std::promise<std::vector<float>> accumulatedPromise;
-  std::future<std::vector<float>> accumulatedFuture =
+  using energiesPerFrequency = std::pair<std::vector<float>, float>;
+  std::promise<energiesPerFrequency> accumulatedPromise;
+  std::future<energiesPerFrequency> accumulatedFuture =
       accumulatedPromise.get_future();
 
-  simulator.run(frequency_, collectors, &accumulatedPromise);
-  std::vector<float> result = accumulatedFuture.get();
-  ASSERT_TRUE(result.size() > 0);
+  simulator.run(frequency_, collectors, accumulatedPromise);
+  energiesPerFrequency result = accumulatedFuture.get();
+  ASSERT_TRUE(result.first.size() > 0);
   // positionTracker.saveAsJson();
   // FAIL();
 }

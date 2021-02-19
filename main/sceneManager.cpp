@@ -11,23 +11,14 @@ SceneManager::SceneManager(Model *model,
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
 }
 
-// TODO: fix nullptr promise
-// TODO: fix iterations
-// TODO: code is dirty -> clean it
 void SceneManager::run() {
+  using energies = std::vector<float>;
+  using energiesPerFrequency = std::pair<energies, float>;
+  using Collectors = std::vector<objects::EnergyCollector>;
+
   Simulator simulator(&raytracer_, model_, &pointSpeaker_, offseter_.get(),
                       &tracker_, simulationProperties_.energyCollectionRules());
-
   std::vector<float> frequencies = simulationProperties_.frequencies();
-
-  std::vector<std::promise<std::vector<float>>> promiseVec;
-  std::vector<std::future<std::vector<float>>> futureVec;
-
-  for (size_t index = 0; index < frequencies.size(); ++index) {
-    std::promise<std::vector<float>> accumulatedPromise;
-    promiseVec.push_back(accumulatedPromise);
-    futureVec.push_back(accumulatedPromise.get_future());
-  }
 
   const size_t processorsNumber = std::thread::hardware_concurrency();
   if (processorsNumber == 0) {
@@ -35,20 +26,21 @@ void SceneManager::run() {
   }
   size_t numberOfUsedProcessors = 0;
 
+  std::vector<std::future<energiesPerFrequency>> futureVec;
   std::vector<std::thread> threads;
   auto currentFrequencyIterator = frequencies.cbegin();
-  auto currentPromiseIterator = promiseVec.begin();
   while (true) {
     while (numberOfUsedProcessors < processorsNumber) {
       float frequency = *currentFrequencyIterator;
-      threads.push_back(
-          std::thread(&Simulator::run, &simulator, std::move(frequency),
-                      std::move(buildCollectors(
-                          model_, simulationProperties_.numOfCollectors())),
-                      &(*currentPromiseIterator)));
+      int numOfCollectors = simulationProperties_.numOfCollectors();
+      Collectors collectors = buildCollectors(model_, numOfCollectors);
+
+      std::promise<energiesPerFrequency> promise;
+      futureVec.push_back(promise.get_future());
+      threads.push_back(std::thread(&Simulator::run, &simulator, frequency,
+                                    collectors, promise));
 
       ++currentFrequencyIterator;
-      ++currentPromiseIterator;
       ++numberOfUsedProcessors;
     }
 
@@ -65,10 +57,10 @@ void SceneManager::run() {
     }
   }
 
-  for (size_t index; index < frequencies.size(); ++index) {
-    std::vector<float> result = futureVec[index].get();
-    std::cout << "Frequency: " << frequencies[index] << ", data: [ ";
-    for (const auto &energy : result) {
+  for (auto &future : futureVec) {
+    energiesPerFrequency data = future.get();
+    std::cout << "Frequency: " << data.second << ", data: [ ";
+    for (const auto &energy : data.first) {
       std::cout << energy << ", ";
     }
     std::cout << "]" << std::endl;
