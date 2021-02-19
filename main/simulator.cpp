@@ -80,36 +80,6 @@ Collectors buildCollectors(const ModelInterface *model, int numCollectors) {
   return energyCollectors;
 }
 
-// exports |energyCollectors| as string representation to |path|
-void exportCollectorsToJson(const Collectors &energyCollectors,
-                            std::string_view path) {
-
-  std::ofstream outFile(path.data());
-  if (!outFile.good()) {
-    std::stringstream errorStream;
-    errorStream << "File at path: " << path.data() << ", doesn't exist!";
-    throw std::invalid_argument(errorStream.str());
-  }
-
-  using Json = nlohmann::json;
-  Json outArray = Json::array();
-  int currentCollectorNumber = 0;
-  for (const auto &collector : energyCollectors) {
-    core::Vec3 collectorOrigin = collector->getOrigin();
-    float radius = collector->getRadius();
-    Json energyCollector = {{"number", currentCollectorNumber},
-                            {"x", collectorOrigin.x()},
-                            {"y", collectorOrigin.y()},
-                            {"z", collectorOrigin.z()},
-                            {"radius", radius}};
-    outArray.push_back(energyCollector);
-    ++currentCollectorNumber;
-  }
-
-  outFile << outArray.dump(1);
-  outFile.close();
-}
-
 const float getSphereWallRadius(const ModelInterface &model) {
   return std::max(constants::kSimulationHeight / 2.0f,
                   4 * std::max(model.height(), model.sideSize()));
@@ -173,6 +143,25 @@ void collectionRules::LinearEnergyCollection::collectEnergy(
       // energyCollector collects.
       float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
       energyCollector->addEnergy(energyRatio * hitData->energy());
+    };
+  }
+}
+
+void collectionRules::LinearEnergyCollectionWithPhaseImpact::collectEnergy(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+    core::RayHitData *hitData) {
+
+  core::Vec3 reachedPosition = hitData->collisionPoint();
+  for (auto &energyCollector : collectors) {
+    if (energyCollector->isVecInside(reachedPosition)) {
+      float distanceToOrigin =
+          (energyCollector->getOrigin() - reachedPosition).magnitude();
+
+      // The closer ray hits origin of the energy Collector, the more energy
+      // energyCollector collects.
+      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
+      energyCollector->addEnergy(energyRatio * hitData->energy() *
+                                 std::cos(hitData->phaseAt()));
     };
   }
 }
