@@ -10,6 +10,8 @@
 #include <sstream>
 #include <string_view>
 
+using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+
 namespace trackers {
 
 // Save |model| to the given file as Json file.
@@ -27,6 +29,7 @@ public:
   virtual void save() const = 0;
 };
 
+// Tracks all reached rays position and saves them to json file at given path.
 class JsonPositionTracker : public PositionTrackerInterface {
 public:
   JsonPositionTracker(std::string_view path);
@@ -44,6 +47,18 @@ private:
   std::string path_;
   std::vector<core::RayHitData> currentTracking_;
   std::vector<std::vector<core::RayHitData>> trackings_;
+};
+
+// Saves all current collectors arrangement into file.
+struct CollectorsTrackerInterface {
+  virtual void save(const Collectors &collectors, std::string_view path) = 0;
+};
+
+// saves all collector properies including position and radius, to Json file at
+// given path.
+struct CollectorsTrackerToJson : public CollectorsTrackerInterface {
+  virtual void save(const Collectors &collectors,
+                    std::string_view path) override;
 };
 } // namespace trackers
 

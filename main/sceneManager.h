@@ -52,9 +52,10 @@ public:
   using energies = std::vector<float>;
   using energiesPerFrequency = std::vector<energies>;
 
-  explicit SceneManager(Model *model,
-                        const SimulationProperties &simulationProperties,
-                        trackers::PositionTrackerInterface *tracker);
+  explicit SceneManager(
+      Model *model, const SimulationProperties &simulationProperties,
+      trackers::PositionTrackerInterface *positionTracker,
+      trackers::CollectorsTrackerInterface *collectorsTracker);
 
   energiesPerFrequency run();
 
@@ -62,7 +63,8 @@ private:
   Model *model_;
   SimulationProperties simulationProperties_;
   RayTracer raytracer_;
-  trackers::PositionTrackerInterface *tracker_;
+  trackers::PositionTrackerInterface *positionTracker_;
+  trackers::CollectorsTrackerInterface *collectorsTracker_;
 
   std::unique_ptr<generators::RandomRayOffseter> offseter_;
   std::unique_ptr<Model> referenceModel_;

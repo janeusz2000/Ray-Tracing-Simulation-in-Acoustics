@@ -98,4 +98,35 @@ void JsonPositionTracker::save() const {
   outFile << outputJson.dump(2);
   outFile.close();
 }
+
+// exports |energyCollectors| as string representation to |path|
+void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
+                                   std::string_view path) {
+
+  std::ofstream outFile(path.data());
+  if (!outFile.good()) {
+    std::stringstream errorStream;
+    errorStream << "File at path: " << path.data() << ", doesn't exist!";
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  using Json = nlohmann::json;
+  Json outArray = Json::array();
+  int currentCollectorNumber = 0;
+  for (const auto &collector : energyCollectors) {
+    core::Vec3 collectorOrigin = collector->getOrigin();
+    float radius = collector->getRadius();
+    Json energyCollector = {{"number", currentCollectorNumber},
+                            {"x", collectorOrigin.x()},
+                            {"y", collectorOrigin.y()},
+                            {"z", collectorOrigin.z()},
+                            {"radius", radius}};
+    outArray.push_back(energyCollector);
+    ++currentCollectorNumber;
+  }
+
+  outFile << outArray.dump(1);
+  outFile.close();
+}
+
 } // namespace trackers

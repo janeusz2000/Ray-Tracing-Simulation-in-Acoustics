@@ -13,7 +13,8 @@ int main() {
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
   trackers::saveModelToJson("./data", model.get());
-  trackers::JsonPositionTracker tracker("./data");
+  trackers::JsonPositionTracker positionTracker("./data");
+  trackers::CollectorsTrackerToJson collectorsTracker;
 
   collectionRules::LinearEnergyCollection energyCollectionRules;
 
@@ -21,6 +22,7 @@ int main() {
   SimulationProperties properties(frequencies, &energyCollectionRules, 500, 37,
                                   1);
 
-  SceneManager manager(model.get(), properties, &tracker);
+  SceneManager manager(model.get(), properties, &positionTracker,
+                       &collectorsTracker);
   manager.run();
 }

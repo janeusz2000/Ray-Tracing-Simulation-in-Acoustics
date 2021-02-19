@@ -38,48 +38,29 @@ To use this project, you will need to follow few steps.
 ```cpp
 #include "main/model.h"
 #include "main/rayTracer.h"
+#include "main/sceneManager.h"
 #include "main/simulator.h"
 #include "obj/generators.h"
 
 #include <algorithm>
 #include <string>
 
-// TODO: make it simpler
 int main() {
 
-  // Path to your model
-  std::string path = "./models/monkey.obj";
-  float sourcePower = 500; // [W]
-  float frequency = 1e3;   // [Hz]
+  std::string path = "./models/simpleCube.obj";
+  std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
-  // Number of total microphones positions.
-  int numOfCollectors = 37;
-
-  // Number of generated rays total is |numOfRaysAlongEachAxis|^2
-  int numOfRaysAlongEachAxis = 15;
-
-  // TODO: Hide this
-  std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path);
   trackers::saveModelToJson("./data", model.get());
+  trackers::JsonPositionTracker tracker("./data");
 
-  RayTracer rayTracer(model.get());
-  trackers::PositionTracker positionTracker("./data");
-  generators::PointSpeakerRayFactory pointSpeaker(numOfRaysAlongEachAxis,
-                                                  sourcePower, model.get());
-  generators::FakeOffseter rayOffseter;
-  Simulator simulator(&rayTracer, model.get(), &pointSpeaker, &rayOffseter,
-                      &positionTracker);
+  collectionRules::LinearEnergyCollection energyCollectionRules;
 
-  std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
-      buildCollectors(model.get(), numOfCollectors);
-  exportCollectorsToJson(collectors, "./data/energyCollectors.json");
+  std::vector<float> frequencies = {100, 200, 300, 400, 500};
+  SimulationProperties properties(frequencies, &energyCollectionRules, 500, 37,
+                                  1);
 
-  std::vector<float> energies = simulator.run(frequency, numOfCollectors);
-  positionTracker.saveAsJson();
-
-  std::for_each(energies.begin(), energies.end(),
-                [](float i) { std::cout << i << " "; });
-  return 0;
+  SceneManager manager(model.get(), properties, &tracker);
+  manager.run();
 }
 ```
 

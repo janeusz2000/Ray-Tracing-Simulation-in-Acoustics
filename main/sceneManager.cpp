@@ -1,10 +1,12 @@
 #include "main/sceneManager.h"
 
-SceneManager::SceneManager(Model *model,
-                           const SimulationProperties &simulationProperties,
-                           trackers::PositionTrackerInterface *tracker)
+SceneManager::SceneManager(
+    Model *model, const SimulationProperties &simulationProperties,
+    trackers::PositionTrackerInterface *positionTracker,
+    trackers::CollectorsTrackerInterface *collectorTracker)
     : model_(model), simulationProperties_(simulationProperties),
-      raytracer_(model), tracker_(tracker) {
+      raytracer_(model), positionTracker_(positionTracker),
+      collectorsTracker_(collectorTracker) {
 
   offseter_ = std::make_unique<generators::FakeOffseter>();
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
@@ -20,13 +22,15 @@ std::vector<std::vector<float>> SceneManager::run() {
         simulationProperties_.numOfRaySquared(),
         simulationProperties_.sourcePower(), model_);
     Simulator simulator(&raytracer_, model_, &pointSpeaker, offseter_.get(),
-                        tracker_,
+                        positionTracker_,
                         simulationProperties_.energyCollectionRules());
     Collectors collectors =
         buildCollectors(model_, simulationProperties_.numOfCollectors());
 
+    collectorsTracker_->save(collectors, "./data");
+
     outputEnergiesPerFrequency.push_back(simulator.run(freq, collectors));
-    tracker_->save();
+    positionTracker_->save();
   }
   return outputEnergiesPerFrequency;
 }

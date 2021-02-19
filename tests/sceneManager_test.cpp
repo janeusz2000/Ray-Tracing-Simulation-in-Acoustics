@@ -7,14 +7,16 @@
 #include <memory>
 
 using collectionRules::LinearEnergyCollection;
+using trackers::CollectorsTrackerInterface;
 using trackers::PositionTrackerInterface;
 
 using Energies = std::vector<float>;
 using EnergiesPerFrequency = std::vector<Energies>;
+using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
 const float kSkipFreq = 1000;
 
-class FakeTracker : public PositionTrackerInterface {
+class FakePositionTracker : public PositionTrackerInterface {
 public:
   void initializeNewTracking() override{};
   void
@@ -22,6 +24,10 @@ public:
   void endCurrentTracking() override{};
   void clearTracking() override{};
   void save() const override{};
+};
+
+struct FakeCollectorsTracker : public CollectorsTrackerInterface {
+  void save(const Collectors &collectors, std::string_view path) override{};
 };
 
 class SceneManagerSimpleTest : public ::testing::Test {
@@ -33,7 +39,8 @@ public:
 
 protected:
   std::unique_ptr<Model> model;
-  FakeTracker tracker;
+  FakePositionTracker positionTracker;
+  FakeCollectorsTracker collectorsTracker;
   LinearEnergyCollection energyCollectionRules;
 };
 
@@ -48,7 +55,8 @@ TEST_F(SceneManagerSimpleTest, repetitiveCollectionOfEnergyTest) {
                                             sourcePower, numOfCollectors,
                                             numOfRaysSquared);
 
-  SceneManager singleRaySimulation(model.get(), simulationProperties, &tracker);
+  SceneManager singleRaySimulation(model.get(), simulationProperties,
+                                   &positionTracker, &collectorsTracker);
   EnergiesPerFrequency result = singleRaySimulation.run();
   ASSERT_THAT(result[0], result[1]);
 }

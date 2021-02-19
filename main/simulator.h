@@ -7,10 +7,8 @@
 #include "obj/generators.h"
 #include "obj/objects.h"
 
-
 #include <cmath>
 #include <fstream>
-#include <future>
 #include <iostream>
 #include <limits>
 #include <sstream>
