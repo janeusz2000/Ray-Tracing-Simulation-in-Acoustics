@@ -1,11 +1,12 @@
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
-#include "main/positionTracker.h"
 #include "main/rayTracer.h"
+#include "main/trackers.h"
 #include "nlohmann/json.hpp"
 #include "obj/generators.h"
 #include "obj/objects.h"
+
 
 #include <cmath>
 #include <fstream>
@@ -75,7 +76,7 @@ public:
   Simulator(RayTracer *tracer, ModelInterface *model,
             generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter,
-            trackers::PositionTracker *positionTracker,
+            trackers::PositionTrackerInterface *positionTracker,
             collectionRules::CollectEnergyInterface *energyCollectionRules)
       : tracer_(tracer), model_(model), source_(source), offsetter_(offsetter),
         positionTracker_(positionTracker),
@@ -96,7 +97,7 @@ private:
   generators::RayFactory *source_;
   generators::RandomRayOffseter *offsetter_;
 
-  trackers::PositionTracker *positionTracker_;
+  trackers::PositionTrackerInterface *positionTracker_;
   collectionRules::CollectEnergyInterface *energyCollectionRules_;
 };
 

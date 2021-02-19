@@ -23,7 +23,7 @@ cc_library(
         "main/model.cpp",
         "main/simulator.cpp",
         "main/rayTracer.cpp",
-        "main/positionTracker.cpp",
+        "main/trackers.cpp",
     ],
     hdrs = [
         "constants.h",
@@ -35,11 +35,23 @@ cc_library(
         "main/model.h",
         "main/simulator.h",
         "main/rayTracer.h",
-        "main/positionTracker.h"
+        "main/trackers.h"
     ],
     deps  = [
         "@github_nlohmann_json//:json",
     ],
+)
+
+cc_test(
+    name = "sceneManager_test",
+    srcs = [
+        "tests/sceneManager_test.cpp",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
+    size = "medium",
 )
 
 

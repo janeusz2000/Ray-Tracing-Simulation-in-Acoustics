@@ -31,7 +31,7 @@ protected:
 TEST_F(MainTest, buildingSimulation) {
 
   RayTracer rayTracer(model_.get());
-  trackers::PositionTracker positionTracker("/tmp");
+  trackers::JsonPositionTracker positionTracker("/tmp");
   PointSpeakerRayFactory pointSpeaker(numOfRayAlongEachAxis_, sourcePower_,
                                       model_.get());
   collectionRules::LinearEnergyCollection energyCollectionRules;

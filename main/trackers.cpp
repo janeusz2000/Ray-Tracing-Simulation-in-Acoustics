@@ -1,4 +1,4 @@
-#include "positionTracker.h"
+#include "trackers.h"
 
 namespace trackers {
 void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
@@ -39,22 +39,23 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
   outFile.close();
 }
 
-PositionTracker::PositionTracker(std::string_view path) : path_(path.data()){};
+JsonPositionTracker::JsonPositionTracker(std::string_view path)
+    : path_(path.data()){};
 
-void PositionTracker::clearTracking() {
+void JsonPositionTracker::clearTracking() {
   currentTracking_.clear();
   trackings_.clear();
 }
-void PositionTracker::initializeNewTracking() { currentTracking_.clear(); }
-void PositionTracker::addNewPositionToCurrentTracking(
+void JsonPositionTracker::initializeNewTracking() { currentTracking_.clear(); }
+void JsonPositionTracker::addNewPositionToCurrentTracking(
     const core::RayHitData &hitData) {
   currentTracking_.push_back(hitData);
 }
-void PositionTracker::endCurrentTracking() {
+void JsonPositionTracker::endCurrentTracking() {
   trackings_.push_back(currentTracking_);
 }
 
-void PositionTracker::saveAsJson() const {
+void JsonPositionTracker::save() const {
   using Json = nlohmann::json;
 
   Json outputJson = Json::array();

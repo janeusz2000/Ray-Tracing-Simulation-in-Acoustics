@@ -2,9 +2,9 @@
 #define SCENEMANAGER_H
 
 #include "core/vec3.h"
-#include "main/positionTracker.h"
 #include "main/rayTracer.h"
 #include "main/simulator.h"
+#include "main/trackers.h"
 #include "obj/generators.h"
 #include "obj/objects.h"
 
@@ -57,16 +57,16 @@ private:
 class SceneManager {
 public:
   explicit SceneManager(Model *model,
-                        const SimulationProperties &simulationProperties);
+                        const SimulationProperties &simulationProperties,
+                        trackers::PositionTrackerInterface *tracker);
 
   void run();
 
 private:
   Model *model_;
   SimulationProperties simulationProperties_;
-
   RayTracer raytracer_;
-  trackers::PositionTracker tracker_;
+  trackers::PositionTrackerInterface *tracker_;
 
   std::unique_ptr<generators::RandomRayOffseter> offseter_;
   std::unique_ptr<Model> referenceModel_;
