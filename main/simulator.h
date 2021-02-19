@@ -42,7 +42,7 @@ struct LinearEnergyCollection : public CollectEnergyInterface {
 struct LinearEnergyCollectionWithPhaseImpact : public CollectEnergyInterface {
   void collectEnergy(const Collectors &collectors,
                      core::RayHitData *hitData) override;
-}
+};
 // TODO: Create Rules for no linear collection
 // TODO: Create Combined Rules of collection
 } // namespace collectionRules

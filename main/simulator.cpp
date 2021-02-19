@@ -161,7 +161,7 @@ void collectionRules::LinearEnergyCollectionWithPhaseImpact::collectEnergy(
       // energyCollector collects.
       float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
       energyCollector->addEnergy(energyRatio * hitData->energy() *
-                                 std::cos(hitData->phaseAt()));
+                                 std::cos(hitData->phase()));
     };
   }
 }
