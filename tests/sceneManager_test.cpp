@@ -58,5 +58,6 @@ TEST_F(SceneManagerSimpleTest, repetitiveCollectionOfEnergyTest) {
   SceneManager singleRaySimulation(model.get(), simulationProperties,
                                    &positionTracker, &collectorsTracker);
   EnergiesPerFrequency result = singleRaySimulation.run();
+  ASSERT_THAT(result[0], ::testing::Not(::testing::IsEmpty()));
   ASSERT_THAT(result[0], result[1]);
 }
