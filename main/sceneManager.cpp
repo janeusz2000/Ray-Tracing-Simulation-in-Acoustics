@@ -37,8 +37,9 @@ void SceneManager::run() {
 
       std::promise<energiesPerFrequency> promise;
       futureVec.push_back(promise.get_future());
-      threads.push_back(std::thread(&Simulator::run, &simulator, frequency,
-                                    std::ref(collectors), std::ref(promise)));
+      threads.push_back(std::thread(&Simulator::run, &simulator,
+                                    std::ref(frequency), std::ref(collectors),
+                                    std::ref(promise)));
 
       ++currentFrequencyIterator;
       ++numberOfUsedProcessors;
