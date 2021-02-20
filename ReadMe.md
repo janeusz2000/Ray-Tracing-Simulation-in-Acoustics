@@ -95,3 +95,25 @@ npm start
 ## Documentation:
 
 ## TODO List:
+
+[ ] change EnergyPerFrequency to unordered_map<float, energies>>
+[ ] split simulation properties to at leas two bundles of class
+[ ] fix constructor of the simulationProperties
+[ ] add comments about energyPerFrequency, what it represent
+[ ] explain what scene manager do
+[ ] consider changing name of the SceneManager
+[ ] create dynamic reading object in gui
+[ ] export energies to gui
+[ ] create reference data
+[ ] export reference data to gui
+[ ] crate new tab inside of the gui to view results of the simulation
+[ ] diffusion coefficient per frequency on gui (x must be log10)
+[ ] create polar pattern kon every frequency
+ (create list to choose frequency per polar pattern)
+[ ] calculate diffusion coefficient per frequency on gui
+[ ] create RayTracer interface (hit with one ray get s reflected + random ones
+could produce another rays)
+[ ] talk with promoter about reference data from mes
+[ ] add multithreading support for speeding up experiments
+[ ] create architecture for running experiments
+[ ] create new ray-tracers to model wave phenomena
