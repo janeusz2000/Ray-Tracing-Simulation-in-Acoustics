@@ -25,6 +25,9 @@ public:
 
 private:
   std::vector<TriangleObj> triangles_;
+  void printItself(std::ostream &os) const noexcept override {
+    os << "Fake Model";
+  }
 };
 
 TEST(PointSpeakerRayFactoryTest, SingleRayTest) {

@@ -26,10 +26,20 @@ public:
   void endCurrentTracking() override{};
   void clearTracking() override{};
   void save() const override{};
+
+private:
+  void printItself(std::ostream &os) const noexcept override {
+    os << "Fake Position Tracker";
+  }
 };
 
 struct FakeCollectorsTracker : public CollectorsTrackerInterface {
   void save(const Collectors &collectors, std::string_view path) override{};
+
+private:
+  void printItself(std::ostream &os) const noexcept override {
+    os << "Fake Collectors Tracker";
+  }
 };
 
 class SceneManagerSimpleTest : public ::testing::Test {

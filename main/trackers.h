@@ -27,15 +27,18 @@ public:
   virtual void endCurrentTracking() = 0;
   virtual void clearTracking() = 0;
   virtual void save() const = 0;
+
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const PositionTrackerInterface &tracker);
+
+private:
+  virtual void printItself(std::ostream &os) const noexcept = 0;
 };
 
 // Tracks all reached rays position and saves them to json file at given path.
 class JsonPositionTracker : public PositionTrackerInterface {
 public:
   JsonPositionTracker(std::string_view path);
-
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const JsonPositionTracker &tracker);
 
   // Initialize new tracking of the ray
   void initializeNewTracking() override;
@@ -47,6 +50,7 @@ public:
   void save() const override;
 
 private:
+  void printItself(std::ostream &os) const noexcept override;
   std::string path_;
   std::vector<core::RayHitData> currentTracking_;
   std::vector<std::vector<core::RayHitData>> trackings_;
@@ -55,6 +59,12 @@ private:
 // Saves all current collectors arrangement into file.
 struct CollectorsTrackerInterface {
   virtual void save(const Collectors &collectors, std::string_view path) = 0;
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const CollectorsTrackerInterface &tracker);
+
+private:
+  // puts representation of itself as string to the given stream.
+  virtual void printItself(std::ostream &os) const noexcept = 0;
 };
 
 // saves all collector properies including position and radius, to Json file at
@@ -63,8 +73,8 @@ struct CollectorsTrackerToJson : public CollectorsTrackerInterface {
   virtual void save(const Collectors &collectors,
                     std::string_view path) override;
 
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const CollectorsTrackerToJson &tracker);
+private:
+  void printItself(std::ostream &os) const noexcept override;
 };
 } // namespace trackers
 

@@ -75,6 +75,18 @@ SceneManager::SceneManager(
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
 }
 
+std::ostream &operator<<(std::ostream &os, const SceneManager &manager) {
+  return os << "SCENE MANAGER\n"
+            << "Model: " << *(manager.model_) << "\n"
+            << "Simulation properties: " << manager.simulationProperties_
+            << "\n"
+            << "Ray Tracer: " << manager.raytracer_ << "\n"
+            << "Position Tracker: " << *(manager.positionTracker_) << "\n"
+            << "Collectors Tracker: " << *(manager.collectorsTracker_) << "\n"
+            << "Offseter: " << *(manager.offseter_) << "\n"
+            << "Reference Model: " << *(manager.referenceModel_);
+}
+
 std::unordered_map<float, std::vector<float>> SceneManager::run() {
   std::vector<float> frequencies =
       simulationProperties_.basicSimulationProperties().frequencies;

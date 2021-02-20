@@ -1,5 +1,9 @@
 #include "main/rayTracer.h"
 
+std::ostream &operator<<(std::ostream &os, const RayTracer &rayTracer) {
+  return os << "Ray Tracer class with model: \n" << *(rayTracer.model_);
+}
+
 RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
                                            float frequency,
                                            core::RayHitData *hitData) {

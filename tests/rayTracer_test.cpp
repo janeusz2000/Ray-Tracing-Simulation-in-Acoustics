@@ -32,6 +32,9 @@ public:
 
 private:
   std::vector<TriangleObj> triangles_;
+  void printItself(std::ostream &os) const noexcept override {
+    os << "Fake Reference Model";
+  }
 };
 
 class RayTracerTest : public ::testing::Test {

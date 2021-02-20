@@ -96,10 +96,12 @@ public:
         positionTracker_(positionTracker),
         energyCollectionRules_(energyCollectionRules){};
 
+  friend std::ostream &operator<<(std::ostream &os, const Simulator &simulator);
+
   // Runs the simulation and returns vector of float that represent result
   // energy collected by energyCollectors. Index of the float correspond
-  // with index of builded energy collector. |Energies| represents vector of
-  // collected energy inside collectors with the same order as given
+  // with index of builded energy collector. |Energies| is vector of float that
+  // represent collected energy inside collectors with the same order as given
   // |collectors|.
   Energies run(float frequency, const Collectors &collectors);
 

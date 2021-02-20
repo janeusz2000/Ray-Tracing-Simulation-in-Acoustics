@@ -1,5 +1,10 @@
 #include "main/model.h"
 
+std::ostream &operator<<(std::ostream &os, const ModelInterface &model) {
+  model.printItself(os);
+  return os;
+}
+
 const std::vector<objects::TriangleObj> &Model::triangles() const {
   return triangles_;
 }
@@ -123,4 +128,10 @@ float Model::getMaxHeight(const std::vector<core::Vec3> &points) const {
     maxHeight = std::max(maxHeight, point.z());
   }
   return maxHeight;
+}
+void Model::printItself(std::ostream &os) const noexcept {
+  os << "Model: \n"
+     << "Triangles in the model: " << triangles_.size() << "\n"
+     << "Model height: " << height_ << "\n"
+     << "Model side size: " << sideSize_ << "\n";
 }

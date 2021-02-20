@@ -42,19 +42,24 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
   outFile.close();
 }
 
+std::ostream &operator<<(std::ostream &os,
+                         const PositionTrackerInterface &tracker) {
+  tracker.printItself(os);
+  return os;
+}
+
 JsonPositionTracker::JsonPositionTracker(std::string_view path)
     : path_(path.data()){};
 
-std::ostream &operator<<(std::ostream &os, const JsonPositionTracker &tracker) {
+void JsonPositionTracker::printItself(std::ostream &os) const noexcept {
   os << "Json Position Tracker\n"
-     << "Path: " << tracker.path_.data() << "\n"
+     << "Path: " << path_.data() << "\n"
      << "current tracking: \n";
   int currentHitData = 0;
-  for (const core::RayHitData &hitData : tracker.currentTracking_) {
+  for (const core::RayHitData &hitData : currentTracking_) {
     os << "HitData number " << currentHitData << "\n" << hitData << "\n";
   }
-  os << "Trackings overall size: " << tracker.trackings_.size();
-  return os;
+  os << "Trackings overall size: " << trackings_.size();
 }
 
 void JsonPositionTracker::clearTracking() {
@@ -115,6 +120,12 @@ void JsonPositionTracker::save() const {
   outFile.close();
 }
 
+std::ostream &operator<<(std::ostream &os,
+                         const CollectorsTrackerInterface &tracker) {
+  tracker.printItself(os);
+  return os;
+}
+
 // exports |energyCollectors| as string representation to |path|
 void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                                    std::string_view path) {
@@ -148,8 +159,7 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
   outFile.close();
 }
 
-std::ostream &operator<<(std::ostream &os,
-                         const CollectorsTrackerToJson &tracker) {
-  return os << "Json Collectors Tracker \n";
+void CollectorsTrackerToJson::printItself(std::ostream &os) const noexcept {
+  os << "Json Collectors Tracker \n";
 }
 } // namespace trackers

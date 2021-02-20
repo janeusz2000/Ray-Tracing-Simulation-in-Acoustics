@@ -2,6 +2,20 @@
 
 namespace generators {
 
+std::ostream &operator<<(std::ostream &os, const RandomRayOffseter &offseter) {
+  offseter.printItself(os);
+  return os;
+}
+
+void FakeOffseter::printItself(std::ostream &os) const noexcept {
+  os << "Fake Ray Offseter";
+}
+
+std::ostream &operator<<(std::ostream &os, const RayFactory &factory) {
+  factory.printItself(os);
+  return os;
+}
+
 PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
                                                float sourcePower,
                                                ModelInterface *model)
@@ -12,7 +26,9 @@ PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,
 
   if (numOfRaysAlongEachAxis_ <= 0) {
     std::stringstream ss;
-    ss << "|numOfRaysAlongEachAxis| cannot be equal or less than zero! "
+    ss << "|numOfRaysAlongEachAxis| given to: \n"
+       << *this
+       << "cannot be equal or less than zero! "
           "\n|numOfRaysAlongEachAxis|: "
        << numOfRaysAlongEachAxis_;
     throw std::invalid_argument(ss.str());
@@ -67,5 +83,15 @@ core::Vec3 PointSpeakerRayFactory::getDirection(int currentRayIndex) const {
 
 bool PointSpeakerRayFactory::isRayAvailable() const {
   return (currentRayIndex_ < numOfRaysAlongEachAxis_ * numOfRaysAlongEachAxis_);
+}
+
+void PointSpeakerRayFactory::printItself(std::ostream &os) const noexcept {
+  os << "POINT SPEAKER RAY FACTORY\n"
+     << "Model: " << *(model_) << "\n"
+     << "Origin: " << origin_ << "\n"
+     << "Num Of Rays Along Each Axis: " << numOfRaysAlongEachAxis_ << "\n"
+     << "Current Ray Index: " << currentRayIndex_ << "\n"
+     << "Energy Per Ray: " << energyPerRay_ << "\n"
+     << "Target Reference Direction: " << targetReferenceDirection_;
 }
 } // namespace generators

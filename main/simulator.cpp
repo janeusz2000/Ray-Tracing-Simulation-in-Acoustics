@@ -54,11 +54,13 @@ std::string_view LinearEnergyCollectionWithPhaseImpact::printItself() const {
 Collectors buildCollectors(const ModelInterface *model, int numCollectors) {
 
   if (model->empty()) {
-    throw std::invalid_argument("Model cannot be Empty!");
+    throw std::invalid_argument(
+        "Model given to buildCollectors() cannot be Empty!");
   }
   if (numCollectors < 4) {
     std::stringstream ss;
-    ss << "numCollectors: " << numCollectors << " is less then 4";
+    ss << "given numCollectors in buildCollectors(): " << numCollectors
+       << ", is less then 4";
     throw std::invalid_argument(ss.str());
   }
 
@@ -68,8 +70,10 @@ Collectors buildCollectors(const ModelInterface *model, int numCollectors) {
   // placed right above the model.
   if (numCollectors % 4 != 0 && (numCollectors - 1) % 4 != 0) {
     std::stringstream ss;
-    ss << "numCollectors or numCollectors-1 has to be divisible by 4, got "
-       << "numCollectors = " << numCollectors;
+    ss << "given number to buildCollectors() "
+       << "numCollectors or numCollectors - 1\n"
+       << "has to be divisible by 4. Instead got numCollectors:  "
+       << numCollectors;
     throw std::invalid_argument(ss.str());
   }
 
@@ -134,6 +138,17 @@ Collectors buildCollectors(const ModelInterface *model, int numCollectors) {
 const float getSphereWallRadius(const ModelInterface &model) {
   return std::max(constants::kSimulationHeight / 2.0f,
                   4 * std::max(model.height(), model.sideSize()));
+}
+
+std::ostream &operator<<(std::ostream &os, const Simulator &simulator) {
+  return os << "SIMULATOR\n"
+            << "Ray tracer: " << *(simulator.tracer_) << "\n"
+            << "Model: " << *(simulator.model_) << "\n"
+            << "Source: " << *(simulator.source_) << "\n"
+            << "Ray Offseter: " << *(simulator.offsetter_) << "\n"
+            << "Position Tracker: " << *(simulator.positionTracker_) << "\n"
+            << "Energy Collection Rules: "
+            << *(simulator.energyCollectionRules_) << "\n";
 }
 
 std::vector<float> Simulator::run(float frequency,

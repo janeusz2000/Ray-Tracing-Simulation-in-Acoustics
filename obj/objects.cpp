@@ -65,7 +65,6 @@ std::ostream &operator<<(std::ostream &os, const Sphere &sp) {
             << ", radius: " << sp.getRadius() << " [m]";
 }
 
-// GETTERS AND SETTERS
 void Sphere::setRadius(float rad) { radius_ = rad; }
 float Sphere::getRadius() const { return radius_; }
 
@@ -74,7 +73,6 @@ std::ostream &operator<<(std::ostream &os, const SphereWall &sp) {
             << ", radius: " << sp.getRadius() << " [m]";
 }
 
-// OPERATORS
 EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other) {
   if (other == *this) {
     return *this;
@@ -97,8 +95,6 @@ bool EnergyCollector::operator==(const EnergyCollector &other) const {
           getRadius() == other.getRadius() && getEnergy() == other.getEnergy());
 }
 
-// METHODS
-
 float EnergyCollector::distanceAt(const core::Vec3 &positionHit) const {
   return (getOrigin() - positionHit).magnitude();
 }
@@ -107,12 +103,9 @@ void EnergyCollector::collectEnergy(const core::RayHitData &hitdata) {
   energy_ += hitdata.energy();
 }
 
-// GETTERS AND SETTERS
 void EnergyCollector::setEnergy(float en) { energy_ = en; }
 float EnergyCollector::getEnergy() const { return energy_; }
 void EnergyCollector::addEnergy(float en) { energy_ += en; }
-
-// CONSTRUCTORS
 
 TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2,
                          const core::Vec3 &point3)
@@ -123,8 +116,6 @@ TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2,
 
 TriangleObj::TriangleObj(const TriangleObj &other) { *this = other; }
 
-// OPERATORS
-
 TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
   setPoint1(other.point1());
   setPoint2(other.point2());
@@ -134,6 +125,7 @@ TriangleObj &TriangleObj::operator=(const TriangleObj &other) {
 
   return *this;
 }
+
 bool TriangleObj::operator==(const TriangleObj &other) const {
   // if other triangle has the same points but declared in different order,
   // they will be still equal.
@@ -230,7 +222,7 @@ bool TriangleObj::arePointsValid() {
   recalculateArea();
   if (area() < constants::kAccuracy) {
     std::stringstream ss;
-    ss << "Area of triangle is too small: " << area();
+    ss << "Area of triangle" << *this << " is too small: " << area();
     throw std::invalid_argument(ss.str());
   }
   return true;

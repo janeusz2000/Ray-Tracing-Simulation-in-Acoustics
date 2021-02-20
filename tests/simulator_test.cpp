@@ -49,6 +49,9 @@ public:
   bool empty() const override { return empty_; }
 
 private:
+  void printItself(std::ostream &os) const noexcept override {
+    os << "Fake Model";
+  }
   std::vector<TriangleObj> triangles_;
   bool empty_;
 };
@@ -116,7 +119,8 @@ protected:
 TEST_F(EnergyCollectorTest, ModelEmptyNotBuildingCollectors) {
   const FakeModel emptyModel(true);
   ASSERT_EXCEPTION_MSG(buildCollectors(&emptyModel, kSkipNumber),
-                       std::invalid_argument, "Model cannot be Empty!");
+                       std::invalid_argument,
+                       "Model given to buildCollectors() cannot be Empty!");
 
   const FakeModel nonEmptyModel(false);
   EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, kSkipNumber));
@@ -127,12 +131,12 @@ TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
 
   ASSERT_EXCEPTION_MSG(
       buildCollectors(&nonEmptyModel, 38), std::invalid_argument,
-      "numCollectors or numCollectors-1 has to be divisible by 4, got "
-      "numCollectors = 38");
+      "given number to buildCollectors() numCollectors or numCollectors - 1"
+      "\nhas to be divisible by 4. Instead got numCollectors:  38");
 
-  ASSERT_EXCEPTION_MSG(buildCollectors(&nonEmptyModel, 3),
-                       std::invalid_argument,
-                       "numCollectors: 3 is less then 4");
+  ASSERT_EXCEPTION_MSG(
+      buildCollectors(&nonEmptyModel, 3), std::invalid_argument,
+      "given numCollectors in buildCollectors(): 3, is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
   EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, 37));

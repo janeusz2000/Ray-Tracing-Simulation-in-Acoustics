@@ -9,6 +9,9 @@
 class RayTracer {
 public:
   RayTracer(ModelInterface *model) : model_(model){};
+
+  friend std::ostream &operator<<(std::ostream &os, const RayTracer &rayTracer);
+
   enum class TraceResult { HIT_TRIANGLE, WENT_OUTSIDE_OF_SIMULATION_SPACE };
   // |hitData| is modified to hold information where ray hit the triangle,
   // or where it went outside the simulation

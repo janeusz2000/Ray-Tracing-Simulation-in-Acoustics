@@ -82,6 +82,9 @@ public:
       trackers::PositionTrackerInterface *positionTracker,
       trackers::CollectorsTrackerInterface *collectorsTracker);
 
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const SceneManager &manager);
+
   // runs whole simulation and returns collected energy from the
   // EnergyCollectors.
   EnergiesPerFrequency run();

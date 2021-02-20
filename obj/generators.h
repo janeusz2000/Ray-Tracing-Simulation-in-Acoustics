@@ -7,6 +7,7 @@
 #include "main/model.h"
 
 #include <exception>
+#include <iostream>
 #include <sstream>
 #include <vector>
 
@@ -19,19 +20,33 @@ public:
                       core::Vec3(getNextAxisOffset(), getNextAxisOffset(), 0));
   }
 
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const RandomRayOffseter &offseter);
+
 protected:
   virtual float getNextAxisOffset() = 0;
+
+private:
+  virtual void printItself(std::ostream &os) const noexcept = 0;
 };
 
 class FakeOffseter : public RandomRayOffseter {
 protected:
   float getNextAxisOffset() override { return 0; }
+
+private:
+  void printItself(std::ostream &os) const noexcept override;
 };
 
 class RayFactory {
 public:
   virtual bool genRay(core::Ray *ray) = 0;
   virtual core::Vec3 origin() const = 0;
+
+  friend std::ostream &operator<<(std::ostream &os, const RayFactory &factory);
+
+private:
+  virtual void printItself(std::ostream &os) const noexcept = 0;
 };
 
 // Generates rays aimed at given model from predetermined |origin| of the
@@ -53,6 +68,8 @@ public:
 private:
   core::Vec3 getDirection(int currentRayIndex) const;
   bool isRayAvailable() const;
+
+  void printItself(std::ostream &os) const noexcept override;
 
   ModelInterface *model_;
   core::Vec3 origin_;
