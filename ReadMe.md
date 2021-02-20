@@ -95,6 +95,7 @@ npm start
 ## Documentation:
 
 ## TODO List:
+[ ]
 
 [ ] change EnergyPerFrequency to unordered_map<float, energies>>
 [ ] split simulation properties to at leas two bundles of class
