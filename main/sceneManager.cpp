@@ -12,10 +12,10 @@ SceneManager::SceneManager(
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
 }
 
-std::vector<std::vector<float>> SceneManager::run() {
+std::unordered_map<float, std::vector<float>> SceneManager::run() {
 
   std::vector<float> frequencies = simulationProperties_.frequencies();
-  energiesPerFrequency outputEnergiesPerFrequency;
+  EnergiesPerFrequency outputEnergiesPerFrequency;
 
   for (float freq : frequencies) {
     generators::PointSpeakerRayFactory pointSpeaker(
@@ -29,7 +29,10 @@ std::vector<std::vector<float>> SceneManager::run() {
 
     collectorsTracker_->save(collectors, "./data");
 
-    outputEnergiesPerFrequency.push_back(simulator.run(freq, collectors));
+    Energies energies = simulator.run(freq, collectors);
+    std::pair<float, Energies> energiesPerFrequency =
+        std::make_pair<float, Energies>(std::move(freq), std::move(energies));
+    outputEnergiesPerFrequency.insert(energiesPerFrequency);
     positionTracker_->save();
   }
   return outputEnergiesPerFrequency;

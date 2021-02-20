@@ -10,6 +10,8 @@
 
 #include <memory>
 #include <string_view>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 // TODO: This constructor is too long, fix it ;-)
@@ -49,15 +51,21 @@ private:
 // This class is creating all necessary objects for simulation.
 class SceneManager {
 public:
-  using energies = std::vector<float>;
-  using energiesPerFrequency = std::vector<energies>;
+  // Represent collected energy value from each collector
+  // at Collectors at the same index.
+  using Energies = std::vector<float>;
+  // Represent collected energy from collectors at the given float that
+  // represent frequency of the simulation.
+  using EnergiesPerFrequency = std::unordered_map<float, Energies>;
 
   explicit SceneManager(
       Model *model, const SimulationProperties &simulationProperties,
       trackers::PositionTrackerInterface *positionTracker,
       trackers::CollectorsTrackerInterface *collectorsTracker);
 
-  energiesPerFrequency run();
+  // runs whole simulation and returns collected energy from the
+  // EnergyCollectors.
+  EnergiesPerFrequency run();
 
 private:
   Model *model_;

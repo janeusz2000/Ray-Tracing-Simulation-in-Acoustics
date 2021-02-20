@@ -96,10 +96,10 @@ npm start
 
 ### TODO List:
 
-- [ ] change EnergyPerFrequency to unordered_map<float, energies>>
+- [x] change EnergyPerFrequency to unordered_map<float, energies>>
 - [ ] split simulation properties to at leas two bundles of class
 - [ ] fix constructor of the simulationProperties
-- [ ] add comments about energyPerFrequency, what it represent
+- [x] add comments about energyPerFrequency, what it represent
 - [ ] explain what scene manager do
 - [ ] consider changing name of the SceneManager
 - [ ] create dynamic reading object in gui
