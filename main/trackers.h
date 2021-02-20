@@ -34,6 +34,9 @@ class JsonPositionTracker : public PositionTrackerInterface {
 public:
   JsonPositionTracker(std::string_view path);
 
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const JsonPositionTracker &tracker);
+
   // Initialize new tracking of the ray
   void initializeNewTracking() override;
   void
@@ -59,6 +62,9 @@ struct CollectorsTrackerInterface {
 struct CollectorsTrackerToJson : public CollectorsTrackerInterface {
   virtual void save(const Collectors &collectors,
                     std::string_view path) override;
+
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const CollectorsTrackerToJson &tracker);
 };
 } // namespace trackers
 

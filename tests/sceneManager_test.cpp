@@ -53,9 +53,10 @@ TEST_F(SceneManagerSimpleTest, repetitiveCollectionOfEnergyTest) {
 
   std::vector<float> frequencies = {100, 200};
 
-  SimulationProperties simulationProperties(frequencies, &energyCollectionRules,
-                                            sourcePower, numOfCollectors,
-                                            numOfRaysSquared);
+  BasicSimulationProperties basicProperties(frequencies, sourcePower,
+                                            numOfCollectors, numOfRaysSquared);
+  SimulationProperties simulationProperties(&energyCollectionRules,
+                                            basicProperties);
 
   SceneManager singleRaySimulation(model.get(), simulationProperties,
                                    &positionTracker, &collectorsTracker);

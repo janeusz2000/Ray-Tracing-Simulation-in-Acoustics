@@ -8,44 +8,60 @@
 #include "obj/generators.h"
 #include "obj/objects.h"
 
+#include <exception>
 #include <memory>
+#include <sstream>
 #include <string_view>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 
-// TODO: This constructor is too long, fix it ;-)
-// Holds all needed information to perform simulation.
+// Store basic properties of the simulation.
+// |frequencies| is vector of frequencies that simulation will be performed on.
+// |sourcePower| determine how much energy is given to each
+// produced ray from rayFactory.
+// |numOfCollector| represents how many collectors will be used in the
+// simulation.
+// |numOfRaysSquared| determine how many rays will be used in the simulation.
+// Note: final number of used rays in simulation will be: |numOfRaysSquared|^2.
+// REQUIREMENTS: |frequencies| cannot be empty, |sourcePower| must
+// be positive value, |numOfCollectors| must be greater then 4 and
+// |numCollectors| or  |numOfCollectors| - 1 must be divisable by 4,
+// |numOfRaysSquared| greater then 0.
+struct BasicSimulationProperties {
+  explicit BasicSimulationProperties(const std::vector<float> &frequencies,
+                                     float sourcePower, int numOfCollectors,
+                                     int numOfRaysSquared);
+  std::vector<float> frequencies;
+  float sourcePower;
+  int numOfCollectors;
+  int numOfRaysSquared;
+
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const BasicSimulationProperties &properties);
+};
+
+// Stores all needed informations required to perform simulation.
+// |energyCollectionRules| determine how energy is collected by each
+// EnergyCollector.
+// |basicSimulationProperies| determine how objects for simulation are built and
+// on which frequencies simulation will be performed.
 struct SimulationProperties {
   explicit SimulationProperties(
-      const std::vector<float> &frequencies /*[Hz]*/,
       collectionRules::CollectEnergyInterface *energyCollectionRules,
-      float sourcePower = 500 /*[W]*/, int numOfCollectors = 37,
-      int numOfRaySquared = 15)
-      : frequencies_(frequencies),
-        energyCollectionRules_(energyCollectionRules),
-        sourcePower_(sourcePower), numOfCollectors_(numOfCollectors),
-        numOfRaySquared_(numOfRaySquared) {}
+      const BasicSimulationProperties &basicSimulationProperties);
 
-  const std::vector<float> &frequencies() const { return frequencies_; }
-  collectionRules::CollectEnergyInterface *energyCollectionRules() {
+  collectionRules::CollectEnergyInterface *energyCollectionRules() const {
     return energyCollectionRules_;
   }
 
-  float sourcePower() const { return sourcePower_; }
-  int numOfCollectors() const { return numOfCollectors_; }
-  int numOfRaySquared() const { return numOfRaySquared_; }
-
-  collectionRules::CollectEnergyInterface *collectionRules() {
-    return energyCollectionRules_;
+  BasicSimulationProperties basicSimulationProperties() const {
+    return basicSimulationProperties_;
   }
 
 private:
-  std::vector<float> frequencies_;
   collectionRules::CollectEnergyInterface *energyCollectionRules_;
-  float sourcePower_;
-  int numOfCollectors_;
-  int numOfRaySquared_;
+  BasicSimulationProperties basicSimulationProperties_;
 };
 
 // This class is creating all necessary objects for simulation.

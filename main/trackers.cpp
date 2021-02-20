@@ -4,7 +4,8 @@ namespace trackers {
 void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
 
   if (model == nullptr) {
-    throw std::invalid_argument("Model cannot be nullptr! ");
+    throw std::invalid_argument(
+        "Model in saveModelToJson() cannot be nullptr! ");
   }
 
   std::string outputPath = pathToFolder.data();
@@ -12,7 +13,9 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
   std::ofstream outFile(outputPath);
   if (!outFile.good()) {
     std::stringstream ss;
-    ss << "Invalid path \nGiven Path: " << outputPath << std::endl;
+    ss << "Invalid path given to saveToModel()!\n"
+       << "Given Path: " << outputPath << "\n"
+       << "file doesn't exist?";
     throw std::invalid_argument(ss.str());
   }
 
@@ -41,6 +44,18 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
 
 JsonPositionTracker::JsonPositionTracker(std::string_view path)
     : path_(path.data()){};
+
+std::ostream &operator<<(std::ostream &os, const JsonPositionTracker &tracker) {
+  os << "Json Position Tracker\n"
+     << "Path: " << tracker.path_.data() << "\n"
+     << "current tracking: \n";
+  int currentHitData = 0;
+  for (const core::RayHitData &hitData : tracker.currentTracking_) {
+    os << "HitData number " << currentHitData << "\n" << hitData << "\n";
+  }
+  os << "Trackings overall size: " << tracker.trackings_.size();
+  return os;
+}
 
 void JsonPositionTracker::clearTracking() {
   currentTracking_.clear();
@@ -89,9 +104,10 @@ void JsonPositionTracker::save() const {
   std::ofstream outFile(path_ + "/trackingData.json", std::ios_base::trunc);
   if (!outFile.good()) {
     std::stringstream ss;
-    ss << "Invalid path to the object!"
-       << "\n"
-       << "path: " << path_ + "/trackingData.json";
+    ss << "Invalid path given to: \n"
+       << *this << "make sure that file at path: \""
+       << path_ + "/trackingData.json\""
+       << " exist";
 
     throw std::invalid_argument(ss.str());
   }
@@ -103,10 +119,13 @@ void JsonPositionTracker::save() const {
 void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                                    std::string_view path) {
 
-  std::ofstream outFile(path.data());
+  std::string resultPath = path.data();
+  resultPath += "/energyCollectors.json";
+  std::ofstream outFile(resultPath);
   if (!outFile.good()) {
     std::stringstream errorStream;
-    errorStream << "File at path: " << path.data() << ", doesn't exist!";
+    errorStream << "File at given path to: " << *this
+                << "check if file at: " << resultPath << "exist!";
     throw std::invalid_argument(errorStream.str());
   }
 
@@ -129,4 +148,8 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
   outFile.close();
 }
 
+std::ostream &operator<<(std::ostream &os,
+                         const CollectorsTrackerToJson &tracker) {
+  return os << "Json Collectors Tracker \n";
+}
 } // namespace trackers

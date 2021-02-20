@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <string>
+#include <vector>
 
 int main() {
 
@@ -19,8 +20,13 @@ int main() {
   collectionRules::LinearEnergyCollection energyCollectionRules;
 
   std::vector<float> frequencies = {100, 200, 300, 400, 500};
-  SimulationProperties properties(frequencies, &energyCollectionRules, 500, 37,
-                                  1);
+  float sourcePower = 500; // [W]
+  int numOfCollectors = 37;
+  int numOfRaysSquared = 20;
+
+  BasicSimulationProperties basicProperties(frequencies, sourcePower,
+                                            numOfCollectors, numOfRaysSquared);
+  SimulationProperties properties(&energyCollectionRules, basicProperties);
 
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
