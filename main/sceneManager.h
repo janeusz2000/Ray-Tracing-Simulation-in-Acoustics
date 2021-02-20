@@ -51,6 +51,9 @@ struct SimulationProperties {
       collectionRules::CollectEnergyInterface *energyCollectionRules,
       const BasicSimulationProperties &basicSimulationProperties);
 
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const SimulationProperties &properties);
+
   collectionRules::CollectEnergyInterface *energyCollectionRules() const {
     return energyCollectionRules_;
   }

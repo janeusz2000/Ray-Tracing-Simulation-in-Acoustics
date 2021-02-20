@@ -24,6 +24,12 @@ namespace collectionRules {
 struct CollectEnergyInterface {
   virtual void collectEnergy(const Collectors &collectors,
                              core::RayHitData *hitData) = 0;
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const CollectEnergyInterface &collection);
+
+private:
+  // Defines representation of the object in error messages.
+  virtual std::string_view printItself() const = 0;
 };
 
 // The futher away from origin of energy collectors ray hits, the less energy it
@@ -34,6 +40,9 @@ struct CollectEnergyInterface {
 struct LinearEnergyCollection : public CollectEnergyInterface {
   void collectEnergy(const Collectors &collectors,
                      core::RayHitData *hitData) override;
+
+private:
+  std::string_view printItself() const override;
 };
 
 // Rules of collection are exactly the same as in LinearEnergyCollection, but in
@@ -42,6 +51,9 @@ struct LinearEnergyCollection : public CollectEnergyInterface {
 struct LinearEnergyCollectionWithPhaseImpact : public CollectEnergyInterface {
   void collectEnergy(const Collectors &collectors,
                      core::RayHitData *hitData) override;
+
+private:
+  std::string_view printItself() const override;
 };
 // TODO: Create Rules for no linear collection
 // TODO: Create Combined Rules of collection

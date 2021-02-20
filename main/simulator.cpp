@@ -1,5 +1,56 @@
 #include "main/simulator.h"
 
+namespace collectionRules {
+std::ostream &operator<<(std::ostream &os,
+                         const CollectEnergyInterface &collection) {
+  return os << collection.printItself().data();
+}
+
+void LinearEnergyCollection::collectEnergy(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+    core::RayHitData *hitData) {
+
+  core::Vec3 reachedPosition = hitData->collisionPoint();
+  for (auto &energyCollector : collectors) {
+    if (energyCollector->isVecInside(reachedPosition)) {
+      float distanceToOrigin =
+          (energyCollector->getOrigin() - reachedPosition).magnitude();
+
+      // The closer ray hits origin of the energy Collector, the more energy
+      // energyCollector collects.
+      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
+      energyCollector->addEnergy(energyRatio * hitData->energy());
+    };
+  }
+}
+
+std::string_view LinearEnergyCollection::printItself() const {
+  return "Linear Energy Collection";
+}
+
+void LinearEnergyCollectionWithPhaseImpact::collectEnergy(
+    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
+    core::RayHitData *hitData) {
+
+  core::Vec3 reachedPosition = hitData->collisionPoint();
+  for (auto &energyCollector : collectors) {
+    if (energyCollector->isVecInside(reachedPosition)) {
+      float distanceToOrigin =
+          (energyCollector->getOrigin() - reachedPosition).magnitude();
+
+      // The closer ray hits origin of the energy Collector, the more energy
+      // energyCollector collects.
+      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
+      energyCollector->addEnergy(energyRatio * hitData->energy() *
+                                 std::cos(hitData->phase()));
+    };
+  }
+}
+std::string_view LinearEnergyCollectionWithPhaseImpact::printItself() const {
+  return "Linear Energy Collection With Phase Impact";
+}
+} // namespace collectionRules
+
 Collectors buildCollectors(const ModelInterface *model, int numCollectors) {
 
   if (model->empty()) {
@@ -127,41 +178,4 @@ Energies Simulator::getEnergyFromGivenCollectors(const Collectors &collectors) {
     output.push_back(collector->getEnergy());
   }
   return output;
-}
-
-void collectionRules::LinearEnergyCollection::collectEnergy(
-    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
-    core::RayHitData *hitData) {
-
-  core::Vec3 reachedPosition = hitData->collisionPoint();
-  for (auto &energyCollector : collectors) {
-    if (energyCollector->isVecInside(reachedPosition)) {
-      float distanceToOrigin =
-          (energyCollector->getOrigin() - reachedPosition).magnitude();
-
-      // The closer ray hits origin of the energy Collector, the more energy
-      // energyCollector collects.
-      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
-      energyCollector->addEnergy(energyRatio * hitData->energy());
-    };
-  }
-}
-
-void collectionRules::LinearEnergyCollectionWithPhaseImpact::collectEnergy(
-    const std::vector<std::unique_ptr<objects::EnergyCollector>> &collectors,
-    core::RayHitData *hitData) {
-
-  core::Vec3 reachedPosition = hitData->collisionPoint();
-  for (auto &energyCollector : collectors) {
-    if (energyCollector->isVecInside(reachedPosition)) {
-      float distanceToOrigin =
-          (energyCollector->getOrigin() - reachedPosition).magnitude();
-
-      // The closer ray hits origin of the energy Collector, the more energy
-      // energyCollector collects.
-      float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
-      energyCollector->addEnergy(energyRatio * hitData->energy() *
-                                 std::cos(hitData->phase()));
-    };
-  }
 }

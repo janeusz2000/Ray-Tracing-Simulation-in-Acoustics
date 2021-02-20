@@ -55,6 +55,15 @@ SimulationProperties::SimulationProperties(
     : energyCollectionRules_(energyCollectionRules),
       basicSimulationProperties_(basicSimulationProperties){};
 
+std::ostream &operator<<(std::ostream &os,
+                         const SimulationProperties &properties) {
+  return os << "SimulationProperties\n"
+            << "- Energy collection rules: \n"
+            << *(properties.energyCollectionRules_)
+            << "- Basic Simulation Properties: \n"
+            << properties.basicSimulationProperties_;
+}
+
 SceneManager::SceneManager(
     Model *model, const SimulationProperties &simulationProperties,
     trackers::PositionTrackerInterface *positionTracker,
