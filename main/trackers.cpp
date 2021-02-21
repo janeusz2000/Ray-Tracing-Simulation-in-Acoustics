@@ -9,7 +9,7 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
   }
 
   std::string outputPath = pathToFolder.data();
-  outputPath += "/model.json";
+  outputPath += "/model.js";
   std::ofstream outFile(outputPath);
   if (!outFile.good()) {
     std::stringstream ss;
@@ -38,7 +38,7 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
     outputJson.push_back(currentTriangle);
   }
 
-  outFile << outputJson.dump(2);
+  outFile << "var model = " << outputJson.dump(3);
   outFile.close();
 }
 
@@ -104,7 +104,7 @@ void JsonPositionTracker::save() const {
     outputJson.push_back(trackingJson);
   }
 
-  std::ofstream outFile(path_ + "/trackingData.json", std::ios_base::trunc);
+  std::ofstream outFile(path_ + "/trackingData.js", std::ios_base::trunc);
   if (!outFile.good()) {
     std::stringstream ss;
     ss << "Invalid path given to: \n"
@@ -114,7 +114,7 @@ void JsonPositionTracker::save() const {
 
     throw std::invalid_argument(ss.str());
   }
-  outFile << outputJson.dump(2);
+  outFile << "var trackingData = " << outputJson.dump(3);
   outFile.close();
 }
 
@@ -123,7 +123,7 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                                    std::string_view path) {
 
   std::string resultPath = path.data();
-  resultPath += "/energyCollectors.json";
+  resultPath += "/energyCollectors.js";
   std::ofstream outFile(resultPath);
   if (!outFile.good()) {
     std::stringstream errorStream;
@@ -147,7 +147,7 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
     ++currentCollectorNumber;
   }
 
-  outFile << outArray.dump(1);
+  outFile << "var energyCollectors = " << outArray.dump(1);
   outFile.close();
 }
 

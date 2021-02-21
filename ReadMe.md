@@ -84,12 +84,8 @@ cc_binary(
 bazel build --config=_gcc build_name
 bazel-bin/build.v1.1
 ```
-7. Compile webpack with:
-```Bash
-npm start
-```
-8. in the browser you should see magic :smirk:
 
+and you should see all magic :smile: ;)
 ---
 
 ## Documentation:
@@ -103,7 +99,7 @@ npm start
 - [x] add exception msg for all cases
 - [ ] explain what scene manager do
 - [ ] consider changing name of the SceneManager
-- [ ] create dynamic reading object in gui
+- [x] create dynamic reading object in gui
 - [ ] export energies to gui
 - [ ] create reference data
 - [ ] export reference data to gui

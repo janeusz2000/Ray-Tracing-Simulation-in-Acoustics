@@ -10,7 +10,7 @@
 
 int main() {
 
-  std::string path = "./models/simpleCube.obj";
+  std::string path = "./models/monkeyfull.obj";
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
   trackers::saveModelToJson("./data", model.get());

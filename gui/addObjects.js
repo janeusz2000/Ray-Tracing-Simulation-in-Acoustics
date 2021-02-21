@@ -1,7 +1,3 @@
-import energyCollectors from '../data/energyCollectors.json';
-import model from '../data/model.json';
-import trackingData from '../data/trackingData.json';
-
 import {hsl} from './hsl';
 import {makeInstance, makeInstance2D} from './makeInstance';
 
