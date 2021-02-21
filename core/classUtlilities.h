@@ -6,7 +6,11 @@
 class Printable {
 public:
   virtual void printItself(std::ostream &os) const noexcept;
-  friend std::ostream &operator<<(std::ostream &os, const Printable &printable);
 };
+
+inline std::ostream &operator<<(std::ostream &os, const Printable &printable) {
+  printable.printItself(os);
+  return os;
+}
 
 #endif
