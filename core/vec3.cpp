@@ -94,9 +94,8 @@ bool Vec3::operator==(const Vec3 &other) const {
 }
 
 bool Vec3::operator!=(const Vec3 &other) const { return !(*this == other); }
-std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3) {
-  return os << "Vec3(" << srcVec3.x() << ", " << srcVec3.y() << ", "
-            << srcVec3.z() << ")";
+void Vec3::printItself(std::ostream &os) const noexcept {
+  os << "Vec3(" << x_ << ", " << y_ << ", " << z_ << ")";
 }
 
 Vec3 &Vec3::operator=(const Vec3 &other) {

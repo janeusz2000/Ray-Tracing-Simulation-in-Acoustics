@@ -17,6 +17,7 @@ cc_library(
     srcs = [
         "core/ray.cpp",
         "core/vec3.cpp",
+        "core/classUtlilities.cpp",
         "main/sceneManager.cpp",
         "obj/generators.cpp",
         "obj/objects.cpp",
@@ -35,7 +36,8 @@ cc_library(
         "main/model.h",
         "main/simulator.h",
         "main/rayTracer.h",
-        "main/trackers.h"
+        "main/trackers.h",
+        "core/classUtlilities.h"
     ],
     deps  = [
         "@github_nlohmann_json//:json",

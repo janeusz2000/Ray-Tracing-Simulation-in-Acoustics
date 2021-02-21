@@ -42,10 +42,8 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
   outFile.close();
 }
 
-std::ostream &operator<<(std::ostream &os,
-                         const PositionTrackerInterface &tracker) {
-  tracker.printItself(os);
-  return os;
+void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
+  os << "Position Tracker Class Inteface";
 }
 
 JsonPositionTracker::JsonPositionTracker(std::string_view path)
@@ -120,12 +118,6 @@ void JsonPositionTracker::save() const {
   outFile.close();
 }
 
-std::ostream &operator<<(std::ostream &os,
-                         const CollectorsTrackerInterface &tracker) {
-  tracker.printItself(os);
-  return os;
-}
-
 // exports |energyCollectors| as string representation to |path|
 void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                                    std::string_view path) {
@@ -157,6 +149,10 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
 
   outFile << outArray.dump(1);
   outFile.close();
+}
+
+void CollectorsTrackerInterface::printItself(std::ostream &os) const noexcept {
+  os << "Collectors Tracker Class Interface\n";
 }
 
 void CollectorsTrackerToJson::printItself(std::ostream &os) const noexcept {

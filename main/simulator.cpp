@@ -1,9 +1,9 @@
 #include "main/simulator.h"
 
 namespace collectionRules {
-std::ostream &operator<<(std::ostream &os,
-                         const CollectEnergyInterface &collection) {
-  return os << collection.printItself().data();
+
+void CollectEnergyInterface::printItself(std::ostream &os) const noexcept {
+  os << "Collect Energy Rules Class Interface";
 }
 
 void LinearEnergyCollection::collectEnergy(
@@ -24,8 +24,8 @@ void LinearEnergyCollection::collectEnergy(
   }
 }
 
-std::string_view LinearEnergyCollection::printItself() const {
-  return "Linear Energy Collection";
+void LinearEnergyCollection::printItself(std::ostream &os) const noexcept {
+  os << "Linear Energy Collection";
 }
 
 void LinearEnergyCollectionWithPhaseImpact::collectEnergy(
@@ -46,8 +46,9 @@ void LinearEnergyCollectionWithPhaseImpact::collectEnergy(
     };
   }
 }
-std::string_view LinearEnergyCollectionWithPhaseImpact::printItself() const {
-  return "Linear Energy Collection With Phase Impact";
+void LinearEnergyCollectionWithPhaseImpact::printItself(
+    std::ostream &os) const noexcept {
+  os << "Linear Energy Collection With Phase Impact";
 }
 } // namespace collectionRules
 
@@ -140,15 +141,14 @@ const float getSphereWallRadius(const ModelInterface &model) {
                   4 * std::max(model.height(), model.sideSize()));
 }
 
-std::ostream &operator<<(std::ostream &os, const Simulator &simulator) {
-  return os << "SIMULATOR\n"
-            << "Ray tracer: " << *(simulator.tracer_) << "\n"
-            << "Model: " << *(simulator.model_) << "\n"
-            << "Source: " << *(simulator.source_) << "\n"
-            << "Ray Offseter: " << *(simulator.offsetter_) << "\n"
-            << "Position Tracker: " << *(simulator.positionTracker_) << "\n"
-            << "Energy Collection Rules: "
-            << *(simulator.energyCollectionRules_) << "\n";
+void Simulator::printItself(std::ostream &os) const noexcept {
+  os << "SIMULATOR\n"
+     << "Ray tracer: " << *tracer_ << "\n"
+     << "Model: " << *model_ << "\n"
+     << "Source: " << *source_ << "\n"
+     << "Ray Offseter: " << *offsetter_ << "\n"
+     << "Position Tracker: " << *positionTracker_ << "\n"
+     << "Energy Collection Rules: " << *energyCollectionRules_ << "\n";
 }
 
 std::vector<float> Simulator::run(float frequency,

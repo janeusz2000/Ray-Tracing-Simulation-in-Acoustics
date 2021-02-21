@@ -34,19 +34,17 @@ BasicSimulationProperties::BasicSimulationProperties(
   }
 }
 
-std::ostream &operator<<(std::ostream &os,
-                         const BasicSimulationProperties &properties) {
+void BasicSimulationProperties::printItself(std::ostream &os) const noexcept {
   os << "BasicSimulationProperties data class"
      << "\n"
      << "frequencies: ";
-  for (const float &freq : properties.frequencies) {
+  for (const float &freq : frequencies) {
     os << freq << ", ";
   }
   os << "\n"
-     << "Source Power: " << properties.sourcePower << "\n"
-     << "Number Of Collectors: " << properties.numOfCollectors << "\n"
-     << "Number of Rays Squared: " << properties.numOfRaysSquared << "\n";
-  return os;
+     << "Source Power: " << sourcePower << "\n"
+     << "Number Of Collectors: " << numOfCollectors << "\n"
+     << "Number of Rays Squared: " << numOfRaysSquared << "\n";
 }
 
 SimulationProperties::SimulationProperties(
@@ -55,13 +53,11 @@ SimulationProperties::SimulationProperties(
     : energyCollectionRules_(energyCollectionRules),
       basicSimulationProperties_(basicSimulationProperties){};
 
-std::ostream &operator<<(std::ostream &os,
-                         const SimulationProperties &properties) {
-  return os << "SimulationProperties\n"
-            << "- Energy collection rules: \n"
-            << *(properties.energyCollectionRules_)
-            << "- Basic Simulation Properties: \n"
-            << properties.basicSimulationProperties_;
+void SimulationProperties::printItself(std::ostream &os) const noexcept {
+  os << "SimulationProperties\n"
+     << "- Energy collection rules: \n"
+     << *(energyCollectionRules_) << "- Basic Simulation Properties: \n"
+     << basicSimulationProperties_;
 }
 
 SceneManager::SceneManager(
@@ -75,16 +71,15 @@ SceneManager::SceneManager(
   referenceModel_ = Model::NewReferenceModel(model->sideSize());
 }
 
-std::ostream &operator<<(std::ostream &os, const SceneManager &manager) {
-  return os << "SCENE MANAGER\n"
-            << "Model: " << *(manager.model_) << "\n"
-            << "Simulation properties: " << manager.simulationProperties_
-            << "\n"
-            << "Ray Tracer: " << manager.raytracer_ << "\n"
-            << "Position Tracker: " << *(manager.positionTracker_) << "\n"
-            << "Collectors Tracker: " << *(manager.collectorsTracker_) << "\n"
-            << "Offseter: " << *(manager.offseter_) << "\n"
-            << "Reference Model: " << *(manager.referenceModel_);
+void SceneManager::printItself(std::ostream &os) const noexcept {
+  os << "SCENE MANAGER\n"
+     << "Model: " << *(model_) << "\n"
+     << "Simulation properties: " << simulationProperties_ << "\n"
+     << "Ray Tracer: " << raytracer_ << "\n"
+     << "Position Tracker: " << *(positionTracker_) << "\n"
+     << "Collectors Tracker: " << *(collectorsTracker_) << "\n"
+     << "Offseter: " << *(offseter_) << "\n"
+     << "Reference Model: " << *(referenceModel_);
 }
 
 std::unordered_map<float, std::vector<float>> SceneManager::run() {

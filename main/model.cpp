@@ -1,8 +1,7 @@
 #include "main/model.h"
 
-std::ostream &operator<<(std::ostream &os, const ModelInterface &model) {
-  model.printItself(os);
-  return os;
+void ModelInterface::printItself(std::ostream &os) const noexcept {
+  os << "Model Interface Class";
 }
 
 const std::vector<objects::TriangleObj> &Model::triangles() const {

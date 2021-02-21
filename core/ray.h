@@ -4,12 +4,13 @@
 #include "constants.h"
 #include "core/vec3.h"
 
+#include "classUtlilities.h"
 #include <iostream>
 #include <limits>
 #include <sstream>
 
 namespace core {
-class Ray {
+class Ray : public Printable {
 public:
   // Returns Ray from |origin| and direction, which is calculated from given
   // spherical coordinates, where |zRotation| represents rotation about z-axis
@@ -24,7 +25,6 @@ public:
   Vec3 at(float time) const;
   float phaseAt(float freq, float time) const;
 
-  friend std::ostream &operator<<(std::ostream &os, const Ray &srcRay);
   bool operator==(const Ray &other) const;
 
   void setOrigin(const Vec3 &origin);
@@ -34,12 +34,14 @@ public:
   void setEnergy(float num);
   float energy() const;
 
+  void printItself(std::ostream &os) const noexcept override;
+
 private:
   Vec3 origin_, direction_;
   float energy_;
 };
 
-struct RayHitData {
+struct RayHitData : public Printable {
   RayHitData()
       : RayHitData(std::numeric_limits<float>::max(), Vec3::kZ,
                    Ray(Vec3::kZero, Vec3::kZ), 1000){};
@@ -49,7 +51,7 @@ struct RayHitData {
   RayHitData(const RayHitData &) = default;
 
   bool operator==(const RayHitData &other) const;
-  friend std::ostream &operator<<(std::ostream &os, const RayHitData &rayData);
+  void printItself(std::ostream &os) const noexcept override;
 
   Vec3 normal() const { return normal_; }
   Vec3 collisionPoint() const { return ray_.at(time); }

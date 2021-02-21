@@ -2,18 +2,16 @@
 
 namespace generators {
 
-std::ostream &operator<<(std::ostream &os, const RandomRayOffseter &offseter) {
-  offseter.printItself(os);
-  return os;
+void RandomRayOffseter::printItself(std::ostream &os) const noexcept {
+  os << "Random Ray Offseter Interface Class";
 }
 
 void FakeOffseter::printItself(std::ostream &os) const noexcept {
   os << "Fake Ray Offseter";
 }
 
-std::ostream &operator<<(std::ostream &os, const RayFactory &factory) {
-  factory.printItself(os);
-  return os;
+void RayFactory::printItself(std::ostream &os) const noexcept {
+  os << "Ray Factory Abstract Class";
 }
 
 PointSpeakerRayFactory::PointSpeakerRayFactory(int numOfRaysAlongEachAxis,

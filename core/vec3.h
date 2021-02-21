@@ -1,6 +1,7 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include "classUtlilities.h"
 #include "constants.h"
 
 #include <iostream>
@@ -9,7 +10,7 @@
 
 namespace core {
 
-class Vec3 {
+class Vec3 : public Printable {
 public:
   static const Vec3 kZero;
   static const Vec3 kX;
@@ -39,7 +40,6 @@ public:
   friend Vec3 operator*(float num, const Vec3 &vec);
   friend Vec3 operator*(const Vec3 &vec, float num);
   friend Vec3 operator/(const Vec3 &vec, float num);
-  friend std::ostream &operator<<(std::ostream &os, const Vec3 &srcVec3);
 
   float scalarProduct(const Vec3 &other) const;
   Vec3 crossProduct(const Vec3 &other) const;
@@ -53,6 +53,8 @@ public:
   void setY(float num);
   float z() const;
   void setZ(float num);
+
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
   float x_, y_, z_;

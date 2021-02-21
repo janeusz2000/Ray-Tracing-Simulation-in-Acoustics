@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
-// test
 #include <cmath>
+#include <iostream>
 
 namespace constants {
 // Expresses accuracy of measured distance in meters in hit position

@@ -1,6 +1,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
+#include "core/classUtlilities.h"
 #include "core/vec3.h"
 #include "main/rayTracer.h"
 #include "main/simulator.h"
@@ -28,7 +29,7 @@
 // be positive value, |numOfCollectors| must be greater then 4 and
 // |numCollectors| or  |numOfCollectors| - 1 must be divisable by 4,
 // |numOfRaysSquared| greater then 0.
-struct BasicSimulationProperties {
+struct BasicSimulationProperties : public Printable {
   explicit BasicSimulationProperties(const std::vector<float> &frequencies,
                                      float sourcePower, int numOfCollectors,
                                      int numOfRaysSquared);
@@ -37,8 +38,7 @@ struct BasicSimulationProperties {
   int numOfCollectors;
   int numOfRaysSquared;
 
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const BasicSimulationProperties &properties);
+  void printItself(std::ostream &os) const noexcept override;
 };
 
 // Stores all needed informations required to perform simulation.
@@ -46,13 +46,10 @@ struct BasicSimulationProperties {
 // EnergyCollector.
 // |basicSimulationProperies| determine how objects for simulation are built and
 // on which frequencies simulation will be performed.
-struct SimulationProperties {
+struct SimulationProperties : public Printable {
   explicit SimulationProperties(
       collectionRules::CollectEnergyInterface *energyCollectionRules,
       const BasicSimulationProperties &basicSimulationProperties);
-
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const SimulationProperties &properties);
 
   collectionRules::CollectEnergyInterface *energyCollectionRules() const {
     return energyCollectionRules_;
@@ -62,13 +59,15 @@ struct SimulationProperties {
     return basicSimulationProperties_;
   }
 
+  void printItself(std::ostream &os) const noexcept override;
+
 private:
   collectionRules::CollectEnergyInterface *energyCollectionRules_;
   BasicSimulationProperties basicSimulationProperties_;
 };
 
 // This class is creating all necessary objects for simulation.
-class SceneManager {
+class SceneManager : public Printable {
 public:
   // Represent collected energy value from each collector
   // at Collectors at the same index.
@@ -82,12 +81,11 @@ public:
       trackers::PositionTrackerInterface *positionTracker,
       trackers::CollectorsTrackerInterface *collectorsTracker);
 
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const SceneManager &manager);
-
   // runs whole simulation and returns collected energy from the
   // EnergyCollectors.
   EnergiesPerFrequency run();
+
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
   Model *model_;

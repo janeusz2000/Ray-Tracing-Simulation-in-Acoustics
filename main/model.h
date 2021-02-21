@@ -1,6 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#include "core/classUtlilities.h"
 #include "obj/objects.h"
 
 #include <algorithm>
@@ -14,7 +15,7 @@
 
 // Holds all Triangle Objects that together represent model
 // and holds all shape properties.
-class ModelInterface {
+class ModelInterface : public Printable {
 public:
   virtual ~ModelInterface(){};
   virtual const std::vector<objects::TriangleObj> &triangles() const = 0;
@@ -22,13 +23,10 @@ public:
   virtual float sideSize() const = 0;
   // returns true if there is no object assigned to a model.
   virtual bool empty() const = 0;
-
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const ModelInterface &model);
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
-  // Representation of the model for errors reading.
-  virtual void printItself(std::ostream &os) const noexcept = 0;
+  // Representation of the model as string for errors reading.
 };
 
 class Model : public ModelInterface {
@@ -50,6 +48,7 @@ public:
 
   void setSideSize(const float sideSize) { sideSize_ = sideSize; }
   float sideSize() const { return sideSize_; }
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
   // Iterates over every triangle in the model and find minimum x, y
@@ -58,8 +57,6 @@ private:
   // Iterates over every triangle and find minimum height
   // that covers whole model.
   float getMaxHeight(const std::vector<core::Vec3> &points) const;
-
-  void printItself(std::ostream &os) const noexcept override;
 
   std::vector<objects::TriangleObj> triangles_;
   float height_, sideSize_;

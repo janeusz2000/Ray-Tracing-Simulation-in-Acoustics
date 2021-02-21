@@ -2,6 +2,7 @@
 #define OBJECTS_H
 
 #include "constants.h"
+#include "core/classUtlilities.h"
 #include "core/ray.h"
 #include "core/vec3.h"
 
@@ -13,7 +14,7 @@
 
 namespace objects {
 
-class Object {
+class Object : public Printable {
 public:
   virtual ~Object(){};
   virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
@@ -22,6 +23,7 @@ public:
 
   void setOrigin(const core::Vec3 &origin);
   core::Vec3 getOrigin() const;
+  void printItself(std::ostream &os) const noexcept override;
 
 protected:
   core::Vec3 origin_;
@@ -31,14 +33,13 @@ class Sphere : public Object {
 public:
   explicit Sphere(const core::Vec3 &origin, float rad = 1);
 
-  friend std::ostream &operator<<(std::ostream &os, const Sphere &sp);
-
   core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
   [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
                                core::RayHitData *hitData) override;
   bool isVecInside(const core::Vec3 &vec) const;
   float getRadius() const;
   void setRadius(float rad);
+  void printItself(std::ostream &os) const noexcept override;
 
 protected:
   float radius_;
@@ -55,9 +56,9 @@ public:
       : Sphere(core::Vec3(0, 0, 0), /*radius=*/1) {
     setRadius(radius);
   }
-  SphereWall(const SphereWall &other) = default;
 
-  friend std::ostream &operator<<(std::ostream &os, const SphereWall &sp);
+protected:
+  void printItself(std::ostream &os) const noexcept override;
 };
 
 class EnergyCollector : public Sphere {
@@ -68,8 +69,6 @@ public:
     setOrigin(origin);
   }
 
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const EnergyCollector &collector);
   bool operator==(const EnergyCollector &other) const;
   EnergyCollector &operator=(const EnergyCollector &other);
 
@@ -79,6 +78,7 @@ public:
   void setEnergy(float en);
   float getEnergy() const;
   void addEnergy(float en);
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
   float energy_;
@@ -86,15 +86,14 @@ private:
 
 class TriangleObj : public Object {
 public:
-  TriangleObj(const core::Vec3 &point1 = core::Vec3{1, 0, 0},
-              const core::Vec3 &point2 = core::Vec3{0, 1, 0},
-              const core::Vec3 &point3 = core::Vec3{0, 0, 1});
+  TriangleObj(const core::Vec3 &point1 = core::Vec3::kX,
+              const core::Vec3 &point2 = core::Vec3::kY,
+              const core::Vec3 &point3 = core::Vec3::kZ);
   TriangleObj(const TriangleObj &other);
 
   TriangleObj &operator=(const TriangleObj &other);
   bool operator==(const TriangleObj &other) const;
   friend bool operator!=(const TriangleObj &left, const TriangleObj &right);
-  friend std::ostream &operator<<(std::ostream &os, const TriangleObj &object);
 
   core::Vec3
   normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
@@ -114,6 +113,7 @@ public:
   void setPoint3(const core::Vec3 &point);
 
   std::vector<core::Vec3> getPoints() const;
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
   bool doesHit(const core::Vec3 &point) const;

@@ -1,6 +1,7 @@
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
+#include "core/classUtlilities.h"
 #include "main/rayTracer.h"
 #include "main/trackers.h"
 #include "nlohmann/json.hpp"
@@ -21,15 +22,10 @@ using Energies = std::vector<float>;
 namespace collectionRules {
 
 // defines how energy collectors collect energy in the simulation
-struct CollectEnergyInterface {
+struct CollectEnergyInterface : public Printable {
   virtual void collectEnergy(const Collectors &collectors,
                              core::RayHitData *hitData) = 0;
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const CollectEnergyInterface &collection);
-
-private:
-  // Defines representation of the object in error messages.
-  virtual std::string_view printItself() const = 0;
+  void printItself(std::ostream &os) const noexcept override;
 };
 
 // The futher away from origin of energy collectors ray hits, the less energy it
@@ -40,9 +36,7 @@ private:
 struct LinearEnergyCollection : public CollectEnergyInterface {
   void collectEnergy(const Collectors &collectors,
                      core::RayHitData *hitData) override;
-
-private:
-  std::string_view printItself() const override;
+  void printItself(std::ostream &os) const noexcept override;
 };
 
 // Rules of collection are exactly the same as in LinearEnergyCollection, but in
@@ -52,8 +46,7 @@ struct LinearEnergyCollectionWithPhaseImpact : public CollectEnergyInterface {
   void collectEnergy(const Collectors &collectors,
                      core::RayHitData *hitData) override;
 
-private:
-  std::string_view printItself() const override;
+  void printItself(std::ostream &os) const noexcept override;
 };
 // TODO: Create Rules for no linear collection
 // TODO: Create Combined Rules of collection
@@ -85,7 +78,7 @@ void exportCollectorsToJson(const Collectors &energyCollectors,
 const float getSphereWallRadius(const ModelInterface &model);
 
 // Performs ray-tracing simulation on given model.
-class Simulator {
+class Simulator : public Printable {
 public:
   Simulator(RayTracer *tracer, ModelInterface *model,
             generators::RayFactory *source,
@@ -96,14 +89,14 @@ public:
         positionTracker_(positionTracker),
         energyCollectionRules_(energyCollectionRules){};
 
-  friend std::ostream &operator<<(std::ostream &os, const Simulator &simulator);
-
   // Runs the simulation and returns vector of float that represent result
   // energy collected by energyCollectors. Index of the float correspond
   // with index of builded energy collector. |Energies| is vector of float that
   // represent collected energy inside collectors with the same order as given
   // |collectors|.
   Energies run(float frequency, const Collectors &collectors);
+
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
   Energies getEnergyFromGivenCollectors(const Collectors &collectors);

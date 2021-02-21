@@ -5,6 +5,10 @@ namespace objects {
 void Object::setOrigin(const core::Vec3 &origin) { origin_ = origin; }
 core::Vec3 Object::getOrigin() const { return origin_; }
 
+void Object::printItself(std::ostream &os) const noexcept {
+  os << "Abstract class Object";
+}
+
 core::Vec3 Sphere::normal(const core::Vec3 &surfacePoint) const {
   return (surfacePoint - getOrigin()).normalize();
 }
@@ -60,17 +64,15 @@ bool Sphere::isVecInside(const core::Vec3 &vec) const {
   return (vec - origin_).magnitude() <= radius_;
 }
 
-std::ostream &operator<<(std::ostream &os, const Sphere &sp) {
-  return os << "Sphere origin: " << sp.getOrigin()
-            << ", radius: " << sp.getRadius() << " [m]";
+void Sphere::printItself(std::ostream &os) const noexcept {
+  os << "Sphere origin: " << origin_ << ", radius: " << radius_ << " [m]";
 }
 
 void Sphere::setRadius(float rad) { radius_ = rad; }
 float Sphere::getRadius() const { return radius_; }
 
-std::ostream &operator<<(std::ostream &os, const SphereWall &sp) {
-  return os << "SphereWall origin: " << sp.getOrigin()
-            << ", radius: " << sp.getRadius() << " [m]";
+void SphereWall::printItself(std::ostream &os) const noexcept {
+  os << "SphereWall origin: " << origin_ << ", radius: " << radius_ << " [m]";
 }
 
 EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other) {
@@ -78,16 +80,15 @@ EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other) {
     return *this;
   }
 
-  this->setOrigin(other.getOrigin());
-  this->setRadius(other.getRadius());
+  setOrigin(other.getOrigin());
+  setRadius(other.getRadius());
   energy_ = other.getEnergy();
 
   return *this;
 }
 
-std::ostream &operator<<(std::ostream &os, const EnergyCollector &collector) {
-  return os << "Energy Collector. Origin: " << collector.getOrigin()
-            << ", Radius: " << collector.getRadius();
+void EnergyCollector::printItself(std::ostream &os) const noexcept {
+  os << "Energy Collector. Origin: " << origin_ << ", Radius: " << radius_;
 }
 
 bool EnergyCollector::operator==(const EnergyCollector &other) const {
@@ -145,9 +146,9 @@ bool operator!=(const TriangleObj &left, const TriangleObj &right) {
   return (!(left == right));
 }
 
-std::ostream &operator<<(std::ostream &os, const TriangleObj &object) {
-  return os << "Triangle Object, vertex: " << object.point1() << ", "
-            << object.point2() << ", " << object.point3();
+void TriangleObj::printItself(std::ostream &os) const noexcept {
+  os << "Triangle Object, vertex: " << point1_ << ", " << point2_ << ", "
+     << point3_;
 }
 
 core::Vec3 TriangleObj::normal(const core::Vec3 &surfacePoint) const {
@@ -204,7 +205,6 @@ void TriangleObj::refreshAttributes() {
   this->setOrigin((point1_ + point2_ + point3_) / 3);
 }
 
-// PRIVATE METHODS
 void TriangleObj::recalculateArea() {
   core::Vec3 vecA = point1_ - point2_;
   core::Vec3 vecB = point1_ - point3_;
@@ -228,7 +228,6 @@ bool TriangleObj::arePointsValid() {
   return true;
 }
 
-// GETTERS AND SETTERS
 core::Vec3 TriangleObj::point1() const { return point1_; }
 void TriangleObj::setPoint1(const core::Vec3 &point) { this->point1_ = point; }
 

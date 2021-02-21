@@ -1,6 +1,7 @@
 #ifndef TRACKERS_H
 #define TRACKERS_H
 
+#include "core/classUtlilities.h"
 #include "core/ray.h"
 #include "main/model.h"
 #include "nlohmann/json.hpp"
@@ -19,7 +20,7 @@ void saveModelToJson(std::string_view path, ModelInterface *model);
 
 // Tracks all reached position by rays in the simulation and
 // saves them to files in the given path.
-class PositionTrackerInterface {
+class PositionTrackerInterface : public Printable {
 public:
   virtual void initializeNewTracking() = 0;
   virtual void
@@ -28,11 +29,7 @@ public:
   virtual void clearTracking() = 0;
   virtual void save() const = 0;
 
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const PositionTrackerInterface &tracker);
-
-private:
-  virtual void printItself(std::ostream &os) const noexcept = 0;
+  void printItself(std::ostream &os) const noexcept override;
 };
 
 // Tracks all reached rays position and saves them to json file at given path.
@@ -48,23 +45,18 @@ public:
   void clearTracking() override;
 
   void save() const override;
+  void printItself(std::ostream &os) const noexcept override;
 
 private:
-  void printItself(std::ostream &os) const noexcept override;
   std::string path_;
   std::vector<core::RayHitData> currentTracking_;
   std::vector<std::vector<core::RayHitData>> trackings_;
 };
 
 // Saves all current collectors arrangement into file.
-struct CollectorsTrackerInterface {
+struct CollectorsTrackerInterface : public Printable {
   virtual void save(const Collectors &collectors, std::string_view path) = 0;
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const CollectorsTrackerInterface &tracker);
-
-private:
-  // puts representation of itself as string to the given stream.
-  virtual void printItself(std::ostream &os) const noexcept = 0;
+  void printItself(std::ostream &os) const noexcept override;
 };
 
 // saves all collector properies including position and radius, to Json file at
@@ -72,8 +64,6 @@ private:
 struct CollectorsTrackerToJson : public CollectorsTrackerInterface {
   virtual void save(const Collectors &collectors,
                     std::string_view path) override;
-
-private:
   void printItself(std::ostream &os) const noexcept override;
 };
 } // namespace trackers

@@ -1,7 +1,7 @@
 #include "main/rayTracer.h"
 
-std::ostream &operator<<(std::ostream &os, const RayTracer &rayTracer) {
-  return os << "Ray Tracer class with model: \n" << *(rayTracer.model_);
+void RayTracer::printItself(std::ostream &os) const noexcept {
+  os << "Ray Tracer class with model: \n" << *(model_);
 }
 
 RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,

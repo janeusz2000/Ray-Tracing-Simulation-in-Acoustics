@@ -32,10 +32,9 @@ float Ray::phaseAt(float freq, float time) const {
   return time / waveLength * 2 * constants::kPi;
 }
 
-std::ostream &operator<<(std::ostream &os, const Ray &srcRay) {
-  return os << "RAY origin: " << srcRay.origin()
-            << ", direction: " << srcRay.direction()
-            << ", energy: " << srcRay.energy();
+void Ray::printItself(std::ostream &os) const noexcept {
+  os << "RAY origin: " << origin_ << ", direction: " << direction_
+     << ", energy: " << energy_;
 }
 
 bool Ray::operator==(const Ray &other) const {
@@ -65,12 +64,11 @@ bool RayHitData::operator==(const RayHitData &other) const {
           std::abs(other.phase() - phase()) <= constants::kAccuracy);
 }
 
-std::ostream &operator<<(std::ostream &os, const RayHitData &rayData) {
-  return os << "Collision point: " << rayData.collisionPoint()
-            << ", incoming ray direction: " << rayData.direction()
-            << ", normal: " << rayData.normal() << ", time: " << rayData.time
-            << ", energy: " << rayData.energy() << ", phase " << rayData.phase()
-            << " [radians]";
+void RayHitData::printItself(std::ostream &os) const noexcept {
+  os << "Collision point: " << collisionPoint()
+     << ", incoming ray direction: " << direction() << ", normal: " << normal()
+     << ", time: " << time << ", energy: " << energy() << ", phase " << phase()
+     << " [radians]";
 }
 
 } // namespace core
