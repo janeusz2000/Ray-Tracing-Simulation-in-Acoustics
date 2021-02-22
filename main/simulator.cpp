@@ -151,8 +151,8 @@ void Simulator::printItself(std::ostream &os) const noexcept {
      << "Energy Collection Rules: " << *energyCollectionRules_ << "\n";
 }
 
-std::vector<float> Simulator::run(float frequency,
-                                  const Collectors &collectors) {
+std::vector<float> Simulator::run(float frequency, const Collectors &collectors,
+                                  const int maxTracking) {
 
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
@@ -175,7 +175,7 @@ std::vector<float> Simulator::run(float frequency,
       }
 
       ++currentTracking;
-      if (currentTracking > constants::kMaxTrackingNumber) {
+      if (currentTracking > maxTracking) {
         break;
       }
     };

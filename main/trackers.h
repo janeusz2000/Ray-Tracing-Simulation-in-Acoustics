@@ -26,8 +26,7 @@ public:
   virtual void
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) = 0;
   virtual void endCurrentTracking() = 0;
-  virtual void clearTracking() = 0;
-  virtual void save() const = 0;
+  virtual void save() = 0;
 
   void printItself(std::ostream &os) const noexcept override;
 };
@@ -42,15 +41,37 @@ public:
   void
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) override;
   void endCurrentTracking() override;
-  void clearTracking() override;
 
-  void save() const override;
+  void save() override;
   void printItself(std::ostream &os) const noexcept override;
 
 private:
+  std::ofstream outFile_;
   std::string path_;
   std::vector<core::RayHitData> currentTracking_;
-  std::vector<std::vector<core::RayHitData>> trackings_;
+};
+
+// Performs sampling of trackings and tracks only few of them.
+class JsonSampledPositionTracker : public PositionTrackerInterface {
+public:
+  JsonSampledPositionTracker(std::string_view path, int numOfRaysSquared,
+                             int numOfVisibleRaysSquared);
+
+  virtual void initializeNewTracking() override;
+  void
+  addNewPositionToCurrentTracking(const core::RayHitData &hitData) override;
+  void endCurrentTracking() override;
+
+  void save() override;
+  void printItself(std::ostream &os) const noexcept override;
+
+private:
+  bool isSampling() const;
+
+  JsonPositionTracker tracker_;
+  int numOfRaysSquared_;
+  int numOfVisibleRays_;
+  int currentNumberOfTracking_;
 };
 
 // Saves all current collectors arrangement into file.

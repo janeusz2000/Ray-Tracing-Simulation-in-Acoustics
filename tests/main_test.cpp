@@ -43,7 +43,8 @@ TEST_F(MainTest, buildingSimulation) {
   std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
       buildCollectors(model_.get(), numOfCollectors_);
 
-  simulator.run(frequency_, collectors);
+  int maxTracking = 12;
+  simulator.run(frequency_, collectors, maxTracking);
   // positionTracker.saveAsJson();
   // FAIL();
 }

@@ -2,35 +2,37 @@
 
 BasicSimulationProperties::BasicSimulationProperties(
     const std::vector<float> &frequencies, float sourcePower,
-    int numOfCollectors, int numOfRaysSquared)
+    int numOfCollectors, int numOfRaysSquared, int maxTracking)
     : frequencies(frequencies), sourcePower(sourcePower),
-      numOfCollectors(numOfCollectors), numOfRaysSquared(numOfRaysSquared) {
+      numOfCollectors(numOfCollectors), numOfRaysSquared(numOfRaysSquared),
+      maxTracking(maxTracking) {
 
+  std::stringstream errorStream;
   if (frequencies.empty()) {
-    throw std::invalid_argument(
-        "Frequencies in BasicSimulationProperties data class cannot be empty!");
+    errorStream
+        << "Frequencies in BasicSimulationProperties cannot be empty!\n";
   }
   if (sourcePower < 0) {
-    std::stringstream errorStream;
-    errorStream << "Source Power given to: \n" << *this << "cannot be < 0! \n";
-    throw std::invalid_argument(errorStream.str());
+    errorStream << "Source Power given cannot be < 0! \n";
   }
   if (numOfCollectors < 4) {
-    std::stringstream errorStream;
-    errorStream << "Number of collectors in: \n"
-                << *this << "cannot be less then 4!";
-    throw std::invalid_argument(errorStream.str());
+    errorStream << "Number of collectors cannot be less then 4! \n";
   }
   if (numOfCollectors % 4 != 0 && (numOfCollectors - 1) % 4 != 0) {
-    std::stringstream errorStream;
-    errorStream << "number of collectors or number of collectors -1 in: \n"
-                << *this << "must be divisable by 4!";
-    throw std::invalid_argument(errorStream.str());
+    errorStream << "number of collectors or number of collectors -1 must be "
+                   "divisable by 4! \n";
   }
   if (numOfRaysSquared < 1) {
-    std::stringstream errorStream;
-    errorStream << "numOfRaysSquared in: \n"
-                << *this << "must be greater then 0!";
+    errorStream << "numOfRaysSquared in must be greater then 0! \n";
+  }
+  if (maxTracking < 1) {
+    errorStream << "Max tracking in: must be greater then 1 \n";
+  }
+  std::string outputErrorMessage = errorStream.str();
+  if (!outputErrorMessage.empty()) {
+    std::stringstream errorInfo;
+    errorInfo << "Error detected in: " << *this << "\n" << outputErrorMessage;
+    throw std::invalid_argument(errorInfo.str());
   }
 }
 
@@ -100,7 +102,9 @@ std::unordered_map<float, std::vector<float>> SceneManager::run() {
 
     collectorsTracker_->save(collectors, "./data");
 
-    Energies energies = simulator.run(freq, collectors);
+    Energies energies = simulator.run(
+        freq, collectors,
+        simulationProperties_.basicSimulationProperties().maxTracking);
     std::pair<float, Energies> energiesPerFrequency =
         std::make_pair<float, Energies>(std::move(freq), std::move(energies));
     outputEnergiesPerFrequency.insert(energiesPerFrequency);

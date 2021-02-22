@@ -36,7 +36,7 @@ export function makeTriangle(point1, point2, point3, scene) {
 
   geometry.computeVertexNormals();
 
-  const object = makeInstance2D(geometry, hsl(5 / 8, 1, .5), 1);
+  const object = makeInstance2D(geometry, getRandomColorAttribute(), 1);
   scene.add(object);
 }
 

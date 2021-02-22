@@ -24,8 +24,7 @@ public:
   void
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) override{};
   void endCurrentTracking() override{};
-  void clearTracking() override{};
-  void save() const override{};
+  void save() override{};
 
 private:
   void printItself(std::ostream &os) const noexcept override {

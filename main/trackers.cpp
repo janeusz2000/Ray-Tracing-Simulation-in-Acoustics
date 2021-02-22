@@ -47,44 +47,42 @@ void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
 }
 
 JsonPositionTracker::JsonPositionTracker(std::string_view path)
-    : path_(path.data()){};
+    : path_(path.data()) {
+
+  path_ += "/trackingData.js";
+  outFile_.open(path_);
+
+  if (!outFile_.good()) {
+    std::stringstream ss;
+    ss << "Invalid path given to: \n"
+       << *this << "make sure that file at path: \"" << path_ << "\" exist";
+    throw std::invalid_argument(ss.str());
+  }
+
+  outFile_ << "var trackingData = [";
+  outFile_.close();
+};
 
 void JsonPositionTracker::printItself(std::ostream &os) const noexcept {
   os << "Json Position Tracker\n"
-     << "Path: " << path_.data() << "\n"
+     << "Path: " << path_ << "\n"
      << "current tracking: \n";
   int currentHitData = 0;
   for (const core::RayHitData &hitData : currentTracking_) {
     os << "HitData number " << currentHitData << "\n" << hitData << "\n";
   }
-  os << "Trackings overall size: " << trackings_.size();
 }
 
-void JsonPositionTracker::clearTracking() {
-  currentTracking_.clear();
-  trackings_.clear();
-}
 void JsonPositionTracker::initializeNewTracking() { currentTracking_.clear(); }
 void JsonPositionTracker::addNewPositionToCurrentTracking(
     const core::RayHitData &hitData) {
   currentTracking_.push_back(hitData);
 }
 void JsonPositionTracker::endCurrentTracking() {
-  trackings_.push_back(currentTracking_);
-}
-
-void JsonPositionTracker::save() const {
-  using Json = nlohmann::json;
-
-  Json outputJson = Json::array();
-  for (const auto &tracking : trackings_) {
+  if (currentTracking_.size() > 1) {
+    using Json = nlohmann::json;
     Json trackingJson = Json::array();
-    bool first = true;
-    for (const core::RayHitData &hitData : tracking) {
-      if (first) { // ! TODO: this is bad. Fix it! 3;)
-        first = false;
-        continue;
-      }
+    for (const core::RayHitData &hitData : currentTracking_) {
       Json hitDataJson = {
           {"origin",
            {{"x", hitData.origin().x()},
@@ -101,23 +99,64 @@ void JsonPositionTracker::save() const {
            (hitData.origin() - hitData.collisionPoint()).magnitude()}};
       trackingJson.push_back(hitDataJson);
     }
-    outputJson.push_back(trackingJson);
-  }
 
-  std::ofstream outFile(path_ + "/trackingData.js", std::ios_base::trunc);
-  if (!outFile.good()) {
-    std::stringstream ss;
-    ss << "Invalid path given to: \n"
-       << *this << "make sure that file at path: \""
-       << path_ + "/trackingData.json\""
-       << " exist";
-
-    throw std::invalid_argument(ss.str());
-  }
-  outFile << "var trackingData = " << outputJson.dump(3);
-  outFile.close();
+    outFile_.open(path_, std::ios_base::app);
+    outFile_ << trackingJson << ",\n";
+    outFile_.close();
+  };
 }
 
+void JsonPositionTracker::save() {
+  outFile_.open(path_, std::ios_base::app);
+  outFile_ << "]";
+  outFile_.close();
+}
+
+JsonSampledPositionTracker::JsonSampledPositionTracker(std::string_view path,
+                                                       int numOfRaysSquared,
+                                                       int numOfVisibleRays)
+    : tracker_(path.data()), numOfRaysSquared_(numOfRaysSquared),
+      numOfVisibleRays_(numOfVisibleRays){};
+
+void JsonSampledPositionTracker::initializeNewTracking() {
+  ++currentNumberOfTracking_;
+  if (isSampling()) {
+    std::cout << "Tracking no. " << currentNumberOfTracking_ << " started!"
+              << std::endl;
+    tracker_.initializeNewTracking();
+  }
+}
+
+void JsonSampledPositionTracker::addNewPositionToCurrentTracking(
+    const core::RayHitData &hitData) {
+  if (isSampling()) {
+    tracker_.addNewPositionToCurrentTracking(hitData);
+  }
+}
+
+void JsonSampledPositionTracker::endCurrentTracking() {
+  if (isSampling()) {
+    tracker_.endCurrentTracking();
+  }
+}
+
+void JsonSampledPositionTracker::save() { tracker_.save(); }
+
+void JsonSampledPositionTracker::printItself(std::ostream &os) const noexcept {
+  os << "Json Sampled position tracking\n"
+     << "current numebr of trackings: " << currentNumberOfTracking_ << " / "
+     << (numOfRaysSquared_ ^ 2) << "\n"
+     << "number of visible rays: " << (numOfVisibleRays_) << "\n"
+     << "Json postion tracker: " << tracker_;
+}
+
+bool JsonSampledPositionTracker::isSampling() const {
+  int divider = numOfRaysSquared_ * numOfRaysSquared_ / numOfVisibleRays_;
+  if (currentNumberOfTracking_ % divider == 0) {
+    return true;
+  }
+  return false;
+}
 // exports |energyCollectors| as string representation to |path|
 void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                                    std::string_view path) {

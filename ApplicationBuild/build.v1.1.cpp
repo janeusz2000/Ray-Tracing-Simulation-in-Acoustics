@@ -11,18 +11,19 @@
 int main() {
 
   std::string path = "./models/normalDiffusor.obj";
+  std::vector<float> frequencies = {100};
+  float sourcePower = 500; // [W]
+  int numOfCollectors = 37;
+  int numOfRaysSquared = 200;
+  int numOfVisibleRays = 400;
+
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
   trackers::saveModelToJson("./data", model.get());
-  trackers::JsonPositionTracker positionTracker("./data");
+  trackers::JsonSampledPositionTracker positionTracker(
+      "./data", numOfRaysSquared, numOfVisibleRays);
   trackers::CollectorsTrackerToJson collectorsTracker;
-
   collectionRules::LinearEnergyCollection energyCollectionRules;
-
-  std::vector<float> frequencies = {100, 200, 300, 400, 500};
-  float sourcePower = 500; // [W]
-  int numOfCollectors = 37;
-  int numOfRaysSquared = 50;
 
   BasicSimulationProperties basicProperties(frequencies, sourcePower,
                                             numOfCollectors, numOfRaysSquared);

@@ -25,18 +25,21 @@
 // simulation.
 // |numOfRaysSquared| determine how many rays will be used in the simulation.
 // Note: final number of used rays in simulation will be: |numOfRaysSquared|^2.
+// |maxTracking| how many reflection will simulation track per ray at maximum.
 // REQUIREMENTS: |frequencies| cannot be empty, |sourcePower| must
 // be positive value, |numOfCollectors| must be greater then 4 and
 // |numCollectors| or  |numOfCollectors| - 1 must be divisable by 4,
-// |numOfRaysSquared| greater then 0.
+// |numOfRaysSquared| greater then 0, |maxTracking| must be greater then 1
 struct BasicSimulationProperties : public Printable {
   explicit BasicSimulationProperties(const std::vector<float> &frequencies,
                                      float sourcePower, int numOfCollectors,
-                                     int numOfRaysSquared);
+                                     int numOfRaysSquared,
+                                     int maxTracking = 12);
   std::vector<float> frequencies;
   float sourcePower;
   int numOfCollectors;
   int numOfRaysSquared;
+  int maxTracking;
 
   void printItself(std::ostream &os) const noexcept override;
 };

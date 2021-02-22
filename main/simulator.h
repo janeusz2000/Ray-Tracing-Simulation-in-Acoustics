@@ -93,8 +93,10 @@ public:
   // energy collected by energyCollectors. Index of the float correspond
   // with index of builded energy collector. |Energies| is vector of float that
   // represent collected energy inside collectors with the same order as given
-  // |collectors|.
-  Energies run(float frequency, const Collectors &collectors);
+  // |collectors|. Max tracking represent how many reflection per year will be
+  // tracked at maximum.
+  Energies run(float frequency, const Collectors &collectors,
+               const int maxTracking);
 
   void printItself(std::ostream &os) const noexcept override;
 
