@@ -52,6 +52,13 @@ private:
 };
 
 // Performs sampling of trackings and tracks only few of them.
+// |numOfRaysSquared| represents how many rays tracking will be in the
+// simulation. Note: Overall number of ray tracking is |numOfRaysSquared|^2
+// |numOfVisibleRaysSquared| represents how many trackings will be accumulated
+// by trackers. Note: Overall number of accumulated trackings is
+// |numOfVisibleRaysSquared|^2.
+// REQUIREMENTS: File at |path| must exist, |numOfRaysSquared| and
+// |numOfVisibleRaysSquared| must be > 0
 class JsonSampledPositionTracker : public PositionTrackerInterface {
 public:
   JsonSampledPositionTracker(std::string_view path, int numOfRaysSquared,

@@ -115,7 +115,23 @@ void JsonPositionTracker::save() {
 JsonSampledPositionTracker::JsonSampledPositionTracker(
     std::string_view path, int numOfRaysSquared, int numOfVisibleRaysSquared)
     : tracker_(path.data()), numOfRaysSquared_(numOfRaysSquared),
-      numOfVisibleRaysSquared_(numOfVisibleRaysSquared){};
+      numOfVisibleRaysSquared_(numOfVisibleRaysSquared) {
+
+  std::stringstream errorStream;
+  if (numOfRaysSquared_ < 1) {
+    errorStream << "Number of Rays squared cannot be less than 1\n";
+  }
+  if (numOfVisibleRaysSquared_ < 1) {
+    errorStream << "Number of Visible Rays squared cannot be less than 1"
+  }
+
+  std::string errorMsg = errorStream.str();
+  if (!errorMsg.empty()) {
+    std::stringstream outputErrorStream;
+    outputErrorStream << "Error occurred in: " << *this << "\n" << errorMsg;
+    throw std::invalid_argument(outputErrorStream.str());
+  }
+};
 
 void JsonSampledPositionTracker::initializeNewTracking() {
   ++currentNumberOfTracking_;
@@ -151,9 +167,8 @@ void JsonSampledPositionTracker::printItself(std::ostream &os) const noexcept {
 bool JsonSampledPositionTracker::isSampling() const {
   int xIndex = currentNumberOfTracking_ % numOfRaysSquared_;
   int yIndex = currentNumberOfTracking_ / numOfRaysSquared_;
-
-  if (xIndex % numOfVisibleRaysSquared_ == 0 &&
-      yIndex % numOfVisibleRaysSquared_ == 0) {
+  int moduloDivider = numOfRaysSquared_ / numOfVisibleRaysSquared_;
+  if (xIndex % moduloDivider == 0 && yIndex % moduloDivider == 0) {
     return true;
   }
   return false;
