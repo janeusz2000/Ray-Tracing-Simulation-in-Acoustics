@@ -1,6 +1,34 @@
 #include "trackers.h"
 
 namespace trackers {
+
+void saveResultsAsJson(std::string_view path,
+                       const EnergyPerFrequency &results) {
+  std::string outputPath = path.data();
+  outputPath += "/results.js";
+
+  std::ofstream jsFile(outputPath);
+  if (!jsFile.good()) {
+    std::stringstream errorStream;
+    errorStream << "File path given to saveResultsAsJson() is invali\n"
+                << "resutls path: " << outputPath;
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  using Json = nlohmann::json;
+  Json outputArray = Json::array();
+  for (auto it = results.cbegin(); it != results.cend(); ++it) {
+    Json energyData = Json::array();
+    for (const float &energy : it->second) {
+      energyData.push_back(energy);
+    }
+    Json dataPerFrequency = {{"frequency", it->first}, {"data", energyData}};
+    outputArray.push_back(dataPerFrequency);
+  }
+
+  jsFile << "const results = " << outputArray.dump(3);
+  jsFile.close();
+}
 void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
 
   if (model == nullptr) {

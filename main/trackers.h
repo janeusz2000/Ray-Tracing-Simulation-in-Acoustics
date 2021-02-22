@@ -12,8 +12,19 @@
 #include <string_view>
 
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+// Represent collected energy value from each collector
+// at Collectors at the same index.
+using Energies = std::vector<float>;
+// Represent collected energy from collectors at the given float that
+// represent frequency of the simulation.
+using EnergyPerFrequency = std::unordered_map<float, Energies>;
 
 namespace trackers {
+
+// Save results of the simulation at given |path| as results.js file, with json
+// structure.
+void saveResultsAsJson(std::string_view path,
+                       const EnergyPerFrequency &results);
 
 // Save |model| to the given file as Json file.
 void saveModelToJson(std::string_view path, ModelInterface *model);

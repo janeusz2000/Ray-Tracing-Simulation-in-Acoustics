@@ -6,12 +6,14 @@
 
 #include <algorithm>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 int main() {
 
+  std::string dataPath = "./data";
   std::string path = "./models/normalDiffusor.obj";
-  std::vector<float> frequencies = {100};
+  std::vector<float> frequencies = {100, 200, 300};
   float sourcePower = 500; // [W]
   int numOfCollectors = 37;
   int numOfRaysSquared = 200;
@@ -19,9 +21,9 @@ int main() {
 
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
-  trackers::saveModelToJson("./data", model.get());
+  trackers::saveModelToJson(dataPath, model.get());
   trackers::JsonSampledPositionTracker positionTracker(
-      "./data", numOfRaysSquared, numOfVisibleRays);
+      dataPath, numOfRaysSquared, numOfVisibleRays);
   trackers::CollectorsTrackerToJson collectorsTracker;
   collectionRules::LinearEnergyCollection energyCollectionRules;
 
@@ -31,5 +33,6 @@ int main() {
 
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
-  manager.run();
+  std::unordered_map<float, std::vector<float>> results = manager.run();
+  trackers::saveResultsAsJson(dataPath, results);
 }
