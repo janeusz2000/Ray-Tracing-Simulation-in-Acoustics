@@ -70,7 +70,7 @@ private:
 
   JsonPositionTracker tracker_;
   int numOfRaysSquared_;
-  int numOfVisibleRays_;
+  int numOfVisibleRaysSquared_;
   int currentNumberOfTracking_;
 };
 

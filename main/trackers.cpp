@@ -112,17 +112,14 @@ void JsonPositionTracker::save() {
   outFile_.close();
 }
 
-JsonSampledPositionTracker::JsonSampledPositionTracker(std::string_view path,
-                                                       int numOfRaysSquared,
-                                                       int numOfVisibleRays)
+JsonSampledPositionTracker::JsonSampledPositionTracker(
+    std::string_view path, int numOfRaysSquared, int numOfVisibleRaysSquared)
     : tracker_(path.data()), numOfRaysSquared_(numOfRaysSquared),
-      numOfVisibleRays_(numOfVisibleRays){};
+      numOfVisibleRaysSquared_(numOfVisibleRaysSquared){};
 
 void JsonSampledPositionTracker::initializeNewTracking() {
   ++currentNumberOfTracking_;
   if (isSampling()) {
-    std::cout << "Tracking no. " << currentNumberOfTracking_ << " started!"
-              << std::endl;
     tracker_.initializeNewTracking();
   }
 }
@@ -145,14 +142,18 @@ void JsonSampledPositionTracker::save() { tracker_.save(); }
 void JsonSampledPositionTracker::printItself(std::ostream &os) const noexcept {
   os << "Json Sampled position tracking\n"
      << "current numebr of trackings: " << currentNumberOfTracking_ << " / "
-     << (numOfRaysSquared_ ^ 2) << "\n"
-     << "number of visible rays: " << (numOfVisibleRays_) << "\n"
+     << (numOfRaysSquared_ * numOfRaysSquared_) << "\n"
+     << "number of visible rays: "
+     << (numOfVisibleRaysSquared_ * numOfVisibleRaysSquared_) << "\n"
      << "Json postion tracker: " << tracker_;
 }
 
 bool JsonSampledPositionTracker::isSampling() const {
-  int divider = numOfRaysSquared_ * numOfRaysSquared_ / numOfVisibleRays_;
-  if (currentNumberOfTracking_ % divider == 0) {
+  int xIndex = currentNumberOfTracking_ % numOfRaysSquared_;
+  int yIndex = currentNumberOfTracking_ / numOfRaysSquared_;
+
+  if (xIndex % numOfVisibleRaysSquared_ == 0 &&
+      yIndex % numOfVisibleRaysSquared_ == 0) {
     return true;
   }
   return false;

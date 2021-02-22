@@ -15,7 +15,7 @@ int main() {
   float sourcePower = 500; // [W]
   int numOfCollectors = 37;
   int numOfRaysSquared = 200;
-  int numOfVisibleRays = 400;
+  int numOfVisibleRays = 10;
 
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
