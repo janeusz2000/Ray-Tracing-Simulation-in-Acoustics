@@ -31,7 +31,8 @@ public:
   void printItself(std::ostream &os) const noexcept override;
 };
 
-// Tracks all reached rays position and saves them to json file at given path.
+// Tracks all reached rays position and saves them to js file as json data at
+// given path. REQUIREMENTS: file must exist at given path.
 class JsonPositionTracker : public PositionTrackerInterface {
 public:
   JsonPositionTracker(std::string_view path);
@@ -51,8 +52,8 @@ private:
   std::vector<core::RayHitData> currentTracking_;
 };
 
-// Performs sampling of trackings and tracks only few of them.
-// |numOfRaysSquared| represents how many rays tracking will be in the
+// Performs sampling of trackings and acquires them into given .js file as json
+// data. |numOfRaysSquared| represents how many rays tracking will be in the
 // simulation. Note: Overall number of ray tracking is |numOfRaysSquared|^2
 // |numOfVisibleRaysSquared| represents how many trackings will be accumulated
 // by trackers. Note: Overall number of accumulated trackings is
