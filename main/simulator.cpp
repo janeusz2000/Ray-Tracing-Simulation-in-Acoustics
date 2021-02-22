@@ -157,29 +157,33 @@ std::vector<float> Simulator::run(float frequency,
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
   core::Ray currentRay;
-  core::RayHitData hitData;
 
   while (source_->genRay(&currentRay)) {
-
+    core::RayHitData hitData;
     // TODO: dont track all rays -> sample them, to increase performance and
     // readability
     // Ray-Trace until Rays excape the model.
     positionTracker_->initializeNewTracking();
-    RayTracer::TraceResult hitResult =
-        RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
-    do {
+    RayTracer::TraceResult hitResult = RayTracer::TraceResult::HIT_TRIANGLE;
+    int currentTracking = 0;
+    while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE) {
       hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
       currentRay = tracer_->getReflected(&hitData);
 
-      positionTracker_->addNewPositionToCurrentTracking(hitData);
+      if (hitResult == RayTracer::TraceResult::HIT_TRIANGLE) {
+        positionTracker_->addNewPositionToCurrentTracking(hitData);
+      }
 
-    } while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE);
+      ++currentTracking;
+      if (currentTracking > constants::kMaxTrackingNumber) {
+        break;
+      }
+    };
 
     if (sphereWall.hitObject(currentRay, frequency, &hitData)) {
       positionTracker_->addNewPositionToCurrentTracking(hitData);
-      positionTracker_->endCurrentTracking();
     }
-
+    positionTracker_->endCurrentTracking();
     energyCollectionRules_->collectEnergy(collectors, &hitData);
   }
 

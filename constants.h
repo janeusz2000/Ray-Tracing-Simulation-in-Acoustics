@@ -12,6 +12,7 @@ const float kAreaAccuracy = 0.0001;
 const float kSoundSpeed = 343.216;
 const float kPi = std::acos(-1);
 const int kSimulationHeight = 8; // [m]
+const int kMaxTrackingNumber = 12;
 } // namespace constants
 
 #endif

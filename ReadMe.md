@@ -91,7 +91,7 @@ and you should see all magic :smile: ;)
 ## Documentation:
 
 ### TODO List:
-
+- [ ] fix normal at the edge
 - [x] change EnergyPerFrequency to unordered_map<float, energies>>
 - [x] split simulation properties to at leas two bundles of class
 - [x] fix constructor of the simulationProperties

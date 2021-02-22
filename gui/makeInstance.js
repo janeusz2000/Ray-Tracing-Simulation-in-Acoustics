@@ -2,7 +2,7 @@ var THREE = require('three')
 
 export function makeInstance(geometry, color, opacity, x, y, z) {
   const material = new THREE.MeshPhongMaterial(
-      {color, opacity : opacity, transparent : true});
+      {color, opacity : opacity, transparent : true, side : THREE.BackSide});
 
   const object = new THREE.Mesh(geometry, material);
   object.position.set(x, y, z);

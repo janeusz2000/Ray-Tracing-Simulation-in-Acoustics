@@ -10,7 +10,7 @@
 
 int main() {
 
-  std::string path = "./models/monkeyfull.obj";
+  std::string path = "./models/normalDiffusor.obj";
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
   trackers::saveModelToJson("./data", model.get());
@@ -22,7 +22,7 @@ int main() {
   std::vector<float> frequencies = {100, 200, 300, 400, 500};
   float sourcePower = 500; // [W]
   int numOfCollectors = 37;
-  int numOfRaysSquared = 20;
+  int numOfRaysSquared = 50;
 
   BasicSimulationProperties basicProperties(frequencies, sourcePower,
                                             numOfCollectors, numOfRaysSquared);

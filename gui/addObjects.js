@@ -99,7 +99,7 @@ export function getTracking(scene) {
                                        currentRay.origin.y);
       const length = currentRay.length;
       const energy = currentRay.energy;
-      const arrowSize = energy * trackingData.length / 5000;
+      const arrowSize = energy * trackingData.length / 30000;
       const arrow = new THREE.ArrowHelper(direction, origin, length, color,
                                           arrowSize, arrowSize / 2);
       scene.add(arrow);
