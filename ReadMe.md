@@ -91,7 +91,6 @@ and you should see all magic :smile: ;)
 ## Documentation:
 
 ### TODO List:
-- [ ] fix normal at the edge
 - [x] change EnergyPerFrequency to unordered_map<float, energies>>
 - [x] split simulation properties to at leas two bundles of class
 - [x] fix constructor of the simulationProperties
@@ -100,7 +99,7 @@ and you should see all magic :smile: ;)
 - [ ] explain what scene manager do
 - [ ] consider changing name of the SceneManager
 - [x] create dynamic reading object in gui
-- [ ] export energies to gui
+- [x] export energies to gui
 - [ ] create reference data
 - [ ] export reference data to gui
 - [ ] crate new tab inside of the gui to view results of the simulation
