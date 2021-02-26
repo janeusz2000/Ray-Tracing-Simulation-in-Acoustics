@@ -25,7 +25,7 @@ int main() {
   trackers::JsonSampledPositionTracker positionTracker(
       dataPath, numOfRaysSquared, numOfVisibleRays);
   trackers::CollectorsTrackerToJson collectorsTracker;
-  collectionRules::LinearEnergyCollection energyCollectionRules;
+  collectionRules::NonLinearEnergyCollection energyCollectionRules;
 
   BasicSimulationProperties basicProperties(frequencies, sourcePower,
                                             numOfCollectors, numOfRaysSquared);
