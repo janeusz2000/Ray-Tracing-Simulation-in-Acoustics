@@ -29,7 +29,7 @@
             display: none;
             position: absolute;
             background-color: #6b6b6b;
-            min-width: 160px;
+            min-width: 20%;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
          }
@@ -39,7 +39,7 @@
             font-family: "Lucida Console", "Courier New", monospace;
             padding: 12px 16px;
             text-decoration: none;
-            display: block;
+            display: block;/
          }
 
          .dropdown-content a:hover {background-color: rgb(39, 39, 39);}
@@ -55,24 +55,16 @@
 	</head>
 
 	<body>
-      <div class="Simulation">
-         <script src="../data/model.js"></script>
-         <script src="../data/trackingData.js"></script>
+      <div class="Results">
          <script src="../data/energyCollectors.js"></script>
-         <script type="module" src=../dist/main.js></script>
+         <script src="../data/results.js"></script>
+         <script type='module' src=../dist/results.js></script>
       </div>
       <div class="dropdown">
          <button class="dropbtn">Menu</button>
          <div class="dropdown-content">
-           <a href="./results.html">Show Results</a>
+           <a href="index.html">Show Simulation</a>
          </div>
-       </div>
-      <!-- <div class="ui">
-         <div class="sliderContainer">
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-         </div>
-         <div class="hide"> Frequency: </div>
-      </div> -->
-
+      </div>
 	</body>
 </html>

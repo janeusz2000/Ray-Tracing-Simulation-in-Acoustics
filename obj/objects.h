@@ -40,6 +40,7 @@ public:
   float getRadius() const;
   void setRadius(float rad);
   void printItself(std::ostream &os) const noexcept override;
+  float volume() const;
 
 protected:
   float radius_;

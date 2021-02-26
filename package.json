@@ -29,6 +29,7 @@
     "webpack-cli": "^4.5.0"
   },
   "dependencies": {
+    "chart.js": "^2.9.4",
     "three": "^0.125.2",
     "three-orbit-controls": "^82.1.0",
     "util": "^0.12.3",

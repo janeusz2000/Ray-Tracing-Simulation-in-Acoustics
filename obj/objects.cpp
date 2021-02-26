@@ -64,6 +64,10 @@ bool Sphere::isVecInside(const core::Vec3 &vec) const {
   return (vec - origin_).magnitude() <= radius_;
 }
 
+float Sphere::volume() const {
+  return 4 / 3 * constants::kPi * std::pow(getRadius(), 3);
+}
+
 void Sphere::printItself(std::ostream &os) const noexcept {
   os << "Sphere origin: " << origin_ << ", radius: " << radius_ << " [m]";
 }

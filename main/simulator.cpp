@@ -50,6 +50,38 @@ void LinearEnergyCollectionWithPhaseImpact::printItself(
     std::ostream &os) const noexcept {
   os << "Linear Energy Collection With Phase Impact";
 }
+
+void NonLinearEnergyCollection::collectEnergy(const Collectors &collectors,
+                                              core::RayHitData *hitData) {
+  core::Vec3 reachedPosition = hitData->collisionPoint();
+  for (const auto &collector : collectors) {
+    if (collector->isVecInside(reachedPosition)) {
+      float distanceToOrigin =
+          (collector->getOrigin() - reachedPosition).magnitude();
+
+      // When Ray Hits exactly at the edge of the collector.
+      if (distanceToOrigin == collector->getRadius()) {
+        return;
+      }
+      // When hit occurs inside the collector
+      else {
+        float distanceFactor =
+            2 * std::sqrt(std::pow(collector->getRadius(), 2) -
+                          std::pow(distanceToOrigin, 2));
+        float soundIntensity =
+            hitData->energy() * distanceFactor / collector->volume();
+        collector->addEnergy(soundIntensity);
+      }
+    }
+  }
+}
+void NonLinearEnergyCollection::printItself(std::ostream &os) const noexcept {
+  os << "Non Linear energy Collection based on: "
+     << "\n"
+     << "Optimizing diffusive surface topology through "
+     << "\n"
+     << "a performance-based design approach";
+}
 } // namespace collectionRules
 
 Collectors buildCollectors(const ModelInterface *model, int numCollectors) {

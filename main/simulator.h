@@ -48,8 +48,21 @@ struct LinearEnergyCollectionWithPhaseImpact : public CollectEnergyInterface {
 
   void printItself(std::ostream &os) const noexcept override;
 };
-// TODO: Create Rules for no linear collection
+
+// Energy collection based on the "Optimizing diffusive surface topology through
+// a performance-based design approach" paper. Collected Energy is defined as
+// sound intensity that occurred inside EnergyCollector. Sound Intensity is
+// calculated from:
+// soundIntensity = energyPerRay * distanceFactor / EnergyCollectorVolume,
+// where distance factor is:
+// distanceFactor = 2 * sqrt(collectorRadius^2 - distanceToOrigin^2)
+struct NonLinearEnergyCollection : public CollectEnergyInterface {
+  void collectEnergy(const Collectors &collectors,
+                     core::RayHitData *hitData) override;
+  void printItself(std::ostream &os) const noexcept override;
+};
 // TODO: Create Combined Rules of collection
+// TODO: Add time factor to the collected energy
 } // namespace collectionRules
 
 // Constructs an array of Energy Collectors around specified model.
