@@ -1,14 +1,15 @@
+'use strict';
 import {addEnergyCollectors, addModel, getTracking} from './addObjects';
 import {animate} from './animate';
 import {prepareScene} from './prepareScene';
 
-var THREE = require('three');
-var OrbitControls = require('three-orbit-controls')(THREE);
-var scene = new THREE.Scene();
-var renderer = new THREE.WebGLRenderer({antialias : true});
-var camera = new THREE.PerspectiveCamera(
+const THREE = require('three');
+const OrbitControls = require('three-orbit-controls')(THREE);
+const scene = new THREE.Scene();
+const renderer = new THREE.WebGLRenderer({antialias : true});
+const camera = new THREE.PerspectiveCamera(
     60, window.innerWidth / window.innerHeight, 1, 100);
-var controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 
 prepareScene(scene, renderer, camera, controls);
 addEnergyCollectors(scene);

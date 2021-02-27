@@ -1,7 +1,7 @@
 import {hsl} from './hsl';
 import {makeInstance, makeInstance2D} from './makeInstance';
 
-var THREE = require('three');
+const THREE = require('three');
 
 export class Vec3 {
   constructor(vector3) {
@@ -83,11 +83,11 @@ export function getRandomColorAttribute() {
 }
 
 export function getTracking(scene) {
-  for (var index = 0; index < trackingData.length; index++) {
+  for (const index = 0; index < trackingData.length; index++) {
     const color = getRandomColorAttribute();
 
-    var currentTracking = trackingData[index];
-    for (var rayTrackIndex = 0; rayTrackIndex < currentTracking.length;
+    const currentTracking = trackingData[index];
+    for (const rayTrackIndex = 0; rayTrackIndex < currentTracking.length;
          rayTrackIndex++) {
 
       const currentRay = currentTracking[rayTrackIndex];

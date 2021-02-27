@@ -66,7 +66,7 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
     outputJson.push_back(currentTriangle);
   }
 
-  outFile << "var model = " << outputJson.dump(3);
+  outFile << "const model = " << outputJson.dump(3);
   outFile.close();
 }
 
@@ -87,7 +87,7 @@ JsonPositionTracker::JsonPositionTracker(std::string_view path)
     throw std::invalid_argument(ss.str());
   }
 
-  outFile_ << "var trackingData = [";
+  outFile_ << "const trackingData = [";
   outFile_.close();
 };
 
@@ -230,7 +230,7 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
     ++currentCollectorNumber;
   }
 
-  outFile << "var energyCollectors = " << outArray.dump(1);
+  outFile << "const energyCollectors = " << outArray.dump(1);
   outFile.close();
 }
 

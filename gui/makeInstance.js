@@ -1,4 +1,4 @@
-var THREE = require('three')
+const THREE = require('three')
 
 export function makeInstance(geometry, color, opacity, x, y, z) {
   const material = new THREE.MeshPhongMaterial(

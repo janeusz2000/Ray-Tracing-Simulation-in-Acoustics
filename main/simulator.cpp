@@ -58,23 +58,15 @@ void NonLinearEnergyCollection::collectEnergy(const Collectors &collectors,
     if (collector->isVecInside(reachedPosition)) {
       float distanceToOrigin =
           (collector->getOrigin() - reachedPosition).magnitude();
-
-      // When Ray Hits exactly at the edge of the collector.
-      if (distanceToOrigin == collector->getRadius()) {
-        return;
-      }
-      // When hit occurs inside the collector
-      else {
-        float distanceFactor =
-            2 * std::sqrt(std::pow(collector->getRadius(), 2) -
-                          std::pow(distanceToOrigin, 2));
-        float soundIntensity =
-            hitData->energy() * distanceFactor / collector->volume();
-        collector->addEnergy(soundIntensity);
-      }
+      float distanceFactor = 2 * std::sqrt(std::pow(collector->getRadius(), 2) -
+                                           std::pow(distanceToOrigin, 2));
+      float soundIntensity =
+          hitData->energy() * distanceFactor / collector->volume();
+      collector->addEnergy(soundIntensity);
     }
   }
 }
+
 void NonLinearEnergyCollection::printItself(std::ostream &os) const noexcept {
   os << "Non Linear energy Collection based on: "
      << "\n"

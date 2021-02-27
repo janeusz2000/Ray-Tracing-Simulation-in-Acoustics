@@ -39,8 +39,8 @@ public:
   bool isVecInside(const core::Vec3 &vec) const;
   float getRadius() const;
   void setRadius(float rad);
-  void printItself(std::ostream &os) const noexcept override;
   float volume() const;
+  void printItself(std::ostream &os) const noexcept override;
 
 protected:
   float radius_;

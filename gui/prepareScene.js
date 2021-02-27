@@ -1,6 +1,6 @@
 import {onWindowResize} from './onWindowResize';
 
-var THREE = require('three')
+const THREE = require('three')
 
 export function prepareScene(scene, renderer, camera, controls) {
   scene.background = new THREE.Color(0x666666);

@@ -1,4 +1,3 @@
-
 export function animate(scene, renderer, camera, controls) {
   // Hold the current object's scope,
   // for accessing properties from within the callback method.

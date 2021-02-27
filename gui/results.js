@@ -1,9 +1,10 @@
-"use strict";
+'use strict';
 import {EnergyCollector} from './addObjects';
 
 const Chart = require('chart.js')
 
 const ctx = document.getElementById('myChart').getContext('2d');
+
 export class Result {
   constructor(result) {
     this.frequency = result.frequency;
@@ -49,8 +50,7 @@ export function getDCoefficient(data) {
 
 export function drawDCoefficient() {
   const results = loadResults();
-  const frequencies =
-      results.map(result => (result.frequency.toString() + " Hz"));
+  const frequencies = results.map(result => (result.frequency));
   const dCoefficientValues = results.map(result => (result.dCoefficient));
 
   const chart = new Chart(ctx, {
@@ -65,7 +65,29 @@ export function drawDCoefficient() {
       } ]
     },
 
-    options : {}
+    options : {
+      scales : {
+        yAxes : [ {
+          display : true,
+          ticks : {
+            suggestedMin : 0,
+            suggestedMax : 1,
+          },
+          scaleLabel : {
+            display : true,
+            labelString : "Acoustic Diffusion Coefficient Value [-]"
+          }
+        } ],
+        xAxes : [ {
+          display : true,
+          scaleLabel : {
+            display : true,
+            labelString : "Frequency [Hz]",
+          },
+        } ]
+
+      }
+    }
   });
 }
 drawDCoefficient();
