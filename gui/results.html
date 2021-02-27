@@ -21,7 +21,7 @@
          }
 
          .dropdown {
-            position: absolute;
+            position: relative;
             display: inline-block;
          }
 
@@ -39,7 +39,7 @@
             font-family: "Lucida Console", "Courier New", monospace;
             padding: 12px 16px;
             text-decoration: none;
-            display: block;/
+            display: block;
          }
 
          .dropdown-content a:hover {background-color: rgb(39, 39, 39);}
@@ -55,17 +55,18 @@
 	</head>
 
 	<body>
-      <canvas id="myChart"></canvas>
+      <div class="dropdown">
+         <button class="dropbtn">Menu</button>
+         <div class="dropdown-content">
+           <a href="./index.html">Show Simulation</a>
+         </div>
+      </div>
       <div class="Results">
+         <canvas id="myChart"></canvas>
          <script src="../data/energyCollectors.js"></script>
          <script src="../data/results.js"></script>
          <script type='module' src=../dist/results.js></script>
       </div>
-      <div class="dropdown">
-         <button class="dropbtn">Menu</button>
-         <div class="dropdown-content">
-           <a href="index.html">Show Simulation</a>
-         </div>
-      </div>
+
 	</body>
 </html>

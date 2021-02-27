@@ -11,16 +11,37 @@ export class Result {
   }
 }
 
+function compareResults(objectA, objectB) {
+  if (objectA.frequency < objectB.frequency) {
+    return 1;
+  }
+  if (objectA.frequency > objectB.frequency) {
+    return -1;
+  }
+  return 0;
+}
+
 export function loadResults() {
-  return results.map(result => new Result(result));
+  const output = results.map(result => new Result(result));
+  output.sort(compareResults);
+  return output;
 }
 
 // |data| is exported from energyCollector
 export function getDCoefficient(data) {
   // TODO: Time Factor
-  const energy = data.map(level => (120 + 10 * Math.log10(level)));
+
+  const energy = [];
+  for (var energyIndex = 0; energyIndex < data.length; energyIndex++) {
+    if (data[energyIndex] == 0) {
+      energy.push(0);
+    } else {
+      energy.push(120 + 10 * Math.log10(data[energyIndex]));
+    }
+  }
+
   const alpha = Math.pow(energy.reduce((acc, curr) => acc + curr), 2);
-  const beta = energy.reduce((acc, curr) => Math.pow(acc, 2) + curr);
+  const beta = energy.reduce((acc, curr) => Math.pow(curr, 2) + acc);
 
   const gamma = (energy.length - 1) * beta;
   return (alpha - beta) / gamma
@@ -28,19 +49,19 @@ export function getDCoefficient(data) {
 
 export function drawDCoefficient() {
   const results = loadResults();
-  const frequencies = results.map(result => (result.frequency));
+  const frequencies =
+      results.map(result => (result.frequency.toString() + " Hz"));
   const dCoefficientValues = results.map(result => (result.dCoefficient));
 
   const chart = new Chart(ctx, {
     type : 'line',
 
     data : {
-      labels : frequencies,
+      labels : frequencies.reverse(),
       datasets : [ {
         label : 'Simulated Acoustic D Coefficient',
-        backgroundColor : 'rgb(255, 99, 132)',
         borderColor : 'rgb(255, 99, 132)',
-        data : dCoefficientValues
+        data : dCoefficientValues,
       } ]
     },
 

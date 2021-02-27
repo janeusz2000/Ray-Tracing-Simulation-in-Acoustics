@@ -13,10 +13,11 @@ int main() {
 
   std::string dataPath = "./data";
   std::string path = "./models/normalDiffusor.obj";
-  std::vector<float> frequencies = {100, 200, 300};
+  std::vector<float> frequencies = {50,   100,  200,  400,   800,
+                                    1600, 3200, 6400, 12800, 25600};
   float sourcePower = 500; // [W]
   int numOfCollectors = 37;
-  int numOfRaysSquared = 200;
+  int numOfRaysSquared = 20;
   int numOfVisibleRays = 10;
 
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
