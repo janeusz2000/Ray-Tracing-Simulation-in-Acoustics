@@ -90,6 +90,7 @@ std::unordered_map<float, std::vector<float>> SceneManager::run() {
   EnergiesPerFrequency outputEnergiesPerFrequency;
 
   for (float freq : frequencies) {
+    positionTracker_->initializeNewFrequency(freq);
     generators::PointSpeakerRayFactory pointSpeaker(
         simulationProperties_.basicSimulationProperties().numOfRaysSquared,
         simulationProperties_.basicSimulationProperties().sourcePower, model_);
@@ -108,7 +109,8 @@ std::unordered_map<float, std::vector<float>> SceneManager::run() {
     std::pair<float, Energies> energiesPerFrequency =
         std::make_pair<float, Energies>(std::move(freq), std::move(energies));
     outputEnergiesPerFrequency.insert(energiesPerFrequency);
-    positionTracker_->save();
+    positionTracker_->endCurrentFrequency();
   }
+  positionTracker_->save();
   return outputEnergiesPerFrequency;
 }

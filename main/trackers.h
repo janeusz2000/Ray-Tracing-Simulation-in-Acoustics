@@ -33,9 +33,11 @@ void saveModelToJson(std::string_view path, ModelInterface *model);
 // saves them to files in the given path.
 class PositionTrackerInterface : public Printable {
 public:
+  virtual void initializeNewFrequency(float frequency) = 0;
   virtual void initializeNewTracking() = 0;
   virtual void
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) = 0;
+  virtual void endCurrentFrequency() = 0;
   virtual void endCurrentTracking() = 0;
   virtual void save() = 0;
 
@@ -48,10 +50,11 @@ class JsonPositionTracker : public PositionTrackerInterface {
 public:
   JsonPositionTracker(std::string_view path);
 
-  // Initialize new tracking of the ray
+  void initializeNewFrequency(float frequency) override;
   void initializeNewTracking() override;
   void
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) override;
+  void endCurrentFrequency() override;
   void endCurrentTracking() override;
 
   void save() override;
@@ -76,9 +79,11 @@ public:
   JsonSampledPositionTracker(std::string_view path, int numOfRaysSquared,
                              int numOfVisibleRaysSquared);
 
-  virtual void initializeNewTracking() override;
+  void initializeNewFrequency(float frequency) override;
+  void initializeNewTracking() override;
   void
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) override;
+  void endCurrentFrequency() override;
   void endCurrentTracking() override;
 
   void save() override;

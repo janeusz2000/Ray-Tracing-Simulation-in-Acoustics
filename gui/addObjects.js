@@ -1,3 +1,4 @@
+"use strict";
 import {hsl} from './hsl';
 import {makeInstance, makeInstance2D} from './makeInstance';
 
@@ -82,16 +83,31 @@ export function getRandomColorAttribute() {
   return color;
 }
 
-export function getTracking(scene) {
-  for (var index = 0; index < trackingData.length; index++) {
+export class Tracking {
+  constructor(tracking) {
+    this.frequency = tracking.frequency;
+    this.trackings = tracking.trackings;
+  }
+}
+
+export function getTracking() {
+  return trackingData.map(tracking => new Tracking(tracking));
+}
+
+export function drawTracking(scene, frequency, arrowList) {
+  const allTracking = getTracking();
+  const currentTracking =
+      allTracking.find(tracking => tracking.frequency === frequency);
+
+  if (currentTracking == null) {
+    throw Error("Desired Frequency of Tracking not Found! Desired Frequency: " +
+                frequency.toString())
+  }
+
+  const trackingData = currentTracking.trackings;
+  trackingData.forEach(tracking => {
     const color = getRandomColorAttribute();
-
-    const currentTracking = trackingData[index];
-    for (var rayTrackIndex = 0; rayTrackIndex < currentTracking.length;
-         rayTrackIndex++) {
-
-      const currentRay = currentTracking[rayTrackIndex];
-
+    tracking.forEach(currentRay => {
       const direction =
           new THREE.Vector3(currentRay.direction.x, currentRay.direction.z,
                             currentRay.direction.y);
@@ -103,6 +119,12 @@ export function getTracking(scene) {
       const arrow = new THREE.ArrowHelper(direction, origin, length, color,
                                           arrowSize, arrowSize / 2);
       scene.add(arrow);
-    }
-  }
+      arrowList.push(arrow);
+    })
+  })
+}
+
+export function deleteTracking(scene, arrowList) {
+  arrowList.forEach(arrow => { scene.remove(arrow); })
+  arrowList = [];
 }

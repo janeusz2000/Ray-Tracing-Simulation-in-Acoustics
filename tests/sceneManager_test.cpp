@@ -20,9 +20,11 @@ const float kSkipFreq = 1000;
 
 class FakePositionTracker : public PositionTrackerInterface {
 public:
+  void initializeNewFrequency(float frequency) override{};
   void initializeNewTracking() override{};
   void
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) override{};
+  void endCurrentFrequency() override{};
   void endCurrentTracking() override{};
   void save() override{};
 

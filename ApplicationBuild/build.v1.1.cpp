@@ -17,7 +17,7 @@ int main() {
                                     1600, 3200, 6400, 12800, 25600};
   float sourcePower = 500; // [W]
   int numOfCollectors = 37;
-  int numOfRaysSquared = 20;
+  int numOfRaysSquared = 100;
   int numOfVisibleRays = 10;
 
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
@@ -26,7 +26,7 @@ int main() {
   trackers::JsonSampledPositionTracker positionTracker(
       dataPath, numOfRaysSquared, numOfVisibleRays);
   trackers::CollectorsTrackerToJson collectorsTracker;
-  collectionRules::NonLinearEnergyCollection energyCollectionRules;
+  collectionRules::LinearEnergyCollectionWithPhaseImpact energyCollectionRules;
 
   BasicSimulationProperties basicProperties(frequencies, sourcePower,
                                             numOfCollectors, numOfRaysSquared);

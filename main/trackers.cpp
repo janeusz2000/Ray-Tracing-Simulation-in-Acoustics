@@ -91,6 +91,22 @@ JsonPositionTracker::JsonPositionTracker(std::string_view path)
   outFile_.close();
 };
 
+void JsonPositionTracker::initializeNewFrequency(float frequency) {
+  std::ofstream outFile;
+  outFile.open(path_, std::ios_base::app);
+  if (!outFile.good()) {
+    std::stringstream errorStream;
+    errorStream << "Invalid Path given to: " << *this
+                << "at initializenewFrequency()\n"
+                << "path: " << path_;
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  outFile << "{\"frequency\":" << frequency << ",\n"
+          << "\"trackings\":[";
+  outFile.close();
+}
+
 void JsonPositionTracker::printItself(std::ostream &os) const noexcept {
   os << "Json Position Tracker\n"
      << "Path: " << path_ << "\n"
@@ -105,6 +121,20 @@ void JsonPositionTracker::initializeNewTracking() { currentTracking_.clear(); }
 void JsonPositionTracker::addNewPositionToCurrentTracking(
     const core::RayHitData &hitData) {
   currentTracking_.push_back(hitData);
+}
+void JsonPositionTracker::endCurrentFrequency() {
+  std::ofstream outFile;
+  outFile.open(path_, std::ios_base::app);
+  if (!outFile.good()) {
+    std::stringstream errorStream;
+    errorStream << "Invalid Path given to: " << *this
+                << "at initializenewFrequency()\n"
+                << "path: " << path_;
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  outFile << "],},";
+  outFile.close();
 }
 void JsonPositionTracker::endCurrentTracking() {
   if (currentTracking_.size() > 1) {
@@ -161,6 +191,10 @@ JsonSampledPositionTracker::JsonSampledPositionTracker(
   }
 };
 
+void JsonSampledPositionTracker::initializeNewFrequency(float frequency) {
+  tracker_.initializeNewFrequency(frequency);
+}
+
 void JsonSampledPositionTracker::initializeNewTracking() {
   ++currentNumberOfTracking_;
   if (isSampling()) {
@@ -173,6 +207,10 @@ void JsonSampledPositionTracker::addNewPositionToCurrentTracking(
   if (isSampling()) {
     tracker_.addNewPositionToCurrentTracking(hitData);
   }
+}
+
+void JsonSampledPositionTracker::endCurrentFrequency() {
+  tracker_.endCurrentFrequency();
 }
 
 void JsonSampledPositionTracker::endCurrentTracking() {

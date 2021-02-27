@@ -49,6 +49,36 @@
             pointer-events: none;
 
          }
+
+         .FrequencySlider {
+            position: absolute;
+            top: 1%;
+            right: 3px;
+            width: 15%;
+            height: 5%;
+            border: 3px solid #000000;
+            opacity: 0.7;
+         }
+         .FrequencySlider:hover {
+            opacity: 1;
+         }
+
+         .FrequencySlider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #4CAF50;
+            cursor: pointer;
+         }
+
+         .FrequencyDisplay {
+            top: 10px;
+            right: 3px;
+            position: absolute;
+            display: block;
+            font-family: "Lucida Console", "Courier New", monospace;
+            color: rgb(255, 255, 255);
+         }
+
          </style>
 	</head>
 

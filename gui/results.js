@@ -1,5 +1,4 @@
 'use strict';
-import {EnergyCollector} from './addObjects';
 
 const Chart = require('chart.js')
 
@@ -37,7 +36,7 @@ export function getDCoefficient(data) {
     if (data[energyIndex] == 0) {
       energy.push(0);
     } else {
-      energy.push(120 + 10 * Math.log10(data[energyIndex]));
+      energy.push(120 + 10 * Math.log10(Math.abs(data[energyIndex])));
     }
   }
 
@@ -66,24 +65,42 @@ export function drawDCoefficient() {
     },
 
     options : {
+      legend : {
+        labels : {
+          fontColor : "white",
+        },
+      },
       scales : {
         yAxes : [ {
           display : true,
           ticks : {
             suggestedMin : 0,
             suggestedMax : 1,
+            fontColor : "white",
           },
           scaleLabel : {
             display : true,
-            labelString : "Acoustic Diffusion Coefficient Value [-]"
+            labelString : "Acoustic Diffusion Coefficient Value [-]",
+            fontColor : "white",
+          },
+          gridLines : {
+            color : "#9e9e9e",
           }
         } ],
         xAxes : [ {
           display : true,
+          ticks : {
+            display : true,
+            fontColor : "white",
+          },
           scaleLabel : {
             display : true,
             labelString : "Frequency [Hz]",
+            fontColor : "white",
           },
+          gridLines : {
+            color : "#9e9e9e",
+          }
         } ]
 
       }
