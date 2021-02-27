@@ -83,11 +83,11 @@ export function getRandomColorAttribute() {
 }
 
 export function getTracking(scene) {
-  for (const index = 0; index < trackingData.length; index++) {
+  for (var index = 0; index < trackingData.length; index++) {
     const color = getRandomColorAttribute();
 
     const currentTracking = trackingData[index];
-    for (const rayTrackIndex = 0; rayTrackIndex < currentTracking.length;
+    for (var rayTrackIndex = 0; rayTrackIndex < currentTracking.length;
          rayTrackIndex++) {
 
       const currentRay = currentTracking[rayTrackIndex];

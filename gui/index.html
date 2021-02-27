@@ -7,10 +7,6 @@
 		<title>RAY-TRACING SIMULATION</title>
       <style>
          body { margin: 0; }
-         canvas {
-            width: 100% ;
-            height: 100%;
-         }
          .dropbtn {
             background-color: #2900df;
             color: white;
@@ -49,30 +45,27 @@
          .Simulation {
             position: absolute;
             width: 100%;
-            height: 100;
+            height: 100%;
+            pointer-events: none;
+
          }
          </style>
 	</head>
 
 	<body>
       <div class="Simulation">
+         <canvas id="SimulationWindow"></canvas>
          <script src="../data/model.js"></script>
          <script src="../data/trackingData.js"></script>
          <script src="../data/energyCollectors.js"></script>
          <script type="module" src=../dist/main.js></script>
       </div>
+
       <div class="dropdown">
          <button class="dropbtn">Menu</button>
          <div class="dropdown-content">
-           <a href="./results.html">Show Results</a>
+           <a href="./results.html">Show Acoustic Diffusion Coefficient</a>
          </div>
        </div>
-      <!-- <div class="ui">
-         <div class="sliderContainer">
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-         </div>
-         <div class="hide"> Frequency: </div>
-      </div> -->
-
 	</body>
 </html>

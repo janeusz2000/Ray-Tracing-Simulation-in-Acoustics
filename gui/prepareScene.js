@@ -1,4 +1,3 @@
-import {onWindowResize} from './onWindowResize';
 
 const THREE = require('three')
 
@@ -7,7 +6,6 @@ export function prepareScene(scene, renderer, camera, controls) {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  camera.position.set(40, 20, 0);
   controls.enableDamping = true; // an animation loop is required when either
                                  // damping or auto-rotation are enabled
   controls.dampingFactor = 0.01;
@@ -27,5 +25,4 @@ export function prepareScene(scene, renderer, camera, controls) {
 
   const ambientLight = new THREE.AmbientLight(0x222222);
   scene.add(ambientLight);
-  window.addEventListener('resize', onWindowResize(camera, window, renderer));
 }
