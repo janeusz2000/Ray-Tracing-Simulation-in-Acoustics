@@ -12,7 +12,7 @@
 int main() {
 
   std::string dataPath = "./data";
-  std::string path = "./models/normalDiffusor.obj";
+  std::string path = "./models/fancyDiffusor.obj";
   std::vector<float> frequencies = {50,   100,  200,  400,   800,
                                     1600, 3200, 6400, 12800, 25600};
   float sourcePower = 500; // [W]
