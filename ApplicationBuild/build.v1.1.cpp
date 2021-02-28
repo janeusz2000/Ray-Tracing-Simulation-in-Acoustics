@@ -13,9 +13,10 @@ int main() {
 
   std::string dataPath = "./data";
   std::string path = "./models/fancyDiffusor.obj";
-  std::vector<float> frequencies = {50,   100,  200,  400,   800,
-                                    1600, 3200, 6400, 12800, 25600};
-  float sourcePower = 500; // [W]
+  std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
+                                    2000, 2500,  3150,  4000, 5000, 6300,
+                                    8000, 10000, 12500, 16000};
+  float sourcePower = 1000; // [W]
   int numOfCollectors = 37;
   int numOfRaysSquared = 100;
   int numOfVisibleRays = 10;
@@ -26,7 +27,7 @@ int main() {
   trackers::JsonSampledPositionTracker positionTracker(
       dataPath, numOfRaysSquared, numOfVisibleRays);
   trackers::CollectorsTrackerToJson collectorsTracker;
-  collectionRules::LinearEnergyCollectionWithPhaseImpact energyCollectionRules;
+  collectionRules::NonLinearEnergyCollection > energyCollectionRules;
 
   BasicSimulationProperties basicProperties(frequencies, sourcePower,
                                             numOfCollectors, numOfRaysSquared);

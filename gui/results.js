@@ -11,12 +11,19 @@ export class Result {
   }
 }
 
+export class Reference {
+  constructor(result) {
+    this.frequency = result.frequency;
+    this.dCoefficient = result.d;
+  }
+}
+
 function compareResults(objectA, objectB) {
   if (objectA.frequency < objectB.frequency) {
-    return 1;
+    return -1;
   }
   if (objectA.frequency > objectB.frequency) {
-    return -1;
+    return 1;
   }
   return 0;
 }
@@ -25,6 +32,12 @@ export function loadResults() {
   const output = results.map(result => new Result(result));
   output.sort(compareResults);
   return output;
+}
+
+export function loadReference() {
+  const reference = referenceData.map(result => new Reference(result));
+  reference.sort(compareResults);
+  return reference;
 }
 
 // |data| is exported from energyCollector
@@ -49,22 +62,44 @@ export function getDCoefficient(data) {
 
 export function drawDCoefficient() {
   const results = loadResults();
-  const frequencies = results.map(result => (result.frequency));
-  const dCoefficientValues = results.map(result => (result.dCoefficient));
+  const reference = loadReference();
+  const referenceFrequencies = reference.map(result => result.frequency);
+  const frequencies = results.map(result => result.frequency);
+  const dCoefficientValues = results.map(result => result.dCoefficient);
+  const referenceD = reference.map(result => result.dCoefficient);
+  console.log(referenceD);
 
   const chart = new Chart(ctx, {
     type : 'line',
 
     data : {
-      labels : frequencies.reverse(),
-      datasets : [ {
-        label : 'Simulated Acoustic D Coefficient',
-        borderColor : 'rgb(255, 99, 132)',
-        data : dCoefficientValues,
-      } ]
+      labels : frequencies,
+      datasets : [
+        {
+          label : 'Simulated Acoustic D Coefficient',
+          borderColor : 'rgb(255, 99, 132)',
+          data : dCoefficientValues,
+        },
+        {
+          label : 'Reference Acoustic D Coefficient',
+          borderColor : 'rgb(0, 153, 51)',
+          data : referenceD,
+        },
+      ]
     },
 
     options : {
+      plugins : {
+        datalabels : {
+          backgroundColor : function(
+              context) { return context.dataset.backgroundColor; },
+          borderRadius : 4,
+          color : 'white',
+          font : {weight : 'bold'},
+          formatter : Math.round,
+          padding : 6
+        }
+      },
       legend : {
         labels : {
           fontColor : "white",
