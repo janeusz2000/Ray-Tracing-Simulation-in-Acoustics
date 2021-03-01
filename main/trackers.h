@@ -23,8 +23,8 @@ namespace trackers {
 
 // Save results of the simulation at given |path| as results.js file, with json
 // structure.
-void saveResultsAsJson(std::string_view path,
-                       const EnergyPerFrequency &results);
+void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
+                       bool referenceModel = false);
 
 // Save |model| to the given file as Json file.
 void saveModelToJson(std::string_view path, ModelInterface *model);
@@ -40,7 +40,7 @@ public:
   virtual void endCurrentFrequency() = 0;
   virtual void endCurrentTracking() = 0;
   virtual void save() = 0;
-
+  virtual void switchToReferenceModel() = 0;
   void printItself(std::ostream &os) const noexcept override;
 };
 
@@ -58,6 +58,7 @@ public:
   void endCurrentTracking() override;
 
   void save() override;
+  void switchToReferenceModel() override;
   void printItself(std::ostream &os) const noexcept override;
 
 private:
@@ -85,6 +86,7 @@ public:
   addNewPositionToCurrentTracking(const core::RayHitData &hitData) override;
   void endCurrentFrequency() override;
   void endCurrentTracking() override;
+  void switchToReferenceModel() override;
 
   void save() override;
   void printItself(std::ostream &os) const noexcept override;

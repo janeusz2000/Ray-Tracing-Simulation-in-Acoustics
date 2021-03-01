@@ -70,7 +70,6 @@ SceneManager::SceneManager(
       raytracer_(model), positionTracker_(positionTracker),
       collectorsTracker_(collectorTracker) {
   offseter_ = std::make_unique<generators::FakeOffseter>();
-  referenceModel_ = Model::NewReferenceModel(model->sideSize());
 }
 
 void SceneManager::printItself(std::ostream &os) const noexcept {
@@ -80,8 +79,7 @@ void SceneManager::printItself(std::ostream &os) const noexcept {
      << "Ray Tracer: " << raytracer_ << "\n"
      << "Position Tracker: " << *(positionTracker_) << "\n"
      << "Collectors Tracker: " << *(collectorsTracker_) << "\n"
-     << "Offseter: " << *(offseter_) << "\n"
-     << "Reference Model: " << *(referenceModel_);
+     << "Offseter: " << *(offseter_);
 }
 
 std::unordered_map<float, std::vector<float>> SceneManager::run() {

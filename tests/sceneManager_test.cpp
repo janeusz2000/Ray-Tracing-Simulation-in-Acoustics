@@ -27,6 +27,7 @@ public:
   void endCurrentFrequency() override{};
   void endCurrentTracking() override{};
   void save() override{};
+  void switchToReferenceModel() override{};
 
 private:
   void printItself(std::ostream &os) const noexcept override {

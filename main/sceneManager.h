@@ -98,7 +98,6 @@ private:
   trackers::CollectorsTrackerInterface *collectorsTracker_;
 
   std::unique_ptr<generators::RandomRayOffseter> offseter_;
-  std::unique_ptr<Model> referenceModel_;
 };
 
 #endif

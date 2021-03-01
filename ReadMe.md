@@ -101,8 +101,8 @@ and you should see all magic :smile: ;)
 - [ ] consider changing name of the SceneManager
 - [x] create dynamic reading object in gui
 - [x] export energies to gui
-- [ ] create reference data
-- [ ] export reference data to gui
+- [x] create reference data
+- [x] export reference data to gui
 - [x] crate new tab inside of the gui to view results of the simulation
 - [x] diffusion coefficient per frequency on gui (x must be log10)
 - [ ] create polar pattern kon every frequency

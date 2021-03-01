@@ -9,6 +9,9 @@
 #include <unordered_map>
 #include <vector>
 
+using Energy = std::vector<float>;
+using EnergyPerFrequency = std::unordered_map<float, Energy>;
+
 int main() {
 
   std::string dataPath = "./data";
@@ -18,14 +21,15 @@ int main() {
                                     8000, 10000, 12500, 16000};
   float sourcePower = 1000; // [W]
   int numOfCollectors = 37;
-  int numOfRaysSquared = 100;
-  int numOfVisibleRays = 10;
+  int numOfRaysSquared = 4;
+  int numOfVisibleRays = 4;
 
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
 
   trackers::saveModelToJson(dataPath, model.get());
   trackers::JsonSampledPositionTracker positionTracker(
       dataPath, numOfRaysSquared, numOfVisibleRays);
+
   trackers::CollectorsTrackerToJson collectorsTracker;
   collectionRules::NonLinearEnergyCollection energyCollectionRules;
 
@@ -35,6 +39,16 @@ int main() {
 
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
-  std::unordered_map<float, std::vector<float>> results = manager.run();
+  EnergyPerFrequency results = manager.run();
   trackers::saveResultsAsJson(dataPath, results);
+
+  positionTracker.switchToReferenceModel();
+  std::unique_ptr<Model> referenceModel =
+      Model::NewReferenceModel(model->sideSize());
+
+  SceneManager referenceManager(referenceModel.get(), properties,
+                                &positionTracker, &collectorsTracker);
+  EnergyPerFrequency referenceResults = referenceManager.run();
+  trackers::saveResultsAsJson(dataPath, referenceResults,
+                              /*referenceModel=*/true);
 }

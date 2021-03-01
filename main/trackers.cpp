@@ -2,17 +2,30 @@
 
 namespace trackers {
 
-void saveResultsAsJson(std::string_view path,
-                       const EnergyPerFrequency &results) {
+void checkStream(const std::ofstream &stream, std::string_view path) {
+  if (!stream.good()) {
+    std::stringstream errorStream;
+    errorStream << "File path given to saveResultsAsJson() is invali\n"
+                << "resutls path: " << path.data();
+    throw std::invalid_argument(errorStream.str());
+  }
+};
+
+void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
+                       bool referenceModel) {
   std::string outputPath = path.data();
   outputPath += "/results.js";
 
-  std::ofstream jsFile(outputPath);
-  if (!jsFile.good()) {
-    std::stringstream errorStream;
-    errorStream << "File path given to saveResultsAsJson() is invali\n"
-                << "resutls path: " << outputPath;
-    throw std::invalid_argument(errorStream.str());
+  std::ofstream jsFile;
+
+  if (referenceModel) {
+    jsFile.open(outputPath, std::ios_base::app);
+    checkStream(jsFile, outputPath);
+    jsFile << "\nconst referenceResults = ";
+  } else {
+    jsFile.open(outputPath);
+    checkStream(jsFile, outputPath);
+    jsFile << "const results = ";
   }
 
   using Json = nlohmann::json;
@@ -26,7 +39,7 @@ void saveResultsAsJson(std::string_view path,
     outputArray.push_back(dataPerFrequency);
   }
 
-  jsFile << "const results = " << outputArray.dump(3);
+  jsFile << outputArray.dump(3);
   jsFile.close();
 }
 void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
@@ -170,6 +183,13 @@ void JsonPositionTracker::save() {
   outFile_.close();
 }
 
+void JsonPositionTracker::switchToReferenceModel() {
+  std::ofstream outFile;
+  outFile.open(path_, std::ios_base::app);
+  outFile << "\n"
+          << "const referenceTrackingData = [";
+}
+
 JsonSampledPositionTracker::JsonSampledPositionTracker(
     std::string_view path, int numOfRaysSquared, int numOfVisibleRaysSquared)
     : tracker_(path.data()), numOfRaysSquared_(numOfRaysSquared),
@@ -220,6 +240,10 @@ void JsonSampledPositionTracker::endCurrentTracking() {
 }
 
 void JsonSampledPositionTracker::save() { tracker_.save(); }
+
+void JsonSampledPositionTracker::switchToReferenceModel() {
+  tracker_.switchToReferenceModel();
+}
 
 void JsonSampledPositionTracker::printItself(std::ostream &os) const noexcept {
   os << "Json Sampled position tracking\n"
