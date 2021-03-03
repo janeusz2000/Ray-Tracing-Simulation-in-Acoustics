@@ -2,29 +2,44 @@
 
 namespace trackers {
 
-void checkStream(const std::ofstream &stream, std::string_view path) {
-  if (!stream.good()) {
-    std::stringstream errorStream;
-    errorStream << "File path given to saveResultsAsJson() is invali\n"
-                << "resutls path: " << path.data();
-    throw std::invalid_argument(errorStream.str());
+std::ofstream PositionTrackerInterface::open(std::string_view path,
+                                             bool overwrite) {
+  std::ofstream fileStream;
+  if (overwrite) {
+    fileStream.open(path.data());
+  } else {
+    fileStream.open(path.data(), std::ios_base::app);
   }
+  return fileStream;
 };
+
+void PositionTrackerInterface::checkStreamIfGood(const std::ofstream &stream) {
+  std::stringstream errorMsgs;
+  if (!stream.is_open()) {
+    errorMsgs << "given stream is not opened!\n";
+  }
+  if (!stream.good()) {
+    errorMsgs << "given path to the stream is invalid!\n";
+  }
+  std::string errorMessages = errorMsgs.str();
+  if (errorMessages.length() > 0) {
+    std::stringstream errorStream;
+    errorStream << "Detected errors in given stream:\n" << errorMsgs.str();
+  }
+}
 
 void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
                        bool referenceModel) {
   std::string outputPath = path.data();
   outputPath += "/results.js";
 
-  std::ofstream jsFile;
+  std::ofstream jsFile =
+      PositionTrackerInterface::open(outputPath, !referenceModel);
 
+  PositionTrackerInterface::checkStreamIfGood(jsFile);
   if (referenceModel) {
-    jsFile.open(outputPath, std::ios_base::app);
-    checkStream(jsFile, outputPath);
     jsFile << "\nconst referenceResults = ";
   } else {
-    jsFile.open(outputPath);
-    checkStream(jsFile, outputPath);
     jsFile << "const results = ";
   }
 

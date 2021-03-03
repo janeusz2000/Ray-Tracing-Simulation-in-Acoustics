@@ -11,6 +11,11 @@
 #include <sstream>
 #include <string_view>
 
+// Contains objects and functions that are responsible for exporting calculated
+// data, objects and ray trajectories in simulation to different files. They
+// are used for visualization and debugging purposes.
+namespace trackers {
+
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 // Represent collected energy value from each collector
 // at Collectors at the same index.
@@ -19,10 +24,8 @@ using Energies = std::vector<float>;
 // represent frequency of the simulation.
 using EnergyPerFrequency = std::unordered_map<float, Energies>;
 
-namespace trackers {
-
 // Save results of the simulation at given |path| as results.js file, with json
-// structure.
+// structure. Change |referenceModel|
 void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
                        bool referenceModel = false);
 
@@ -33,6 +36,11 @@ void saveModelToJson(std::string_view path, ModelInterface *model);
 // saves them to files in the given path.
 class PositionTrackerInterface : public Printable {
 public:
+  // returns opened std::ofstream with given path.
+  static std::ofstream open(std::string_view path, bool overwrite = true);
+  // checks if given stream is open and good, and throws std::invalid_argument
+  // if one of requirements is not met.
+  static void checkStreamIfGood(const std::ofstream &stream);
   virtual void initializeNewFrequency(float frequency) = 0;
   virtual void initializeNewTracking() = 0;
   virtual void
