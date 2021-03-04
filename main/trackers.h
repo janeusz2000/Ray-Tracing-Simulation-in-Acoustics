@@ -11,12 +11,73 @@
 #include <sstream>
 #include <string_view>
 
+using Json = nlohmann::json;
+using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+
 // Contains objects and functions that are responsible for exporting calculated
 // data, objects and ray trajectories in simulation to different files. They
 // are used for visualization and debugging purposes.
 namespace trackers {
 
-using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+// Mediator between different type of input data File.
+// Prepares data to be saved into file
+struct FileBuffer {
+  explicit FileBuffer(std::string_view message = "");
+  void addMessageToBuffer(std::string_view message);
+  // Reads data accumulated in buffer
+  std::string_view readData() const;
+  // clears buffer and acquires data from json to buffer
+  void acquireJsonFile(const Json &json);
+  std::stringstream stream;
+};
+
+// Mediator between std::ofstream and FileBuffer.
+// Manages opening, saving, writing and closing file.
+class File : public Printable {
+public:
+  explicit File(std::string_view path) : path_(path){};
+  // Opens file at given |path| overwriting existing one.
+  // Throws std::invalid_argument exception if file is not found
+  // at given path.
+  void openFileWithOverwrite();
+  // Opens file at given |path| without overwriting it.
+  // Data is appended after existing one. Throws
+  // std::invalid_argument exception if file is not found
+  // at given path.
+  void open();
+  // Writes given FileBuffer into file and flush content;
+  void write(const FileBuffer &buffer);
+  void writeWithoutFlush(const FileBuffer &buffer);
+  void printItself(std::ostream &os) const noexcept override;
+
+private:
+  void handleErrors();
+
+protected:
+  std::ofstream fileStream_;
+  std::string_view path_;
+};
+
+// contains utilities for rendering javascript syntax in FileBuffer
+namespace javascript {
+
+FileBuffer initVar(std::string_view variableName);
+FileBuffer initLet(std::string_view variableName);
+FileBuffer initConst(std::string_view variableName);
+FileBuffer initArray();
+FileBuffer endArray();
+FileBuffer initObject();
+FileBuffer endObject();
+
+void initArrayInBuffer(FileBuffer &buffer);
+void endArrayInBuffer(FileBuffer &buffer);
+void initObjectInBuffer(FileBuffer &buffer);
+void endObjectInBuffer(FileBuffer &buffer);
+
+} // namespace javascript
+
+// ! =========== Refractoring so far =================
+
 // Represent collected energy value from each collector
 // at Collectors at the same index.
 using Energies = std::vector<float>;

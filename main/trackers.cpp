@@ -2,6 +2,100 @@
 
 namespace trackers {
 
+FileBuffer::FileBuffer(std::string_view message) { stream << message; }
+
+void FileBuffer::addMessageToBuffer(std::string_view message) {
+  stream << message;
+}
+
+std::string_view FileBuffer::readData() const { return stream.str().c_str(); }
+
+void FileBuffer::acquireJsonFile(const Json &json) {
+  stream.clear();
+  stream << json;
+}
+
+void File::openFileWithOverwrite() {
+  fileStream_.open(path_.data());
+  handleErrors();
+}
+
+void File::open() {
+  fileStream_.open(path_.data(), std::ios_base::app);
+  handleErrors();
+}
+
+void File::write(const FileBuffer &buffer) {
+  fileStream_ << buffer.readData() << std::flush;
+}
+
+void File::writeWithoutFlush(const FileBuffer &buffer) {
+  fileStream_ << buffer.readData();
+}
+
+void File::printItself(std::ostream &os) const noexcept {
+  os << "File at given path: " << path_ << "\n";
+}
+
+void File::handleErrors() {
+  if (!fileStream_.good()) {
+    std::stringstream errorStream;
+    errorStream << "Error in: " << *this << "File doesn't exist at given path!";
+    throw std::invalid_argument(errorStream.str());
+  }
+}
+
+namespace javascript {
+void initArrayInBuffer(FileBuffer &buffer) { buffer.stream << '['; }
+void endArrayInBuffer(FileBuffer &buffer) { buffer.stream << ']'; }
+void initObjectInBuffer(FileBuffer &buffer) { buffer.stream << '{'; }
+void endObjectInBuffer(FileBuffer &buffer) { buffer.stream << "}"; }
+
+FileBuffer initVar(std::string_view variableName) {
+  FileBuffer buffer;
+  buffer.stream << "var " << variableName << "= ";
+  return buffer;
+}
+
+FileBuffer initLet(std::string_view variableName) {
+  FileBuffer buffer;
+  buffer.stream << "let " << variableName << "= ";
+  return buffer;
+}
+
+FileBuffer initConst(std::string_view variableName) {
+  FileBuffer buffer;
+  buffer.stream << "const " << variableName << "= ";
+  return buffer;
+}
+
+FileBuffer initArray() {
+  FileBuffer buffer;
+  initArrayInBuffer(buffer);
+  return buffer;
+}
+
+FileBuffer endArray() {
+  FileBuffer buffer;
+  endArrayInBuffer(buffer);
+  return buffer;
+}
+
+FileBuffer initObject() {
+  FileBuffer buffer;
+  initObjectInBuffer(buffer);
+  return buffer;
+}
+
+FileBuffer endObject() {
+  FileBuffer buffer;
+  endObjectInBuffer(buffer);
+  return buffer;
+}
+} // namespace javascript
+
+// ! =========== Refractoring so far =================
+
 std::ofstream PositionTrackerInterface::open(std::string_view path,
                                              bool overwrite) {
   std::ofstream fileStream;
@@ -43,7 +137,6 @@ void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
     jsFile << "const results = ";
   }
 
-  using Json = nlohmann::json;
   Json outputArray = Json::array();
   for (auto it = results.cbegin(); it != results.cend(); ++it) {
     Json energyData = Json::array();
