@@ -5,6 +5,10 @@
 ```diff
 !! Under Development !!
 ```
+<p align="center">
+<img src="githubContent/demo.gif" alt="animated" />
+</p>
+
 
 ### TODO List:
 - [x] change EnergyPerFrequency to unordered_map<float, energies>>
