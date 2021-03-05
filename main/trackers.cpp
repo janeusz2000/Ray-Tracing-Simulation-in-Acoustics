@@ -2,17 +2,17 @@
 
 namespace trackers {
 
-FileBuffer::FileBuffer(std::string_view message) { stream << message; }
-
 void FileBuffer::addMessageToBuffer(std::string_view message) {
   stream << message;
 }
 
-std::string_view FileBuffer::readData() const { return stream.str().c_str(); }
-
 void FileBuffer::acquireJsonFile(const Json &json) {
   stream.clear();
   stream << json;
+}
+
+void FileInterface::printItself(std::ostream &os) const noexcept {
+  os << "File Interface class \n";
 }
 
 void File::openFileWithOverwrite() {
@@ -26,11 +26,11 @@ void File::open() {
 }
 
 void File::write(const FileBuffer &buffer) {
-  fileStream_ << buffer.readData() << std::flush;
+  fileStream_ << buffer.stream.rdbuf() << std::endl;
 }
 
 void File::writeWithoutFlush(const FileBuffer &buffer) {
-  fileStream_ << buffer.readData();
+  fileStream_ << buffer.stream.rdbuf();
 }
 
 void File::printItself(std::ostream &os) const noexcept {
@@ -46,10 +46,6 @@ void File::handleErrors() {
 }
 
 namespace javascript {
-void initArrayInBuffer(FileBuffer &buffer) { buffer.stream << '['; }
-void endArrayInBuffer(FileBuffer &buffer) { buffer.stream << ']'; }
-void initObjectInBuffer(FileBuffer &buffer) { buffer.stream << '{'; }
-void endObjectInBuffer(FileBuffer &buffer) { buffer.stream << "}"; }
 
 FileBuffer initVar(std::string_view variableName) {
   FileBuffer buffer;
@@ -92,49 +88,34 @@ FileBuffer endObject() {
   endObjectInBuffer(buffer);
   return buffer;
 }
+
+void initArrayInBuffer(FileBuffer &buffer) { buffer.stream << '['; }
+void endArrayInBuffer(FileBuffer &buffer) { buffer.stream << "]"; }
+void initObjectInBuffer(FileBuffer &buffer) { buffer.stream << '{'; }
+void endObjectInBuffer(FileBuffer &buffer) { buffer.stream << "}"; }
+void endLineInBuffer(FileBuffer &buffer) { buffer.stream << ';'; }
+void initConstInBuffer(FileBuffer &buffer, std::string_view constName) {
+  buffer.stream << "const " << constName << "=";
+}
+
 } // namespace javascript
 
 // ! =========== Refractoring so far =================
-
-std::ofstream PositionTrackerInterface::open(std::string_view path,
-                                             bool overwrite) {
-  std::ofstream fileStream;
-  if (overwrite) {
-    fileStream.open(path.data());
-  } else {
-    fileStream.open(path.data(), std::ios_base::app);
-  }
-  return fileStream;
-};
-
-void PositionTrackerInterface::checkStreamIfGood(const std::ofstream &stream) {
-  std::stringstream errorMsgs;
-  if (!stream.is_open()) {
-    errorMsgs << "given stream is not opened!\n";
-  }
-  if (!stream.good()) {
-    errorMsgs << "given path to the stream is invalid!\n";
-  }
-  std::string errorMessages = errorMsgs.str();
-  if (errorMessages.length() > 0) {
-    std::stringstream errorStream;
-    errorStream << "Detected errors in given stream:\n" << errorMsgs.str();
-  }
-}
 
 void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
                        bool referenceModel) {
   std::string outputPath = path.data();
   outputPath += "/results.js";
 
-  std::ofstream jsFile =
-      PositionTrackerInterface::open(outputPath, !referenceModel);
+  File file(outputPath);
 
-  PositionTrackerInterface::checkStreamIfGood(jsFile);
+  FileBuffer fileBuffer;
   if (referenceModel) {
-    jsFile << "\nconst referenceResults = ";
+    file.open();
+    javascript::initConstInBuffer(fileBuffer, "referenceResults");
   } else {
-    jsFile << "const results = ";
+    file.openFileWithOverwrite();
+    fileBuffer = javascript::initConst("results");
   }
 
   Json outputArray = Json::array();
@@ -147,9 +128,11 @@ void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
     outputArray.push_back(dataPerFrequency);
   }
 
-  jsFile << outputArray.dump(3);
-  jsFile.close();
+  fileBuffer.acquireJsonFile(outputArray);
+  javascript::endLineInBuffer(fileBuffer);
+  file.write(fileBuffer);
 }
+
 void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
 
   if (model == nullptr) {
@@ -159,18 +142,10 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
 
   std::string outputPath = pathToFolder.data();
   outputPath += "/model.js";
-  std::ofstream outFile(outputPath);
-  if (!outFile.good()) {
-    std::stringstream ss;
-    ss << "Invalid path given to saveToModel()!\n"
-       << "Given Path: " << outputPath << "\n"
-       << "file doesn't exist?";
-    throw std::invalid_argument(ss.str());
-  }
 
-  using Json = nlohmann::json;
+  File file(outputPath);
+
   Json outputJson = Json::array();
-
   for (const objects::TriangleObj &triangle : model->triangles()) {
     Json currentTriangle = {{"point1",
                              {{"x", triangle.point1().x()},
@@ -187,8 +162,12 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
     outputJson.push_back(currentTriangle);
   }
 
-  outFile << "const model = " << outputJson.dump(3);
-  outFile.close();
+  FileBuffer buffer = javascript::initConst("model");
+  // TODO: Unify this
+  file.write(buffer);
+  buffer.acquireJsonFile(outputJson);
+  javascript::endLineInBuffer(buffer);
+  file.write(buffer);
 }
 
 void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
@@ -196,7 +175,7 @@ void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
 }
 
 JsonPositionTracker::JsonPositionTracker(std::string_view path)
-    : path_(path.data()) {
+    : path_(path), file_(path) {
 
   path_ += "/trackingData.js";
   outFile_.open(path_);

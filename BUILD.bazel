@@ -56,6 +56,19 @@ cc_test(
     size = "medium",
 )
 
+cc_test(
+    name = "trackers_test",
+    srcs = [
+        "tests/trackers_test.cpp",
+    ],
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
+    size = "medium",
+)
+
+
 
 cc_test(
     name = "simulator_test",

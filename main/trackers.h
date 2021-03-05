@@ -11,29 +11,39 @@
 #include <sstream>
 #include <string_view>
 
-using Json = nlohmann::json;
-using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
-
 // Contains objects and functions that are responsible for exporting calculated
 // data, objects and ray trajectories in simulation to different files. They
 // are used for visualization and debugging purposes.
 namespace trackers {
 
+using Json = nlohmann::json;
+using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+
 // Mediator between different type of input data File.
 // Prepares data to be saved into file
 struct FileBuffer {
-  explicit FileBuffer(std::string_view message = "");
   void addMessageToBuffer(std::string_view message);
-  // Reads data accumulated in buffer
-  std::string_view readData() const;
-  // clears buffer and acquires data from json to buffer
+  // clears buffer and acquires data from json to buffer`
   void acquireJsonFile(const Json &json);
   std::stringstream stream;
 };
 
 // Mediator between std::ofstream and FileBuffer.
 // Manages opening, saving, writing and closing file.
-class File : public Printable {
+class FileInterface : public Printable {
+public:
+  // TODO: And check if file is open
+  virtual void openFileWithOverwrite() = 0;
+  // TODO: And check if file is open
+  virtual void open() = 0;
+  virtual void write(const FileBuffer &buffer) = 0;
+  virtual void writeWithoutFlush(const FileBuffer &buffer) = 0;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
+// Mediator between std::ofstream and FileBuffer.
+// Manages opening, saving, writing and closing file.
+class File : public FileInterface {
 public:
   explicit File(std::string_view path) : path_(path){};
   // Opens file at given |path| overwriting existing one.
@@ -69,14 +79,13 @@ FileBuffer endArray();
 FileBuffer initObject();
 FileBuffer endObject();
 
+void endLineInBuffer(FileBuffer &buffer);
 void initArrayInBuffer(FileBuffer &buffer);
 void endArrayInBuffer(FileBuffer &buffer);
 void initObjectInBuffer(FileBuffer &buffer);
 void endObjectInBuffer(FileBuffer &buffer);
-
+void initConstInBuffer(FileBuffer &buffer, std::string_view constName);
 } // namespace javascript
-
-// ! =========== Refractoring so far =================
 
 // Represent collected energy value from each collector
 // at Collectors at the same index.
@@ -97,10 +106,6 @@ void saveModelToJson(std::string_view path, ModelInterface *model);
 // saves them to files in the given path.
 class PositionTrackerInterface : public Printable {
 public:
-  // returns opened std::ofstream with given path.
-  static std::ofstream open(std::string_view path, bool overwrite = true);
-  // checks if given stream is open and good, and throws std::invalid_argument
-  // if one of requirements is not met.
   static void checkStreamIfGood(const std::ofstream &stream);
   virtual void initializeNewFrequency(float frequency) = 0;
   virtual void initializeNewTracking() = 0;
@@ -134,6 +139,8 @@ private:
   std::ofstream outFile_;
   std::string path_;
   std::vector<core::RayHitData> currentTracking_;
+  File file_;
+  FileBuffer FileBuffer_;
 };
 
 // Performs sampling of trackings and acquires them into given .js file as json
