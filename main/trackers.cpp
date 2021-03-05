@@ -2,10 +2,6 @@
 
 namespace trackers {
 
-void FileBuffer::addMessageToBuffer(std::string_view message) {
-  stream << message;
-}
-
 void FileBuffer::acquireJsonFile(const Json &json) {
   stream.clear();
   stream << json;
@@ -28,6 +24,9 @@ void File::open() {
 }
 
 void File::write(const FileBuffer &buffer) {
+  if (!fileStream_.is_open()) {
+    open();
+  }
   fileStream_ << buffer.stream.rdbuf() << std::endl;
 }
 
@@ -105,8 +104,9 @@ void initConstInBuffer(FileBuffer &buffer, std::string_view constName) {
 
 } // namespace javascript
 
-void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
-                       bool referenceModel) {
+void DataExporter::saveResultsAsJson(std::string_view path,
+                                     const EnergyPerFrequency &results,
+                                     bool referenceModel) {
   std::string outputPath = path.data();
   outputPath += "/results.js";
 
@@ -114,7 +114,6 @@ void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
 
   FileBuffer fileBuffer;
   if (referenceModel) {
-    file.open();
     javascript::initConstInBuffer(fileBuffer, "referenceResults");
   } else {
     file.openFileWithOverwrite();
@@ -136,40 +135,48 @@ void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
   file.write(fileBuffer);
 }
 
-void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
+void DataExporter::saveModelToJson(std::string_view pathToFolder,
+                                   ModelInterface *model) {
   if (model == nullptr) {
-    throw std::invalid_argument(
-        "Model in saveModelToJson() cannot be nullptr! ");
+    std::stringstream errorStream;
+    errorStream << "Given model to: " << *this << "Cannot be nullptr! ";
+    throw std::invalid_argument(errorStream.str());
   }
 
+  FileBuffer buffer = javascript::initConst("model");
   std::string outputPath = pathToFolder.data();
   outputPath += "/model.js";
+  File file(outputPath);
+  file.openFileWithOverwrite();
+  file.write(buffer);
 
   Json outputJson = Json::array();
   for (const objects::TriangleObj &triangle : model->triangles()) {
-    Json currentTriangle = {{"point1",
-                             {{"x", triangle.point1().x()},
-                              {"y", triangle.point1().y()},
-                              {"z", triangle.point1().z()}}},
-                            {"point2",
-                             {{"x", triangle.point2().x()},
-                              {"y", triangle.point2().y()},
-                              {"z", triangle.point2().z()}}},
-                            {"point3",
-                             {{"x", triangle.point3().x()},
-                              {"y", triangle.point3().y()},
-                              {"z", triangle.point3().z()}}}};
-    outputJson.push_back(currentTriangle);
+    outputJson.push_back(convertTriangleToJson(triangle));
   }
-
-  File file(outputPath);
-  FileBuffer buffer = javascript::initConst("model");
-  // TODO: Unify this
-  file.openFileWithOverwrite();
-  file.write(buffer);
   buffer.acquireJsonFile(outputJson);
+
   javascript::endLineInBuffer(buffer);
   file.write(buffer);
+}
+
+void DataExporter::printItself(std::ostream &os) const noexcept {
+  os << "Data Exporter\n";
+}
+Json DataExporter::convertTriangleToJson(
+    const objects::TriangleObj &triangle) const {
+  return {{"point1",
+           {{"x", triangle.point1().x()},
+            {"y", triangle.point1().y()},
+            {"z", triangle.point1().z()}}},
+          {"point2",
+           {{"x", triangle.point2().x()},
+            {"y", triangle.point2().y()},
+            {"z", triangle.point2().z()}}},
+          {"point3",
+           {{"x", triangle.point3().x()},
+            {"y", triangle.point3().y()},
+            {"z", triangle.point3().z()}}}};
 }
 
 void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
@@ -189,10 +196,9 @@ JsonPositionTracker::JsonPositionTracker(std::string_view path) {
 
 void JsonPositionTracker::initializeNewFrequency(float frequency) {
   std::stringstream customMessage;
-  customMessage << "{\"frequency\":" << frequency << ",\n"
-                << "\"trackings\":[";
   FileBuffer buffer;
-  buffer.addMessageToBuffer(customMessage.str());
+  buffer.stream << "{\"frequency\":" << frequency << ",\n"
+                << "\"trackings\":[";
   file_.write(buffer);
 }
 
@@ -212,11 +218,8 @@ void JsonPositionTracker::addNewPositionToCurrentTracking(
   currentTracking_.push_back(hitData);
 }
 void JsonPositionTracker::endCurrentFrequency() {
-  // TODO: simply this
-  std::stringstream customMessage;
-  customMessage << "],},";
   FileBuffer buffer;
-  buffer.addMessageToBuffer(customMessage.str());
+  buffer.stream << "],},";
   file_.write(buffer);
 }
 

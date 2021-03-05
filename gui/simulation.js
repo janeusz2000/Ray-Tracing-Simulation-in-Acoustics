@@ -5,9 +5,9 @@ import {
   getTracking,
   drawTracking,
   deleteTracking
-} from './addObjects';
-import {animate} from './animate';
-import {prepareScene} from './prepareScene';
+} from './src/simulation/addObjects';
+import {animate} from './src/simulation/animate';
+import {prepareScene} from './src/simulation/prepareScene';
 
 function addFrequencySlider(scene, arrowList) {
   const frequencies =
@@ -68,6 +68,7 @@ function onWindowResize() {
 
 const arrowList = [];
 const startingFrequency = addFrequencySlider(scene, arrowList);
+
 window.addEventListener('resize', onWindowResize);
 prepareScene(scene, renderer, camera, controls);
 addEnergyCollectors(scene);

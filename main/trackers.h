@@ -22,8 +22,7 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 // Mediator between different type of input data File.
 // Prepares data to be saved into file
 struct FileBuffer {
-  void addMessageToBuffer(std::string_view message);
-  // clears buffer and acquires data from json to buffer`
+  // clears buffer and acquires data from json to buffer
   void acquireJsonFile(const Json &json);
   std::stringstream stream;
 };
@@ -35,10 +34,12 @@ public:
   // TODO: And check if file is open
   virtual void openFileWithOverwrite() = 0;
   // TODO: And check if file is open
-  virtual void open() = 0;
   virtual void write(const FileBuffer &buffer) = 0;
   virtual void writeWithoutFlush(const FileBuffer &buffer) = 0;
   void printItself(std::ostream &os) const noexcept override;
+
+private:
+  virtual void open() = 0;
 };
 
 // Mediator between std::ofstream and FileBuffer.
@@ -54,7 +55,6 @@ public:
   // Data is appended after existing one. Throws
   // std::invalid_argument exception if file is not found
   // at given path.
-  void open();
   // Writes given FileBuffer into file and flush content;
   void write(const FileBuffer &buffer);
   void writeWithoutFlush(const FileBuffer &buffer);
@@ -63,6 +63,7 @@ public:
   void setPath(std::string_view path);
 
 private:
+  void open();
   void handleErrors();
 
 protected:
@@ -99,14 +100,23 @@ using Energies = std::vector<float>;
 // represent frequency of the simulation.
 using EnergyPerFrequency = std::unordered_map<float, Energies>;
 
-// Save results of the simulation at given |path| as results.js file, with json
-// structure. Change |referenceModel|
-void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
-                       bool referenceModel = false);
+// Contains basic utilities for saving models and saving results of the
+// simulation.
+struct DataExporter : Printable {
+  // Save results of the simulation at given |path| as results.js file, with
+  // json structure. if |referenceModel| is false, file will be overwritten.
+  void saveResultsAsJson(std::string_view path,
+                         const EnergyPerFrequency &results,
+                         bool referenceModel = false);
 
-// Save |model| to the given file as Json file.
-void saveModelToJson(std::string_view path, ModelInterface *model);
+  // Save |model| to the given file as Json file.
+  void saveModelToJson(std::string_view path, ModelInterface *model);
 
+  void printItself(std::ostream &os) const noexcept override;
+
+private:
+  Json convertTriangleToJson(const objects::TriangleObj &triangle) const;
+};
 // Tracks all reached position by rays in the simulation and
 // saves them to files in the given path.
 class PositionTrackerInterface : public Printable {

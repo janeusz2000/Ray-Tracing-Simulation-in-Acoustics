@@ -19,6 +19,7 @@ export class Triangle {
     this.point3 = new Vec3(triangle.point3);
   }
 }
+
 export function getModel() {
   return model.map(triangle => new Triangle(triangle));
 }

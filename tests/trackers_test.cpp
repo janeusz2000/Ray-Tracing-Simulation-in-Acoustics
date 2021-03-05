@@ -8,6 +8,7 @@ using trackers::File;
 using trackers::FileBuffer;
 using trackers::FileInterface;
 
+const float kSkipValue = 1000;
 class FakeFile : public FileInterface {
 public:
   void openFileWithOverwrite() override{};
@@ -23,7 +24,6 @@ public:
   }
 };
 
-const float kSkipValue = 1000;
 TEST(TrackersTest, AcquiringJsonFileToBuffer) {
 
   FileBuffer buffer;

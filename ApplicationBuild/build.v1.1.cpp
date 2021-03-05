@@ -21,12 +21,13 @@ int main() {
                                     8000, 10000, 12500, 16000};
   float sourcePower = 1000; // [W]
   int numOfCollectors = 37;
-  int numOfRaysSquared = 4;
-  int numOfVisibleRays = 4;
+  int numOfRaysSquared = 200;
+  int numOfVisibleRays = 10;
 
+  trackers::DataExporter dataExporter;
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
+  dataExporter.saveModelToJson(dataPath, model.get());
 
-  trackers::saveModelToJson(dataPath, model.get());
   trackers::JsonSampledPositionTracker positionTracker(
       dataPath, numOfRaysSquared, numOfVisibleRays);
 
@@ -40,7 +41,7 @@ int main() {
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
   EnergyPerFrequency results = manager.run();
-  trackers::saveResultsAsJson(dataPath, results);
+  dataExporter.saveResultsAsJson(dataPath, results);
 
   positionTracker.switchToReferenceModel();
   std::unique_ptr<Model> referenceModel =
@@ -49,8 +50,8 @@ int main() {
   SceneManager referenceManager(referenceModel.get(), properties,
                                 &positionTracker, &collectorsTracker);
   EnergyPerFrequency referenceResults = referenceManager.run();
-  trackers::saveResultsAsJson(dataPath, referenceResults,
-                              /*referenceModel=*/true);
+  dataExporter.saveResultsAsJson(dataPath, referenceResults,
+                                 /*referenceModel=*/true);
 
   std::cout << "Program ended!";
 }

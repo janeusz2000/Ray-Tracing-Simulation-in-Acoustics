@@ -17,7 +17,7 @@ public:
         numOfRayAlongEachAxis_(1) {
     model_ = Model::NewReferenceModel(1.0);
 
-    trackers::saveModelToJson("/tmp", model_.get());
+    dataExporter_.saveModelToJson("/tmp", model_.get());
   }
 
 protected:
@@ -26,6 +26,7 @@ protected:
   int numOfCollectors_;
   int numOfRayAlongEachAxis_;
   std::unique_ptr<Model> model_;
+  trackers::DataExporter dataExporter_;
 };
 
 TEST_F(MainTest, buildingSimulation) {
