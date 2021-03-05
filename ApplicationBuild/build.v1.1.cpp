@@ -51,4 +51,6 @@ int main() {
   EnergyPerFrequency referenceResults = referenceManager.run();
   trackers::saveResultsAsJson(dataPath, referenceResults,
                               /*referenceModel=*/true);
+
+  std::cout << "Program ended!";
 }

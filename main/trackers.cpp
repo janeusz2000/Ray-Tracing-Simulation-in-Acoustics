@@ -16,11 +16,13 @@ void FileInterface::printItself(std::ostream &os) const noexcept {
 }
 
 void File::openFileWithOverwrite() {
+  std::cout << "File opened wit overwrite at: " << path_ << std::endl;
   fileStream_.open(path_.data());
   handleErrors();
 }
 
 void File::open() {
+  std::cout << "File opened at: " << path_ << std::endl;
   fileStream_.open(path_.data(), std::ios_base::app);
   handleErrors();
 }
@@ -36,6 +38,8 @@ void File::writeWithoutFlush(const FileBuffer &buffer) {
 void File::printItself(std::ostream &os) const noexcept {
   os << "File at given path: " << path_ << "\n";
 }
+
+void File::setPath(std::string_view path) { path_ = path.data(); }
 
 void File::handleErrors() {
   if (!fileStream_.good()) {
@@ -89,6 +93,7 @@ FileBuffer endObject() {
   return buffer;
 }
 
+void addCommaInBuffer(FileBuffer &buffer) { buffer.stream << ","; }
 void initArrayInBuffer(FileBuffer &buffer) { buffer.stream << '['; }
 void endArrayInBuffer(FileBuffer &buffer) { buffer.stream << "]"; }
 void initObjectInBuffer(FileBuffer &buffer) { buffer.stream << '{'; }
@@ -99,8 +104,6 @@ void initConstInBuffer(FileBuffer &buffer, std::string_view constName) {
 }
 
 } // namespace javascript
-
-// ! =========== Refractoring so far =================
 
 void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
                        bool referenceModel) {
@@ -134,7 +137,6 @@ void saveResultsAsJson(std::string_view path, const EnergyPerFrequency &results,
 }
 
 void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
-
   if (model == nullptr) {
     throw std::invalid_argument(
         "Model in saveModelToJson() cannot be nullptr! ");
@@ -142,8 +144,6 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
 
   std::string outputPath = pathToFolder.data();
   outputPath += "/model.js";
-
-  File file(outputPath);
 
   Json outputJson = Json::array();
   for (const objects::TriangleObj &triangle : model->triangles()) {
@@ -162,8 +162,10 @@ void saveModelToJson(std::string_view pathToFolder, ModelInterface *model) {
     outputJson.push_back(currentTriangle);
   }
 
+  File file(outputPath);
   FileBuffer buffer = javascript::initConst("model");
   // TODO: Unify this
+  file.openFileWithOverwrite();
   file.write(buffer);
   buffer.acquireJsonFile(outputJson);
   javascript::endLineInBuffer(buffer);
@@ -174,12 +176,14 @@ void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
   os << "Position Tracker Class Inteface";
 }
 
-JsonPositionTracker::JsonPositionTracker(std::string path)
-    : file_(path + "/trackingData.js") {
-
+JsonPositionTracker::JsonPositionTracker(std::string_view path) {
+  std::string outputPath = path.data();
+  outputPath += "/trackingData.js";
+  file_.setPath(outputPath);
   FileBuffer buffer = javascript::initConst("trackingData");
   javascript::initArrayInBuffer(buffer);
-  file_.open();
+  file_.openFileWithOverwrite();
+
   file_.write(buffer);
 };
 
@@ -239,12 +243,14 @@ void JsonPositionTracker::endCurrentTracking() {
 
     FileBuffer buffer;
     buffer.acquireJsonFile(trackingJson);
+    javascript::addCommaInBuffer(buffer);
     file_.write(buffer);
   };
 }
 
 void JsonPositionTracker::save() {
   FileBuffer buffer = javascript::endArray();
+  javascript::endLineInBuffer(buffer);
   file_.write(buffer);
 }
 
@@ -258,7 +264,6 @@ JsonSampledPositionTracker::JsonSampledPositionTracker(
     std::string_view path, int numOfRaysSquared, int numOfVisibleRaysSquared)
     : tracker_(path.data()), numOfRaysSquared_(numOfRaysSquared),
       numOfVisibleRaysSquared_(numOfVisibleRaysSquared) {
-
   std::stringstream errorStream;
   if (numOfRaysSquared_ < 1) {
     errorStream << "Number of Rays squared cannot be less than 1\n";
@@ -330,18 +335,6 @@ bool JsonSampledPositionTracker::isSampling() const {
 // exports |energyCollectors| as string representation to |path|
 void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                                    std::string_view path) {
-
-  std::string resultPath = path.data();
-  resultPath += "/energyCollectors.js";
-  std::ofstream outFile(resultPath);
-  if (!outFile.good()) {
-    std::stringstream errorStream;
-    errorStream << "File at given path to: " << *this
-                << "check if file at: " << resultPath << "exist!";
-    throw std::invalid_argument(errorStream.str());
-  }
-
-  using Json = nlohmann::json;
   Json outArray = Json::array();
   int currentCollectorNumber = 0;
   for (const auto &collector : energyCollectors) {
@@ -355,9 +348,15 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
     outArray.push_back(energyCollector);
     ++currentCollectorNumber;
   }
-
-  outFile << "const energyCollectors = " << outArray.dump(1);
-  outFile.close();
+  // TODO: simply this
+  std::string outputPath = path.data();
+  outputPath += "/energyCollectors.js";
+  File file(outputPath);
+  FileBuffer buffer = javascript::initConst("energyCollectors");
+  file.openFileWithOverwrite();
+  file.write(buffer);
+  buffer.acquireJsonFile(outArray);
+  file.write(buffer);
 }
 
 void CollectorsTrackerInterface::printItself(std::ostream &os) const noexcept {

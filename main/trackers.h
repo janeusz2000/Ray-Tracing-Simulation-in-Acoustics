@@ -45,7 +45,7 @@ public:
 // Manages opening, saving, writing and closing file.
 class File : public FileInterface {
 public:
-  explicit File(std::string_view path) : path_(path){};
+  File(std::string_view path = "") : path_(path.data()){};
   // Opens file at given |path| overwriting existing one.
   // Throws std::invalid_argument exception if file is not found
   // at given path.
@@ -60,12 +60,14 @@ public:
   void writeWithoutFlush(const FileBuffer &buffer);
   void printItself(std::ostream &os) const noexcept override;
 
+  void setPath(std::string_view path);
+
 private:
   void handleErrors();
 
 protected:
   std::ofstream fileStream_;
-  std::string_view path_;
+  std::string path_;
 };
 
 // contains utilities for rendering javascript syntax in FileBuffer
@@ -81,6 +83,7 @@ FileBuffer endArray();
 FileBuffer initObject();
 FileBuffer endObject();
 
+void addCommaInBuffer(FileBuffer &buffer);
 void endLineInBuffer(FileBuffer &buffer);
 void initArrayInBuffer(FileBuffer &buffer);
 void endArrayInBuffer(FileBuffer &buffer);
@@ -124,7 +127,7 @@ public:
 // given path. REQUIREMENTS: file must exist at given path.
 class JsonPositionTracker : public PositionTrackerInterface {
 public:
-  JsonPositionTracker(std::string path);
+  JsonPositionTracker(std::string_view path);
 
   void initializeNewFrequency(float frequency) override;
   void initializeNewTracking() override;
