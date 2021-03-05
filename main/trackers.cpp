@@ -174,42 +174,27 @@ void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
   os << "Position Tracker Class Inteface";
 }
 
-JsonPositionTracker::JsonPositionTracker(std::string_view path)
-    : path_(path), file_(path) {
+JsonPositionTracker::JsonPositionTracker(std::string path)
+    : file_(path + "/trackingData.js") {
 
-  path_ += "/trackingData.js";
-  outFile_.open(path_);
-
-  if (!outFile_.good()) {
-    std::stringstream ss;
-    ss << "Invalid path given to: \n"
-       << *this << "make sure that file at path: \"" << path_ << "\" exist";
-    throw std::invalid_argument(ss.str());
-  }
-
-  outFile_ << "const trackingData = [";
-  outFile_.close();
+  FileBuffer buffer = javascript::initConst("trackingData");
+  javascript::initArrayInBuffer(buffer);
+  file_.open();
+  file_.write(buffer);
 };
 
 void JsonPositionTracker::initializeNewFrequency(float frequency) {
-  std::ofstream outFile;
-  outFile.open(path_, std::ios_base::app);
-  if (!outFile.good()) {
-    std::stringstream errorStream;
-    errorStream << "Invalid Path given to: " << *this
-                << "at initializenewFrequency()\n"
-                << "path: " << path_;
-    throw std::invalid_argument(errorStream.str());
-  }
-
-  outFile << "{\"frequency\":" << frequency << ",\n"
-          << "\"trackings\":[";
-  outFile.close();
+  std::stringstream customMessage;
+  customMessage << "{\"frequency\":" << frequency << ",\n"
+                << "\"trackings\":[";
+  FileBuffer buffer;
+  buffer.addMessageToBuffer(customMessage.str());
+  file_.write(buffer);
 }
 
 void JsonPositionTracker::printItself(std::ostream &os) const noexcept {
   os << "Json Position Tracker\n"
-     << "Path: " << path_ << "\n"
+     << "File: " << file_ << "\n"
      << "current tracking: \n";
   int currentHitData = 0;
   for (const core::RayHitData &hitData : currentTracking_) {
@@ -223,22 +208,16 @@ void JsonPositionTracker::addNewPositionToCurrentTracking(
   currentTracking_.push_back(hitData);
 }
 void JsonPositionTracker::endCurrentFrequency() {
-  std::ofstream outFile;
-  outFile.open(path_, std::ios_base::app);
-  if (!outFile.good()) {
-    std::stringstream errorStream;
-    errorStream << "Invalid Path given to: " << *this
-                << "at initializenewFrequency()\n"
-                << "path: " << path_;
-    throw std::invalid_argument(errorStream.str());
-  }
-
-  outFile << "],},";
-  outFile.close();
+  // TODO: simply this
+  std::stringstream customMessage;
+  customMessage << "],},";
+  FileBuffer buffer;
+  buffer.addMessageToBuffer(customMessage.str());
+  file_.write(buffer);
 }
+
 void JsonPositionTracker::endCurrentTracking() {
   if (currentTracking_.size() > 1) {
-    using Json = nlohmann::json;
     Json trackingJson = Json::array();
     for (const core::RayHitData &hitData : currentTracking_) {
       Json hitDataJson = {
@@ -258,23 +237,21 @@ void JsonPositionTracker::endCurrentTracking() {
       trackingJson.push_back(hitDataJson);
     }
 
-    outFile_.open(path_, std::ios_base::app);
-    outFile_ << trackingJson << ",\n";
-    outFile_.close();
+    FileBuffer buffer;
+    buffer.acquireJsonFile(trackingJson);
+    file_.write(buffer);
   };
 }
 
 void JsonPositionTracker::save() {
-  outFile_.open(path_, std::ios_base::app);
-  outFile_ << "]";
-  outFile_.close();
+  FileBuffer buffer = javascript::endArray();
+  file_.write(buffer);
 }
 
 void JsonPositionTracker::switchToReferenceModel() {
-  std::ofstream outFile;
-  outFile.open(path_, std::ios_base::app);
-  outFile << "\n"
-          << "const referenceTrackingData = [";
+  FileBuffer buffer = javascript::initConst("referenceTrackingData");
+  javascript::initArrayInBuffer(buffer);
+  file_.write(buffer);
 }
 
 JsonSampledPositionTracker::JsonSampledPositionTracker(

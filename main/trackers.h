@@ -71,6 +71,8 @@ protected:
 // contains utilities for rendering javascript syntax in FileBuffer
 namespace javascript {
 
+// TODO: create constructor of the FleBuffer file with json.
+
 FileBuffer initVar(std::string_view variableName);
 FileBuffer initLet(std::string_view variableName);
 FileBuffer initConst(std::string_view variableName);
@@ -122,7 +124,7 @@ public:
 // given path. REQUIREMENTS: file must exist at given path.
 class JsonPositionTracker : public PositionTrackerInterface {
 public:
-  JsonPositionTracker(std::string_view path);
+  JsonPositionTracker(std::string path);
 
   void initializeNewFrequency(float frequency) override;
   void initializeNewTracking() override;
@@ -137,7 +139,6 @@ public:
 
 private:
   std::ofstream outFile_;
-  std::string path_;
   std::vector<core::RayHitData> currentTracking_;
   File file_;
   FileBuffer FileBuffer_;
