@@ -14,6 +14,7 @@ using EnergyPerFrequency = std::unordered_map<float, Energy>;
 
 int main() {
 
+  trackers::startSimulation();
   std::string dataPath = "./data";
   std::string path = "./models/fancyDiffusor.obj";
   std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
@@ -21,7 +22,7 @@ int main() {
                                     8000, 10000, 12500, 16000};
   float sourcePower = 1000; // [W]
   int numOfCollectors = 37;
-  int numOfRaysSquared = 200;
+  int numOfRaysSquared = 20;
   int numOfVisibleRays = 10;
 
   trackers::DataExporter dataExporter;
@@ -37,7 +38,6 @@ int main() {
   BasicSimulationProperties basicProperties(frequencies, sourcePower,
                                             numOfCollectors, numOfRaysSquared);
   SimulationProperties properties(&energyCollectionRules, basicProperties);
-
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
   EnergyPerFrequency results = manager.run();
@@ -53,5 +53,5 @@ int main() {
   dataExporter.saveResultsAsJson(dataPath, referenceResults,
                                  /*referenceModel=*/true);
 
-  std::cout << "Program ended!";
+  trackers::endSimulation();
 }

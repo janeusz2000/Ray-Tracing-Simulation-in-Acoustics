@@ -12,7 +12,7 @@ void FileInterface::printItself(std::ostream &os) const noexcept {
 }
 
 void File::openFileWithOverwrite() {
-  std::cout << "File opened wit overwrite at: " << path_ << std::endl;
+  std::cout << "File opened with overwrite at: " << path_ << std::endl;
   fileStream_.open(path_.data());
   handleErrors();
 }
@@ -103,6 +103,24 @@ void initConstInBuffer(FileBuffer &buffer, std::string_view constName) {
 }
 
 } // namespace javascript
+
+void startSimulation() {
+  FileBuffer buffer = javascript::initConst("loading");
+  buffer.stream << "true;";
+
+  File file("./data/loading.js");
+  file.openFileWithOverwrite();
+  file.write(buffer);
+}
+
+void endSimulation() {
+  FileBuffer buffer = javascript::initConst("loading");
+  buffer.stream << "false;";
+
+  File file("./data/loading.js");
+  file.openFileWithOverwrite();
+  file.write(buffer);
+}
 
 void DataExporter::saveResultsAsJson(std::string_view path,
                                      const EnergyPerFrequency &results,

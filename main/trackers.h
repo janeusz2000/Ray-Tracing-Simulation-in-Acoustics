@@ -93,6 +93,11 @@ void endObjectInBuffer(FileBuffer &buffer);
 void initConstInBuffer(FileBuffer &buffer, std::string_view constName);
 } // namespace javascript
 
+// Enable loading screen by setting loading variable to true;
+void startSimulation();
+// Disable loading screen by setting loading variable to false;
+void endSimulation();
+
 // Represent collected energy value from each collector
 // at Collectors at the same index.
 using Energies = std::vector<float>;

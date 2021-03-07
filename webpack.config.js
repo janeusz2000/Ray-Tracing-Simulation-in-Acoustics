@@ -24,4 +24,11 @@ const normalizedResults = {
   },
 };
 
-module.exports = [ simulation, results, normalizedResults ];
+const preLoader = {
+  mode : 'development',
+  devtool : false,
+  entry : './gui/preLoader.js',
+  output : {filename : 'preLoader.js', path : path.resolve(__dirname, 'dist')},
+};
+
+module.exports = [ simulation, results, normalizedResults, preLoader ];
