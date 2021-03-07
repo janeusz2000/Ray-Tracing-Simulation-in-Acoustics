@@ -12,7 +12,7 @@
 
 ### TODO List:
 - [x] Normalized acoustic d coefficient graph
-- [ ] loading  screen for gui when simulation is running
+- [x] loading  screen for gui when simulation is running
 - [ ] create gui for swaping models in current simulation (from reference to model and back to model)
 - [ ] Include time factor inside simulation
 - [ ] include ray expanding factor for lower frequencies
