@@ -13,15 +13,15 @@
 ### TODO List:
 - [x] Normalized acoustic d coefficient graph
 - [x] loading  screen for gui when simulation is running
+- [x] rearrange trackers for cleaner code
+- [ ] create polar pattern on every frequency
 - [ ] create gui for swaping models in current simulation (from reference to model and back to model)
 - [ ] Include time factor inside simulation
 - [ ] include ray expanding factor for lower frequencies
-- [ ] rearrange trackers for cleaner code
 - [ ] make a research how low frequencies interact with small obstacles
 - [ ] use profile and search where is bottleneck
 - [ ] explain what scene manager do
 - [ ] consider changing name of the SceneManager
-- [ ] create polar pattern kon every frequency
  (create list to choose frequency per polar pattern)
 - [ ] create RayTracer interface (hit with one ray get s reflected + random ones
 could produce another rays)
