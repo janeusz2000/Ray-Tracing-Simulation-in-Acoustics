@@ -31,4 +31,15 @@ const preLoader = {
   output : {filename : 'preLoader.js', path : path.resolve(__dirname, 'dist')},
 };
 
-module.exports = [ simulation, results, normalizedResults, preLoader ];
+const polarPatterns = {
+  mode : 'development',
+  devtool : false,
+  entry : './gui/polarPatterns.js',
+  output :
+      {filename : 'polarPatterns.js', path : path.resolve(__dirname, 'dist')},
+};
+
+// module.exports =
+//     [ simulation, results, normalizedResults, preLoader, polarPatterns ];
+
+module.exports = [ polarPatterns ];
