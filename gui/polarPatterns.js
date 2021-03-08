@@ -15,23 +15,123 @@ export function importEnergyCollectorsArrayPerFrequency() {
 const context = document.getElementById('myChart').getContext('2d');
 const collectorData = importEnergyCollectorsArrayPerFrequency();
 const energyCollectors = getEnergyCollectors();
+
+class EnergyCollectorWithEnergy {
+  constructor(EnergyCollector, energy) {
+    this.x = EnergyCollector.x;
+    this.y = EnergyCollector.y;
+    this.z = EnergyCollector.z;
+    this.energy = energy;
+  }
+}
+
+export function associateCollectorWithData(energyCollectors, energyData) {
+  const outputList = [];
+  for (var index = 0; index < energyCollectors.length; index++) {
+    outputList.push(new EnergyCollectorWithEnergy(energyCollectors[index],
+                                                  energyData[index]));
+  }
+  return outputList;
+}
+
+export function divideCollectorListIntoTwoPolarPatters(
+    collectorWithEnergyList) {
+
+  const outputListEvenIndex = [];
+  const outputListOddIndex = [];
+  const listSize = collectorWithEnergyList.length;
+
+  var index = listSize % 2;
+  if (index == 1) {
+    outputListEvenIndex.push(collectorWithEnergyList[0]);
+    outputListOddIndex.push(collectorWithEnergyList[0]);
+  }
+  for (; index < listSize; index++) {
+    if (index % 2 == 0) {
+      outputListEvenIndex.push(collectorWithEnergyList[index]);
+    } else {
+      outputListOddIndex.push(collectorWithEnergyList[index]);
+    }
+  }
+
+  return [ outputListEvenIndex, outputListOddIndex ];
+}
+
+export function compareCollectorsWithEnergy(collectorA, collectorB) {
+  if (collectorA.x < collectorB.x) {
+    return -1;
+  } else if (collectorA.x > collectorB.x) {
+    return 1;
+  } else {
+    if (collectorA.y < collectorB.y) {
+      return -1;
+    } else if (collectorA.y > collectorB.y) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+export function linSpaceArray(start, stop, n) {
+  const outputList = [];
+  var currentNumber = start;
+  const step = Math.abs(start - stop) / n;
+  if (start > stop) {
+    step *= -1;
+  }
+  for (var index = 0; index < n; index++) {
+    outputList.push(currentNumber);
+    currentNumber += step;
+  }
+  return outputList;
+}
+
+var frequency = 0;
+const collectorsWithEnergyList =
+    associateCollectorWithData(energyCollectors, collectorData[frequency])
+const outputLists =
+    divideCollectorListIntoTwoPolarPatters(collectorsWithEnergyList);
+
+const dataA = outputLists[0];
+const dataB = outputLists[1];
+
+dataA.sort(compareCollectorsWithEnergy);
+dataB.sort(compareCollectorsWithEnergy);
+const angles = linSpaceArray(0, 360, 2 * dataA.length);
+
+const energiesA =
+    dataA.map(energyCollectorWithEnergy => energyCollectorWithEnergy.energy);
+const energiesB =
+    dataB.map(energyCollectorWithEnergy => energyCollectorWithEnergy.energy);
+
+while (energiesA.length < angles) {
+  energiesA.push(0);
+  energiesB.push(0);
+}
+
 Chart.defaults.global.defaultFontColor = 'white';
 var index = 0;
 const chart = new Chart(context, {
   data : {
-    labels : energyCollectors.map(energyCollector =>
-                                      energyCollector.number.toString()),
+    labels : angles.map(angle => angle.toString() + "'"),
     datasets : [
       {
-        label : "EnergyCollectors",
+        label : "polarPatternA",
         borderColor : 'rgb(255, 99, 132)',
-        data : collectorData[index],
+        data : energiesA
+      },
+      {
+        label : "polarPatternB",
+        borderColor : 'rgb(0, 153, 0)',
+        data : energiesB,
       },
     ]
   },
 
   type : 'radar',
   options : {
+    rotation : -Math.PI,
+    circumference : Math.PI,
     scales : {
       r : {
         angleLines : {

@@ -21,7 +21,7 @@ int main() {
                                     2000, 2500,  3150,  4000, 5000, 6300,
                                     8000, 10000, 12500, 16000};
   float sourcePower = 1000; // [W]
-  int numOfCollectors = 37;
+  int numOfCollectors = 36;
   int numOfRaysSquared = 10;
   int numOfVisibleRays = 10;
 
