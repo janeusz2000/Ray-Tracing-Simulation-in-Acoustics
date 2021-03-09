@@ -86,71 +86,100 @@ export function linSpaceArray(start, stop, n) {
   return outputList;
 }
 
-var frequency = 0;
-const collectorsWithEnergyList =
-    associateCollectorWithData(energyCollectors, collectorData[frequency])
-const outputLists =
-    divideCollectorListIntoTwoPolarPatters(collectorsWithEnergyList);
+// Refractor this because its ugly C:
+export function drawPolarPattern() {
+  var frequency = 0;
+  const collectorsWithEnergyList =
+      associateCollectorWithData(energyCollectors, collectorData[frequency])
+  const outputLists =
+      divideCollectorListIntoTwoPolarPatters(collectorsWithEnergyList);
 
-const dataA = outputLists[0];
-const dataB = outputLists[1];
+  const dataA = outputLists[0];
+  const dataB = outputLists[1];
 
-dataA.sort(compareCollectorsWithEnergy);
-dataB.sort(compareCollectorsWithEnergy);
-const angles = linSpaceArray(0, 360, 2 * dataA.length);
+  dataA.sort(compareCollectorsWithEnergy);
+  dataB.sort(compareCollectorsWithEnergy);
+  const angles = linSpaceArray(-180, 180, 2 * dataA.length);
 
-const energiesA =
-    dataA.map(energyCollectorWithEnergy => energyCollectorWithEnergy.energy);
-const energiesB =
-    dataB.map(energyCollectorWithEnergy => energyCollectorWithEnergy.energy);
+  const energiesA =
+      dataA.map(energyCollectorWithEnergy => energyCollectorWithEnergy.energy);
+  const energiesB =
+      dataB.map(energyCollectorWithEnergy => energyCollectorWithEnergy.energy);
 
-while (energiesA.length < angles) {
-  energiesA.push(0);
-  energiesB.push(0);
+  const tempA = energiesA.map(energy => {
+    if (energy == 0) {
+      return 0;
+    } else {
+      return 20 * Math.log10(energy)
+    }
+  });
+
+  console.log(tempA);
+  const tempB = energiesB.map(energy => {
+    if (energy == 0) {
+      return 0;
+    } else {
+      return 20 * Math.log10(energy)
+    }
+  });
+
+  const MaxA = Math.max.apply(Math, tempA);
+  console.log(MaxA);
+  const MaxB = Math.max.apply(Math, tempA);
+
+  const resultA = tempA.map(energy => energy - MaxA);
+  const resultB = tempB.map(energy => energy - MaxB);
+
+  while (resultA.length < angles.length) {
+    resultA.push(-Infinity);
+    resultB.unshift(-Infinity);
+  }
+
+  Chart.defaults.global.defaultFontColor = 'white';
+  var index = 0;
+  const chart = new Chart(context, {
+    data : {
+      labels : angles.map(angle => angle.toString() + "'"),
+      datasets : [
+        {
+          label : "Polar pattern circumference A",
+          borderColor : 'rgb(255, 99, 132)',
+          data : resultA,
+        },
+        {
+          label : "Polar pattern circumference B",
+          borderColor : 'rgb(0, 153, 0)',
+          data : resultB,
+        },
+      ]
+    },
+
+    type : 'radar',
+    options : {
+      rotation : -Math.PI,
+      circumference : Math.PI,
+      scales : {
+        r : {
+          angleLines : {
+            display : false,
+          }
+        }
+      },
+      scale : {
+        gridLines : {
+          color : "#9e9e9e",
+        },
+      },
+
+      legend : {
+        labels : {
+          fontColor : "black",
+        },
+      },
+
+    },
+
+  });
 }
 
-Chart.defaults.global.defaultFontColor = 'white';
-var index = 0;
-const chart = new Chart(context, {
-  data : {
-    labels : angles.map(angle => angle.toString() + "'"),
-    datasets : [
-      {
-        label : "polarPatternA",
-        borderColor : 'rgb(255, 99, 132)',
-        data : energiesA
-      },
-      {
-        label : "polarPatternB",
-        borderColor : 'rgb(0, 153, 0)',
-        data : energiesB,
-      },
-    ]
-  },
-
-  type : 'radar',
-  options : {
-    rotation : -Math.PI,
-    circumference : Math.PI,
-    scales : {
-      r : {
-        angleLines : {
-          display : false,
-        }
-      }
-    },
-    scale : {
-      gridLines : {
-        color : "#9e9e9e",
-      },
-    },
-
-    legend : {
-      labels : {
-        fontColor : "black",
-      },
-    },
-
-  },
-
-});
+drawPolarPattern();

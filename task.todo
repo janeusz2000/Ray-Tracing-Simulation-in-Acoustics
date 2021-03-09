@@ -1,13 +1,3 @@
-[x] 1. Associate collector with right data.
-[x] 2. check if number of collectors is even or not:
-     - if its even we dont need to move any collectors
-     - if is even, we need to move collector at 0 index to the middle.
-
-[x] 3. Sort Collectors with data by pattern order
-
-
-
-[x] 4. create angle content based on energy collectors number.
 [ ] 5. Create a expanding list where I can choose frequency
 [ ] 6. Update chart.js when new frequency is selected.
 

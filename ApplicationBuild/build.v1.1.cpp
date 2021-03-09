@@ -22,7 +22,7 @@ int main() {
                                     8000, 10000, 12500, 16000};
   float sourcePower = 1000; // [W]
   int numOfCollectors = 36;
-  int numOfRaysSquared = 10;
+  int numOfRaysSquared = 20;
   int numOfVisibleRays = 10;
 
   trackers::DataExporter dataExporter;
