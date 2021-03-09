@@ -18,10 +18,9 @@
 - [ ] create gui for swaping models in current simulation (from reference to model and back to model)
 - [ ] Include time factor inside simulation
 - [ ] include ray expanding factor for lower frequencies
-- [ ] make a research how low frequencies interact with small obstacles
+- [x] make a research how low frequencies interact with small obstacles
 - [ ] use profile and search where is bottleneck
-- [ ] explain what scene manager do
-- [ ] consider changing name of the SceneManager
+- [x] explain what scene manager do
  (create list to choose frequency per polar pattern)
 - [ ] create RayTracer interface (hit with one ray get s reflected + random ones
 could produce another rays)
