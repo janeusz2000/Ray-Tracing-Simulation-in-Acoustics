@@ -31,6 +31,13 @@ const preLoader = {
   output : {filename : 'preLoader.js', path : path.resolve(__dirname, 'dist')},
 };
 
+const polarData = {
+  mode : 'development',
+  devtool : false,
+  entry : './gui/src/polarPatterns/data.js',
+  output : {filename : 'polarData.js', path : path.resolve(__dirname, 'dist')},
+};
+
 const polarPatterns = {
   mode : 'development',
   devtool : false,
@@ -39,7 +46,8 @@ const polarPatterns = {
       {filename : 'polarPatterns.js', path : path.resolve(__dirname, 'dist')},
 };
 
-// module.exports =
-//     [ simulation, results, normalizedResults, preLoader, polarPatterns ];
+module.exports = [
+  polarData, polarPatterns, simulation, results, normalizedResults, preLoader
+];
 
-module.exports = [ polarPatterns ];
+//
