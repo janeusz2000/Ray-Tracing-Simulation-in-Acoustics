@@ -5,7 +5,7 @@ import {getRandomColorAttribute} from './getRandomColorAttribute';
 
 const THREE = require('three');
 
-export function makeTriangle(point1, point2, point3, scene) {
+export function makeTriangle(point1, point2, point3, scene, triangleList) {
 
   const geometry = new THREE.BufferGeometry();
   const positions = [];
@@ -21,4 +21,5 @@ export function makeTriangle(point1, point2, point3, scene) {
 
   const object = makeInstance2D(geometry, getRandomColorAttribute(), 1);
   scene.add(object);
+  triangleList.push(object);
 }

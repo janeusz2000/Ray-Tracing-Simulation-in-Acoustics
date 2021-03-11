@@ -3,11 +3,14 @@
 import {addEnergyCollectors} from './src/simulation/addEnergyCollectors';
 import {addModel} from './src/simulation/addModel';
 import {drawTracking} from './src/simulation/drawTracking';
-import {deleteTracking} from './src/simulation/deleteTracking';
+import {getModel} from './src/simulation/getModel';
 
 import {animate} from './src/simulation/animate';
 import {prepareScene} from './src/simulation/prepareScene';
 import {addFrequencySlider} from './src/simulation/addFrequencySlider';
+import {
+  addToggleModelSwitchOnModelVsReference
+} from './src/simulation/addToggleSwitchOnModelVsReference'
 
 const THREE = require('three');
 const OrbitControls = require('three-orbit-controls')(THREE);
@@ -29,11 +32,16 @@ function onWindowResize() {
 }
 
 const arrowList = [];
+const triangleList = [];
+
 const startingFrequency = addFrequencySlider(scene, arrowList);
+addToggleModelSwitchOnModelVsReference(scene, triangleList);
 
 window.addEventListener('resize', onWindowResize);
 prepareScene(scene, renderer, camera, controls);
 addEnergyCollectors(scene);
-addModel(scene);
+const unprocessedTriangles = getModel();
+
+addModel(scene, unprocessedTriangles, triangleList);
 drawTracking(scene, startingFrequency, arrowList)
 animate(scene, renderer, camera, controls);

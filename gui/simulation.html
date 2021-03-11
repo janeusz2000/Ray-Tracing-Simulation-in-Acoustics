@@ -78,7 +78,70 @@
             font-family: "Lucida Console", "Courier New", monospace;
             color: rgb(255, 255, 255);
          }
+         .switch {
+            position: absolute;
+            display: inline-block;
+            right: 0.5%;
+            top: 7%;
+            width: 30px;
+            height: 17px;
 
+            }
+
+         .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            }
+         .slider:before {
+            position: absolute;
+            content: "";
+            height: 13px;
+            width: 13px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            }
+
+         input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+            }
+
+         input:checked + .slider:before {
+            -webkit-transform: translateX(13px);
+            -ms-transform: translateX(13px);
+            transform: translateX(13px);
+            }
+
+         input:checked + .slider {
+            background-color: #2196F3;
+         }
+
+         .slider.round {
+            border-radius: 17px;
+
+         }
+
+         .slider.round:before {
+            border-radius: 50%;
+         }
+
+         .modelIndicator {
+            position: absolute;
+            right: 5px;
+            top: 5%;
+            display: block;
+            font-family: "Lucida Console", "Courier New", monospace;
+            color: rgb(255, 255, 255);
+         }
          </style>
 	</head>
 
@@ -100,6 +163,6 @@
            <a href="./normalizedResults.html">Normalized Acoustic Diffusion Coefficient</a>
            <a href="./polarPatterns.html">Polar Patterns</a>
          </div>
-       </div>
+      </div>
 	</body>
 </html>

@@ -153,6 +153,8 @@ void DataExporter::saveResultsAsJson(std::string_view path,
   file.write(fileBuffer);
 }
 
+// TODO: Dont reapeat yourself because reference model is almost the same. Fix
+// it !.
 void DataExporter::saveModelToJson(std::string_view pathToFolder,
                                    ModelInterface *model) {
   if (model == nullptr) {
@@ -170,6 +172,31 @@ void DataExporter::saveModelToJson(std::string_view pathToFolder,
 
   Json outputJson = Json::array();
   for (const objects::TriangleObj &triangle : model->triangles()) {
+    outputJson.push_back(convertTriangleToJson(triangle));
+  }
+  buffer.acquireJsonFile(outputJson);
+
+  javascript::endLineInBuffer(buffer);
+  file.write(buffer);
+}
+
+void DataExporter::saveReferenceModelToJson(std::string_view pathToFolder,
+                                            ModelInterface *referenceModel) {
+  if (referenceModel == nullptr) {
+    std::stringstream errorStream;
+    errorStream << "Given reference Model to: " << *this
+                << "Cannot be nullptr! ";
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  FileBuffer buffer = javascript::initConst("referenceModel");
+  std::string outputPath = pathToFolder.data();
+  outputPath += "/model.js";
+  File file(outputPath);
+  file.write(buffer);
+
+  Json outputJson = Json::array();
+  for (const objects::TriangleObj &triangle : referenceModel->triangles()) {
     outputJson.push_back(convertTriangleToJson(triangle));
   }
   buffer.acquireJsonFile(outputJson);

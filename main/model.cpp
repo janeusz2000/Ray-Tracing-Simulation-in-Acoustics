@@ -97,8 +97,8 @@ std::unique_ptr<Model> Model::NewLoadFromObjectFile(std::string_view path) {
 std::unique_ptr<Model> Model::NewReferenceModel(float size) {
 
   std::vector<core::Vec3> clockWiseOrigins = {
-      core::Vec3(-size / 2, size / 2, 0), core::Vec3(size / 2, size / 2, 0),
-      core::Vec3(size / 2, -size / 2, 0), core::Vec3(-size / 2, -size / 2, 0)};
+      core::Vec3(-size, size, 0), core::Vec3(size, size, 0),
+      core::Vec3(size, -size, 0), core::Vec3(-size, -size, 0)};
 
   std::vector<objects::TriangleObj> objects = {
       objects::TriangleObj(clockWiseOrigins[1], clockWiseOrigins[2],

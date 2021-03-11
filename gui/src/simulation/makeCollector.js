@@ -1,6 +1,6 @@
 'use strict'
 import{hsl} from './hsl';
-import {makeInstance, makeInstance2D} from './makeInstance';
+import {makeInstance} from './makeInstance';
 
 const THREE = require('three');
 
