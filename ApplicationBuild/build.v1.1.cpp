@@ -52,6 +52,7 @@ int main() {
   EnergyPerFrequency referenceResults = referenceManager.run();
   dataExporter.saveResultsAsJson(dataPath, referenceResults,
                                  /*referenceModel=*/true);
-  dataExporter.saveReferenceModelToJson(dataPath, referenceModel.get());
+  dataExporter.saveModelToJson(dataPath, referenceModel.get(),
+                               /*referenceModel=*/true);
   trackers::endSimulation();
 }

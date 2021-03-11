@@ -1,11 +1,11 @@
+
 'use strict';
-import {getTracking} from './getTracking';
 import {getRandomColorAttribute} from './getRandomColorAttribute'
 
 const THREE = require('three');
 
-export function drawTracking(scene, frequency, arrowList) {
-  const allTracking = getTracking();
+export function drawTracking(scene, frequency, arrowList, allTracking) {
+
   const currentTracking =
       allTracking.find(tracking => tracking.frequency === frequency);
 

@@ -4,7 +4,8 @@ import {deleteModelFromSimulation} from './deleteModelFromSimulation'
 import {getModel} from './getModel';
 import {getReferenceModel} from './getReference';
 
-export function addToggleModelSwitchOnModelVsReference(scene, triangleList) {
+export function addToggleModelSwitchOnModelVsReference(scene, triangleList,
+                                                       objectTracker) {
   const newDiv = document.createElement("div");
   newDiv.className = "ToggleSwitch";
   const newLabel = document.createElement("label")
@@ -12,7 +13,7 @@ export function addToggleModelSwitchOnModelVsReference(scene, triangleList) {
 
   const newInput = document.createElement("input");
   newInput.type = "checkbox";
-
+  objectTracker.addObject(newInput, "modelToggleSwitch");
   newLabel.appendChild(newInput);
 
   const newSpan = document.createElement("span")
@@ -32,11 +33,16 @@ export function addToggleModelSwitchOnModelVsReference(scene, triangleList) {
       deleteModelFromSimulation(scene, triangleList);
       const tempTriangles = getReferenceModel();
       addModel(scene, tempTriangles, triangleList);
+      const event = new Event("input");
+      objectTracker.getObject("frequencySlider").dispatchEvent(event);
+
     } else {
       newOutput.value = "Model";
       deleteModelFromSimulation(scene, triangleList);
       const tempTriangles = getModel();
       addModel(scene, tempTriangles, triangleList);
+      const event = new Event("input");
+      objectTracker.getObject("frequencySlider").dispatchEvent(event);
     }
   })
 

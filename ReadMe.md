@@ -15,7 +15,7 @@
 - [x] loading  screen for gui when simulation is running
 - [x] rearrange trackers for cleaner code
 - [x] create polar pattern on every frequency
-- [ ] create gui for swaping models in current simulation (from reference to model and back to model)
+- [x] create gui for swaping models in current simulation (from reference to model and back to model)
 - [ ] Include time factor inside simulation
 - [ ] include ray expanding factor for lower frequencies
 - [x] make a research how low frequencies interact with small obstacles

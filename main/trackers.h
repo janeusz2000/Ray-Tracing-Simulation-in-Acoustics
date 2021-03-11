@@ -114,13 +114,11 @@ struct DataExporter : Printable {
                          const EnergyPerFrequency &results,
                          bool referenceModel = false);
 
-  // Save |model| to the given .js as Json file in javascript syntax as const
-  // model variable.
-  void saveModelToJson(std::string_view pathToFolder, ModelInterface *model);
-  // Save |referenceModel| to the given .js as Json file in javascript syntax as
-  // const referenceModel variable
-  void saveReferenceModelToJson(std::string_view pathToFolder,
-                                ModelInterface *referenceModel);
+  // Overwrites |model| to the given .js file as Json file in javascript syntax
+  // as const model variable or if the reference model is given true, data is
+  // appended as a const referenceModel variable.
+  void saveModelToJson(std::string_view pathToFolder, ModelInterface *model,
+                       bool referenceModel = false);
 
   void printItself(std::ostream &os) const noexcept override;
 

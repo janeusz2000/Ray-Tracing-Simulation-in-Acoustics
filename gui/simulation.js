@@ -11,6 +11,28 @@ import {addFrequencySlider} from './src/simulation/addFrequencySlider';
 import {
   addToggleModelSwitchOnModelVsReference
 } from './src/simulation/addToggleSwitchOnModelVsReference'
+import {getTracking} from './src/simulation/getTracking';
+
+class ActiveObjectTracker {
+  constructor() {
+    this.object = [];
+    this.legend = [];
+  }
+
+  addObject(object, objectDescription) {
+    this.object.push(object);
+    this.legend.push(objectDescription);
+  }
+
+  getObject(objectDescription) {
+    var index = -1;
+    this.legend.find(element => {
+      index++;
+      return element === objectDescription;
+    });
+    return this.object[index];
+  }
+}
 
 const THREE = require('three');
 const OrbitControls = require('three-orbit-controls')(THREE);
@@ -30,18 +52,19 @@ function onWindowResize() {
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
+const objectTracker = new ActiveObjectTracker;
 const arrowList = [];
 const triangleList = [];
 
-const startingFrequency = addFrequencySlider(scene, arrowList);
-addToggleModelSwitchOnModelVsReference(scene, triangleList);
+addToggleModelSwitchOnModelVsReference(scene, triangleList, objectTracker);
+const startingFrequency = addFrequencySlider(scene, arrowList, objectTracker);
 
 window.addEventListener('resize', onWindowResize);
 prepareScene(scene, renderer, camera, controls);
 addEnergyCollectors(scene);
 const unprocessedTriangles = getModel();
+const tempTracking = getTracking();
 
 addModel(scene, unprocessedTriangles, triangleList);
-drawTracking(scene, startingFrequency, arrowList)
+drawTracking(scene, startingFrequency, arrowList, tempTracking)
 animate(scene, renderer, camera, controls);
