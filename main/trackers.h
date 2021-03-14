@@ -38,6 +38,8 @@ public:
   virtual void writeWithoutFlush(const FileBuffer &buffer) = 0;
   void printItself(std::ostream &os) const noexcept override;
 
+  virtual ~FileInterface(){};
+
 private:
   virtual void open() = 0;
 };
@@ -129,6 +131,7 @@ private:
 // saves them to files in the given path.
 class PositionTrackerInterface : public Printable {
 public:
+  virtual ~PositionTrackerInterface(){};
   static void checkStreamIfGood(const std::ofstream &stream);
   virtual void initializeNewFrequency(float frequency) = 0;
   virtual void initializeNewTracking() = 0;
@@ -200,6 +203,7 @@ private:
 
 // Saves all current collectors arrangement into file.
 struct CollectorsTrackerInterface : public Printable {
+  virtual ~CollectorsTrackerInterface(){};
   virtual void save(const Collectors &collectors, std::string_view path) = 0;
   void printItself(std::ostream &os) const noexcept override;
 };

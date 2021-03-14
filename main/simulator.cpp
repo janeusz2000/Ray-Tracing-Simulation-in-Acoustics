@@ -184,8 +184,6 @@ std::vector<float> Simulator::run(float frequency, const Collectors &collectors,
 
   while (source_->genRay(&currentRay)) {
     core::RayHitData hitData;
-    // TODO: dont track all rays -> sample them, to increase performance and
-    // readability
     // Ray-Trace until Rays excape the model.
     positionTracker_->initializeNewTracking();
     RayTracer::TraceResult hitResult = RayTracer::TraceResult::HIT_TRIANGLE;

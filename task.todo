@@ -1,3 +1,19 @@
-[ ] 5. Create a expanding list where I can choose frequency
-[ ] 6. Update chart.js when new frequency is selected.
 
+fs = 96 kHz
+sep = 1/fs
+
+TODO:
+[x] Create member of the overall time arrival
+[x] Modify constructor of Ray
+[x] -....................- in RayHitData
+[ ] Modify energy collector to track collected energy
+   per time in unordered_map<float, float>, that represent energy / time.
+[ ] Modify data to support time ticks per and energy.
+
+   Convert energy to this representation:
+
+   {
+   "time" :[time1, time2, time3, time4 ...]
+   "energyVector" : [energy1, energy 2, energy3...]
+   }
+[ ] Modify getDCoefficient.js to support this kind of data.

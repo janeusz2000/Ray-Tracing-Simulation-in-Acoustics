@@ -20,7 +20,8 @@ public:
                                  float xyInclination);
 
   explicit Ray(const Vec3 &origin = Vec3::kZero,
-               const Vec3 &direction = Vec3::kZ, float energy = 0);
+               const Vec3 &direction = Vec3::kZ, float energy = 0,
+               float accumulatedTime = 0);
 
   Vec3 at(float time) const;
   float phaseAt(float freq, float time) const;
@@ -38,17 +39,16 @@ public:
 
 private:
   Vec3 origin_, direction_;
-  float energy_;
+  float energy_, accumulatedTime_;
 };
 
 struct RayHitData : public Printable {
-  RayHitData()
-      : RayHitData(std::numeric_limits<float>::max(), Vec3::kZ,
-                   Ray(Vec3::kZero, Vec3::kZ), 1000){};
-  RayHitData(float t, const Vec3 &norm, const Ray &ray, float freq)
-      : time(t), frequency(freq), ray_(ray), normal_(norm){};
-  ~RayHitData() = default;
-  RayHitData(const RayHitData &) = default;
+  explicit RayHitData(float t = std::numeric_limits<float>::max(),
+                      const Vec3 &norm = Vec3::kZ,
+                      const Ray &ray = Ray(Vec3::kZero, Vec3::kZ),
+                      float freq = 1000, float accumulatedTime = 0)
+      : time(t), frequency(freq), accumulatedTime(accumulatedTime), ray_(ray),
+        normal_(norm){};
 
   bool operator==(const RayHitData &other) const;
   void printItself(std::ostream &os) const noexcept override;
@@ -59,7 +59,7 @@ struct RayHitData : public Printable {
   Vec3 origin() const { return ray_.origin(); }
   float energy() const { return ray_.energy(); }
   float phase() const { return ray_.phaseAt(frequency, time); }
-  float time, frequency;
+  float time, frequency, accumulatedTime;
 
 private:
   Ray ray_;

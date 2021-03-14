@@ -16,14 +16,14 @@ int main() {
 
   trackers::startSimulation();
   std::string dataPath = "./data";
-  std::string path = "./models/fancyDiffusor.obj";
+  std::string path = "./models/sphere.obj";
   std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
                                     2000, 2500,  3150,  4000, 5000, 6300,
                                     8000, 10000, 12500, 16000};
   float sourcePower = 1000; // [W]
   int numOfCollectors = 36;
-  int numOfRaysSquared = 10;
-  int numOfVisibleRays = 5;
+  int numOfRaysSquared = 25;
+  int numOfVisibleRays = 20;
 
   trackers::DataExporter dataExporter;
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());

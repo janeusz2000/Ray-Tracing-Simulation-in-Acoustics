@@ -9,8 +9,9 @@ Ray Ray::fromSphericalCoords(const Vec3 &origin, float zRotation,
                           std::sin(xyInclination)));
 }
 
-Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy)
-    : origin_(origin), energy_(energy) {
+Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy,
+         float accumulatedTime)
+    : origin_(origin), energy_(energy), accumulatedTime_(accumulatedTime) {
   if (direction == Vec3(0, 0, 0)) {
     throw std::invalid_argument("Direction  equal to Vec3(0, 0, 0)");
   }

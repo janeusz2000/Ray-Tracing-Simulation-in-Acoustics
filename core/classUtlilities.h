@@ -5,6 +5,7 @@
 
 class Printable {
 public:
+  virtual ~Printable(){};
   virtual void printItself(std::ostream &os) const noexcept;
 };
 
