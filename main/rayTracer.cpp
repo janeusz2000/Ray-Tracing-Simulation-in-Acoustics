@@ -19,7 +19,8 @@ RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
     }
   }
   if (hit) {
-    closestHitData.accumulatedTime = accumulatedTime + closestHitData.time;
+    closestHitData.accumulatedTime =
+        accumulatedTime + closestHitData.time / constants::kSoundSpeed;
     *hitData = closestHitData;
     return TraceResult::HIT_TRIANGLE;
   }

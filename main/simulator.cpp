@@ -208,6 +208,7 @@ Simulator::run(float frequency, const Collectors &collectors,
 
     if (sphereWall.hitObject(currentRay, frequency, &hitData)) {
       positionTracker_->addNewPositionToCurrentTracking(hitData);
+      hitData.accumulatedTime += hitData.time / constants::kSoundSpeed;
     }
 
     positionTracker_->endCurrentTracking();
