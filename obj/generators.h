@@ -1,8 +1,8 @@
 #ifndef GENERATORS_H
 #define GENERATORS_H
 
-#include "constants.h"
 #include "core/classUtlilities.h"
+#include "core/constants.h"
 #include "core/ray.h"
 #include "core/vec3.h"
 #include "main/model.h"

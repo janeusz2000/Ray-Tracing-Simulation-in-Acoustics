@@ -32,14 +32,11 @@ struct FileBuffer {
 // Manages opening, saving, writing and closing file.
 class FileInterface : public Printable {
 public:
-  // TODO: And check if file is open
+  virtual ~FileInterface(){};
   virtual void openFileWithOverwrite() = 0;
-  // TODO: And check if file is open
   virtual void write(const FileBuffer &buffer) = 0;
   virtual void writeWithoutFlush(const FileBuffer &buffer) = 0;
   void printItself(std::ostream &os) const noexcept override;
-
-  virtual ~FileInterface(){};
 
 private:
   virtual void open() = 0;
@@ -50,6 +47,7 @@ private:
 class File : public FileInterface {
 public:
   File(std::string_view path = "") : path_(path.data()){};
+  virtual ~File(){};
   // Opens file at given |path| overwriting existing one.
   // Throws std::invalid_argument exception if file is not found
   // at given path.

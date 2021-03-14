@@ -1,8 +1,8 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
 
-#include "constants.h"
 #include "core/classUtlilities.h"
+#include "core/constants.h"
 #include "core/ray.h"
 #include "core/vec3.h"
 
@@ -34,7 +34,7 @@ protected:
 class Sphere : public Object {
 public:
   explicit Sphere(const core::Vec3 &origin, float rad = 1);
-
+  virtual ~Sphere(){};
   core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
   [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
                                core::RayHitData *hitData) override;
@@ -66,8 +66,6 @@ protected:
 
 class EnergyCollector : public Sphere {
 public:
-  // TODO: write comment what it is.
-
   explicit EnergyCollector(const core::Vec3 &origin, float radius)
       : Sphere(origin, radius) {
     setRadius(radius);
