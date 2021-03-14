@@ -8,6 +8,7 @@ RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
                                            float frequency,
                                            core::RayHitData *hitData) {
   bool hit = false;
+  float accumulatedTime = hitData->accumulatedTime;
   core::RayHitData closestHitData;
   for (objects::TriangleObj triangle : model_->triangles()) {
     if (triangle.hitObject(ray, frequency, hitData)) {
@@ -18,6 +19,7 @@ RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
     }
   }
   if (hit) {
+    closestHitData.accumulatedTime = accumulatedTime + closestHitData.time;
     *hitData = closestHitData;
     return TraceResult::HIT_TRIANGLE;
   }
@@ -33,7 +35,8 @@ core::Ray RayTracer::getReflected(core::RayHitData *hitData) const {
       2 * hitData->normal() *
           hitData->direction().scalarProduct(hitData->normal());
 
-  return core::Ray(hitData->collisionPoint(), newDirection, hitData->energy());
+  return core::Ray(hitData->collisionPoint(), newDirection, hitData->energy(),
+                   hitData->accumulatedTime);
 }
 
 // TODO: put sphere wall here instead of simulator

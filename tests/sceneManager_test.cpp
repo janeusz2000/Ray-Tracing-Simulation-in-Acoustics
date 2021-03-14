@@ -12,7 +12,8 @@ using collectionRules::LinearEnergyCollection;
 using trackers::CollectorsTrackerInterface;
 using trackers::PositionTrackerInterface;
 
-using Energies = std::vector<float>;
+using EnergyPerTime = std::unordered_map<float, float>;
+using Energies = std::vector<EnergyPerTime>;
 using EnergiesPerFrequency = std::unordered_map<float, Energies>;
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 

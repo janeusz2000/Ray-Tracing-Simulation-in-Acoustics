@@ -14,6 +14,8 @@
 
 namespace objects {
 
+using EnergyPerTime = std::unordered_map<float, float>;
+
 class Object : public Printable {
 public:
   virtual ~Object(){};
@@ -64,8 +66,10 @@ protected:
 
 class EnergyCollector : public Sphere {
 public:
+  // TODO: write comment what it is.
+
   explicit EnergyCollector(const core::Vec3 &origin, float radius)
-      : Sphere(origin, radius), energy_(0.0f) {
+      : Sphere(origin, radius) {
     setRadius(radius);
     setOrigin(origin);
   }
@@ -76,13 +80,13 @@ public:
   float distanceAt(const core::Vec3 &positionHit) const;
   void collectEnergy(const core::RayHitData &hitdata);
 
-  void setEnergy(float en);
-  float getEnergy() const;
-  void addEnergy(float en);
+  void setEnergy(const EnergyPerTime &en);
+  EnergyPerTime getEnergy() const;
+  void addEnergy(float acquisitionTime, float energy);
   void printItself(std::ostream &os) const noexcept override;
 
 private:
-  float energy_;
+  EnergyPerTime collectedEnergy_;
 };
 
 class TriangleObj : public Object {

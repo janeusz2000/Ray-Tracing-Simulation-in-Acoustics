@@ -19,7 +19,8 @@ void LinearEnergyCollection::collectEnergy(
       // The closer ray hits origin of the energy Collector, the more energy
       // energyCollector collects.
       float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
-      energyCollector->addEnergy(energyRatio * hitData->energy());
+      energyCollector->addEnergy(hitData->accumulatedTime,
+                                 energyRatio * hitData->energy());
     };
   }
 }
@@ -41,8 +42,9 @@ void LinearEnergyCollectionWithPhaseImpact::collectEnergy(
       // The closer ray hits origin of the energy Collector, the more energy
       // energyCollector collects.
       float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
-      energyCollector->addEnergy(energyRatio * hitData->energy() *
-                                 std::cos(hitData->phase()));
+      energyCollector->addEnergy(hitData->accumulatedTime,
+                                 energyRatio * hitData->energy() *
+                                     std::cos(hitData->phase()));
     };
   }
 }
@@ -62,7 +64,8 @@ void NonLinearEnergyCollection::collectEnergy(const Collectors &collectors,
                                            std::pow(distanceToOrigin, 2));
       float soundIntensity =
           hitData->energy() * distanceFactor / collector->volume();
-      collector->addEnergy(soundIntensity);
+
+      collector->addEnergy(hitData->accumulatedTime, soundIntensity);
     }
   }
 }
@@ -175,8 +178,9 @@ void Simulator::printItself(std::ostream &os) const noexcept {
      << "Energy Collection Rules: " << *energyCollectionRules_ << "\n";
 }
 
-std::vector<float> Simulator::run(float frequency, const Collectors &collectors,
-                                  const int maxTracking) {
+std::vector<std::unordered_map<float, float>>
+Simulator::run(float frequency, const Collectors &collectors,
+               const int maxTracking) {
 
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
@@ -205,6 +209,7 @@ std::vector<float> Simulator::run(float frequency, const Collectors &collectors,
     if (sphereWall.hitObject(currentRay, frequency, &hitData)) {
       positionTracker_->addNewPositionToCurrentTracking(hitData);
     }
+
     positionTracker_->endCurrentTracking();
     energyCollectionRules_->collectEnergy(collectors, &hitData);
   }
@@ -213,7 +218,7 @@ std::vector<float> Simulator::run(float frequency, const Collectors &collectors,
 }
 
 Energies Simulator::getEnergyFromGivenCollectors(const Collectors &collectors) {
-  std::vector<float> output;
+  std::vector<std::unordered_map<float, float>> output;
   output.reserve(collectors.size());
   for (auto &collector : collectors) {
     output.push_back(collector->getEnergy());

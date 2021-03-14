@@ -9,7 +9,8 @@
 #include <unordered_map>
 #include <vector>
 
-using Energy = std::vector<float>;
+using EnergyPerTime = std::unordered_map<float, float>;
+using Energy = std::vector<EnergyPerTime>;
 using EnergyPerFrequency = std::unordered_map<float, Energy>;
 
 int main() {
@@ -22,8 +23,8 @@ int main() {
                                     8000, 10000, 12500, 16000};
   float sourcePower = 1000; // [W]
   int numOfCollectors = 36;
-  int numOfRaysSquared = 25;
-  int numOfVisibleRays = 20;
+  int numOfRaysSquared = 20;
+  int numOfVisibleRays = 10;
 
   trackers::DataExporter dataExporter;
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());

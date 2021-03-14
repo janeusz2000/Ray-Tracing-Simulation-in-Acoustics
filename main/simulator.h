@@ -14,10 +14,12 @@
 #include <limits>
 #include <sstream>
 #include <string_view>
+#include <unordered_map>
 #include <vector>
 
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
-using Energies = std::vector<float>;
+using EnergyPerTime = std::unordered_map<float, float>;
+using Energies = std::vector<EnergyPerTime>;
 
 namespace collectionRules {
 

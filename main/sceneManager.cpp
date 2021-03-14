@@ -82,7 +82,8 @@ void SceneManager::printItself(std::ostream &os) const noexcept {
      << "Offseter: " << *(offseter_);
 }
 
-std::unordered_map<float, std::vector<float>> SceneManager::run() {
+std::unordered_map<float, std::vector<std::unordered_map<float, float>>>
+SceneManager::run() {
   std::vector<float> frequencies =
       simulationProperties_.basicSimulationProperties().frequencies;
   EnergiesPerFrequency outputEnergiesPerFrequency;

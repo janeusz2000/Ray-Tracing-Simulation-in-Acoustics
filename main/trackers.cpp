@@ -141,8 +141,17 @@ void DataExporter::saveResultsAsJson(std::string_view path,
   Json outputArray = Json::array();
   for (auto it = results.cbegin(); it != results.cend(); ++it) {
     Json energyData = Json::array();
-    for (const float &energy : it->second) {
-      energyData.push_back(energy);
+    for (const std::unordered_map<float, float> &EnergyPerTime : it->second) {
+      Json timeArray = Json::array();
+      Json energyArray = Json::array();
+
+      for (auto it = EnergyPerTime.cbegin(); it != EnergyPerTime.cend(); ++it) {
+        timeArray.push_back(it->first);
+        energyArray.push_back(it->second);
+      }
+
+      Json EnergyData = {{"time", timeArray}, {"energy", energyArray}};
+      energyData.push_back(EnergyData);
     }
     Json dataPerFrequency = {{"frequency", it->first}, {"data", energyData}};
     outputArray.push_back(dataPerFrequency);

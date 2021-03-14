@@ -72,9 +72,11 @@ private:
 // This class is creating all necessary objects for simulation.
 class SceneManager : public Printable {
 public:
+  // TODO: EXPLAIN WHAT IT IS
+  using EnergyPerTime = std::unordered_map<float, float>;
   // Represent collected energy value from each collector
   // at Collectors at the same index.
-  using Energies = std::vector<float>;
+  using Energies = std::vector<EnergyPerTime>;
   // Represent collected energy from collectors at the given float that
   // represent frequency of the simulation.
   using EnergiesPerFrequency = std::unordered_map<float, Energies>;

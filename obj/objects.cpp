@@ -56,7 +56,10 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
   // sphere).
   float collisionTime = timeLow > 0 ? timeLow : timeHigh;
   core::Vec3 collision = ray.at(collisionTime);
-  *hitData = core::RayHitData(collisionTime, normal(collision), ray, freq);
+  // TODO: write comment why
+  float accumulatedTime = hitData->accumulatedTime + collisionTime;
+  *hitData = core::RayHitData(collisionTime, normal(collision), ray, freq,
+                              accumulatedTime);
   return true;
 }
 
@@ -86,7 +89,6 @@ EnergyCollector &EnergyCollector::operator=(const EnergyCollector &other) {
 
   setOrigin(other.getOrigin());
   setRadius(other.getRadius());
-  energy_ = other.getEnergy();
 
   return *this;
 }
@@ -105,12 +107,29 @@ float EnergyCollector::distanceAt(const core::Vec3 &positionHit) const {
 }
 
 void EnergyCollector::collectEnergy(const core::RayHitData &hitdata) {
-  energy_ += hitdata.energy();
+  float time = hitdata.accumulatedTime;
+  float energy = hitdata.energy();
+  addEnergy(time, energy);
 }
 
-void EnergyCollector::setEnergy(float en) { energy_ = en; }
-float EnergyCollector::getEnergy() const { return energy_; }
-void EnergyCollector::addEnergy(float en) { energy_ += en; }
+void EnergyCollector::setEnergy(const EnergyPerTime &energyPerTime) {
+  collectedEnergy_ = energyPerTime;
+}
+EnergyPerTime EnergyCollector::getEnergy() const { return collectedEnergy_; }
+// TODO: WHATS THE POINT OF THIS IF I HAVE COLLECT ENERGY????
+void EnergyCollector::addEnergy(float acquisitionTime, float energy) {
+  std::unordered_map<float, float>::iterator it =
+      collectedEnergy_.find(acquisitionTime);
+
+  if (it == collectedEnergy_.end()) {
+    auto energyPerTimeSample = std::make_pair<float, float>(
+        std::move(acquisitionTime), std::move(energy));
+    collectedEnergy_.insert(energyPerTimeSample);
+
+  } else {
+    it->second += energy;
+  }
+}
 
 TriangleObj::TriangleObj(const core::Vec3 &point1, const core::Vec3 &point2,
                          const core::Vec3 &point3)

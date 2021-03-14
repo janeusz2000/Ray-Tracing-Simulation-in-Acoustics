@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <string_view>
+#include <unordered_map>
 
 // Contains objects and functions that are responsible for exporting calculated
 // data, objects and ray trajectories in simulation to different files. They
@@ -100,9 +101,11 @@ void startSimulation();
 // Disable loading screen by setting loading variable to false;
 void endSimulation();
 
+// TODO: Explain what it is.
+using EnergyPerTime = std::unordered_map<float, float>;
 // Represent collected energy value from each collector
 // at Collectors at the same index.
-using Energies = std::vector<float>;
+using Energies = std::vector<EnergyPerTime>;
 // Represent collected energy from collectors at the given float that
 // represent frequency of the simulation.
 using EnergyPerFrequency = std::unordered_map<float, Energies>;
