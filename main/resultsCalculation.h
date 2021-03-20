@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+using Collectors = std::vector<objects::EnergyCollector *>;
 
 // Represents acquired energy in time function. This class try to imitate
 // ".wav" file recording acquired in real research of acoustic recording.
@@ -19,6 +19,7 @@ public:
   float getEnergyAtTimeIndex(int timeIndex) const;
   void setEnergyAtTime(float time, float energy);
   int getSampleRate() const;
+  size_t length() const;
 
   void printItself(std::ostream &os) const noexcept override;
 
