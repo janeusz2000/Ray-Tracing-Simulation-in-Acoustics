@@ -215,7 +215,7 @@ bool TriangleObj::doesHit(const core::Vec3 &point) const {
   float beta = vecC.crossProduct(vecA).magnitude() / 2;
   float gamma = vecA.crossProduct(vecB).magnitude() / 2;
 
-  return alpha + beta + gamma - area_ <= constants::kAreaAccuracy;
+  return std::abs(alpha + beta + gamma - area_) <= constants::kAreaAccuracy;
 }
 
 float TriangleObj::area() const { return area_; }

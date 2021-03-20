@@ -14,6 +14,7 @@
 
 namespace objects {
 
+// TODO: What it represents?
 using EnergyPerTime = std::unordered_map<float, float>;
 
 class Object : public Printable {

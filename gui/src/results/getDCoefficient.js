@@ -30,14 +30,12 @@ function findSmallestTimeStep(timeArray) {
 }
 
 function arrange(start, stop, step) {
-  const size = Math.round(Math.abs(stop - start) / step);
-  console.log(size)
   const output = [];
-  var index = -1;
-  output.forEach(value => {
+  var index = 0;
+  while ((start + index * step) < stop) {
+    output.push(start + index * step);
     ++index;
-    return index * step;
-  })
+  }
   return output;
 }
 
@@ -58,22 +56,28 @@ export function getDCoefficient(data) {
   const energyCollectorData = data.map(collector => {
     const time = collector.time;
     const energy = collector.energy;
-    if (energy.length == 0) {
+    if (energy.length == 0 || time.length == 0) {
       return 0;
     }
+
     const samples = [];
     for (var timeIndex = 0; timeIndex < time.length; ++timeIndex) {
       samples.push(new Sample(time[timeIndex], energy[timeIndex]));
     }
     samples.sort(compareSamples);
 
-    // TODO: calculate time vector here
-    // TODO: sum energies that are really close to each other.
+    // const smallestTimeStep = findSmallestTimeStep(time);
+    // const stop = Math.max.apply(Math, time);
+    // const start = Math.min.apply(Math, time);
+    // const timeArray = arrange(start, stop, smallestTimeStep);
+    // const energyArray = new Array(timeArray.length).fill(0);
+    // samples.forEach(sample => {
+    //   const sampleIndex = parseInt(sample.time / smallestTimeStep);
+    //   energyArray[sampleIndex] = sample.energy;
+    // })
 
-    const energiesArray = samples.map(sample => sample.energy);
-
-    return Math.sqrt(dot(energiesArray, energiesArray) /
-                     energiesArray.length); // RMS
+    const RMS = Math.sqrt(dot(energy, energy) / energy.length);
+    return RMS;
   });
 
   const energy = energyCollectorData.map(rmsValue => {
@@ -86,9 +90,7 @@ export function getDCoefficient(data) {
 
   const alpha = Math.pow(energy.reduce((acc, curr) => acc + curr), 2);
   const beta = energy.reduce((acc, curr) => Math.pow(curr, 2) + acc);
-
   const gamma = (energy.length - 1) * beta;
-
   const output = (alpha - beta) / gamma;
 
   return output;
