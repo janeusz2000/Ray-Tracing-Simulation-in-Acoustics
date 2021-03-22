@@ -7,12 +7,15 @@
 #include <cmath>
 
 using Collectors = std::vector<objects::EnergyCollector *>;
+// TODO: explain what it is
+const int kDataMargin = 2;
 
 // Represents acquired energy in time function. This class try to imitate
 // ".wav" file recording acquired in real research of acoustic recording.
 class WaveObject : public Printable {
 public:
-  explicit WaveObject(int sampleRate = 96e3) : sampleRate_(sampleRate){};
+  explicit WaveObject(int sampleRate = 96e3)
+      : sampleRate_(sampleRate), data_(kDataMargin, 0){};
 
   const std::vector<float> &getData() const;
   // return pressure defined in [dB]

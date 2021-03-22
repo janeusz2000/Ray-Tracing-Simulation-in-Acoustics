@@ -23,8 +23,8 @@ float WaveObject::getTotalPressure() const {
   float total = 0;
 
   for (size_t sampleIndex = 1; sampleIndex < length(); ++sampleIndex) {
-    float t0 = sampleIndex * sampleRate_;
-    float t1 = (sampleIndex - 1) * sampleRate_;
+    float t0 = static_cast<float>(sampleIndex) / sampleRate_;
+    float t1 = static_cast<float>(sampleIndex - 1) / sampleRate_;
     total += kDt * (getEnergyAtTime(t0) + getEnergyAtTime(t1)) / 2.0f;
   }
   return (total > 0) ? (120 + 10 * std::log10(total)) : 0;
@@ -42,39 +42,38 @@ calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjects) {
 }
 
 float WaveObject::getEnergyAtTime(float time) const {
-  size_t timeIndex = time * sampleRate_;
+  size_t timeIndex = std::floor(time * sampleRate_);
 
   if (!isTimeIndexValid(timeIndex)) {
     std::stringstream errorMessage;
     errorMessage << "Given time to getEnergyAtTime(): " << time
                  << " is invalid\n"
-                 << "Given time index: " << timeIndex
-                 << " is out of range in: " << *this;
+                 << "Calculated time index: " << timeIndex
+                 << " is out of range in: \n"
+                 << *this << "\n";
     throw std::invalid_argument(errorMessage.str());
   }
   return data_[timeIndex];
 }
 
 bool WaveObject::isTimeIndexValid(size_t timeIndex) const {
-  return timeIndex < data_.size() && timeIndex > 0;
+  return timeIndex < (data_.size() - kDataMargin) && timeIndex > 0;
 }
 
-size_t WaveObject::length() const { return data_.size(); }
+size_t WaveObject::length() const { return data_.size() - 2; }
 
 const std::vector<float> &WaveObject::getData() const { return data_; }
 
 void WaveObject::addEnergyAtTime(float time, float energy) {
   if (time < 0) {
     std::stringstream errorStream;
-    errorStream
-        << "given time to addEnergyAtTime() cannot be less then 0! Given Time"
-        << time;
+    errorStream << "given time at addEnergyAtTime() in " << *this
+                << "cannot be less then 0! Given Time: " << time << "s.";
     throw std::invalid_argument(errorStream.str());
   }
-
-  size_t timeIndex = static_cast<size_t>(time * sampleRate_);
+  size_t timeIndex = std::floor(time * sampleRate_);
   if (timeIndex >= data_.size()) {
-    data_.resize(timeIndex, 0);
+    data_.resize(timeIndex + kDataMargin, 0);
   }
 
   // TODO: create approximation of the energy if sample is between two samples
@@ -86,7 +85,7 @@ int WaveObject::getSampleRate() const { return sampleRate_; }
 
 void WaveObject::printItself(std::ostream &os) const noexcept {
   os << "Wave Object\n"
-     << "Sample rate: " << sampleRate_ << "\n"
+     << "Sample rate: " << sampleRate_ << " Hz\n"
      << "Data size: " << data_.size();
 }
 

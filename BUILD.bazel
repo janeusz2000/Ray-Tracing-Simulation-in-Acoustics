@@ -46,8 +46,6 @@ cc_test(
     size = "medium",
 )
 
-
-
 cc_test(
     name = "simulator_test",
     srcs = [
