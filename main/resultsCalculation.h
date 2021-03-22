@@ -12,7 +12,7 @@ using Collectors = std::vector<objects::EnergyCollector *>;
 // ".wav" file recording acquired in real research of acoustic recording.
 class WaveObject : public Printable {
 public:
-  explicit WaveObject(int sampleRate) : sampleRate_(sampleRate){};
+  explicit WaveObject(int sampleRate = 96e3) : sampleRate_(sampleRate){};
 
   const std::vector<float> &getData() const;
   // return pressure defined in [dB]

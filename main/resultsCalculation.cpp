@@ -1,13 +1,11 @@
 #include "resultsCalculation.h"
 
-std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
-                                          int sampleRate = 96e3) {
+std::vector<WaveObject> createWaveObjects(const Collectors &collectors) {
   std::vector<WaveObject> output;
   output.reserve(collectors.size());
 
   for (objects::EnergyCollector *collector : collectors) {
-    WaveObject wave(sampleRate);
-
+    WaveObject wave;
     for (auto energyPerTimeIt = collector->getEnergy().cbegin();
          energyPerTimeIt != collector->getEnergy().cend(); ++energyPerTimeIt) {
       wave.addEnergyAtTime(energyPerTimeIt->first, energyPerTimeIt->second);
@@ -21,7 +19,6 @@ std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
 float WaveObject::getTotalPressure() const {
   // Trapezoid Integral calculation:
   // https://en.wikipedia.org/wiki/Trapezoidal_rule
-  // NOTE: increase to get higher precision
   const float kDt = 1 / sampleRate_;
   float total = 0;
 

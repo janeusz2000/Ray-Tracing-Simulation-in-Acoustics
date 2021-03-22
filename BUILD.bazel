@@ -72,6 +72,17 @@ cc_test(
     ],
 )
 
+cc_test(
+    name = "resultsCalculation_test",
+    srcs = [
+        "tests/resultsCalculation_test.cpp",
+    ],
+
+    deps = [
+        ":utils",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
 
 cc_test(
     name = "sphereCollision_test",
