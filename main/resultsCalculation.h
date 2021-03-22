@@ -15,9 +15,12 @@ public:
   explicit WaveObject(int sampleRate) : sampleRate_(sampleRate){};
 
   const std::vector<float> &getData() const;
+  // return pressure defined in [dB]
+  float getTotalPressure() const;
 
-  float getEnergyAtTimeIndex(int timeIndex) const;
-  void setEnergyAtTime(float time, float energy);
+  float getEnergyAtTime(float time) const;
+  void addEnergyAtTime(float time, float energy);
+
   int getSampleRate() const;
   size_t length() const;
 
@@ -26,12 +29,12 @@ public:
 private:
   // Returns true if given time index is within range of |data|.
   bool isTimeIndexValid(size_t timeIndex) const;
-
   int sampleRate_;
   std::vector<float> data_;
 };
 
-std::vector<WaveObject> createWaveObjects(const Collectors &collectors);
+std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
+                                          int sampleRate);
 std::vector<float>
 calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjectVector);
 
@@ -68,5 +71,18 @@ private:
 // 17497-2:2012
 float calculateDiffusionCoefficient(
     const std::vector<float> &soundPressureLevels);
+
+// class WaveObjectBetter {
+// public:
+//   explicit WaveObjectBetter(int sampleRate) : sampleRate_(sampleRate){};
+//   virtual ~WaveObjectBetter(){};
+
+//   virtual int length() const = 0;
+//   virtual float getEnergyAtTime(float time) const = 0;
+//   virtual void setEnergyAtTime(float time, float energy) = 0;
+
+// protected:
+//   int sampleRate_;
+// };
 
 #endif

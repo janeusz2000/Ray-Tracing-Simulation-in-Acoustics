@@ -113,7 +113,9 @@ void EnergyCollector::collectEnergy(const core::RayHitData &hitdata) {
 void EnergyCollector::setEnergy(const EnergyPerTime &energyPerTime) {
   collectedEnergy_ = energyPerTime;
 }
-EnergyPerTime EnergyCollector::getEnergy() const { return collectedEnergy_; }
+const EnergyPerTime &EnergyCollector::getEnergy() const {
+  return collectedEnergy_;
+}
 // TODO: WHATS THE POINT OF THIS IF I HAVE COLLECT ENERGY????
 void EnergyCollector::addEnergy(float acquisitionTime, float energy) {
   std::unordered_map<float, float>::iterator it =

@@ -1,22 +1,36 @@
 #include "resultsCalculation.h"
 
-std::vector<WaveObject> createWaveObjects(const Collectors &collectors) {
+std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
+                                          int sampleRate = 96e3) {
+  std::vector<WaveObject> output;
+  output.reserve(collectors.size());
 
-  std::vector<WaveObject> outputVector;
-  outputVector.reserve(collectors.size());
   for (objects::EnergyCollector *collector : collectors) {
+    WaveObject wave(sampleRate);
 
-    /* TODO:
-    1. Create Wav Object
-    2. Define size of the wave objects with appropiate margins.
-    3. Set energy at right times
-    */
+    for (auto energyPerTimeIt = collector->getEnergy().cbegin();
+         energyPerTimeIt != collector->getEnergy().cend(); ++energyPerTimeIt) {
+      wave.addEnergyAtTime(energyPerTimeIt->first, energyPerTimeIt->second);
+    }
+
+    output.push_back(wave);
   }
+  return output;
+}
 
-  // TODO: create interpolation of the energy energy as sound wave pass through
-  // receiver.
+float WaveObject::getTotalPressure() const {
+  // Trapezoid Integral calculation:
+  // https://en.wikipedia.org/wiki/Trapezoidal_rule
+  // NOTE: increase to get higher precision
+  const float kDt = 1 / sampleRate_;
+  float total = 0;
 
-  return outputVector;
+  for (size_t sampleIndex = 1; sampleIndex < length(); ++sampleIndex) {
+    float t0 = sampleIndex * sampleRate_;
+    float t1 = (sampleIndex - 1) * sampleRate_;
+    total += kDt * (getEnergyAtTime(t0) + getEnergyAtTime(t1)) / 2.0f;
+  }
+  return (total > 0) ? (120 + 10 * std::log10(total)) : 0;
 }
 
 std::vector<float>
@@ -25,38 +39,22 @@ calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjects) {
   std::vector<float> soundPressureLevels;
   soundPressureLevels.reserve(waveObjects.size());
   for (const WaveObject &wave : waveObjects) {
-
-    // Trapezoid Integral calculation:
-    // https://en.wikipedia.org/wiki/Trapezoidal_rule
-    float soundLevelPressureInPascal = 0;
-    for (size_t index = 1; index < wave.length(); ++index) {
-      soundLevelPressureInPascal += 1.0f / 2 *
-                                    (wave.getEnergyAtTimeIndex(index) +
-                                     wave.getEnergyAtTimeIndex(index - 1)) /
-                                    wave.getSampleRate();
-    }
-
-    float pressureInDecibels =
-        soundLevelPressureInPascal > 0
-            ? (120 + 10 * std::log10(soundLevelPressureInPascal))
-            : 0;
-
-    soundPressureLevels.push_back(pressureInDecibels);
+    soundPressureLevels.push_back(wave.getTotalPressure());
   }
   return soundPressureLevels;
 }
 
-float WaveObject::getEnergyAtTimeIndex(int timeIndex) const {
+float WaveObject::getEnergyAtTime(float time) const {
+  size_t timeIndex = time * sampleRate_;
+
   if (!isTimeIndexValid(timeIndex)) {
     std::stringstream errorMessage;
-    errorMessage << "Calculated time to getEnergyAtTime(): "
-                 << static_cast<float>(timeIndex) / sampleRate_
+    errorMessage << "Given time to getEnergyAtTime(): " << time
                  << " is invalid\n"
                  << "Given time index: " << timeIndex
                  << " is out of range in: " << *this;
     throw std::invalid_argument(errorMessage.str());
   }
-
   return data_[timeIndex];
 }
 
@@ -68,16 +66,23 @@ size_t WaveObject::length() const { return data_.size(); }
 
 const std::vector<float> &WaveObject::getData() const { return data_; }
 
-void WaveObject::setEnergyAtTime(float time, float energy) {
+void WaveObject::addEnergyAtTime(float time, float energy) {
+  if (time < 0) {
+    std::stringstream errorStream;
+    errorStream
+        << "given time to addEnergyAtTime() cannot be less then 0! Given Time"
+        << time;
+    throw std::invalid_argument(errorStream.str());
+  }
 
-  // TODO: resize data to be valid
-  // TODO: Create wave approximation for input data
+  size_t timeIndex = static_cast<size_t>(time * sampleRate_);
+  if (timeIndex >= data_.size()) {
+    data_.resize(timeIndex, 0);
+  }
 
-  int timeIndex = static_cast<int>(time * sampleRate_);
+  // TODO: create approximation of the energy if sample is between two samples
 
-  // TODO: approximate energy across different samples
-
-  data_[timeIndex] = energy;
+  data_[timeIndex] += energy;
 }
 
 int WaveObject::getSampleRate() const { return sampleRate_; }
@@ -122,9 +127,9 @@ float calculateDiffusionCoefficient(
                          2);
 
   float beta = 0;
-  std::for_each(
-      soundPressureLevels.cbegin(), soundPressureLevels.cend(),
-      [&](float const &soundPressure) { beta += std::pow(soundPressure, 2); });
+  for (const float pressure : soundPressureLevels) {
+    beta += std::pow(pressure, 2);
+  }
 
   float gamma = static_cast<float>(soundPressureLevels.size() - 1) * beta;
 

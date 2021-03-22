@@ -80,7 +80,7 @@ public:
   void collectEnergy(const core::RayHitData &hitdata);
 
   void setEnergy(const EnergyPerTime &en);
-  EnergyPerTime getEnergy() const;
+  const EnergyPerTime &getEnergy() const;
   void addEnergy(float acquisitionTime, float energy);
   void printItself(std::ostream &os) const noexcept override;
 
