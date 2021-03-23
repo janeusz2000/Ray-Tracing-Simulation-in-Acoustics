@@ -29,26 +29,21 @@ calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjects) {
   return soundPressureLevels;
 }
 
-float WaveObject::getEnergyAtTime(float time) const {
-  size_t timeIndex = std::floor(time * sampleRate_);
+// private
+// TODO: add this to .h file
+int64 WaveObject::getTimeIndex(float time) const {
+  return std::floor(time * sampleRate_);
+}
 
-  if (!isTimeIndexValid(timeIndex)) {
-    std::stringstream errorMessage;
-    errorMessage << "Given time to getEnergyAtTime(): " << time
-                 << " is invalid\n"
-                 << "Calculated time index: " << timeIndex
-                 << " is out of range in: \n"
-                 << *this << "\n";
-    throw std::invalid_argument(errorMessage.str());
+float WaveObject::getEnergyAtTime(float time) const {
+  int64 timeIndex = getTimeIndex(time);
+  if (timeIndex >= data_.size() || timeIndex < 0) {
+    return 0;
   }
   return data_[timeIndex];
 }
 
-bool WaveObject::isTimeIndexValid(size_t timeIndex) const {
-  return timeIndex < (data_.size() - kDataMargin) && timeIndex >= 0;
-}
-
-size_t WaveObject::length() const { return data_.size() - 2; }
+size_t WaveObject::length() const { return data_.size(); }
 
 const std::vector<float> &WaveObject::getData() const { return data_; }
 
@@ -60,9 +55,9 @@ void WaveObject::addEnergyAtTime(float time, float energy) {
                 << "s.";
     throw std::invalid_argument(errorStream.str());
   }
-  size_t timeIndex = std::floor(time * sampleRate_);
+  int64 timeIndex = getTimeIndex(time);
   if (timeIndex >= data_.size()) {
-    data_.resize(timeIndex + kDataMargin, 0);
+    data_.resize(timeIndex + 1, 0);
   }
 
   // TODO: create approximation of the energy if sample is between two samples
@@ -70,12 +65,12 @@ void WaveObject::addEnergyAtTime(float time, float energy) {
   data_[timeIndex] += energy;
 }
 
-const int WaveObject::getSampleRate() const { return sampleRate_; }
+int WaveObject::getSampleRate() const { return sampleRate_; }
 
 void WaveObject::printItself(std::ostream &os) const noexcept {
   os << "Wave Object\n"
      << "Sample rate: " << sampleRate_ << " Hz\n"
-     << "Data size: " << data_.size();
+     << "Data size: " << length();
 }
 
 std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
