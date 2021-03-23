@@ -57,7 +57,7 @@ float WaveObject::getEnergyAtTime(float time) const {
 }
 
 bool WaveObject::isTimeIndexValid(size_t timeIndex) const {
-  return timeIndex < (data_.size() - kDataMargin) && timeIndex > 0;
+  return timeIndex < (data_.size() - kDataMargin) && timeIndex >= 0;
 }
 
 size_t WaveObject::length() const { return data_.size() - 2; }
@@ -67,8 +67,9 @@ const std::vector<float> &WaveObject::getData() const { return data_; }
 void WaveObject::addEnergyAtTime(float time, float energy) {
   if (time < 0) {
     std::stringstream errorStream;
-    errorStream << "given time at addEnergyAtTime() in " << *this
-                << "cannot be less then 0! Given Time: " << time << "s.";
+    errorStream << "given time at addEnergyAtTime() in: \n"
+                << *this << "cannot be less then 0! Given Time: " << time
+                << "s.";
     throw std::invalid_argument(errorStream.str());
   }
   size_t timeIndex = std::floor(time * sampleRate_);

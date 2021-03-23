@@ -43,7 +43,6 @@ using ::testing::ElementsAreArray;
 using ::testing::IsEmpty;
 using ::testing::Not;
 
-const int kDefaultSampleRate = 96e3;
 const float kSkipDuration = 10;
 
 TEST(WaveObject, EnergyManagementTest) {
@@ -52,40 +51,40 @@ TEST(WaveObject, EnergyManagementTest) {
   basicWave.addEnergyAtTime(t0, 0);
   ASSERT_THAT(basicWave.getData(), Not(IsEmpty()));
   ASSERT_THAT(basicWave.getData(), Each(0.0f));
-  ASSERT_EQ(basicWave.length(), kDefaultSampleRate * t0);
+  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t0);
 
   float t1 = 1.0f;
   float energy = 100;
   basicWave.addEnergyAtTime(t1, energy);
   ASSERT_THAT(basicWave.getData(), Not(Each(0.0f)));
   ASSERT_FLOAT_EQ(basicWave.getEnergyAtTime(t1), energy);
-  ASSERT_EQ(basicWave.length(), kDefaultSampleRate * t0);
+  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t0);
 
   basicWave.addEnergyAtTime(t1, energy);
   ASSERT_FLOAT_EQ(basicWave.getEnergyAtTime(t1), 2 * energy);
 
+  // Adding energy at the time which exceed previous time values, should
+  // not have influence on data that was registered at smaller time values.
   float t2 = 40;
   basicWave.addEnergyAtTime(t2, 100);
-  ASSERT_EQ(basicWave.length(), kDefaultSampleRate * t2);
+  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t2);
   ASSERT_FLOAT_EQ(basicWave.getEnergyAtTime(t1), 2 * energy)
       << "resizing wave has impact on previous values!\n";
 }
 
 class WaveObjectPressureTest : public ::testing::Test {
 protected:
-  std::vector<float> getZeroValues(float duration) const {
-    return std::vector<float>(static_cast<int>(duration * kDefaultSampleRate),
-                              0);
+  std::vector<float> getZeroValues(float duration, int sampleRate) const {
+    return std::vector<float>(static_cast<int>(duration * sampleRate), 0);
   }
-  std::vector<float> getOneValues(float duration) const {
-    return std::vector<float>(static_cast<int>(duration * kDefaultSampleRate),
-                              1.0f);
+  std::vector<float> getOneValues(float duration, int sampleRate) const {
+    return std::vector<float>(static_cast<int>(duration * sampleRate), 1.0f);
   }
 
   void assignValuesToWave(WaveObject &wave, const std::vector<float> &values) {
 
     for (size_t index = 0; index < values.size(); ++index) {
-      float currentTime = static_cast<float>(index) / kDefaultSampleRate;
+      float currentTime = static_cast<float>(index) / wave.getSampleRate();
       wave.addEnergyAtTime(currentTime, values[index]);
     }
   }
@@ -93,11 +92,16 @@ protected:
 
 TEST_F(WaveObjectPressureTest, FixtureClassUtilsTest) {
 
-  ASSERT_THAT(getOneValues(kSkipDuration), Not(IsEmpty()));
-  ASSERT_THAT(getZeroValues(kSkipDuration), Not(IsEmpty()));
+  WaveObject defaultWave;
+  ASSERT_THAT(getOneValues(kSkipDuration, defaultWave.getSampleRate()),
+              Not(IsEmpty()));
+  ASSERT_THAT(getZeroValues(kSkipDuration, defaultWave.getSampleRate()),
+              Not(IsEmpty()));
 
-  ASSERT_THAT(getOneValues(kSkipDuration), Each(1.0f));
-  ASSERT_THAT(getZeroValues(kSkipDuration), Each(0.0f));
+  ASSERT_THAT(getOneValues(kSkipDuration, defaultWave.getSampleRate()),
+              Each(1.0f));
+  ASSERT_THAT(getZeroValues(kSkipDuration, defaultWave.getSampleRate()),
+              Each(0.0f));
 
   std::vector<float> customVec = {1, 2, 3, std::sqrt(3), -132.09, 0};
   WaveObject wave;
@@ -107,16 +111,22 @@ TEST_F(WaveObjectPressureTest, FixtureClassUtilsTest) {
 
 TEST_F(WaveObjectPressureTest, GetTotalPressureTest) {
 
-  // float duration = std::sqrt(5);
-  // float referencePressureFromOnes = 1 * duration;
-  // WaveObject onesWave;
-  // assignValuesToWave(onesWave, getOneValues(duration));
-  // ASSERT_FLOAT_EQ(onesWave.getTotalPressure(), referencePressureFromOnes);
+  float duration = std::sqrt(5);
 
-  // WaveObject zerosWave;
-  // assignValuesToWave(zerosWave, getZeroValues(duration));
-  // float referencePressureFromZeros = 0;
-  // ASSERT_FLOAT_EQ(zerosWave.getTotalPressure(), referencePressureFromZeros);
+  WaveObject zerosWave;
+  assignValuesToWave(zerosWave,
+                     getZeroValues(duration, zerosWave.getSampleRate()));
+  float referencePressureFromZeros = 0;
+  ASSERT_FLOAT_EQ(zerosWave.getTotalPressure(), referencePressureFromZeros);
+
+  WaveObject onesWave;
+  assignValuesToWave(onesWave,
+                     getOneValues(duration, onesWave.getSampleRate()));
+  std::vector<float> referenceOnes(
+      std::floor(duration * onesWave.getSampleRate()), 1);
+  ASSERT_ELEMENTS_NEAR(onesWave.getData(), referenceOnes, 1);
+  float referencePressureFromOnes = 1 * duration;
+  // ASSERT_FLOAT_EQ(onesWave.getTotalPressure(), referencePressureFromOnes);
 
   // float scaleFactor = 0.5f;
   // std::vector<float> customValues = getZeroValues(duration);
