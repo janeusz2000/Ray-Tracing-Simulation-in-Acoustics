@@ -1,19 +1,7 @@
 #include "resultsCalculation.h"
 
-std::vector<WaveObject> createWaveObjects(const Collectors &collectors) {
-  std::vector<WaveObject> output;
-  output.reserve(collectors.size());
-
-  for (objects::EnergyCollector *collector : collectors) {
-    WaveObject wave;
-    for (auto energyPerTimeIt = collector->getEnergy().cbegin();
-         energyPerTimeIt != collector->getEnergy().cend(); ++energyPerTimeIt) {
-      wave.addEnergyAtTime(energyPerTimeIt->first, energyPerTimeIt->second);
-    }
-
-    output.push_back(wave);
-  }
-  return output;
+float convertPressureToDecibels(float pressure) {
+  return pressure > 0 ? (120 + 10 * std::log10(pressure)) : 0.0f;
 }
 
 float WaveObject::getTotalPressure() const {
@@ -82,12 +70,29 @@ void WaveObject::addEnergyAtTime(float time, float energy) {
   data_[timeIndex] += energy;
 }
 
-int WaveObject::getSampleRate() const { return sampleRate_; }
+const int WaveObject::getSampleRate() const { return sampleRate_; }
 
 void WaveObject::printItself(std::ostream &os) const noexcept {
   os << "Wave Object\n"
      << "Sample rate: " << sampleRate_ << " Hz\n"
      << "Data size: " << data_.size();
+}
+
+std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
+                                          int sampleRate = 96e3) {
+  std::vector<WaveObject> output;
+  output.reserve(collectors.size());
+
+  for (objects::EnergyCollector *collector : collectors) {
+    WaveObject wave(sampleRate);
+    for (auto energyPerTimeIt = collector->getEnergy().cbegin();
+         energyPerTimeIt != collector->getEnergy().cend(); ++energyPerTimeIt) {
+      wave.addEnergyAtTime(energyPerTimeIt->first, energyPerTimeIt->second);
+    }
+
+    output.push_back(wave);
+  }
+  return output;
 }
 
 std::unordered_map<float, float> ResultInterface::getResults(
@@ -116,8 +121,8 @@ float DiffusionCoefficient::calculateParameter(
   return calculateDiffusionCoefficient(soundPressureLevels);
 }
 
-float calculateDiffusionCoefficient(
-    const std::vector<float> &soundPressureLevels) {
+float DiffusionCoefficient::calculateDiffusionCoefficient(
+    const std::vector<float> &soundPressureLevels) const {
 
   float alpha = std::pow(std::accumulate(soundPressureLevels.cbegin(),
                                          soundPressureLevels.cend(), 0),

@@ -7,24 +7,28 @@
 #include <cmath>
 
 using Collectors = std::vector<objects::EnergyCollector *>;
-// TODO: explain what it is
-const int kDataMargin = 2;
 
+// Converts given pressure defined in [Pa] into [dB].
+// NOTE: given |pressure| must be greater then zero, otherwise it will return 0.
+float convertPressureToDecibels(float pressure);
+
+// How many extra samples will be created in WaveObject data, to make accesing
+// and writing safe from getting out of range error.
+const int kDataMargin = 2;
 // Represents acquired energy in time function. This class try to imitate
 // ".wav" file recording acquired in real research of acoustic recording.
 class WaveObject : public Printable {
 public:
-  explicit WaveObject(int sampleRate = 96e3)
+  explicit WaveObject(int sampleRate)
       : sampleRate_(sampleRate), data_(kDataMargin, 0){};
-
   const std::vector<float> &getData() const;
-  // return pressure defined in [dB]
+  // return pressure defined in [Pa]
   float getTotalPressure() const;
 
   float getEnergyAtTime(float time) const;
   void addEnergyAtTime(float time, float energy);
 
-  int getSampleRate() const;
+  const int getSampleRate() const;
   size_t length() const;
 
   void printItself(std::ostream &os) const noexcept override;
@@ -56,12 +60,6 @@ struct ResultInterface {
 protected:
   virtual float calculateParameter(const Collectors &collectors) const = 0;
 };
-
-struct DiffusionCoefficient : public ResultInterface {
-private:
-  float calculateParameter(const Collectors &collectors) const override;
-};
-
 // Diffusion Coefficient is a measure of the uniformity of diffusion for a
 // representative sample of sources over a complete semicircle for a single
 // plane diffuser, or a complete hemisphere for a hemispherical diffuser.
@@ -69,23 +67,16 @@ private:
 // "Mean or a weighting of the directional diffusion coefficients for
 // the difference source ositions is used to calculate the diffusion
 // coefficient, as specified in 8.4 (source). A guideline to achieve
-// a representative sample of sources is given in 6.2.2 (source). The lack of a
-// subscript for d indicates random incidence." ~Comes from (source): ISO
+// a representative sample of sources is given in 6.2.2 (source). The lack of
+// a subscript for d indicates random incidence." ~Comes from (source): ISO
 // 17497-2:2012
-float calculateDiffusionCoefficient(
-    const std::vector<float> &soundPressureLevels);
+struct DiffusionCoefficient : public ResultInterface {
+private:
+  // Calculates parameter from given vector of pressures defined in [dB]
+  float calculateDiffusionCoefficient(
+      const std::vector<float> &soundPressureLevels) const;
 
-// class WaveObjectBetter {
-// public:
-//   explicit WaveObjectBetter(int sampleRate) : sampleRate_(sampleRate){};
-//   virtual ~WaveObjectBetter(){};
-
-//   virtual int length() const = 0;
-//   virtual float getEnergyAtTime(float time) const = 0;
-//   virtual void setEnergyAtTime(float time, float energy) = 0;
-
-// protected:
-//   int sampleRate_;
-// };
+  float calculateParameter(const Collectors &collectors) const override;
+};
 
 #endif

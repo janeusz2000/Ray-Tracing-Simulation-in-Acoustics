@@ -44,9 +44,10 @@ using ::testing::IsEmpty;
 using ::testing::Not;
 
 const float kSkipDuration = 10;
+const int kSampleRate = 96e3;
 
 TEST(WaveObject, EnergyManagementTest) {
-  WaveObject basicWave;
+  WaveObject basicWave(kSampleRate);
   float t0 = 2.0f;
   basicWave.addEnergyAtTime(t0, 0);
   ASSERT_THAT(basicWave.getData(), Not(IsEmpty()));
@@ -88,15 +89,10 @@ protected:
       wave.addEnergyAtTime(currentTime, values[index]);
     }
   }
-
-  float convertPressureToDecibels(float pressure) {
-    return pressure > 0 ? (120 + 10 * std::log10(pressure)) : 0.0f;
-  }
 };
 
 TEST_F(WaveObjectPressureTest, FixtureClassUtilsTest) {
-
-  WaveObject defaultWave;
+  WaveObject defaultWave(kSampleRate);
   ASSERT_THAT(getOneValues(kSkipDuration, defaultWave.getSampleRate()),
               Not(IsEmpty()));
   ASSERT_THAT(getZeroValues(kSkipDuration, defaultWave.getSampleRate()),
@@ -108,7 +104,7 @@ TEST_F(WaveObjectPressureTest, FixtureClassUtilsTest) {
               Each(0.0f));
 
   std::vector<float> customVec = {1, 2, 3, std::sqrt(3), -132.09, 0};
-  WaveObject wave;
+  WaveObject wave(kSampleRate);
   assignValuesToWave(wave, customVec);
   ASSERT_ELEMENTS_NEAR(wave.getData(), customVec, 1e-4);
 }
@@ -116,14 +112,14 @@ TEST_F(WaveObjectPressureTest, FixtureClassUtilsTest) {
 TEST_F(WaveObjectPressureTest, GetTotalPressureTest) {
 
   float duration = std::sqrt(5);
-  WaveObject zerosWave;
+  WaveObject zerosWave(kSampleRate);
   assignValuesToWave(zerosWave,
                      getZeroValues(duration, zerosWave.getSampleRate()));
   float referencePressureFromZeros = 0;
   ASSERT_FLOAT_EQ(zerosWave.getTotalPressure(),
                   convertPressureToDecibels(referencePressureFromZeros));
 
-  WaveObject onesWave;
+  WaveObject onesWave(kSampleRate);
   assignValuesToWave(onesWave,
                      getOneValues(duration, onesWave.getSampleRate()));
   std::vector<float> referenceOnes(
@@ -131,10 +127,10 @@ TEST_F(WaveObjectPressureTest, GetTotalPressureTest) {
   ASSERT_ELEMENTS_NEAR(onesWave.getData(), referenceOnes, 1);
   float referencePressureFromOnes = 1 * duration;
   ASSERT_NEAR(onesWave.getTotalPressure(),
-              convertPressureToDecibels(referencePressureFromOnes), 1.0f);
+              convertPressureToDecibels(referencePressureFromOnes), 0.6f);
 
   float scaleFactor = 0.5f;
-  WaveObject wave;
+  WaveObject wave(kSampleRate);
   std::vector<float> customValues =
       getZeroValues(duration, wave.getSampleRate());
   for (size_t index = 0;
@@ -147,5 +143,5 @@ TEST_F(WaveObjectPressureTest, GetTotalPressureTest) {
       static_cast<float>(wave.length()) / wave.getSampleRate();
   float referencePressureFromCustom = 1 * customDuration * scaleFactor;
   ASSERT_NEAR(wave.getTotalPressure(),
-              convertPressureToDecibels(referencePressureFromCustom), 1.0f);
+              convertPressureToDecibels(referencePressureFromCustom), 0.6f);
 }
