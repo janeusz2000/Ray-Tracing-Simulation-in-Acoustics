@@ -19,14 +19,14 @@ std::vector<WaveObject> createWaveObjects(const Collectors &collectors) {
 float WaveObject::getTotalPressure() const {
   // Trapezoid Integral calculation:
   // https://en.wikipedia.org/wiki/Trapezoidal_rule
-  const float kDt = 1 / sampleRate_;
+  const float kDt = 1.0f / sampleRate_;
   float total = 0;
-
   for (size_t sampleIndex = 1; sampleIndex < length(); ++sampleIndex) {
     float t0 = static_cast<float>(sampleIndex) / sampleRate_;
     float t1 = static_cast<float>(sampleIndex - 1) / sampleRate_;
     total += kDt * (getEnergyAtTime(t0) + getEnergyAtTime(t1)) / 2.0f;
   }
+
   return (total > 0) ? (120 + 10 * std::log10(total)) : 0;
 }
 

@@ -88,6 +88,10 @@ protected:
       wave.addEnergyAtTime(currentTime, values[index]);
     }
   }
+
+  float convertPressureToDecibels(float pressure) {
+    return pressure > 0 ? (120 + 10 * std::log10(pressure)) : 0.0f;
+  }
 };
 
 TEST_F(WaveObjectPressureTest, FixtureClassUtilsTest) {
@@ -112,12 +116,12 @@ TEST_F(WaveObjectPressureTest, FixtureClassUtilsTest) {
 TEST_F(WaveObjectPressureTest, GetTotalPressureTest) {
 
   float duration = std::sqrt(5);
-
   WaveObject zerosWave;
   assignValuesToWave(zerosWave,
                      getZeroValues(duration, zerosWave.getSampleRate()));
   float referencePressureFromZeros = 0;
-  ASSERT_FLOAT_EQ(zerosWave.getTotalPressure(), referencePressureFromZeros);
+  ASSERT_FLOAT_EQ(zerosWave.getTotalPressure(),
+                  convertPressureToDecibels(referencePressureFromZeros));
 
   WaveObject onesWave;
   assignValuesToWave(onesWave,
@@ -126,19 +130,22 @@ TEST_F(WaveObjectPressureTest, GetTotalPressureTest) {
       std::floor(duration * onesWave.getSampleRate()), 1);
   ASSERT_ELEMENTS_NEAR(onesWave.getData(), referenceOnes, 1);
   float referencePressureFromOnes = 1 * duration;
-  // ASSERT_FLOAT_EQ(onesWave.getTotalPressure(), referencePressureFromOnes);
+  ASSERT_NEAR(onesWave.getTotalPressure(),
+              convertPressureToDecibels(referencePressureFromOnes), 1.0f);
 
-  // float scaleFactor = 0.5f;
-  // std::vector<float> customValues = getZeroValues(duration);
-  // for (size_t index = 0;
-  //      index < static_cast<size_t>(customValues.size() * scaleFactor);
-  //      ++index) {
-  //   customValues[index] = 1;
-  // }
-  // WaveObject wave;
-  // assignValuesToWave(wave, customValues);
-  // float customDuration =
-  //     static_cast<float>(wave.length()) / wave.getSampleRate();
-  // float referencePressureFromCustom = 1 * customDuration * scaleFactor;
-  // ASSERT_FLOAT_EQ(wave.getTotalPressure(), referencePressureFromCustom);
+  float scaleFactor = 0.5f;
+  WaveObject wave;
+  std::vector<float> customValues =
+      getZeroValues(duration, wave.getSampleRate());
+  for (size_t index = 0;
+       index < static_cast<size_t>(customValues.size() * scaleFactor);
+       ++index) {
+    customValues[index] = 1;
+  }
+  assignValuesToWave(wave, customValues);
+  float customDuration =
+      static_cast<float>(wave.length()) / wave.getSampleRate();
+  float referencePressureFromCustom = 1 * customDuration * scaleFactor;
+  ASSERT_NEAR(wave.getTotalPressure(),
+              convertPressureToDecibels(referencePressureFromCustom), 1.0f);
 }
