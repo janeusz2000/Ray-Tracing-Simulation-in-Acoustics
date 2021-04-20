@@ -40,14 +40,24 @@ private:
   std::vector<float> data_;
 };
 
-std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
-                                          int sampleRate);
+class WaveObjectFactory {
+public:
+  explicit WaveObjectFactory(int sampleRate) : sampleRate_(sampleRate){};
+  std::vector<WaveObject>
+  createWaveObjectsFromCollectors(const Collectors &collectors);
+
+private:
+  int sampleRate_;
+};
+
 std::vector<float>
 calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjectVector);
 
 // Interface struct for acoustic parameter calculation from function sequence of
 // sound level pressure acquired in simulation.
 struct ResultInterface {
+  explicit ResultInterface(WaveObjectFactory *waveObjectFactory)
+      : waveFactory_(waveObjectFactory){};
   virtual ~ResultInterface(){};
 
   // Calculates desired acoustic parameter in frequency function. Key of the
@@ -59,6 +69,7 @@ struct ResultInterface {
 
 protected:
   virtual float calculateParameter(const Collectors &collectors) const = 0;
+  WaveObjectFactory *waveFactory_;
 };
 // Diffusion Coefficient is a measure of the uniformity of diffusion for a
 // representative sample of sources over a complete semicircle for a single
@@ -71,12 +82,16 @@ protected:
 // a subscript for d indicates random incidence." ~Comes from (source): ISO
 // 17497-2:2012
 struct DiffusionCoefficient : public ResultInterface {
+  explicit DiffusionCoefficient(WaveObjectFactory *waveFactory)
+      : ResultInterface(waveFactory){};
+
+protected:
+  float calculateParameter(const Collectors &collectors) const override;
+
 private:
   // Calculates parameter from given vector of pressures defined in [dB]
   float calculateDiffusionCoefficient(
       const std::vector<float> &soundPressureLevels) const;
-
-  float calculateParameter(const Collectors &collectors) const override;
 };
 
 #endif

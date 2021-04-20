@@ -17,14 +17,9 @@ def omega(frequency):
 def k(omega):
    return omega / soundSpeed
 
-def radiationRatio(k, sphereRadius):
+def radiationRatio(k, sphereRadius   ):
    return (k * sphereRadius) ** 2 / (1 + (k * sphereRadius) ** 2)
 
-radiationRatioList = list()
-for frequency in frequencies:
-   om = omega(frequency)
-   k_ = k(om)
-   radiationRatioList.append(radiationRatio(k_, radius))
 
 def gamma(angle):
    return I(angle) * np.sin(angle)
@@ -41,6 +36,12 @@ def D(angle):
    d, error = quad(gamma, 0, np.pi)
    print("D: %f, error: %f" % (d, error))
    return i / d
+
+radiationRatioList = list()
+for frequency in frequencies:
+   om = omega(frequency)
+   k_ = k(om)
+   radiationRatioList.append(radiationRatio(k_, radius))
 
 plt.figure()
 for index in range(0, len(frequencies)):

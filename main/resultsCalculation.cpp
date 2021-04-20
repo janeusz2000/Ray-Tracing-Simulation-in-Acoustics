@@ -65,7 +65,7 @@ void WaveObject::addEnergyAtTime(float time, float energy) {
     data_.resize(timeIndex + kDataMargin, 0);
   }
 
-  // TODO: create approximation of the energy if sample is between two samples
+  // FIXME: create approximation of the energy if sample is between two samples
 
   data_[timeIndex] += energy;
 }
@@ -78,13 +78,13 @@ void WaveObject::printItself(std::ostream &os) const noexcept {
      << "Data size: " << data_.size();
 }
 
-std::vector<WaveObject> createWaveObjects(const Collectors &collectors,
-                                          int sampleRate = 96e3) {
+std::vector<WaveObject> WaveObjectFactory::createWaveObjectsFromCollectors(
+    const Collectors &collectors) {
   std::vector<WaveObject> output;
   output.reserve(collectors.size());
 
   for (objects::EnergyCollector *collector : collectors) {
-    WaveObject wave(sampleRate);
+    WaveObject wave(sampleRate_);
     for (auto energyPerTimeIt = collector->getEnergy().cbegin();
          energyPerTimeIt != collector->getEnergy().cend(); ++energyPerTimeIt) {
       wave.addEnergyAtTime(energyPerTimeIt->first, energyPerTimeIt->second);
@@ -113,7 +113,7 @@ float DiffusionCoefficient::calculateParameter(
     const Collectors &collectors) const {
 
   std::vector<WaveObject> wavePerEnergyCollector =
-      createWaveObjects(collectors);
+      waveFactory_->createWaveObjectsFromCollectors(collectors);
 
   std::vector<float> soundPressureLevels =
       calculateSoundPressureLevels(wavePerEnergyCollector);
