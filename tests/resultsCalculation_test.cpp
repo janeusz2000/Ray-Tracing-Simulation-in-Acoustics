@@ -2,6 +2,7 @@
 #include "gtest/gtest.h"
 
 #include "core/constants.h"
+#include "main/model.h"
 #include "main/resultsCalculation.h"
 
 #include <cmath>
