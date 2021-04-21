@@ -178,18 +178,21 @@ void Simulator::printItself(std::ostream &os) const noexcept {
      << "Energy Collection Rules: " << *energyCollectionRules_ << "\n";
 }
 
-std::vector<std::unordered_map<float, float>>
-Simulator::run(float frequency, const Collectors &collectors,
-               const int maxTracking) {
+void Simulator::run(float frequency, Collectors *collectors,
+                    const int maxTracking) {
 
+  // Determines spacial limits of the simulation
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
   core::Ray currentRay;
-
   while (source_->genRay(&currentRay)) {
-    core::RayHitData hitData;
-    // Ray-Trace until Rays excape the model.
+
+    // Initialize visual representation of ray tracking in gui
     positionTracker_->initializeNewTracking();
+
+    // TODO: replace hitData with factory to delete default values for
+    // rayHitData
+    core::RayHitData hitData;
     RayTracer::TraceResult hitResult = RayTracer::TraceResult::HIT_TRIANGLE;
     int currentTracking = 0;
     while (hitResult == RayTracer::TraceResult::HIT_TRIANGLE) {
@@ -212,17 +215,18 @@ Simulator::run(float frequency, const Collectors &collectors,
     }
 
     positionTracker_->endCurrentTracking();
-    energyCollectionRules_->collectEnergy(collectors, &hitData);
+    energyCollectionRules_->collectEnergy(*collectors, &hitData);
   }
-
-  return getEnergyFromGivenCollectors(collectors);
 }
 
-Energies Simulator::getEnergyFromGivenCollectors(const Collectors &collectors) {
-  std::vector<std::unordered_map<float, float>> output;
-  output.reserve(collectors.size());
-  for (auto &collector : collectors) {
-    output.push_back(collector->getEnergy());
-  }
-  return output;
-}
+// ! THIS WILL BE USEFUL FOR RESULTS CALCULATION LATER
+
+// Energies Simulator::getEnergyFromGivenCollectors(const Collectors
+// &collectors) {
+//   std::vector<std::unordered_map<float, float>> output;
+//   output.reserve(collectors.size());
+//   for (auto &collector : collectors) {
+//     output.push_back(collector->getEnergy());
+//   }
+//   return output;
+// }

@@ -75,8 +75,6 @@ protected:
 // contains utilities for rendering javascript syntax in FileBuffer
 namespace javascript {
 
-// TODO: create constructor of the FleBuffer file with json.
-
 FileBuffer initVar(std::string_view variableName);
 FileBuffer initLet(std::string_view variableName);
 FileBuffer initConst(std::string_view variableName);
@@ -99,7 +97,7 @@ void startSimulation();
 // Disable loading screen by setting loading variable to false;
 void endSimulation();
 
-// TODO: Explain what it is.
+// Represents Energy Collected |first| at certain time |second|
 using EnergyPerTime = std::unordered_map<float, float>;
 // Represent collected energy value from each collector
 // at Collectors at the same index.
@@ -142,6 +140,20 @@ public:
   virtual void endCurrentTracking() = 0;
   virtual void save() = 0;
   virtual void switchToReferenceModel() = 0;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
+// Used for running simulation without any visual representation.
+class FakePositionTracker : public PositionTrackerInterface {
+public:
+  void initializeNewFrequency(float frequency) override{};
+  void initializeNewTracking() override{};
+  void
+  addNewPositionToCurrentTracking(const core::RayHitData &hitData) override{};
+  void endCurrentFrequency() override{};
+  void endCurrentTracking() override{};
+  void save() override{};
+  void switchToReferenceModel() override{};
   void printItself(std::ostream &os) const noexcept override;
 };
 
@@ -206,6 +218,11 @@ private:
 struct CollectorsTrackerInterface : public Printable {
   virtual ~CollectorsTrackerInterface(){};
   virtual void save(const Collectors &collectors, std::string_view path) = 0;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
+struct FakeCollectorsTracker : public CollectorsTrackerInterface {
+  void save(const Collectors &collectors, std::string_view path) override{};
   void printItself(std::ostream &os) const noexcept override;
 };
 

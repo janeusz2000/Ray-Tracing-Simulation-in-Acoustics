@@ -45,7 +45,7 @@ TEST_F(MainTest, buildingSimulation) {
       buildCollectors(model_.get(), numOfCollectors_);
 
   int maxTracking = 12;
-  simulator.run(frequency_, collectors, maxTracking);
+  simulator.run(frequency_, &collectors, maxTracking);
   // positionTracker.saveAsJson();
   // FAIL();
 }

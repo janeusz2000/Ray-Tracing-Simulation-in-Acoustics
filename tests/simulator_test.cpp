@@ -49,7 +49,7 @@ public:
   bool empty() const override { return empty_; }
 
 private:
-  void printItself(std::ostream &os) const noexcept override {
+void printItself(std::ostream &os) const noexcept override {
     os << "Fake Model";
   }
   std::vector<TriangleObj> triangles_;

@@ -213,7 +213,11 @@ Json DataExporter::convertTriangleToJson(
 }
 
 void PositionTrackerInterface::printItself(std::ostream &os) const noexcept {
-  os << "Position Tracker Class Inteface";
+  os << "Position Tracker Class Inteface\n";
+}
+
+void FakePositionTracker::printItself(std::ostream &os) const noexcept {
+  os << "Fake Position Tracker\n";
 }
 
 JsonPositionTracker::JsonPositionTracker(std::string_view path) {
@@ -397,6 +401,10 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
 
 void CollectorsTrackerInterface::printItself(std::ostream &os) const noexcept {
   os << "Collectors Tracker Class Interface\n";
+}
+
+void FakeCollectorsTracker::printItself(std::ostream &os) const noexcept {
+  os << "Fake Collectors tracker\n";
 }
 
 void CollectorsTrackerToJson::printItself(std::ostream &os) const noexcept {

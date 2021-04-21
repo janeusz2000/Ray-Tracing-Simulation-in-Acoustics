@@ -18,6 +18,7 @@
 #include <vector>
 
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+// Represents Energy Collected |first| at certain time |second|
 using EnergyPerTime = std::unordered_map<float, float>;
 using Energies = std::vector<EnergyPerTime>;
 
@@ -104,14 +105,8 @@ public:
         positionTracker_(positionTracker),
         energyCollectionRules_(energyCollectionRules){};
 
-  // Runs the simulation and returns vector of float that represent result
-  // energy collected by energyCollectors. Index of the float correspond
-  // with index of builded energy collector. |Energies| is vector of float that
-  // represent collected energy inside collectors with the same order as given
-  // |collectors|. Max tracking represent how many reflection per year will be
-  // tracked at maximum.
-  Energies run(float frequency, const Collectors &collectors,
-               const int maxTracking);
+  // Runs the simulation by modifying given collectors
+  void run(float frequency, Collectors *collectors, const int maxTracking);
 
   void printItself(std::ostream &os) const noexcept override;
 

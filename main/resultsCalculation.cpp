@@ -103,8 +103,8 @@ std::unordered_map<float, float> ResultInterface::getResults(
        it != std::cend(energyCollectorsPerFrequency); ++it) {
 
     float frequency = it->first;
-    calculatedParameterVectorInTime.insert(std::make_pair<float, float>(
-        std::move(frequency), std::move(calculateParameter(it->second))));
+    calculatedParameterVectorInTime.insert(
+        std::make_pair(frequency, calculateParameter(it->second)));
   }
   return calculatedParameterVectorInTime;
 }

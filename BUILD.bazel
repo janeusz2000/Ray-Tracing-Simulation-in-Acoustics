@@ -1,4 +1,3 @@
-
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 
@@ -7,23 +6,43 @@ cc_binary(
     srcs = [
         "ApplicationBuild/build.v1.1.cpp",
     ],
+    linkopts = ["-lpthread"],
     deps = [
         ":utils",
     ],
-    linkopts=["-lpthread"],
+)
+
+cc_binary(
+    name = "validation",
+    srcs = [
+        "ApplicationBuild/build.v1.1.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":utils",
+    ],
 )
 
 cc_library(
     name = "utils",
-    srcs = glob(["main/*.cpp","core/*.cpp","obj/*.cpp"]),
-    hdrs = glob(["main/*.h", "core/*.h", "obj/*.h",]),
-    deps  = [
+    srcs = glob([
+        "main/*.cpp",
+        "core/*.cpp",
+        "obj/*.cpp",
+    ]),
+    hdrs = glob([
+        "main/*.h",
+        "core/*.h",
+        "obj/*.h",
+    ]),
+    deps = [
         "@github_nlohmann_json//:json",
     ],
 )
 
 cc_test(
     name = "sceneManager_test",
+    size = "medium",
     srcs = [
         "tests/sceneManager_test.cpp",
     ],
@@ -31,11 +50,11 @@ cc_test(
         ":utils",
         "@com_google_googletest//:gtest_main",
     ],
-    size = "medium",
 )
 
 cc_test(
     name = "trackers_test",
+    size = "medium",
     srcs = [
         "tests/trackers_test.cpp",
     ],
@@ -43,11 +62,11 @@ cc_test(
         ":utils",
         "@com_google_googletest//:gtest_main",
     ],
-    size = "medium",
 )
 
 cc_test(
     name = "simulator_test",
+    size = "medium",
     srcs = [
         "tests/simulator_test.cpp",
     ],
@@ -55,7 +74,6 @@ cc_test(
         ":utils",
         "@com_google_googletest//:gtest_main",
     ],
-    size = "medium",
 )
 
 cc_test(
@@ -63,7 +81,6 @@ cc_test(
     srcs = [
         "tests/object_utils_test.cpp",
     ],
-
     deps = [
         ":utils",
         "@com_google_googletest//:gtest_main",
@@ -75,7 +92,6 @@ cc_test(
     srcs = [
         "tests/resultsCalculation_test.cpp",
     ],
-
     deps = [
         ":utils",
         "@com_google_googletest//:gtest_main",
@@ -90,7 +106,7 @@ cc_test(
     deps = [
         ":utils",
         "@com_google_googletest//:gtest_main",
-    ]
+    ],
 )
 
 cc_test(
@@ -101,7 +117,7 @@ cc_test(
     deps = [
         ":utils",
         "@com_google_googletest//:gtest_main",
-    ]
+    ],
 )
 
 cc_test(
@@ -112,7 +128,7 @@ cc_test(
     deps = [
         ":utils",
         "@com_google_googletest//:gtest_main",
-    ]
+    ],
 )
 
 cc_test(
@@ -123,5 +139,5 @@ cc_test(
     deps = [
         ":utils",
         "@com_google_googletest//:gtest_main",
-    ]
+    ],
 )

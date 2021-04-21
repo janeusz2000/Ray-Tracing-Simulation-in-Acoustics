@@ -58,23 +58,3 @@ protected:
   FakeCollectorsTracker collectorsTracker;
   LinearEnergyCollection energyCollectionRules;
 };
-
-TEST_F(SceneManagerSimpleTest, repetitiveCollectionOfEnergyTest) {
-  float sourcePower = 500;
-  int numOfCollectors = 37;
-  int numOfRaysSquared = 1;
-
-  std::vector<float> frequencies = {100, 200};
-
-  BasicSimulationProperties basicProperties(frequencies, sourcePower,
-                                            numOfCollectors, numOfRaysSquared);
-  SimulationProperties simulationProperties(&energyCollectionRules,
-                                            basicProperties);
-
-  SceneManager singleRaySimulation(model.get(), simulationProperties,
-                                   &positionTracker, &collectorsTracker);
-  EnergiesPerFrequency result = singleRaySimulation.run();
-  // ! THIS DOESNT TEST ANYTHING, FIX IT!
-  ASSERT_THAT(result[100], ::testing::Not(::testing::IsEmpty()));
-  ASSERT_EQ(result[100], result[200]);
-}

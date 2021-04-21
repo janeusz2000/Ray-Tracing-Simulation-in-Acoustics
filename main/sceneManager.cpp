@@ -82,34 +82,40 @@ void SceneManager::printItself(std::ostream &os) const noexcept {
      << "Offseter: " << *(offseter_);
 }
 
-std::unordered_map<float, std::vector<std::unordered_map<float, float>>>
-SceneManager::run() {
+std::unordered_map<float, Collectors> SceneManager::run() {
   std::vector<float> frequencies =
       simulationProperties_.basicSimulationProperties().frequencies;
-  EnergiesPerFrequency outputEnergiesPerFrequency;
+
+  std::unordered_map<float, Collectors> collectorsPerFrequencies;
 
   for (float freq : frequencies) {
+
+    // Initialize frequency in visual reporesentation of the simulation
     positionTracker_->initializeNewFrequency(freq);
+
     generators::PointSpeakerRayFactory pointSpeaker(
         simulationProperties_.basicSimulationProperties().numOfRaysSquared,
         simulationProperties_.basicSimulationProperties().sourcePower, model_);
+
     Simulator simulator(&raytracer_, model_, &pointSpeaker, offseter_.get(),
                         positionTracker_,
                         simulationProperties_.energyCollectionRules());
+
     Collectors collectors = buildCollectors(
         model_,
         simulationProperties_.basicSimulationProperties().numOfCollectors);
 
+    // Save collectors for the visual representation
     collectorsTracker_->save(collectors, "./data");
 
-    Energies energies = simulator.run(
-        freq, collectors,
-        simulationProperties_.basicSimulationProperties().maxTracking);
-    std::pair<float, Energies> energiesPerFrequency =
-        std::make_pair<float, Energies>(std::move(freq), std::move(energies));
-    outputEnergiesPerFrequency.insert(energiesPerFrequency);
+    int maxTracking =
+        simulationProperties_.basicSimulationProperties().maxTracking;
+    simulator.run(freq, &collectors, maxTracking);
+
+    collectorsPerFrequencies.insert(
+        std::make_pair(freq, std::move(collectors)));
     positionTracker_->endCurrentFrequency();
   }
   positionTracker_->save();
-  return outputEnergiesPerFrequency;
+  return collectorsPerFrequencies;
 }
