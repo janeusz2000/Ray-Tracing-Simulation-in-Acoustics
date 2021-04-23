@@ -83,7 +83,7 @@ std::vector<WaveObject> WaveObjectFactory::createWaveObjectsFromCollectors(
   std::vector<WaveObject> output;
   output.reserve(collectors.size());
 
-  for (objects::EnergyCollector *collector : collectors) {
+  for (auto &collector : collectors) {
     WaveObject wave(sampleRate_);
     for (auto energyPerTimeIt = collector->getEnergy().cbegin();
          energyPerTimeIt != collector->getEnergy().cend(); ++energyPerTimeIt) {

@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-using Collectors = std::vector<objects::EnergyCollector *>;
+using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
 // Converts given pressure defined in [Pa] into [dB].
 // NOTE: given |pressure| must be greater then zero, otherwise it will return 0.

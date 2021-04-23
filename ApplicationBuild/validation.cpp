@@ -25,7 +25,7 @@ const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
 float kDefaultModelSize = 1.0;
 int main() {
 
-  std::unique_ptr<Model> model = model::NewReferenceModel(kDefaultModelSize);
+  std::unique_ptr<Model> model = Model::NewReferenceModel(kDefaultModelSize);
 
   trackers::FakePositionTracker positionTracker;
   trackers::FakeCollectorsTracker collectorsTracker;
@@ -37,9 +37,14 @@ int main() {
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
 
-  std::unordered_map<float, Collectors> = manager.run();
+  std::unordered_map<float, Collectors> mapOfCollectors = manager.run();
 
   WaveObjectFactory waveFactory(kSampleRate);
+
+  // ACOUSTIC PARAMETERS
+  DiffusionCoefficient diffusion(&waveFactory);
+  std::vector<ResultInterface *> acousticParameters;
+  acousticParameters.push_back(&diffusion);
   // TODO: calculate diffusion coefficient from given std::unordered_map<float,
   // collectors>
 }

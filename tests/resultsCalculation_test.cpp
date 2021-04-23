@@ -37,7 +37,7 @@ TEST(AssertElementsNear, MacroTest) {
   ASSERT_ELEMENTS_NEAR(vec1, vec2, 1e-3f);
 }
 
-using Collectors = std::vector<objects::EnergyCollector *>;
+using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
 using ::testing::Each;
 using ::testing::ElementsAreArray;

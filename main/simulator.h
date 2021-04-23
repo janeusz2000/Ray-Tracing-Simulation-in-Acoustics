@@ -111,8 +111,6 @@ public:
   void printItself(std::ostream &os) const noexcept override;
 
 private:
-  Energies getEnergyFromGivenCollectors(const Collectors &collectors);
-
   RayTracer *tracer_;
   ModelInterface *model_;
   generators::RayFactory *source_;

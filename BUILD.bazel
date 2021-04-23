@@ -15,7 +15,7 @@ cc_binary(
 cc_binary(
     name = "validation",
     srcs = [
-        "ApplicationBuild/build.v1.1.cpp",
+        "ApplicationBuild/validation.cpp",
     ],
     linkopts = ["-lpthread"],
     deps = [

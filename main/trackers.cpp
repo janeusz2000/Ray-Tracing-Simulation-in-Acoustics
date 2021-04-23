@@ -162,8 +162,6 @@ void DataExporter::saveResultsAsJson(std::string_view path,
   file.write(fileBuffer);
 }
 
-// TODO: Dont reapeat yourself because reference model is almost the same. Fix
-// it !.
 void DataExporter::saveModelToJson(std::string_view pathToFolder,
                                    ModelInterface *model, bool referenceModel) {
   if (model == nullptr) {
