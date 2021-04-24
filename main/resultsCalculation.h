@@ -5,6 +5,7 @@
 #include "obj/objects.h"
 
 #include <cmath>
+#include <map>
 
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
@@ -55,7 +56,7 @@ calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjectVector);
 
 // Interface struct for acoustic parameter calculation from function sequence of
 // sound level pressure acquired in simulation.
-struct ResultInterface {
+struct ResultInterface : public Printable {
   explicit ResultInterface(WaveObjectFactory *waveObjectFactory)
       : waveFactory_(waveObjectFactory){};
   virtual ~ResultInterface(){};
@@ -63,9 +64,10 @@ struct ResultInterface {
   // Calculates desired acoustic parameter in frequency function. Key of the
   // std::unordered_map represents frequency and element value represent
   // value of the calculated acoustic parameter.
-  std::unordered_map<float, float> getResults(
-      const std::unordered_map<float, Collectors> &energyCollectorsPerFrequency)
-      const;
+  std::map<float, float> getResults(const std::unordered_map<float, Collectors>
+                                        &energyCollectorsPerFrequency) const;
+
+  void printItself(std::ostream &os) const noexcept override;
 
 protected:
   virtual float calculateParameter(const Collectors &collectors) const = 0;
@@ -84,6 +86,8 @@ protected:
 struct DiffusionCoefficient : public ResultInterface {
   explicit DiffusionCoefficient(WaveObjectFactory *waveFactory)
       : ResultInterface(waveFactory){};
+
+  void printItself(std::ostream &os) const noexcept override;
 
 protected:
   float calculateParameter(const Collectors &collectors) const override;

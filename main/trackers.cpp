@@ -2,6 +2,60 @@
 
 namespace trackers {
 
+std::string_view getAcousticParameterName(ResultInterface *result) {
+  if (result == nullptr) {
+    throw std::invalid_argument(
+        "Result passed to getAcousticParameterName() cannot be nullptr!");
+  }
+  std::stringstream ss;
+  ss << *result;
+  return ss.str().c_str();
+}
+
+void ResultTracker::registerResult(std::string_view parameterName,
+                                   const std::map<float, float> &result) {
+  if (results_.find(parameterName) == results_.end()) {
+    results_.insert(std::make_pair(parameterName, result));
+  }
+}
+
+void ResultTracker::saveRaport(std::string path) const {
+  FileBuffer jsVariable = javascript::initConst("results");
+  jsVariable.stream << raport_;
+
+  File resultJS(path + "/resutls.js");
+  resultJS.write(jsVariable);
+}
+
+const Json ResultTracker::generateRaport() {
+
+  std::cout << "Parsing data for generated Raport" << std::endl;
+  // TODO: implement parsing data to JSON:
+  /*
+  [
+    {
+      name: "difffusionCoefficient",
+      frequencies: [100, 200, 300, 400 ... ]
+      values: [0.1, 0.2, 0.3, 0.4 ... ]
+    }
+  ]
+  */
+  return raport_;
+}
+
+void ResultTracker::printItself(std::ostream &os) const noexcept {
+  os << "Results tracker\n"
+     << "So far it acquired: \n";
+  for (auto it = results_.begin(); it != results_.end(); ++it) {
+    os << "\t" << it->first << "\n"
+       << "\t\t[";
+    for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+      os << it2->first << "Hz: " << it2->second << ", ";
+    }
+    os << "\n";
+  }
+}
+
 void FileBuffer::acquireJsonFile(const Json &json) {
   stream.clear();
   stream << json;

@@ -95,10 +95,10 @@ std::vector<WaveObject> WaveObjectFactory::createWaveObjectsFromCollectors(
   return output;
 }
 
-std::unordered_map<float, float> ResultInterface::getResults(
+std::map<float, float> ResultInterface::getResults(
     const std::unordered_map<float, Collectors> &energyCollectorsPerFrequency)
     const {
-  std::unordered_map<float, float> calculatedParameterVectorInTime;
+  std::map<float, float> calculatedParameterVectorInTime;
   for (auto it = std::cbegin(energyCollectorsPerFrequency);
        it != std::cend(energyCollectorsPerFrequency); ++it) {
 
@@ -107,6 +107,10 @@ std::unordered_map<float, float> ResultInterface::getResults(
         std::make_pair(frequency, calculateParameter(it->second)));
   }
   return calculatedParameterVectorInTime;
+}
+
+void ResultInterface::printItself(std::ostream &os) const noexcept {
+  os << "Acoustic_parameter_Interface_Class";
 }
 
 float DiffusionCoefficient::calculateParameter(
@@ -136,4 +140,8 @@ float DiffusionCoefficient::calculateDiffusionCoefficient(
   float gamma = static_cast<float>(soundPressureLevels.size() - 1) * beta;
 
   return (alpha - beta) / gamma;
+}
+
+void DiffusionCoefficient::printItself(std::ostream &os) const noexcept {
+  os << "Acoustic_Diffusion_Coefficient";
 }

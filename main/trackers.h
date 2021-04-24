@@ -4,6 +4,7 @@
 #include "core/classUtlilities.h"
 #include "core/ray.h"
 #include "main/model.h"
+#include "main/resultsCalculation.h"
 #include "nlohmann/json.hpp"
 #include "obj/objects.h"
 
@@ -19,6 +20,32 @@ namespace trackers {
 
 using Json = nlohmann::json;
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
+
+// Extracts name from the acoustic Parameter class
+std::string_view getAcousticParameterName(ResultInterface *result);
+
+// Holds all simulated resutls in simulation and prepares data for export as
+// json file;
+class ResultTracker : Printable {
+public:
+  void registerResult(std::string_view parameterName,
+                      const std::map<float, float> &result);
+
+  // Saves data as results.js file at given path in json structure
+  // file as const results;
+  void saveRaport(std::string path) const;
+  // TODO: create file association with right reference and trained model
+  // TODO: put this implementation outside of this class
+  // void compareDataToReference(std::string_view path);
+
+  void printItself(std::ostream &os) const noexcept override;
+  const Json generateRaport();
+
+private:
+  Json raport_;
+
+  std::unordered_map<std::string_view, std::map<float, float>> results_;
+};
 
 // Mediator between different type of input data File.
 // Prepares data to be saved into file
@@ -233,6 +260,7 @@ struct CollectorsTrackerToJson : public CollectorsTrackerInterface {
                     std::string_view path) override;
   void printItself(std::ostream &os) const noexcept override;
 };
+
 } // namespace trackers
 
 #endif
