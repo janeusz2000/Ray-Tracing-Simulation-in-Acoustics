@@ -21,9 +21,6 @@ namespace trackers {
 using Json = nlohmann::json;
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
-// Extracts name from the acoustic Parameter class
-std::string_view getAcousticParameterName(ResultInterface *result);
-
 // Holds all simulated resutls in simulation and prepares data for export as
 // json file;
 class ResultTracker : Printable {

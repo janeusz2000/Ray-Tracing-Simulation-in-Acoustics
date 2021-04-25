@@ -110,7 +110,11 @@ std::map<float, float> ResultInterface::getResults(
 }
 
 void ResultInterface::printItself(std::ostream &os) const noexcept {
-  os << "Acoustic_parameter_Interface_Class";
+  os << getName();
+}
+
+std::string_view ResultInterface::getName() const noexcept {
+  return "Acoustic Parameter Interface Class";
 }
 
 float DiffusionCoefficient::calculateParameter(
@@ -142,6 +146,10 @@ float DiffusionCoefficient::calculateDiffusionCoefficient(
   return (alpha - beta) / gamma;
 }
 
+std::string_view DiffusionCoefficient::getName() const noexcept {
+  return "Acoustic Diffusion Coefficient";
+}
+
 void DiffusionCoefficient::printItself(std::ostream &os) const noexcept {
-  os << "Acoustic_Diffusion_Coefficient";
+  os << getName();
 }

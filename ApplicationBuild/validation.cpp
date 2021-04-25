@@ -18,13 +18,13 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 const int kSampleRate = 96e3;
 const float sourcePower = 1000;
 const int numOfCollectors = 37;
-const int numOfRaysSquared = 100;
+const int numOfRaysSquared = 1000;
 const int numOfVisibleRays = 10;
 const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
                                         2000, 2500,  3150,  4000, 5000, 6300,
                                         8000, 10000, 12500, 16000};
 
-std::string_view raportPath = "";
+std::string_view raportPath = "./data";
 std::string_view referenceDataPath;
 
 float kDefaultModelSize = 1.0;
@@ -59,8 +59,7 @@ int main() {
   for (ResultInterface *result : acousticParameters) {
     std::map<float, float> resultPerFrequency =
         result->getResults(mapOfCollectors);
-    std::string_view parameterName = trackers::getAcousticParameterName(result);
-    resultTracker.registerResult(parameterName, resultPerFrequency);
+    resultTracker.registerResult(result->getName(), resultPerFrequency);
   }
 
   resultTracker.generateRaport();

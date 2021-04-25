@@ -67,6 +67,8 @@ struct ResultInterface : public Printable {
   std::map<float, float> getResults(const std::unordered_map<float, Collectors>
                                         &energyCollectorsPerFrequency) const;
 
+  virtual std::string_view getName() const noexcept;
+
   void printItself(std::ostream &os) const noexcept override;
 
 protected:
@@ -86,6 +88,8 @@ protected:
 struct DiffusionCoefficient : public ResultInterface {
   explicit DiffusionCoefficient(WaveObjectFactory *waveFactory)
       : ResultInterface(waveFactory){};
+
+  std::string_view getName() const noexcept override;
 
   void printItself(std::ostream &os) const noexcept override;
 

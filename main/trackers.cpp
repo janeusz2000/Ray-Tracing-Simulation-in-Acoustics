@@ -8,7 +8,7 @@ std::string_view getAcousticParameterName(ResultInterface *result) {
         "Result passed to getAcousticParameterName() cannot be nullptr!");
   }
   std::stringstream ss;
-  ss << *result;
+  result->printItself(ss);
   return ss.str().c_str();
 }
 
@@ -23,23 +23,29 @@ void ResultTracker::saveRaport(std::string path) const {
   FileBuffer jsVariable = javascript::initConst("results");
   jsVariable.stream << raport_;
 
-  File resultJS(path + "/resutls.js");
+  File resultJS(path + "/results.js");
+  resultJS.openFileWithOverwrite();
   resultJS.write(jsVariable);
 }
 
 const Json ResultTracker::generateRaport() {
 
-  std::cout << "Parsing data for generated Raport" << std::endl;
-  // TODO: implement parsing data to JSON:
-  /*
-  [
-    {
-      name: "difffusionCoefficient",
-      frequencies: [100, 200, 300, 400 ... ]
-      values: [0.1, 0.2, 0.3, 0.4 ... ]
+  Json resultArray = Json::array();
+  for (auto it = results_.begin(); it != results_.end(); ++it) {
+    std::string_view parameterName = it->first;
+    Json frequencyArray = Json::array();
+    Json parameterValues = Json::array();
+    for (auto valuesIt = it->second.begin(); valuesIt != it->second.end();
+         ++valuesIt) {
+      frequencyArray.push_back(valuesIt->first);
+      parameterValues.push_back(valuesIt->second);
     }
-  ]
-  */
+    Json acousticParameter = {{"name", parameterName.data()},
+                              {"frequencies", frequencyArray},
+                              {"values", parameterValues}};
+    resultArray.push_back(acousticParameter);
+  }
+  raport_ = resultArray;
   return raport_;
 }
 
