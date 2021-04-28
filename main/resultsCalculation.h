@@ -13,15 +13,11 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 // NOTE: given |pressure| must be greater then zero, otherwise it will return 0.
 float convertPressureToDecibels(float pressure);
 
-// How many extra samples will be created in WaveObject data, to make accesing
-// and writing safe from getting out of range error.
-const int kDataMargin = 2;
 // Represents acquired energy in time function. This class try to imitate
 // ".wav" file recording acquired in real research of acoustic recording.
 class WaveObject : public Printable {
 public:
-  explicit WaveObject(int sampleRate)
-      : sampleRate_(sampleRate), data_(kDataMargin, 0){};
+  explicit WaveObject(int sampleRate) : sampleRate_(sampleRate){};
   const std::vector<float> &getData() const;
   // return pressure defined in [Pa]
   float getTotalPressure() const;
@@ -29,14 +25,14 @@ public:
   float getEnergyAtTime(float time) const;
   void addEnergyAtTime(float time, float energy);
 
-  const int getSampleRate() const;
+  int getSampleRate() const;
   size_t length() const;
 
   void printItself(std::ostream &os) const noexcept override;
 
 private:
+  u_int64_t getTimeIndex(float time) const;
   // Returns true if given time index is within range of |data|.
-  bool isTimeIndexValid(size_t timeIndex) const;
   int sampleRate_;
   std::vector<float> data_;
 };

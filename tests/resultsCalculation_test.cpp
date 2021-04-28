@@ -53,14 +53,14 @@ TEST(WaveObject, EnergyManagementTest) {
   basicWave.addEnergyAtTime(t0, 0);
   ASSERT_THAT(basicWave.getData(), Not(IsEmpty()));
   ASSERT_THAT(basicWave.getData(), Each(0.0f));
-  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t0);
+  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t0 + 1);
 
   float t1 = 1.0f;
   float energy = 100;
   basicWave.addEnergyAtTime(t1, energy);
   ASSERT_THAT(basicWave.getData(), Not(Each(0.0f)));
   ASSERT_FLOAT_EQ(basicWave.getEnergyAtTime(t1), energy);
-  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t0);
+  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t0 + 1);
 
   basicWave.addEnergyAtTime(t1, energy);
   ASSERT_FLOAT_EQ(basicWave.getEnergyAtTime(t1), 2 * energy);
@@ -69,7 +69,7 @@ TEST(WaveObject, EnergyManagementTest) {
   // not have influence on data that was registered at smaller time values.
   float t2 = 40;
   basicWave.addEnergyAtTime(t2, 100);
-  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t2);
+  ASSERT_EQ(basicWave.length(), basicWave.getSampleRate() * t2 + 1);
   ASSERT_FLOAT_EQ(basicWave.getEnergyAtTime(t1), 2 * energy)
       << "resizing wave has impact on previous values!\n";
 }

@@ -4,6 +4,10 @@ float convertPressureToDecibels(float pressure) {
   return pressure > 0 ? (120 + 10 * std::log10(pressure)) : 0.0f;
 }
 
+u_int64_t WaveObject::getTimeIndex(float time) const {
+  return std::floor(time * sampleRate_);
+}
+
 float WaveObject::getTotalPressure() const {
   // Trapezoid Integral calculation:
   // https://en.wikipedia.org/wiki/Trapezoidal_rule
@@ -30,25 +34,14 @@ calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjects) {
 }
 
 float WaveObject::getEnergyAtTime(float time) const {
-  size_t timeIndex = std::floor(time * sampleRate_);
-
-  if (!isTimeIndexValid(timeIndex)) {
-    std::stringstream errorMessage;
-    errorMessage << "Given time to getEnergyAtTime(): " << time
-                 << " is invalid\n"
-                 << "Calculated time index: " << timeIndex
-                 << " is out of range in: \n"
-                 << *this << "\n";
-    throw std::invalid_argument(errorMessage.str());
+  u_int64_t timeIndex = getTimeIndex(time);
+  if (timeIndex >= data_.size() || timeIndex < 0) {
+    return 0;
   }
   return data_[timeIndex];
 }
 
-bool WaveObject::isTimeIndexValid(size_t timeIndex) const {
-  return timeIndex < (data_.size() - kDataMargin) && timeIndex >= 0;
-}
-
-size_t WaveObject::length() const { return data_.size() - 2; }
+size_t WaveObject::length() const { return data_.size(); }
 
 const std::vector<float> &WaveObject::getData() const { return data_; }
 
@@ -60,9 +53,9 @@ void WaveObject::addEnergyAtTime(float time, float energy) {
                 << "s.";
     throw std::invalid_argument(errorStream.str());
   }
-  size_t timeIndex = std::floor(time * sampleRate_);
+  u_int64_t timeIndex = getTimeIndex(time);
   if (timeIndex >= data_.size()) {
-    data_.resize(timeIndex + kDataMargin, 0);
+    data_.resize(timeIndex + 1, 0);
   }
 
   // FIXME: create approximation of the energy if sample is between two samples
@@ -70,12 +63,12 @@ void WaveObject::addEnergyAtTime(float time, float energy) {
   data_[timeIndex] += energy;
 }
 
-const int WaveObject::getSampleRate() const { return sampleRate_; }
+int WaveObject::getSampleRate() const { return sampleRate_; }
 
 void WaveObject::printItself(std::ostream &os) const noexcept {
   os << "Wave Object\n"
      << "Sample rate: " << sampleRate_ << " Hz\n"
-     << "Data size: " << data_.size();
+     << "Data size: " << length();
 }
 
 std::vector<WaveObject> WaveObjectFactory::createWaveObjectsFromCollectors(
