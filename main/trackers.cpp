@@ -13,7 +13,7 @@ void ResultTracker::saveRaport(std::string path) const {
   FileBuffer jsVariable = javascript::initConst("results");
   jsVariable.stream << raport_;
 
-  File resultJS(path + "/results.js");
+  File resultJS(path);
   resultJS.openFileWithOverwrite();
   resultJS.write(jsVariable);
 }

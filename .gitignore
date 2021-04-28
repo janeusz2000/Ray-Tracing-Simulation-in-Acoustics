@@ -1,6 +1,7 @@
 /temp
 /data
 /models
+/validationLog
 
 # compiled output
 /dist

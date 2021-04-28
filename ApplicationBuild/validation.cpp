@@ -16,21 +16,25 @@ using EnergyPerFrequency = std::unordered_map<float, Energy>;
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
 const int kSampleRate = 96e3;
-const float sourcePower = 1000;
+const float sourcePower = 500;
 const int numOfCollectors = 37;
-const int numOfRaysSquared = 200;
+const int numOfRaysSquared = 10;
 const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
                                         2000, 2500,  3150,  4000, 5000, 6300,
                                         8000, 10000, 12500, 16000};
 
-std::string_view raportPath = "./data";
-std::string_view referenceDataPath;
-
 float kDefaultModelSize = 1.0;
 
-int main() {
+// ARGS MUST CONTAIN:
+// #1 raport path
+// #2 model path
+int main(int argc, char *argv[]) {
+  std::vector<std::string> args(&argv[0], &argv[0 + argc]);
+  std::string_view raportPath = args[1];
+  std::string_view modelPath = args[2];
 
-  std::unique_ptr<Model> model = Model::NewReferenceModel(kDefaultModelSize);
+  std::cout << "starting validation for: " << modelPath << std::endl;
+  std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
 
   trackers::FakePositionTracker positionTracker;
   trackers::FakeCollectorsTracker collectorsTracker;
