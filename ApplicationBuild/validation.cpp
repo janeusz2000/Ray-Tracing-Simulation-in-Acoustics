@@ -18,8 +18,7 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 const int kSampleRate = 96e3;
 const float sourcePower = 1000;
 const int numOfCollectors = 37;
-const int numOfRaysSquared = 1000;
-const int numOfVisibleRays = 10;
+const int numOfRaysSquared = 200;
 const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
                                         2000, 2500,  3150,  4000, 5000, 6300,
                                         8000, 10000, 12500, 16000};
@@ -47,8 +46,8 @@ int main() {
 
   WaveObjectFactory waveFactory(kSampleRate);
 
-  // ACOUSTIC PARAMETERS: declare and add Acoustic parameter to involve it in
-  // simulation
+  // ACOUSTIC PARAMETERS: declare and  append to |acousticParameters|
+  // to involve it in simulation
   std::vector<ResultInterface *> acousticParameters;
 
   DiffusionCoefficient diffusion(&waveFactory);
@@ -62,42 +61,9 @@ int main() {
     resultTracker.registerResult(result->getName(), resultPerFrequency);
   }
 
-  resultTracker.generateRaport();
+  Json raport = resultTracker.generateRaport();
   // TODO: This should not be member of restultsTracker()
   // make another interface for it;
   // resultTracker.compareDataToReference();
   resultTracker.saveRaport(raportPath.data());
 }
-
-// int main() {
-
-//   trackers::startSimulation();
-//   std::string dataPath = "./data";
-//   std::string path = "./models/monkeyfull.obj";
-
-//   trackers::DataExporter dataExporter;
-//   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
-//   dataExporter.saveModelToJson(dataPath, model.get());
-
-//   trackers::JsonSampledPositionTracker positionTracker(
-//       dataPath, numOfRaysSquared, numOfVisibleRays);
-
-//   trackers::CollectorsTrackerToJson collectorsTracker;
-//   collectionRules::NonLinearEnergyCollection energyCollectionRules;
-
-//   EnergyPerFrequency results = manager.run();
-//   dataExporter.saveResultsAsJson(dataPath, results);
-
-//   positionTracker.switchToReferenceModel();
-//   std::unique_ptr<Model> referenceModel =
-//       Model::NewReferenceModel(model->sideSize());
-
-//   SceneManager referenceManager(referenceModel.get(), properties,
-//                                 &positionTracker, &collectorsTracker);
-//   EnergyPerFrequency referenceResults = referenceManager.run();
-//   dataExporter.saveResultsAsJson(dataPath, referenceResults,
-//                                  /*referenceModel=*/true);
-//   dataExporter.saveModelToJson(dataPath, referenceModel.get(),
-//                                /*referenceModel=*/true);
-//   trackers::endSimulation();
-// }

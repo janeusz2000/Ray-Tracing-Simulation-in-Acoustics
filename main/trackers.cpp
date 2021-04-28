@@ -2,16 +2,6 @@
 
 namespace trackers {
 
-std::string_view getAcousticParameterName(ResultInterface *result) {
-  if (result == nullptr) {
-    throw std::invalid_argument(
-        "Result passed to getAcousticParameterName() cannot be nullptr!");
-  }
-  std::stringstream ss;
-  result->printItself(ss);
-  return ss.str().c_str();
-}
-
 void ResultTracker::registerResult(std::string_view parameterName,
                                    const std::map<float, float> &result) {
   if (results_.find(parameterName) == results_.end()) {
