@@ -61,7 +61,7 @@ int main() {
     resultTracker.registerResult(result->getName(), resultPerFrequency);
   }
 
-  Json raport = resultTracker.generateRaport();
+  trackers::Json raport = resultTracker.generateRaport();
   // TODO: This should not be member of restultsTracker()
   // make another interface for it;
   // resultTracker.compareDataToReference();
