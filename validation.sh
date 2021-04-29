@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "Validation Start at:" $(date) >> ./validationRaport.log
 
+bazel build --config=_gcc validation
 source ./venv/bin/activate
 
 shopt -s nullglob

@@ -1,27 +1,2 @@
-
-fs = 96 kHz
-sep = 1/fs
-
-TODO:
-[x] Create member of the overall time arrival
-[x] Modify constructor of Ray
-[x] -....................- in RayHitData
-[x] Modify energy collector to track collected energy
-   per time in unordered_map<float, float>, that represent energy / time.
-
-   - create member for new type acquisition in energy collector
-   - modify adds energy.
-
-
-[x] accumulate time in rayHitData and pass it to Ray constructor.
-
-[x] Modify data to support time ticks per and energy.
-
-   Convert energy to this representation:
-
-   {
-   "time" :[time1, time2, time3, time4 ...]
-   "energyVector" : [energy1, energy 2, energy3...]
-   }
-
-[ ] Modify getDCoefficient.js to support this kind of data.
+[ ] check frequencies if they are the same
+[ ] check valurs if they are the same
