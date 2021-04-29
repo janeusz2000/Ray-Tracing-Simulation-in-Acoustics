@@ -1,17 +1,22 @@
 #!/bin/bash
-echo "Validation Start"
+echo "Validation Start at:" $(date) >> ./validationRaport.log
+
+source ./venv/bin/activate
 
 shopt -s nullglob
-FILEARRAY=( "validationDiffusors/*" )
+DIFFUSORS_ARRAY_PATH=( "validationDiffusors/*" )
 
-for FILEPATH in $FILEARRAY
+for DIFFUSOR_PATH in $DIFFUSORS_ARRAY_PATH
 do
-   CURRENT_FILE=$(echo ${FILEPATH%.*} | cut -c21-)
-   JS_FILE="./validationResults/$CURRENT_FILE.js"
+   CURRENT_FILE=$(echo ${DIFFUSOR_PATH%.*} | cut -c21-)
+   RAPORT_FILE="./validationResults/$CURRENT_FILE.json"
+   REFERENCE_FILE="./validationResults/Reference/$CURRENT_FILE.json"
 
-   rm $JS_FILE
-   touch $JS_FILE
+   rm $RAPORT_FILE
+   touch $RAPORT_FILE
 
-   bazel-bin/validation $JS_FILE ./$FILEPATH
-
+   bazel-bin/validation $RAPORT_FILE ./$DIFFUSOR_PATH
+   python3 ./validationTools/compareResutlsToReference.py $REFERENCE_FILE $RAPORT_FILE
 done
+
+deactivate

@@ -10,7 +10,7 @@ void ResultTracker::registerResult(std::string_view parameterName,
 }
 
 void ResultTracker::saveRaport(std::string path) const {
-  FileBuffer jsVariable = javascript::initConst("results");
+  FileBuffer jsVariable;
   jsVariable.stream << raport_;
 
   File resultJS(path);

@@ -28,8 +28,7 @@ public:
   void registerResult(std::string_view parameterName,
                       const std::map<float, float> &result);
 
-  // Saves data as results.js file at given path in json structure
-  // file as const results;
+  // Saves acoustic in json format
   void saveRaport(std::string path) const;
   // TODO: create file association with right reference and trained model
   // TODO: put this implementation outside of this class
@@ -70,7 +69,7 @@ private:
 // Manages opening, saving, writing and closing file.
 class File : public FileInterface {
 public:
-  File(std::string_view path = "") : path_(path.data()){};
+  explicit File(std::string_view path = "") : path_(path.data()){};
   virtual ~File(){};
   // Opens file at given |path| overwriting existing one.
   // Throws std::invalid_argument exception if file is not found
