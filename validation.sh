@@ -1,14 +1,13 @@
 #!/bin/bash
-echo "Validation Start at:" $(date) >> ./validationRaport.log
+echo "Validation Start at:" $(date) >>./validationRaport.log
 
 bazel build --config=_gcc validation
 source ./venv/bin/activate
 
 shopt -s nullglob
-DIFFUSORS_ARRAY_PATH=( "validationDiffusors/*" )
+DIFFUSORS_ARRAY_PATH=("validationDiffusors/*")
 
-for DIFFUSOR_PATH in $DIFFUSORS_ARRAY_PATH
-do
+for DIFFUSOR_PATH in $DIFFUSORS_ARRAY_PATH; do
    CURRENT_FILE=$(echo ${DIFFUSOR_PATH%.*} | cut -c21-)
    RAPORT_FILE="./validationResults/$CURRENT_FILE.json"
    REFERENCE_FILE="./validationResults/Reference/$CURRENT_FILE.json"

@@ -13,7 +13,6 @@ using EnergyPerTime = std::unordered_map<float, float>;
 using Energy = std::vector<EnergyPerTime>;
 using EnergyPerFrequency = std::unordered_map<float, Energy>;
 
-int main(){};
 // int main() {
 
 //   trackers::startSimulation();
