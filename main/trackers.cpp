@@ -433,6 +433,7 @@ void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                             {"y", collectorOrigin.y()},
                             {"z", collectorOrigin.z()},
                             {"radius", radius}};
+
     outArray.push_back(energyCollector);
     ++currentCollectorNumber;
   }

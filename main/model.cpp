@@ -9,17 +9,15 @@ const std::vector<objects::TriangleObj> &Model::triangles() const {
 }
 
 Model::Model(const std::vector<objects::TriangleObj> &triangles)
-    : triangles_(triangles) {
+    : triangles_(triangles), height_(std::numeric_limits<float>::min()),
+      sideSize_(std::numeric_limits<float>::min()) {
 
   // finding maximum side length and maximum height of the model.
-  float maxSideSize = 0, maxHeight = 0;
   for (const auto &triangle : triangles_) {
 
-    maxSideSize = std::max(maxSideSize, getMaxSide(triangle.getPoints()));
-    maxHeight = std::max(maxHeight, getMaxHeight(triangle.getPoints()));
+    sideSize_ = std::max(sideSize_, getMaxSide(triangle.getPoints()));
+    height_ = std::max(height_, getMaxHeight(triangle.getPoints()));
   }
-  setSideSize(maxSideSize);
-  setHeight(maxHeight);
 }
 
 std::unique_ptr<Model> Model::NewLoadFromObjectFile(std::string_view path) {
@@ -91,6 +89,7 @@ std::unique_ptr<Model> Model::NewLoadFromObjectFile(std::string_view path) {
       }
     }
   }
+
   return std::make_unique<Model>(triangles);
 }
 

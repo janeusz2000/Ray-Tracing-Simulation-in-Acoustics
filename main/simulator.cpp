@@ -147,6 +147,7 @@ Collectors buildCollectors(const ModelInterface *model, int numCollectors) {
 
     float groundCoordinate =
         collectorSphereRadius * std::cos(times * angleBetweenCollectors);
+
     float zCoordinate =
         collectorSphereRadius * std::sin(times * angleBetweenCollectors);
 

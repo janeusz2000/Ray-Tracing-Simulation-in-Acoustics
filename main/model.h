@@ -7,11 +7,13 @@
 #include <algorithm>
 #include <fstream>
 #include <iterator>
+#include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <string_view>
 #include <vector>
+
 
 // Holds all Triangle Objects that together represent model
 // and holds all shape properties.
