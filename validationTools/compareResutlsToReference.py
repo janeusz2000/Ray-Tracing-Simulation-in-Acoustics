@@ -2,6 +2,7 @@ import json
 import logging
 import numpy as np
 from numpy.core.fromnumeric import mean
+from loggingStatistics import insert_statistic_Values
 
 from absl import app, flags
 
@@ -104,11 +105,24 @@ def main(argv):
                           medianError]
 
             outputMessage = " Validation values: \n"
+            outputValues = list()
             for parameter in parameters:
                 name = str(parameter.__name__)
-                value = str(parameter(result['values'], reference['values']))
+                float_value = round(
+                    parameter(result['values'], reference['values']), 5)
+                value = str(float_value)
                 outputMessage += f"\t{name} : {value}\n"
+                outputValues.append(float_value)
             logging.info(outputMessage)
+
+            insert_statistic_Values(
+                parameterName=parameter_name,
+                meanError=outputValues[0],
+                standardDeviation=outputValues[1],
+                rmse=outputValues[2],
+                maxError=outputValues[3],
+                minError=outputValues[4],
+                medianError=outputValues[5])
 
 
 if __name__ == "__main__":

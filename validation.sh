@@ -4,6 +4,17 @@ echo "Validation Start at:" $(date) >>./validationRaport.log
 bazel build --config=_gcc validation
 source ./venv/bin/activate
 
+SOURCE_POWER=1000
+NUM_OF_COLLECTORS=40
+NUM_OF_RAYS_SQUARED=100
+
+echo STARTING VALIDATION FOR:
+echo - SOURCE POWER: $SOURCE_POWER
+echo - NUM_OF_COLLECTORS: $NUM_OF_COLLECTORS
+echo - NUM_OF_RAYS_SQUARED: $NUM_OF_RAYS_SQUARED
+
+python3 ./validationTools/loggingSimulationProperties.py $SOURCE_POWER $NUM_OF_COLLECTORS $NUM_OF_RAYS_SQUARED
+
 shopt -s nullglob
 DIFFUSORS_ARRAY_PATH=("validationDiffusors/*")
 
