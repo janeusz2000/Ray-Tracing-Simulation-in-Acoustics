@@ -1,8 +1,6 @@
 import mysql.connector
 from mysql.connector import MySQLConnection, Error
 import numpy as np
-from numpy.lib.function_base import insert
-from numpy.lib.utils import source
 from ipConfig import local_ip
 
 import logging

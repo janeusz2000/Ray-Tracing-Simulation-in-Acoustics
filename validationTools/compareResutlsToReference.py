@@ -123,6 +123,7 @@ def main(argv):
                 maxError=outputValues[3],
                 minError=outputValues[4],
                 medianError=outputValues[5])
+    return len(referenceMap.keys())
 
 
 if __name__ == "__main__":

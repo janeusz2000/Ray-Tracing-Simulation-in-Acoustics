@@ -30,4 +30,10 @@ for DIFFUSOR_PATH in $DIFFUSORS_ARRAY_PATH; do
    python3 ./validationTools/compareResutlsToReference.py $REFERENCE_FILE $RAPORT_FILE
 done
 
-deactivate
+echo "Write short Validation Description: "
+read -r DESC
+
+echo "Final describtion: $DESC"
+python3 ./validationTools/logValidation.py $DESC
+
+# deactivate
