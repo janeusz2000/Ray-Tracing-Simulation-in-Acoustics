@@ -19,7 +19,7 @@ def insert_statistic_Values(
 
     try:
         conn = mysql.connector.connect(
-            host=local_ip, database='Validations', user='root', password='')
+            host=local_ip, database='Validations', user='Brad', password='')
 
         if conn.is_connected():
             query = f"INSERT INTO STATISTIC_VALUES(PARAMETER_NAME, MEAN_ERROR, STANDARD_DEVIATION_ERROR, RMSE, MAX_ERROR, MIN_ERROR, MEDIAN_ERROR) VALUES ('{parameterName}', {meanError}, {standardDeviation}, {rmse}, {maxError}, {minError}, {medianError})"

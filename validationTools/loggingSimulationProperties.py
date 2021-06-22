@@ -14,7 +14,7 @@ logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
 def insert_SimulationProperties(sourcePower: float, numOfCollectors: int, numOfRaysSquared: int):
     try:
         conn = mysql.connector.connect(
-            host=local_ip, database='Validations', user='root', password='')
+            host=local_ip, database='Validations', user='Brad', password='')
 
         if conn.is_connected():
             query = f'INSERT INTO SIMULATION_PROPERTIES(SOURCE_POWER, NUM_OF_COLLECTORS, TOTAL_NUMBER_OF_RAYS) VALUES ({sourcePower},{numOfCollectors}, {np.square(numOfRaysSquared)});'
