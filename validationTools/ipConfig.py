@@ -1,3 +1,9 @@
-# ip hosts must be obtained every time from:
-# cat /etc/resolv.conf
-local_ip = '172.17.112.1'
+local_ip = None
+with open('/etc/resolv.conf', 'r') as f:
+    for line in reversed(f.readlines()):
+        keyword = 'nameserver'
+        local_ip = line[line.find(keyword) + len(keyword) + 1:]
+        break
+
+if __name__ == "__main__":
+    print(local_ip)

@@ -2,11 +2,12 @@ import mysql.connector
 from mysql.connector import MySQLConnection, Error
 from ipConfig import local_ip
 import logging
+from absl import app
 
-logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
+logging.basicConfig(filename="./validationRaport.log", level=logging.DEBUG)
 
 
-def main():
+def main(argv):
     conn = None
     try:
         conn = mysql.connector.connect(
@@ -23,7 +24,7 @@ def main():
             if response is not None:
                 logging.info("Select operation Sucessfull!")
             else:
-                logging.error("Select operation was not successful!")
+                logging.info("Select operation was not successful!")
 
     except Error as e:
         print(e)
@@ -34,4 +35,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app.run(main)
