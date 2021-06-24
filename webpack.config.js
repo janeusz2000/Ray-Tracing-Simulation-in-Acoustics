@@ -3,7 +3,7 @@ const destination = "server/dist";
 const simulation = {
   mode: "development",
   devtool: false,
-  entry: "./gui/simulation.js",
+  entry: "./server/gui/simulation.js",
   output: {
     filename: "simulation.js",
     path: path.resolve(__dirname, destination),
@@ -13,7 +13,7 @@ const simulation = {
 const results = {
   mode: "development",
   devtool: false,
-  entry: "./gui/results.js",
+  entry: "./server/gui/results.js",
   output: {
     filename: "results.js",
     path: path.resolve(__dirname, destination),
@@ -23,7 +23,7 @@ const results = {
 const normalizedResults = {
   mode: "development",
   devtool: false,
-  entry: "./gui/normalizedResults.js",
+  entry: "./server/gui/normalizedResults.js",
   output: {
     filename: "normalizedResults.js",
     path: path.resolve(__dirname, destination),
@@ -33,7 +33,7 @@ const normalizedResults = {
 const preLoader = {
   mode: "development",
   devtool: false,
-  entry: "./gui/preLoader.js",
+  entry: "./server/gui/preLoader.js",
   output: {
     filename: "preLoader.js",
     path: path.resolve(__dirname, destination),
@@ -43,7 +43,7 @@ const preLoader = {
 const polarData = {
   mode: "development",
   devtool: false,
-  entry: "./gui/src/polarPatterns/data.js",
+  entry: "./server/gui/src/polarPatterns/data.js",
   output: {
     filename: "polarData.js",
     path: path.resolve(__dirname, destination),
@@ -53,7 +53,7 @@ const polarData = {
 const polarPatterns = {
   mode: "development",
   devtool: false,
-  entry: "./gui/polarPatterns.js",
+  entry: "./server/gui/polarPatterns.js",
   output: {
     filename: "polarPatterns.js",
     path: path.resolve(__dirname),
@@ -63,7 +63,7 @@ const polarPatterns = {
 const validation = {
   mode: "development",
   devtool: false,
-  entry: "./gui/validation.js",
+  entry: "./server/gui/validation.js",
   output: {
     filename: "validation.js",
     path: path.resolve(__dirname, destination),

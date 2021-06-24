@@ -20,15 +20,7 @@ headers.append("GET", "POST", "OPTIONS");
 
 testButton.onclick = function () {
   fetch(addressIp + "/app/getValidationsID")
-    .then((response) => {
-      if (response.ok) {
-        console.log("Request successful");
-      } else {
-        console.log("Request not successful");
-      }
-      return response;
-    })
-    .then((data) => console.log(data))
+    .then((response) => console.log(response.json()))
     .catch((error) => console.log(error));
 };
 

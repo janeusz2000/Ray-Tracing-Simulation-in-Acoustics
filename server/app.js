@@ -34,7 +34,7 @@ class DatabaseConnection {
     const newConnection = this.getConnection();
     return new Promise(function (resolve, reject) {
       const queryMessage =
-        "SELECT VALIDATION_ID FROM VALIDATION_DATA ORDER BY VALIDATION_ID DESC";
+        "SELECT VALIDATION_ID FROM VALIDATION_DATA ORDER BY VALIDATION_ID ASC";
       newConnection.query(queryMessage, function (error, rows, fields) {
         if (error) return reject(error);
         resolve(rows);
@@ -101,9 +101,16 @@ app.use(function (req, res, next) {
   next();
 });
 
+// DEFAULT SITE
+
 // SIMULATION HTML REQUESTS
 app.get("/", function (request, response) {
   response.sendFile(path.join(__dirname + "/AppCards/simulation.html"));
+});
+
+// MENU
+app.get("/validations.html", function (request, response) {
+  response.sendFile(path.join(__dirname + "/AppCards/validations.html"));
 });
 
 app.get("/css/simulationStyle.css", function (request, response) {
@@ -135,16 +142,19 @@ app.get("/dist/simulation.js", function (request, response) {
 });
 
 // VALIDATION REQUESTS
-app.get("/app/getValidationsID", function (request, response) {
+app.get("/dist/validation.js", function (request, response) {
+  response.sendFile(path.join(__dirname + "/dist/validation.js"));
+});
+
+// VALIDATION INTERNAL REQUESTS
+app.get("/app/getValidations", function (request, response) {
+  response.setHeader("Content-type", "application/json");
   const requestedData = databaseConnection
     .getValidationsIDsFromDatabase()
+    .then((response) => console.log(response))
     .then(function (rows) {
-      response.send(rows);
+      response.json(JSON.stringify(rows));
       return rows;
-    })
-    .then((data) => {
-      console.log("Data sent: " + data);
-      return data;
     })
     .catch((error) =>
       setImmediate(() => {
