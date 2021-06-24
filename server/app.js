@@ -34,7 +34,7 @@ class DatabaseConnection {
     const newConnection = this.getConnection();
     return new Promise(function (resolve, reject) {
       const queryMessage =
-        "SELECT VALIDATION_ID FROM VALIDATION_DATA ORDER BY VALIDATION_ID ASC";
+        "SELECT * FROM VALIDATION_DATA ORDER BY VALIDATION_ID ASC";
       newConnection.query(queryMessage, function (error, rows, fields) {
         if (error) return reject(error);
         resolve(rows);
@@ -147,15 +147,12 @@ app.get("/dist/validation.js", function (request, response) {
 });
 
 // VALIDATION INTERNAL REQUESTS
-app.get("/app/getValidations", function (request, response) {
+app.get("/app/getValidation", function (request, response) {
   response.setHeader("Content-type", "application/json");
   const requestedData = databaseConnection
     .getValidationsIDsFromDatabase()
-    .then((response) => console.log(response))
-    .then(function (rows) {
-      response.json(JSON.stringify(rows));
-      return rows;
-    })
+    .then((data) => JSON.parse(JSON.stringify(data)))
+    .then((data) => response.json(data))
     .catch((error) =>
       setImmediate(() => {
         throw error;

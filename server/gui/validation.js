@@ -19,7 +19,7 @@ headers.append("Access-Control-Allow-Credentials", "true");
 headers.append("GET", "POST", "OPTIONS");
 
 testButton.onclick = function () {
-  fetch(addressIp + "/app/getValidationsID")
+  fetch(addressIp + "/app/getValidation")
     .then((response) => console.log(response.json()))
     .catch((error) => console.log(error));
 };
