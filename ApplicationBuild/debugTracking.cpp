@@ -28,7 +28,7 @@ float kDefaultModelSize = 1.0;
 
 std::string_view modelPath =
     "./validationDiffusors/2D_2m_6n_modulo7_200Hz_15stopni_5potega.obj";
-std::string_view dataPath = "./data";
+std::string_view serverDataPath = "./server/data";
 
 // ARGS MUST CONTAIN:
 // frequency that will be used in simulation
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
 
   trackers::JsonSampledPositionTracker positionTracker(
-      dataPath, numOfRaysSquared, numOfVisibleRaysSquared);
+      serverDataPath, numOfRaysSquared, numOfVisibleRaysSquared);
   trackers::CollectorsTrackerToJson collectorsTracker;
 
   collectionRules::NonLinearEnergyCollection energyCollectionRules;
@@ -61,7 +61,8 @@ int main(int argc, char *argv[]) {
   std::cout << "Ray tracing of the object at: \n\t" << modelPath
             << "\nhas finishied!" << std::endl;
 
-  dataExporter.saveModelToJson(dataPath, model.get(), /*referenceModel=*/false);
+  dataExporter.saveModelToJson(serverDataPath, model.get(),
+                               /*referenceModel=*/false);
 
   positionTracker.switchToReferenceModel();
   std::unique_ptr<Model> referenceModel =
@@ -72,7 +73,7 @@ int main(int argc, char *argv[]) {
 
   std::unordered_map<float, Collectors> mapOfReferenceCollectors =
       referenceManager.run();
-  dataExporter.saveModelToJson(dataPath, referenceModel.get(),
+  dataExporter.saveModelToJson(serverDataPath, referenceModel.get(),
                                /*referenceModel=*/true);
 
   trackers::endSimulation();

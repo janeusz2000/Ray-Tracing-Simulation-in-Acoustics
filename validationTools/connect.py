@@ -22,7 +22,7 @@ def main(argv):
             response = cursor.fetchall()
 
             if response is not None:
-                logging.info("Select operation Sucessfull!")
+                logging.info("Select operation Successful!")
             else:
                 logging.info("Select operation was not successful!")
 

@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  background-color: #666666;
 }
 .dropbtn {
   background-color: #2900df;
@@ -13,6 +14,9 @@ body {
 .dropdown {
   position: absolute;
   display: inline-block;
+}
+canvas#Chart{
+  background-color: gold;
 }
 
 .dropdown-content {
