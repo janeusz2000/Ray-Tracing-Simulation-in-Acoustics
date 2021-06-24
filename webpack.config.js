@@ -56,7 +56,7 @@ const polarPatterns = {
   entry: "./server/gui/polarPatterns.js",
   output: {
     filename: "polarPatterns.js",
-    path: path.resolve(__dirname),
+    path: path.resolve(__dirname, destination),
   },
 };
 

@@ -2,6 +2,7 @@
 /data
 /models
 /validationLog
+server/data
 
 # compiled output
 /dist
@@ -59,7 +60,6 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
 
 # Dependency directories
 node_modules/
