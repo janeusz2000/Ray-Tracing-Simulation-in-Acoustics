@@ -179,11 +179,11 @@ app.get("/app/getValidation", function (request, response) {
 });
 
 app.get("/app/getStatisticValues/*", function (request, response) {
-  const statisticValueTableID = request.originalUrl.substr(
+  const statisticValuesTableID = request.originalUrl.substr(
     request.originalUrl.lastIndexOf("/") + 1
   );
   databaseConnection
-    .getStatisticValuesByIDFromDataBase(statisticValueTableID)
+    .getStatisticValuesByIDFromDataBase(statisticValuesTableID)
     .then(function (data) {
       if (data.length == 0) {
         throw Error(
@@ -191,10 +191,6 @@ app.get("/app/getStatisticValues/*", function (request, response) {
         );
       }
       return JSON.parse(JSON.stringify(data));
-    })
-    .then(function (data) {
-      console.log(data);
-      return data;
     })
     .then((data) => response.json(data))
     .catch((error) =>

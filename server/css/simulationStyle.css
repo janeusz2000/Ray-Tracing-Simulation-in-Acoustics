@@ -3,9 +3,8 @@ body {
   background-color: #666666;
 }
 canvas {
-  margin: 3%;
-  width: 94%;
-  height: 94%;
+  width: 100%;
+  height: 100%;
 }
 .dropbtn {
   background-color: #2900df;
@@ -33,30 +32,6 @@ canvas {
 .dropdown {
   position: absolute;
   display: inline-block;
-}
-canvas#ValidationChart0 {
-  background-color: gold;
-}
-canvas#ValidationChart1 {
-  background-color: pink;
-}
-canvas#ValidationChart2 {
-  background-color: green;
-}
-canvas#ValidationChart3 {
-  background-color: blue;
-}
-canvas#ValidationChart4 {
-  background-color: violet;
-}
-canvas#ValidationChart5 {
-  background-color: black;
-}
-canvas#ValidationChart6 {
-  background-color: brown;
-}
-canvas#ValidationChart7 {
-  background-color: red;
 }
 .dropdown-content {
   display: none;
