@@ -2,23 +2,62 @@ body {
   margin: 0;
   background-color: #666666;
 }
+canvas {
+  margin: 3%;
+  width: 94%;
+  height: 94%;
+}
 .dropbtn {
   background-color: #2900df;
   color: white;
-  padding: 20px;
   font-family: "Lucida Console", "Courier New", monospace;
   font-size: 16px;
   border: none;
+}
+
+.testDiv {
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.testButton {
+  margin: 0 auto;
+  width: 8%;
+  position: relative;
+  left: 46%;
+  background-color: #2900df;
 }
 
 .dropdown {
   position: absolute;
   display: inline-block;
 }
-canvas#Chart{
+canvas#ValidationChart0 {
   background-color: gold;
 }
-
+canvas#ValidationChart1 {
+  background-color: pink;
+}
+canvas#ValidationChart2 {
+  background-color: green;
+}
+canvas#ValidationChart3 {
+  background-color: blue;
+}
+canvas#ValidationChart4 {
+  background-color: violet;
+}
+canvas#ValidationChart5 {
+  background-color: black;
+}
+canvas#ValidationChart6 {
+  background-color: brown;
+}
+canvas#ValidationChart7 {
+  background-color: red;
+}
 .dropdown-content {
   display: none;
   position: absolute;

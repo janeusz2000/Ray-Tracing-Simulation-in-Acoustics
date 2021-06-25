@@ -42,6 +42,20 @@ class DatabaseConnection {
     });
   }
 
+  getStatisticValuesByIDFromDataBase(TableID) {
+    const newConnection = this.getConnection();
+    return new Promise(function (resolve, reject) {
+      const queryMessage =
+        "SELECT * FROM STATISTIC_VALUES WHERE STATISTIC_VALUES_ID IN (" +
+        TableID +
+        ");";
+      newConnection.query(queryMessage, function (error, rows, fields) {
+        if (error) return reject(error);
+        resolve(rows);
+      });
+    });
+  }
+
   testConnection() {
     const newConnection = this.getConnection();
     newConnection.connect(function (error) {
@@ -108,6 +122,10 @@ app.get("/", function (request, response) {
   response.sendFile(path.join(__dirname + "/AppCards/simulation.html"));
 });
 
+app.get("/simulation.html", function (request, response) {
+  response.sendFile(path.join(__dirname + "/AppCards/simulation.html"));
+});
+
 // MENU
 app.get("/validations.html", function (request, response) {
   response.sendFile(path.join(__dirname + "/AppCards/validations.html"));
@@ -149,9 +167,35 @@ app.get("/dist/validation.js", function (request, response) {
 // VALIDATION INTERNAL REQUESTS
 app.get("/app/getValidation", function (request, response) {
   response.setHeader("Content-type", "application/json");
-  const requestedData = databaseConnection
+  databaseConnection
     .getValidationsIDsFromDatabase()
     .then((data) => JSON.parse(JSON.stringify(data)))
+    .then((data) => response.json(data))
+    .catch((error) =>
+      setImmediate(() => {
+        throw error;
+      })
+    );
+});
+
+app.get("/app/getStatisticValues/*", function (request, response) {
+  const statisticValueTableID = request.originalUrl.substr(
+    request.originalUrl.lastIndexOf("/") + 1
+  );
+  databaseConnection
+    .getStatisticValuesByIDFromDataBase(statisticValueTableID)
+    .then(function (data) {
+      if (data.length == 0) {
+        throw Error(
+          "Table Statistic Values" + statisticValueTableID + " doesn't exist!"
+        );
+      }
+      return JSON.parse(JSON.stringify(data));
+    })
+    .then(function (data) {
+      console.log(data);
+      return data;
+    })
     .then((data) => response.json(data))
     .catch((error) =>
       setImmediate(() => {
