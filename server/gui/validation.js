@@ -6,13 +6,14 @@ const currentPort = "3000";
 const addressIp = currentIp + ":" + currentPort;
 const numberOfValidationsModel = 8;
 
-// TODO: refresh data every 5 min
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+const ParameterNames = [
+  "MEAN_ERROR",
+  "STANDARD_DEVIATION_ERROR",
+  "RMSE",
+  "MAX_ERROR",
+  "MIN_ERROR",
+  "MEDIAN_ERROR",
+];
 
 async function getValidations() {
   const response = await fetch(addressIp + "/app/getValidation");
@@ -32,19 +33,11 @@ async function parseRequestsAndGetStatisticValuesFromDatabase(requests) {
   return outputArray;
 }
 
-async function renderComponents(validations, numberOfGraphsPerRow) {
+async function renderComponents(validations) {
   // used for drawing tables
-  const ParameterNames = [
-    "MEAN_ERROR",
-    "STANDARD_DEVIATION_ERROR",
-    "RMSE",
-    "MAX_ERROR",
-    "MIN_ERROR",
-    "MEDIAN_ERROR",
-  ];
 
   const currentComponentDiv = document.createElement("div");
-  currentComponentDiv.style.setProperty("width", "100%");
+  currentComponentDiv.style.setProperty("width", "98%");
 
   const propertyList = [...Array(numberOfValidationsModel).keys()].map(
     (number) => "SAMPLE" + (number + 1)
@@ -142,51 +135,6 @@ async function renderComponents(validations, numberOfGraphsPerRow) {
       },
     },
   });
-
-  //   // generate new row every time x of the element
-  //   // index in the table reach numberOfGraphsPerRow
-  //   if (
-  //     sample % numberOfGraphsPerRow == 0 &&
-  //     sample != 0
-  //   ) {
-  //     currentRow = document.createElement("tr");
-  //   }
-
-  //   const currentCell = document.createElement("td");
-  //   const newCanvas = document.createElement("canvas");
-  //   newCanvas.id = "ValidationChart" + currentChart++;
-  //   newCanvas.height = "300";
-  //   newCanvas.width = "800";
-  //   currentCell.appendChild(newCanvas);
-  //   currentRow.appendChild(currentCell);
-  //   if ((sample + 1) % numberOfGraphsPerRow == 0) {
-  //     tableBody.appendChild(currentRow);
-  //   }
-
-  //   const context = newCanvas.getContext("2d");
-
-  //   // DATA FOR CHARTS
-  //
-  //   const backgroundColors = statisticValues.map(
-  //     (table) =>
-  //       "rgba(" +
-  //       getRandomInt(100, 255) +
-  //       ", " +
-  //       getRandomInt(100, 255) +
-  //       ", " +
-  //       getRandomInt(100, 255) +
-  //       ", 0.5)"
-  //   );
-  //
-
-  //   const borderColors = backgroundColors.map(
-  //     (color) => color.substr(0, color.lastIndexOf(",") + 1) + "1)"
-  //   );
-
-  //   // const color = "#" + (((1 << 24) * Math.random()) | 0).toString(16);
-  // }
-  // currentTable.appendChild(tableBody);
-  // currentComponentDiv.appendChild(currentTable);
   document.body.appendChild(currentComponentDiv);
 }
 
@@ -197,5 +145,4 @@ function performRendering(numberOfGraphsPerRow) {
   );
 }
 
-const numberOfGraphsPerRow = 3;
-performRendering(numberOfGraphsPerRow);
+performRendering();
