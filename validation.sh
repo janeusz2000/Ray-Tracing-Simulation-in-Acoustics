@@ -5,7 +5,7 @@ bazel build --config=_gcc validation
 source ./venv/bin/activate
 
 SOURCE_POWER=1000
-NUM_OF_COLLECTORS=40
+NUM_OF_COLLECTORS=33
 NUM_OF_RAYS_SQUARED=100
 
 echo STARTING VALIDATION FOR:
@@ -26,7 +26,7 @@ for DIFFUSOR_PATH in $DIFFUSORS_ARRAY_PATH; do
    rm $RAPORT_FILE
    touch $RAPORT_FILE
 
-   bazel-bin/validation $RAPORT_FILE ./$DIFFUSOR_PATH
+   bazel-bin/validation $RAPORT_FILE ./$DIFFUSOR_PATH $SOURCE_POWER $NUM_OF_COLLECTORS $NUM_OF_RAYS_SQUARED
    python3 ./validationTools/compareResutlsToReference.py $REFERENCE_FILE $RAPORT_FILE
 done
 
