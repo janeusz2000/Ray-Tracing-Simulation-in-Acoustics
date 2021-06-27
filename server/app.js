@@ -160,6 +160,10 @@ app.get("/dist/simulation.js", function (request, response) {
   response.sendFile(path.join(__dirname + "/dist/simulation.js"));
 });
 
+// STATISTIC VALUES REQUESTS
+
+app.get("");
+
 // VALIDATION REQUESTS
 app.get("/dist/validation.js", function (request, response) {
   response.sendFile(path.join(__dirname + "/dist/validation.js"));

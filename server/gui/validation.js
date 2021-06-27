@@ -5,6 +5,9 @@ const currentIp = "http://localhost";
 const currentPort = "3000";
 const addressIp = currentIp + ":" + currentPort;
 const numberOfValidationsModel = 8;
+const propertyList = [...Array(numberOfValidationsModel).keys()].map(
+  (number) => "SAMPLE" + (number + 1)
+);
 
 var validationChart;
 
@@ -72,15 +75,16 @@ function getData(parameterName, statisticValues) {
   return data;
 }
 
+async function renderSimulationPropertiesTable(validations) {
+  console.log(validations);
+  f;
+}
+
 async function renderComponents(validations) {
   // used for drawing tables
 
   const currentComponentDiv = document.createElement("div");
   currentComponentDiv.style.setProperty("width", "98%");
-
-  const propertyList = [...Array(numberOfValidationsModel).keys()].map(
-    (number) => "SAMPLE" + (number + 1)
-  );
 
   const statisticValuesIDPerSampleList = propertyList.map((property) =>
     validations.map((validation) => validation[property])
@@ -144,6 +148,8 @@ async function renderComponents(validations) {
   });
 
   document.body.appendChild(currentComponentDiv);
+
+  renderSimulationPropertiesTable(validations);
 }
 
 // DRAWS every component on this site
@@ -156,16 +162,11 @@ async function performRendering(numberOfGraphsPerRow) {
     document.getElementById(parameterName.toLowerCase() + "_button")
   );
 
-  var parameterNamesIndex = 0;
   parameterButtons.forEach((button) =>
     button.addEventListener("click", async function () {
       const buttonParameterName = button.id
         .substr(0, button.id.lastIndexOf("_"))
         .toUpperCase();
-
-      const propertyList = [...Array(numberOfValidationsModel).keys()].map(
-        (number) => "SAMPLE" + (number + 1)
-      );
 
       const validations = await getValidations();
 
