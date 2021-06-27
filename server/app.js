@@ -53,6 +53,7 @@ class DatabaseConnection {
         if (error) return reject(error);
         resolve(rows);
       });
+      newConnection.end();
     });
   }
 

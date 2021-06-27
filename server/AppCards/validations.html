@@ -1,26 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Ray Tracing Validations</title>
-   <link rel="stylesheet" href="./css/simulationStyle.css">
-   <link href="/favicon.ico" type="image/x-icon" rel="icon" />
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Ray Tracing Validations</title>
+      <link rel="stylesheet" href="./css/simulationStyle.css">
+      <link href="/favicon.ico" type="image/x-icon" rel="icon" />
 
-</head>
-<body>
-   <div class="dropdown">
-      <button class="dropbtn">Menu</button>`
-      <div class="dropdown-content">
-        <a href="./simulation.html">Simulation</a>
-      </div>
-   </div>
-   <div class="Graphs">
-      <script src="../dist/validation.js"></script>
-   </div>
+   </head>
+   <body>
+      <header>
+         <div class="dropdown">
+            <button class="dropbtn">Menu</button>`
+            <div class="dropdown-content">
+               <a href="./simulation.html">Simulation</a>
+            </div>
+         </div>
+         <div class="dropdown" style="width: 200px">
+            <button class="dropbtn">Parameter</button>`
+            <div class="dropdown-content">
+               <button id="mean_error_button" style="width: 200px; padding:
+                  12px
+                  16px;">MEAN_ERROR</button>
+               <button id="standard_deviation_error_button" style="width:
+                  200px;
+                  padding: 12px 16px;">STANDARD_DEVIATION</button>
+               <button id="rmse_button" style="width: 200px; padding: 12px
+                  16px;">RMSE</button>
+               <button id="max_error_button" style="width: 200px; padding:
+                  12px
+                  16px;">MAX_ERROR</button>
+               <button id="min_error_button" style="width: 200px; padding:
+                  12px
+                  16px;">MIN_ERROR</button>
+               <button id="median_error_button" style="width: 200px; padding:
+                  12px 16px;">MEDIAN_ERROR</button>
+            </div>
+         </div>
+      </header>
 
-</body>
+      <div class="Graphs">
+         <script src="../dist/validation.js"></script>
+      </></body>
 
-</html>
+   </html>
