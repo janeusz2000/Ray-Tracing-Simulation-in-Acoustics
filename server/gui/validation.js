@@ -1,5 +1,18 @@
 const chart = require("chart.js");
+const { traceDeprecation } = require("process");
 chart.defaults.scale.gridLines.color = "#ddd";
+
+Element.prototype.remove = function () {
+  this.parentElement.removeChild(this);
+};
+
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function () {
+  for (var i = this.length() - 1; i >= 0; i--) {
+    if (this[i] && this[i].parentElement) {
+      this[i].parentElement.removeChild(this[i]);
+    }
+  }
+};
 
 const currentIp = "http://localhost";
 const currentPort = "3000";
@@ -36,6 +49,17 @@ async function parseRequestsAndGetStatisticValuesFromDatabase(requests) {
     outputArray.push(statisticValuesList);
   }
   return outputArray;
+}
+
+async function requestSimulationPropertiesByIDs(simulationPropertiesIds) {
+  const requestURL =
+    addressIp +
+    "/app/getSimulationProperties/" +
+    encodeURI(simulationPropertiesIds);
+  const response = await fetch(requestURL);
+  const statisticProperties = await response.json();
+
+  return statisticProperties;
 }
 
 function getData(parameterName, statisticValues) {
@@ -75,9 +99,83 @@ function getData(parameterName, statisticValues) {
   return data;
 }
 
+async function drawInterface(validations) {
+  const validation = validations[0];
+  const simulationID = validation.SIMULATION_PROPERTIES_ID;
+  const simulationPropertiesArray = await requestSimulationPropertiesByIDs(
+    simulationID
+  );
+  const simulationProperties = simulationPropertiesArray[0];
+  const row = document.createElement("tr");
+
+  const validationID = document.createElement("th");
+  validationID.id = "ValidationIDHeader";
+  validationID.innerHTML = "Validation nr: ";
+  validationID.className = "tableHeader";
+  row.appendChild(validationID);
+
+  for (const propertyName in simulationProperties) {
+    const cell = document.createElement("th");
+    cell.id = propertyName + "Header";
+    cell.innerHTML = propertyName;
+    cell.className = "tableHeader";
+    row.appendChild(cell);
+  }
+
+  const desc = document.createElement("th");
+  desc.id = "descHeader";
+  desc.innerHTML = "Description";
+  desc.className = "tableHeader";
+  row.appendChild(desc);
+  return row;
+}
+
 async function renderSimulationPropertiesTable(validations) {
-  console.log(validations);
-  f;
+  // console.log(validations);
+  const currentDiv = document.createElement("div");
+  currentDiv.id = "tableSimulationProperties";
+  currentDiv.className = "tableContent";
+
+  const table = document.createElement("table");
+  const tableBody = document.createElement("tbody");
+  const headers = await drawInterface(validations);
+  tableBody.appendChild(headers);
+
+  for (const validationID in validations) {
+    const validation = validations[validationID];
+    const simulationId = validation.SIMULATION_PROPERTIES_ID;
+    const simulationPropertiesArray = await requestSimulationPropertiesByIDs(
+      simulationId
+    );
+    const simulationProperties = simulationPropertiesArray[0];
+    const row = document.createElement("tr");
+
+    const validationIDCell = document.createElement("td");
+    validationIDCell.id = "ValidationNumber";
+    validationIDCell.innerHTML = (validation.VALIDATION_ID - 1).toString();
+    validationIDCell.className = "dataCell";
+    row.appendChild(validationIDCell);
+
+    for (const propertyName in simulationProperties) {
+      const cell = document.createElement("td");
+      cell.id = propertyName;
+      cell.innerHTML = simulationProperties[propertyName];
+      cell.className = "dataCell";
+      row.appendChild(cell);
+    }
+
+    const descriptionCell = document.createElement("td");
+    descriptionCell.id = "descriptionCell" + validation.VALIDATION_ID;
+    descriptionCell.innerHTML = validation.VALIDATION_DESC;
+    descriptionCell.className = "dataCell";
+    row.appendChild(descriptionCell);
+
+    tableBody.appendChild(row);
+  }
+
+  table.appendChild(tableBody);
+  currentDiv.appendChild(table);
+  document.body.appendChild(currentDiv);
 }
 
 async function renderComponents(validations) {
@@ -102,8 +200,6 @@ async function renderComponents(validations) {
 
   const data = getData("MEAN_ERROR", statisticValues);
 
-  console.log(data);
-
   const options = {
     title: {
       display: true,
@@ -118,6 +214,11 @@ async function renderComponents(validations) {
     scales: {
       yAxes: [
         {
+          scaleLabel: {
+            display: true,
+            labelString: "Value [-]",
+            fontColor: "white",
+          },
           ticks: {
             fontColor: "white",
           },
@@ -183,6 +284,11 @@ async function performRendering(numberOfGraphsPerRow) {
 
       validationChart.options.title.text = buttonParameterName;
       validationChart.update();
+
+      const tableDiv = document
+        .getElementById("tableSimulationProperties")
+        .remove();
+      renderSimulationPropertiesTable(validations);
     })
   );
 }

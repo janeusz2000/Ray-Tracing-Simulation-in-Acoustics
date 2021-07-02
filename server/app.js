@@ -42,6 +42,21 @@ class DatabaseConnection {
     });
   }
 
+  getSimulationProperties(simulationPropertiesID) {
+    const newConnection = this.getConnection();
+    return new Promise(function (resolve, reject) {
+      const queryMessage =
+        "SELECT * FROM SIMULATION_PROPERTIES WHERE SIMULATION_ID IN (" +
+        simulationPropertiesID +
+        ") ORDER BY SIMULATION_ID ASC;";
+      newConnection.query(queryMessage, function (error, rows, fields) {
+        if (error) return reject(error);
+        resolve(rows);
+      });
+      newConnection.end();
+    });
+  }
+
   getStatisticValuesByIDFromDataBase(TableID) {
     const newConnection = this.getConnection();
     return new Promise(function (resolve, reject) {
@@ -118,7 +133,8 @@ app.use(function (req, res, next) {
 
 // DEFAULT SITE
 
-// SIMULATION HTML REQUESTS
+// TODO: generate this on every file that is inside server folder
+// SIMULATION HTML FILE REQUESTS
 app.get("/", function (request, response) {
   response.sendFile(path.join(__dirname + "/AppCards/simulation.html"));
 });
@@ -193,6 +209,30 @@ app.get("/app/getStatisticValues/*", function (request, response) {
       if (data.length == 0) {
         throw Error(
           "Table Statistic Values" + statisticValueTableID + " doesn't exist!"
+        );
+      }
+      return JSON.parse(JSON.stringify(data));
+    })
+    .then((data) => response.json(data))
+    .catch((error) =>
+      setImmediate(() => {
+        throw error;
+      })
+    );
+});
+
+app.get("/app/getSimulationProperties/*", function (request, response) {
+  const simulationPropertiesID = request.originalUrl.substr(
+    request.originalUrl.lastIndexOf("/") + 1
+  );
+  databaseConnection
+    .getSimulationProperties(simulationPropertiesID)
+    .then(function (data) {
+      if (data.length == 0) {
+        throw Error(
+          "Table Simulation Properties" +
+            simulationPropertiesID +
+            " doesn't exists!"
         );
       }
       return JSON.parse(JSON.stringify(data));
