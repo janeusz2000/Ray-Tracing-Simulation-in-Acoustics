@@ -182,7 +182,7 @@ Collectors XAxisCollectorBuilder::buildCollectors(const ModelInterface *model,
   }
   const int numCollectorReminder = numCollectors % 2;
   const float angleBetweenCollectors =
-      constants::kPi / (numCollectors + numCollectorReminder - 1);
+      constants::kPi / (numCollectors + numCollectorReminder - 2);
 
   // radius of the two half-circles  is equal to the 4 times the biggest
   // dimension of the model and must be at least equal to 4, which is equal to
@@ -209,7 +209,7 @@ Collectors XAxisCollectorBuilder::buildCollectors(const ModelInterface *model,
 
   // Remaining energy collectors:
   std::vector<core::Vec3> origins;
-  for (int times = 0; times * 4 < numToGo; ++times) {
+  for (int times = 0; times * 2 < numToGo; ++times) {
 
     float groundCoordinate =
         collectorSphereRadius * std::cos(times * angleBetweenCollectors);
@@ -217,11 +217,10 @@ Collectors XAxisCollectorBuilder::buildCollectors(const ModelInterface *model,
     float zCoordinate =
         collectorSphereRadius * std::sin(times * angleBetweenCollectors);
 
-    origins = {core::Vec3(groundCoordinate, 0, zCoordinate),
-               core::Vec3(0, -groundCoordinate, zCoordinate),
-               core::Vec3(-groundCoordinate, 0, zCoordinate),
-               core::Vec3(0, groundCoordinate, zCoordinate)};
-
+    origins = {
+        core::Vec3(groundCoordinate, 0, zCoordinate),
+        core::Vec3(-groundCoordinate, 0, zCoordinate),
+    };
     for (const core::Vec3 &origin : origins) {
       energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
           origin, energyCollectorRadius));
@@ -240,8 +239,58 @@ void YAxisCollectorBuilder::printItself(std::ostream &os) const noexcept {
 }
 
 Collectors YAxisCollectorBuilder::buildCollectors(const ModelInterface *model,
-                                                  int numCollector) const {
-  throw std::logic_error("not implemented");
+                                                  int numCollectors) const {
+  if (model->empty()) {
+    throw std::invalid_argument(
+        "Model given to buildCollectors() cannot be Empty!");
+  }
+  const int numCollectorReminder = numCollectors % 2;
+  const float angleBetweenCollectors =
+      constants::kPi / (numCollectors + numCollectorReminder - 2);
+
+  // radius of the two half-circles  is equal to the 4 times the biggest
+  // dimension of the model and must be at least equal to 4, which is equal to
+  // SphereWall radius.
+  const float collectorSphereRadius = getSphereWallRadius(*model);
+
+  // The radius of one collector (distance between collectors) can be then
+  // calculated with Law of cosines, as R *sqrt(2 - 2 *
+  // cos(angleBetweenCollectors)).
+  float energyCollectorRadius =
+      collectorSphereRadius *
+      std::sqrt(2.0f - 2 * std::cos(angleBetweenCollectors));
+
+  Collectors energyCollectors;
+  energyCollectors.reserve(numCollectors);
+  // When Num Collectors is not even, we need to put one collector at (0, 0,
+  // collectorSphereRadius)
+  if (numCollectorReminder == 1) {
+    energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
+        core::Vec3(0, 0, collectorSphereRadius), energyCollectorRadius));
+  }
+  // and decrease number remaining collectors to create remaining ones
+  const int numToGo = numCollectors - (numCollectorReminder);
+
+  // Remaining energy collectors:
+  std::vector<core::Vec3> origins;
+  for (int times = 0; times * 2 < numToGo; ++times) {
+
+    float groundCoordinate =
+        collectorSphereRadius * std::cos(times * angleBetweenCollectors);
+
+    float zCoordinate =
+        collectorSphereRadius * std::sin(times * angleBetweenCollectors);
+
+    origins = {
+        core::Vec3(0, groundCoordinate, zCoordinate),
+        core::Vec3(0, -groundCoordinate, zCoordinate),
+    };
+    for (const core::Vec3 &origin : origins) {
+      energyCollectors.push_back(std::make_unique<objects::EnergyCollector>(
+          origin, energyCollectorRadius));
+    }
+  }
+  return energyCollectors;
   return {};
 }
 
@@ -300,15 +349,3 @@ void Simulator::run(float frequency, Collectors *collectors,
     energyCollectionRules_->collectEnergy(*collectors, &hitData);
   }
 }
-
-// ! THIS WILL BE USEFUL FOR RESULTS CALCULATION LATER
-
-// Energies Simulator::getEnergyFromGivenCollectors(const Collectors
-// &collectors) {
-//   std::vector<std::unordered_map<float, float>> output;
-//   output.reserve(collectors.size());
-//   for (auto &collector : collectors) {
-//     output.push_back(collector->getEnergy());
-//   }
-//   return output;
-// }

@@ -24,6 +24,17 @@ cc_binary(
 )
 
 cc_binary(
+    name = "collectorTest",
+    srcs = [
+        "ApplicationBuild/collectorTest.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":utils",
+    ],
+)
+
+cc_binary(
     name = "debugTracking",
     srcs = [
         "ApplicationBuild/debugTracking.cpp",

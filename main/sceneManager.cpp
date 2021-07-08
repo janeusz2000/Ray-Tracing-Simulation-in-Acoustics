@@ -18,10 +18,6 @@ BasicSimulationProperties::BasicSimulationProperties(
   if (numOfCollectors < 4) {
     errorStream << "Number of collectors cannot be less then 4! \n";
   }
-  if (numOfCollectors % 4 != 0 && (numOfCollectors - 1) % 4 != 0) {
-    errorStream << "number of collectors or number of collectors -1 must be "
-                   "divisable by 4! \n";
-  }
   if (numOfRaysSquared < 1) {
     errorStream << "numOfRaysSquared in must be greater then 0! \n";
   }
@@ -107,7 +103,7 @@ SceneManager::run(const CollectorBuilderInterface *collectorBuilder) {
         simulationProperties_.basicSimulationProperties().numOfCollectors);
 
     // Save collectors for the visual representation
-    collectorsTracker_->save(collectors, "./data");
+    collectorsTracker_->save(collectors, "./server/data");
 
     int maxTracking =
         simulationProperties_.basicSimulationProperties().maxTracking;

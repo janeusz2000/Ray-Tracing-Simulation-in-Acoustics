@@ -158,7 +158,7 @@ void startSimulation() {
   FileBuffer buffer = javascript::initConst("loading");
   buffer.stream << "true;";
 
-  File file("./data/loading.js");
+  File file("./server/data/loading.js");
   file.openFileWithOverwrite();
   file.write(buffer);
 }
@@ -167,7 +167,7 @@ void endSimulation() {
   FileBuffer buffer = javascript::initConst("loading");
   buffer.stream << "false;";
 
-  File file("./data/loading.js");
+  File file("./server/data/loading.js");
   file.openFileWithOverwrite();
   file.write(buffer);
 }
