@@ -68,6 +68,12 @@ struct NonLinearEnergyCollection : public CollectEnergyInterface {
 // TODO: Add time factor to the collected energy
 } // namespace collectionRules
 
+struct CollectorBuilderInterface : public Printable {
+  virtual Collectors buildCollectors(const ModelInterface *model,
+                                     int numCollectors) const = 0;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
 // Constructs an array of Energy Collectors around specified model.
 // Energy Collectors are arranged in two half-circles, whose origin is
 // centere on the model, oriented at the right angle to each other.
@@ -82,7 +88,26 @@ struct NonLinearEnergyCollection : public CollectEnergyInterface {
 
 // Throws std::invalid_argument when |numCollectors| < 4 or when |numCollectors|
 // or |numCollectors|-1 is not divisible by 4.
-Collectors buildCollectors(const ModelInterface *model, int numCollectors);
+struct DoubleAxisCollectorBuilder : public CollectorBuilderInterface {
+  Collectors buildCollectors(const ModelInterface *model,
+                             int numCollector) const override;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
+struct XAxisCollectorBuilder : public CollectorBuilderInterface {
+
+  Collectors buildCollectors(const ModelInterface *model,
+                             int numCollector) const override;
+
+  void printItself(std::ostream &os) const noexcept override;
+};
+struct YAxisCollectorBuilder : public CollectorBuilderInterface {
+
+  Collectors buildCollectors(const ModelInterface *model,
+                             int numCollector) const override;
+
+  void printItself(std::ostream &os) const noexcept override;
+};
 
 // Saves positions of the energyCollectors to the Json file at given path.
 void exportCollectorsToJson(const Collectors &energyCollectors,

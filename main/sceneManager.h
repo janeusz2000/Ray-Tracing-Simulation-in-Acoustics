@@ -88,7 +88,8 @@ public:
 
   // Runs simulation and retruns map of collectors with acquired energy per
   // frequency
-  std::unordered_map<float, Collectors> run();
+  std::unordered_map<float, Collectors>
+  run(const CollectorBuilderInterface *collectorBuilder);
 
   void printItself(std::ostream &os) const noexcept override;
 

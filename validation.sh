@@ -6,7 +6,7 @@ source ./venv/bin/activate
 
 SOURCE_POWER=1000
 NUM_OF_COLLECTORS=33
-NUM_OF_RAYS_SQUARED=100
+NUM_OF_RAYS_SQUARED=200
 
 echo STARTING VALIDATION FOR:
 echo - SOURCE POWER: $SOURCE_POWER
@@ -21,13 +21,15 @@ DIFFUSORS_ARRAY_PATH=("validationDiffusors/*")
 for DIFFUSOR_PATH in $DIFFUSORS_ARRAY_PATH; do
    CURRENT_FILE=$(echo ${DIFFUSOR_PATH%.*} | cut -c21-)
    RAPORT_FILE="./validationResults/$CURRENT_FILE.json"
-   REFERENCE_FILE="./validationResults/Reference/$CURRENT_FILE.json"
+   REFERENCE_FILE_LINE="./validationResults/Reference/line/$CURRENT_FILE.json"
+   REFERENCE_FILE_SURFACE="./validationResults/Reference/surface/$CURRENT_FILE.json"
 
    rm $RAPORT_FILE
    touch $RAPORT_FILE
 
    bazel-bin/validation $RAPORT_FILE ./$DIFFUSOR_PATH $SOURCE_POWER $NUM_OF_COLLECTORS $NUM_OF_RAYS_SQUARED
-   python3 ./validationTools/compareResutlsToReference.py $REFERENCE_FILE $RAPORT_FILE
+   python3 ./validationTools/compareResutlsToReference.py $REFERENCE_FILE_LINE $RAPORT_FILE "Line"
+   python3 ./validationTools/compareResutlsToReference.py $REFERENCE_FILE_SURFACE $RAPORT_FILE "Surface"
 done
 
 echo "Write short Validation Description: "
@@ -36,4 +38,4 @@ read -r DESC
 echo "Final describtion: $DESC"
 python3 ./validationTools/logValidation.py $DESC
 
-# deactivate
+deactivate

@@ -40,10 +40,9 @@ TEST_F(MainTest, buildingSimulation) {
   FakeOffseter rayOffseter;
   Simulator simulator(&rayTracer, model_.get(), &pointSpeaker, &rayOffseter,
                       &positionTracker, &energyCollectionRules);
-
+  DoubleAxisCollectorBuilder collectorBuilder;
   std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
-      buildCollectors(model_.get(), numOfCollectors_);
-
+      collectorBuilder.buildCollectors(model_.get(), numOfCollectors_);
   int maxTracking = 12;
   simulator.run(frequency_, &collectors, maxTracking);
   // positionTracker.saveAsJson();

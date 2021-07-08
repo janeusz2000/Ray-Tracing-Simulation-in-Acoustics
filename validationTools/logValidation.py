@@ -12,8 +12,7 @@ logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
 
 
 def loadExampleReferenceData():
-    PATH = './validationResults/Reference/1D_0.5m_modulo7_2000Hz'\
-        '_10n_60stopni_kwadratPlusJeden.json'
+    PATH = "validationResults/Reference/line/1D_1m_modulo23_500Hz_46n_30stopni_5potega.json"
     with open(PATH) as jsonFile:
         reference = json.load(jsonFile)
         return prepareParamterMap(reference)
@@ -25,7 +24,7 @@ def getResponse(conn: mysql.connector.MySQLConnection):
         myCursor = conn.cursor()
         query = f"SELECT * FROM STATISTIC_VALUES WHERE " \
             f"STATISTIC_VALUES.PARAMETER_NAME='{parameterName}' " \
-            f"ORDER BY STATISTIC_VALUES_ID DESC LIMIT 8; "
+            f"ORDER BY STATISTIC_VALUES_ID DESC LIMIT 16; "
         myCursor.execute(query)
         yield (parameterName, myCursor.fetchall())
 
@@ -45,12 +44,11 @@ def prepareQuery(parameterName: str,
 
     queryHeader = "INSERT INTO VALIDATION_DATA(PARAMETER_NAME, " \
         "SIMULATION_PROPERTIES_ID, SAMPLE1, SAMPLE2, SAMPLE3, SAMPLE4," \
-        "SAMPLE5, SAMPLE6, SAMPLE7, SAMPLE8, VALIDATION_DESC) "
+        "VALIDATION_DESC) "
 
     queryValues = f"VALUES ('{parameterName}', {lastSimulationID}, " \
         f"{sampleIndexList[0]}, {sampleIndexList[1]}, {sampleIndexList[2]}, " \
-        f"{sampleIndexList[3]}, {sampleIndexList[4]}, {sampleIndexList[5]}, " \
-        f"{sampleIndexList[6]}, {sampleIndexList[7]}, '{validationDesc}');"
+        f"{sampleIndexList[3]}, '{validationDesc}');"
 
     return queryHeader + queryValues
 
@@ -69,16 +67,28 @@ def execute(argv):
             for parameterName, response in getResponse(conn):
                 sampleIndexList = [currentResponse[0]
                                    for currentResponse in reversed(response)]
+                print(sampleIndexList)
+                # divide samples into line validaion and surface validation
+                sampleLineIndex = sampleIndexList[0::2]
+                sampleSurfaceIndex = sampleIndexList[1::2]
+                print("line: {}".format(sampleLineIndex))
+                print("surface: {}".format(sampleSurfaceIndex))
                 simulationID = getCurrentSimulationProperties(conn)
-                query = prepareQuery(parameterName=parameterName,
-                                     sampleIndexList=sampleIndexList,
-                                     lastSimulationID=simulationID,
-                                     validationDesc=desc)
+                LineQuery = prepareQuery(parameterName=parameterName,
+                                         sampleIndexList=sampleLineIndex,
+                                         lastSimulationID=simulationID,
+                                         validationDesc=desc)
                 myCursor = conn.cursor()
-                myCursor.execute(query)
+                myCursor.execute(LineQuery)
+
+                SurfaceQuery = prepareQuery(parameterName=parameterName,
+                                            sampleIndexList=sampleSurfaceIndex,
+                                            lastSimulationID=simulationID,
+                                            validationDesc=desc)
+                myCursor = conn.cursor()
+                myCursor.execute(SurfaceQuery)
                 conn.commit()
-                logging.info("==== VALIDATION SAVED IN DATABASE ==== " +
-                             "query:  " + query)
+                logging.info("==== VALIDATION SAVED IN DATABASE ==== ")
 
     except Error as e:
         print(e)

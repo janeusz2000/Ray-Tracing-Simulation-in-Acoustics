@@ -17,9 +17,9 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
 const int kSampleRate = 96e3;
 
-const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
-                                        2000, 2500,  3150,  4000, 5000, 6300,
-                                        8000, 10000, 12500, 16000};
+const std::vector<float> frequencies = {100,  125,  160,  200,  250,
+                                        315,  400,  500,  630,  800,
+                                        1000, 1250, 1600, 2000, 2500};
 
 float kDefaultModelSize = 1.0;
 
@@ -50,7 +50,9 @@ int main(int argc, char *argv[]) {
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
 
-  std::unordered_map<float, Collectors> mapOfCollectors = manager.run();
+  DoubleAxisCollectorBuilder collectorBuilder;
+  std::unordered_map<float, Collectors> mapOfCollectors =
+      manager.run(&collectorBuilder);
 
   WaveObjectFactory waveFactory(kSampleRate);
 

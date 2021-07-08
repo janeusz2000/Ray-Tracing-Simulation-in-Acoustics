@@ -56,7 +56,9 @@ int main(int argc, char *argv[]) {
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
 
-  std::unordered_map<float, Collectors> mapOfCollectors = manager.run();
+  DoubleAxisCollectorBuilder collectorBuilder;
+  std::unordered_map<float, Collectors> mapOfCollectors =
+      manager.run(&collectorBuilder);
 
   std::cout << "Ray tracing of the object at: \n\t" << modelPath
             << "\nhas finishied!" << std::endl;
@@ -72,7 +74,7 @@ int main(int argc, char *argv[]) {
                                 &positionTracker, &collectorsTracker);
 
   std::unordered_map<float, Collectors> mapOfReferenceCollectors =
-      referenceManager.run();
+      referenceManager.run(&collectorBuilder);
   dataExporter.saveModelToJson(serverDataPath, referenceModel.get(),
                                /*referenceModel=*/true);
 

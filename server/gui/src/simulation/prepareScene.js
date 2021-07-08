@@ -1,14 +1,14 @@
-
-const THREE = require('three')
+const THREE = require("three");
 
 export function prepareScene(scene, renderer, camera, controls) {
   scene.background = new THREE.Color(0x666666);
+  // scene.background = new THREE.Color(0xffffff);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
   camera.position.set(0, 0, 20);
   controls.enableDamping = true; // an animation loop is required when either
-                                 // damping or auto-rotation are enabled
+  // damping or auto-rotation are enabled
   controls.dampingFactor = 0.01;
   controls.screenSpacePanning = false;
   controls.minDistance = 1;

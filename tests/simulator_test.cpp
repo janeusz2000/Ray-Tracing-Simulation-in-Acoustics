@@ -49,7 +49,7 @@ public:
   bool empty() const override { return empty_; }
 
 private:
-void printItself(std::ostream &os) const noexcept override {
+  void printItself(std::ostream &os) const noexcept override {
     os << "Fake Model";
   }
   std::vector<TriangleObj> triangles_;
@@ -118,38 +118,44 @@ protected:
 
 TEST_F(EnergyCollectorTest, ModelEmptyNotBuildingCollectors) {
   const FakeModel emptyModel(true);
-  ASSERT_EXCEPTION_MSG(buildCollectors(&emptyModel, kSkipNumber),
-                       std::invalid_argument,
-                       "Model given to buildCollectors() cannot be Empty!");
+  DoubleAxisCollectorBuilder collectorBuilder;
+  ASSERT_EXCEPTION_MSG(
+      collectorBuilder.buildCollectors(&emptyModel, kSkipNumber),
+      std::invalid_argument,
+      "Model given to buildCollectors() cannot be Empty!");
 
   const FakeModel nonEmptyModel(false);
-  EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, kSkipNumber));
+  EXPECT_NO_THROW(
+      collectorBuilder.buildCollectors(&nonEmptyModel, kSkipNumber));
 }
 
 TEST_F(EnergyCollectorTest, ThrowExceptionWhenInvalidNumCollector) {
   const FakeModel nonEmptyModel(false);
-
+  DoubleAxisCollectorBuilder collectorBuilder;
   ASSERT_EXCEPTION_MSG(
-      buildCollectors(&nonEmptyModel, 38), std::invalid_argument,
+      collectorBuilder.buildCollectors(&nonEmptyModel, 38),
+      std::invalid_argument,
       "given number to buildCollectors() numCollectors or numCollectors - 1"
       "\nhas to be divisible by 4. Instead got numCollectors:  38");
 
   ASSERT_EXCEPTION_MSG(
-      buildCollectors(&nonEmptyModel, 3), std::invalid_argument,
+      collectorBuilder.buildCollectors(&nonEmptyModel, 3),
+      std::invalid_argument,
       "given numCollectors in buildCollectors(): 3, is less then 4");
 
   // Test case when numCollector - 1 % 4 = 0
-  EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, 37));
+  EXPECT_NO_THROW(collectorBuilder.buildCollectors(&nonEmptyModel, 37));
 
   // Test case when numCollector % 4 = 0
-  EXPECT_NO_THROW(buildCollectors(&nonEmptyModel, 36));
+  EXPECT_NO_THROW(collectorBuilder.buildCollectors(&nonEmptyModel, 36));
 }
 
 TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
   const FakeModel nonEmptyModel(false);
-
+  DoubleAxisCollectorBuilder collectorBuilder;
   const int numCollectors = 37;
-  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
+  auto energyCollectors =
+      collectorBuilder.buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(numCollectors, energyCollectors.size());
 
   Ray straightUp(Vec3::kZero, Vec3::kZ);
@@ -191,9 +197,10 @@ TEST_F(EnergyCollectorTest, NotEvenNumOfEnergyCollectorTest) {
 
 TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
   const FakeModel nonEmptyModel(false);
-
+  DoubleAxisCollectorBuilder collectorBuilder;
   const int numCollectors = 36;
-  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
+  auto energyCollectors =
+      collectorBuilder.buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   Ray straightUp(Vec3::kZero, Vec3::kZ);
@@ -240,9 +247,10 @@ TEST_F(EnergyCollectorTest, EvenNumOfEnergyCollectorTest) {
 
 TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
   const FakeModel nonEmptyModel(false);
-
+  DoubleAxisCollectorBuilder collectorBuilder;
   const int numCollectors = 37;
-  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
+  auto energyCollectors =
+      collectorBuilder.buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   const float collectorPositionRadius = 4;
@@ -264,9 +272,10 @@ TEST_F(EnergyCollectorTest, NoHoleNextToTheTopCollectorOddNum) {
 
 TEST_F(EnergyCollectorTest, HitRayStraightUpEvenCollectors) {
   const FakeModel nonEmptyModel(false);
-
+  DoubleAxisCollectorBuilder collectorBuilder;
   const int numCollectors = 20;
-  auto energyCollectors = buildCollectors(&nonEmptyModel, numCollectors);
+  auto energyCollectors =
+      collectorBuilder.buildCollectors(&nonEmptyModel, numCollectors);
   ASSERT_EQ(energyCollectors.size(), numCollectors);
 
   RayHitData hitData;

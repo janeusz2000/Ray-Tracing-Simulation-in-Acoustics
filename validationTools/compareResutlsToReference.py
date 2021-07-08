@@ -71,6 +71,7 @@ def minError(array1, array2) -> float:
 def main(argv):
     referencePath = argv[1]
     resultsPath = argv[2]
+    validationType = argv[3]
 
     logging.info(f"VALIDATION OF: {resultsPath}")
 
@@ -123,6 +124,7 @@ def main(argv):
                 maxError=outputValues[3],
                 minError=outputValues[4],
                 medianError=outputValues[5])
+
     return len(referenceMap.keys())
 
 

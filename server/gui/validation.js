@@ -17,7 +17,7 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function () {
 const currentIp = "http://localhost";
 const currentPort = "3000";
 const addressIp = currentIp + ":" + currentPort;
-const numberOfValidationsModel = 8;
+const numberOfValidationsModel = 4;
 const propertyList = [...Array(numberOfValidationsModel).keys()].map(
   (number) => "SAMPLE" + (number + 1)
 );
@@ -271,6 +271,10 @@ async function performRendering(numberOfGraphsPerRow) {
 
       const validations = await getValidations();
 
+      const tableDiv = document
+        .getElementById("tableSimulationProperties")
+        .remove();
+      renderSimulationPropertiesTable(validations);
       const statisticValuesIDPerSampleList = propertyList.map((property) =>
         validations.map((validation) => validation[property])
       );
@@ -284,11 +288,6 @@ async function performRendering(numberOfGraphsPerRow) {
 
       validationChart.options.title.text = buttonParameterName;
       validationChart.update();
-
-      const tableDiv = document
-        .getElementById("tableSimulationProperties")
-        .remove();
-      renderSimulationPropertiesTable(validations);
     })
   );
 }

@@ -82,7 +82,8 @@ void SceneManager::printItself(std::ostream &os) const noexcept {
      << "Offseter: " << *(offseter_);
 }
 
-std::unordered_map<float, Collectors> SceneManager::run() {
+std::unordered_map<float, Collectors>
+SceneManager::run(const CollectorBuilderInterface *collectorBuilder) {
   std::vector<float> frequencies =
       simulationProperties_.basicSimulationProperties().frequencies;
 
@@ -101,7 +102,7 @@ std::unordered_map<float, Collectors> SceneManager::run() {
                         positionTracker_,
                         simulationProperties_.energyCollectionRules());
 
-    Collectors collectors = buildCollectors(
+    Collectors collectors = collectorBuilder->buildCollectors(
         model_,
         simulationProperties_.basicSimulationProperties().numOfCollectors);
 
