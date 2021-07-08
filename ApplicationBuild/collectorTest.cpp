@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
 
-  YAxisCollectorBuilder collectorBuilder;
+  GeometricDomeCollectorBuilder collectorBuilder;
   std::unordered_map<float, Collectors> mapOfCollectors =
       manager.run(&collectorBuilder);
 

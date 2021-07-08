@@ -68,6 +68,8 @@ struct NonLinearEnergyCollection : public CollectEnergyInterface {
 // TODO: Add time factor to the collected energy
 } // namespace collectionRules
 
+Collectors buildCollectors(const ModelInterface *model, int numCollectors);
+
 struct CollectorBuilderInterface : public Printable {
   virtual Collectors buildCollectors(const ModelInterface *model,
                                      int numCollectors) const = 0;
@@ -86,27 +88,47 @@ struct CollectorBuilderInterface : public Printable {
 // model. Radius of an energy collector is equal to distance between twoenergy
 // collectors.
 
-// Throws std::invalid_argument when |numCollectors| < 4 or when |numCollectors|
-// or |numCollectors|-1 is not divisible by 4.
 struct DoubleAxisCollectorBuilder : public CollectorBuilderInterface {
+
+  // Throws std::invalid_argument when |numCollectors| < 4 or when
+  // |numCollectors| or |numCollectors|-1 is not divisible by 4.
   Collectors buildCollectors(const ModelInterface *model,
-                             int numCollector) const override;
+                             int numCollectors) const override;
   void printItself(std::ostream &os) const noexcept override;
 };
 
+// Constructs an array of Energy Collectors around specified model.
+// Works the same as DoubleAxisCollectorBuilder but instead it only build one
+// half sphere on along X Axis.
 struct XAxisCollectorBuilder : public CollectorBuilderInterface {
 
   Collectors buildCollectors(const ModelInterface *model,
-                             int numCollector) const override;
+                             int numCollectors) const override;
 
   void printItself(std::ostream &os) const noexcept override;
 };
+// Constructs an array of Energy Collectors around specified model.
+// Works the same as DoubleAxisCollectorBuilder but instead it only build one
+// half sphere on along Y Axis.
 struct YAxisCollectorBuilder : public CollectorBuilderInterface {
 
   Collectors buildCollectors(const ModelInterface *model,
-                             int numCollector) const override;
+                             int numCollectors) const override;
 
   void printItself(std::ostream &os) const noexcept override;
+};
+// Constructs half-geodesic dome pattern of Energy Collectors around the model.
+struct GeometricDomeCollectorBuilder : public CollectorBuilderInterface {
+  Collectors
+  buildCollectors(const ModelInterface *model,
+                  /*skip this number*/ int numCollectors = 0) const override;
+  void printItself(std::ostream &os) const noexcept override;
+
+private:
+  std::vector<core::Vec3> loadPoints(int size) const;
+  std::vector<core::Vec3>
+  findClosest5Points(const core::Vec3 &point,
+                     std::vector<core::Vec3> pointList) const;
 };
 
 // Saves positions of the energyCollectors to the Json file at given path.

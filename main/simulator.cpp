@@ -227,7 +227,6 @@ Collectors XAxisCollectorBuilder::buildCollectors(const ModelInterface *model,
     }
   }
   return energyCollectors;
-  return {};
 }
 
 void XAxisCollectorBuilder::printItself(std::ostream &os) const noexcept {
@@ -291,7 +290,87 @@ Collectors YAxisCollectorBuilder::buildCollectors(const ModelInterface *model,
     }
   }
   return energyCollectors;
-  return {};
+}
+
+std::vector<core::Vec3>
+GeometricDomeCollectorBuilder::loadPoints(int size) const {
+
+  std::vector<core::Vec3> points;
+  std::ifstream objPattern;
+  std::string_view path =
+      "./main/energyCollectorsPatterns/geodesicDomePattern.obj";
+
+  // Check if file exist at given path
+  objPattern.open(path.data());
+  if (!objPattern.good()) {
+    std::stringstream errorStream;
+    errorStream << "Something went wrong with the file in: " << *this
+                << "in loadPoints() method";
+    throw std::invalid_argument(errorStream.str());
+  }
+
+  int lineNumber = 1;
+  for (std::string line; std::getline(objPattern, line); ++lineNumber) {
+    std::stringstream ss(line);
+    std::istream_iterator<std::string> begin(ss);
+    std::istream_iterator<std::string> end;
+    std::vector<std::string> stringWords(begin, end);
+    if (stringWords[0] == "v") {
+
+      // Checks if point declaration is valid
+      if (stringWords.size() != 4) {
+        std::stringstream errorString;
+        errorString << "Invalid point declaration in object file at:\n"
+                    << "line: " << lineNumber;
+      }
+
+      // Z coordinate in .obj files represents y coordinate in this
+      // simulation.
+      float x = std::stof(stringWords[1]);
+      float z = std::stof(stringWords[2]);
+      float y = std::stof(stringWords[3]);
+      points.push_back(
+    }
+  }
+  return points;
+}
+
+std::vector<core::Vec3> GeometricDomeCollectorBuilder::findClosest5Points(
+    const core::Vec3 &point, std::vector<core::Vec3> pointList) const {
+  std::sort(pointList.begin(), pointList.end(),
+            [&](const core::Vec3 &point1, const core::Vec3 &point2) -> bool {
+              return (point1 - point).magnitudeSquared() <
+                     (point2 - point).magnitudeSquared();
+            });
+  return std::vector<core::Vec3>(pointList.begin(), pointList.begin() + 5);
+}
+
+Collectors
+GeometricDomeCollectorBuilder::buildCollectors(const ModelInterface *model,
+                                               int numCollector) const {
+
+  Collectors collectors;
+  std::vector<core::Vec3> points = loadPoints(model->sideSize());
+
+  for (const core::Vec3 &point : points) {
+    std::vector<core::Vec3> closestPoints = findClosest5Points(point, points);
+    core::Vec3 theFurthestPoint = *std::max_element(
+        closestPoints.begin(), closestPoints.end(),
+        [&](const core::Vec3 &point1, const core::Vec3 &point2) -> bool {
+          return (point1 - point).magnitudeSquared() <
+                 (point2 - point).magnitudeSquared();
+        });
+
+    float collectorRadius = (theFurthestPoint - point).magnitude();
+    collectors.push_back(
+        std::make_unique<objects::EnergyCollector>(point, collectorRadius));
+  }
+  return collectors;
+}
+
+void GeometricDomeCollectorBuilder::printItself(
+    std::ostream &os) const noexcept {
+  os << "Geometric Dome Collector Builder\n";
 }
 
 const float getSphereWallRadius(const ModelInterface &model) {
@@ -318,11 +397,8 @@ void Simulator::run(float frequency, Collectors *collectors,
   core::Ray currentRay;
   while (source_->genRay(&currentRay)) {
 
-    // Initialize visual representation of ray tracking in gui
     positionTracker_->initializeNewTracking();
 
-    // TODO: replace hitData with factory to delete default values for
-    // rayHitData
     core::RayHitData hitData;
     RayTracer::TraceResult hitResult = RayTracer::TraceResult::HIT_TRIANGLE;
     int currentTracking = 0;
