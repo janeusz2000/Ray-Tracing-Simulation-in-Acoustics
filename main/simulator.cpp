@@ -329,7 +329,7 @@ GeometricDomeCollectorBuilder::loadPoints(int size) const {
       float x = std::stof(stringWords[1]);
       float z = std::stof(stringWords[2]);
       float y = std::stof(stringWords[3]);
-      points.push_back(
+      points.push_back(core::Vec3(x, y, z));
     }
   }
   return points;
