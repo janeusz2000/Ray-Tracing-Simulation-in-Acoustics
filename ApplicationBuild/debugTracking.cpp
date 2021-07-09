@@ -20,6 +20,7 @@ const float sourcePower = 500; // [W]
 const int numOfCollectors = 37;
 const int numOfRaysSquared = 10;
 const int numOfVisibleRaysSquared = 10;
+const int maxTracking = 15;
 const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
                                         2000, 2500,  3150,  4000, 5000, 6300,
                                         8000, 10000, 12500, 16000};
@@ -49,8 +50,8 @@ int main(int argc, char *argv[]) {
   trackers::CollectorsTrackerToJson collectorsTracker;
 
   collectionRules::NonLinearEnergyCollection energyCollectionRules;
-  BasicSimulationProperties basicProperties(frequencies, sourcePower,
-                                            numOfCollectors, numOfRaysSquared);
+  BasicSimulationProperties basicProperties(
+      frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
 
   SimulationProperties properties(&energyCollectionRules, basicProperties);
   SceneManager manager(model.get(), properties, &positionTracker,

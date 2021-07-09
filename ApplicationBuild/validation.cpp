@@ -47,6 +47,7 @@ std::unique_ptr<CollectorBuilderInterface> summonBuilder(std::string_view key) {
 // #4 source Power
 // #5 numOfCollectors
 // #6 numOfRaysSquared
+// #7 maxTracking
 
 int main(int argc, char *argv[]) {
   std::vector<std::string> args(&argv[0], &argv[0 + argc]);
@@ -56,6 +57,7 @@ int main(int argc, char *argv[]) {
   const float sourcePower = std::stof(args[4]);
   const int numOfCollectors = std::stoi(args[5]);
   const int numOfRaysSquared = std::stoi(args[6]);
+  const int maxTracking = stoi(args[7]);
 
   std::cout << "starting validation for: " << modelPath << std::endl;
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
@@ -64,8 +66,8 @@ int main(int argc, char *argv[]) {
   trackers::FakeCollectorsTracker collectorsTracker;
 
   collectionRules::NonLinearEnergyCollection energyCollectionRules;
-  BasicSimulationProperties basicProperties(frequencies, sourcePower,
-                                            numOfCollectors, numOfRaysSquared);
+  BasicSimulationProperties basicProperties(
+      frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
   SimulationProperties properties(&energyCollectionRules, basicProperties);
 
   std::unique_ptr<CollectorBuilderInterface> collectorBuilder =

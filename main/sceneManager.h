@@ -33,8 +33,7 @@
 struct BasicSimulationProperties : public Printable {
   explicit BasicSimulationProperties(const std::vector<float> &frequencies,
                                      float sourcePower, int numOfCollectors,
-                                     int numOfRaysSquared,
-                                     int maxTracking = 12);
+                                     int numOfRaysSquared, int maxTracking);
   std::vector<float> frequencies;
   float sourcePower;
   int numOfCollectors;

@@ -395,8 +395,9 @@ void Simulator::run(float frequency, Collectors *collectors,
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
   core::Ray currentRay;
-  while (source_->genRay(&currentRay)) {
 
+  while (source_->genRay(&currentRay)) {
+    bool rayTracingFinished = false;
     positionTracker_->initializeNewTracking();
 
     core::RayHitData hitData;
@@ -412,16 +413,17 @@ void Simulator::run(float frequency, Collectors *collectors,
 
       ++currentTracking;
       if (currentTracking > maxTracking) {
-        break;
+        rayTracingFinished = true;
       }
     };
 
-    if (sphereWall.hitObject(currentRay, frequency, &hitData)) {
+    if (!rayTracingFinished &&
+        sphereWall.hitObject(currentRay, frequency, &hitData)) {
       positionTracker_->addNewPositionToCurrentTracking(hitData);
       hitData.accumulatedTime += hitData.time / constants::kSoundSpeed;
+      energyCollectionRules_->collectEnergy(*collectors, &hitData);
     }
 
     positionTracker_->endCurrentTracking();
-    energyCollectionRules_->collectEnergy(*collectors, &hitData);
   }
 }
