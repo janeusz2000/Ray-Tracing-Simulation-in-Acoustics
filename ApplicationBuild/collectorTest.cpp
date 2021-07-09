@@ -18,7 +18,7 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
 const int kSampleRate = 96e3;
 const float sourcePower = 500; // [W]
-const int numOfCollectors = 19;
+const int numOfCollectors = 21;
 const int numOfRaysSquared = 10;
 const int numOfVisibleRaysSquared = 10;
 const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
@@ -28,7 +28,8 @@ const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
 float kDefaultModelSize = 1.0;
 
 std::string_view modelPath =
-    "./validationDiffusors/2D_2m_6n_modulo7_200Hz_15stopni_5potega.obj";
+    "./validationDiffusors/1D_1m_modulo23_500Hz_46n_30stopni_5potega.obj";
+
 std::string_view serverDataPath = "./server/data";
 
 // ARGS MUST CONTAIN:
@@ -57,7 +58,7 @@ int main(int argc, char *argv[]) {
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
 
-  GeometricDomeCollectorBuilder collectorBuilder;
+  XAxisCollectorBuilder collectorBuilder;
   std::unordered_map<float, Collectors> mapOfCollectors =
       manager.run(&collectorBuilder);
 

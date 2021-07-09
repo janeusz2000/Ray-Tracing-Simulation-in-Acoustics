@@ -17,7 +17,7 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function () {
 const currentIp = "http://localhost";
 const currentPort = "3000";
 const addressIp = currentIp + ":" + currentPort;
-const numberOfValidationsModel = 4;
+const numberOfValidationsModel = 8;
 const propertyList = [...Array(numberOfValidationsModel).keys()].map(
   (number) => "SAMPLE" + (number + 1)
 );
