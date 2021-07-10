@@ -1,21 +1,32 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 
-# cc_binary(
-#     name = "build.v1.1",
-#     srcs = [
-#         "ApplicationBuild/build.v1.1.cpp",
-#     ],
-#     linkopts = ["-lpthread"],
-#     deps = [
-#         ":utils",
-#     ],
-# )
+cc_binary(
+    name = "validationGeoDome",
+    srcs = [
+        "ApplicationBuild/validationGeoDome.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":utils",
+    ],
+)
 
 cc_binary(
-    name = "validation",
+    name = "validationBothAxis",
     srcs = [
-        "ApplicationBuild/validation.cpp",
+        "ApplicationBuild/validationBothAxis.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":utils",
+    ],
+)
+
+cc_binary(
+    name = "validationXAxis",
+    srcs = [
+        "ApplicationBuild/validationXAxis.cpp",
     ],
     linkopts = ["-lpthread"],
     deps = [

@@ -39,21 +39,27 @@ def executeCommand(command: str) -> None:
     os.system(command)
 
 
-def buildBinary():
-    os.system("bazel build --config=_gcc validation")
+def buildBinaries():
+    os.system("bazel build --config=_gcc validationXAxis")
+    os.system("bazel build --config=_gcc validationBothAxis")
+    os.system("bazel build --config=_gcc validationGeoDome")
 
 
 def executeLineValidation(diffusorProperty: DiffusorProperty,
                           simulationProperties: SimulationProperties,
                           raportPath: str) -> None:
-    command = f"bazel-bin/validation {diffusorProperty.type} {raportPath} {diffusorProperty.path} {simulationProperties.sourcePower} {simulationProperties.numOfCollectors} {simulationProperties.numOfRaysSquared} {simulationProperties.maxTracking}"
+    command = ""
+    if diffusorProperty.type == "xAxis":
+        command = f"bazel-bin/validationXAxis  {raportPath} {diffusorProperty.path} {simulationProperties.sourcePower} {simulationProperties.numOfCollectors} {simulationProperties.numOfRaysSquared} {simulationProperties.maxTracking}"
+    else:
+        command = f"bazel-bin/validationBothAxis  {raportPath} {diffusorProperty.path} {simulationProperties.sourcePower} {simulationProperties.numOfCollectors} {simulationProperties.numOfRaysSquared} {simulationProperties.maxTracking}"
     executeCommand(command)
 
 
 def executeSurfaceValidation(diffusorProperty: DiffusorProperty,
                              simulationProperties: SimulationProperties,
                              raportPath: str) -> None:
-    command = f"bazel-bin/validation geodome {raportPath} {diffusorProperty.path} {simulationProperties.sourcePower} {simulationProperties.numOfCollectors} {simulationProperties.numOfRaysSquared} {simulationProperties.maxTracking}"
+    command = f"bazel-bin/validationGeoDome {raportPath} {diffusorProperty.path} {simulationProperties.sourcePower} {simulationProperties.numOfCollectors} {simulationProperties.numOfRaysSquared} {simulationProperties.maxTracking}"
     executeCommand(command)
 
 

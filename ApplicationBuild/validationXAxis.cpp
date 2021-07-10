@@ -23,25 +23,7 @@ const std::vector<float> frequencies = {100,  125,  160,  200,  250,
 
 float kDefaultModelSize = 1.0;
 
-std::unique_ptr<CollectorBuilderInterface> summonBuilder(std::string_view key) {
-  std::unordered_map<std::string_view, int> builderMap{
-      {"xAxis", 0}, {"yAxis", 1}, {"xyAxis", 2}, {"geoDome", 3}};
-  switch (builderMap.at(key)) {
-  case 0:
-    return std::make_unique<XAxisCollectorBuilder>();
-  case 1:
-    return std::make_unique<YAxisCollectorBuilder>();
-  case 2:
-    return std::make_unique<DoubleAxisCollectorBuilder>();
-  case 3:
-    return std::make_unique<GeometricDomeCollectorBuilder>();
-  default:
-    throw std::invalid_argument(std::string("Unrecognised collector shape: ") +
-                                key.data());
-  }
-}
 // ARGS MUST CONTAIN:
-// #1 energy collector pattern type
 // #2 raport path
 // #3 model path
 // #4 source Power
@@ -51,13 +33,12 @@ std::unique_ptr<CollectorBuilderInterface> summonBuilder(std::string_view key) {
 
 int main(int argc, char *argv[]) {
   std::vector<std::string> args(&argv[0], &argv[0 + argc]);
-  std::string_view collectorShape = args[1];
-  std::string_view raportPath = args[2];
-  std::string_view modelPath = args[3];
-  const float sourcePower = std::stof(args[4]);
-  const int numOfCollectors = std::stoi(args[5]);
-  const int numOfRaysSquared = std::stoi(args[6]);
-  const int maxTracking = stoi(args[7]);
+  std::string_view raportPath = args[1];
+  std::string_view modelPath = args[2];
+  const float sourcePower = std::stof(args[3]);
+  const int numOfCollectors = std::stoi(args[4]);
+  const int numOfRaysSquared = std::stoi(args[5]);
+  const int maxTracking = stoi(args[6]);
 
   std::cout << "starting validation for: " << modelPath << std::endl;
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
@@ -70,12 +51,11 @@ int main(int argc, char *argv[]) {
       frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
   SimulationProperties properties(&energyCollectionRules, basicProperties);
 
-  std::unique_ptr<CollectorBuilderInterface> collectorBuilder =
-      summonBuilder(collectorShape);
+  XAxisCollectorBuilder collectorBuilder;
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
   std::unordered_map<float, Collectors> mapOfCollectors =
-      manager.run(collectorBuilder.get());
+      manager.run(&collectorBuilder);
 
   WaveObjectFactory waveFactory(kSampleRate);
 
