@@ -329,7 +329,7 @@ GeometricDomeCollectorBuilder::loadPoints(int size) const {
       float x = std::stof(stringWords[1]);
       float z = std::stof(stringWords[2]);
       float y = std::stof(stringWords[3]);
-      points.push_back(core::Vec3(x, y, z));
+      points.push_back(size * core::Vec3(x, y, z));
     }
   }
   return points;
@@ -350,7 +350,7 @@ GeometricDomeCollectorBuilder::buildCollectors(const ModelInterface *model,
                                                int numCollector) const {
 
   Collectors collectors;
-  std::vector<core::Vec3> points = loadPoints(model->sideSize());
+  std::vector<core::Vec3> points = loadPoints(getSphereWallRadius(*model));
 
   for (const core::Vec3 &point : points) {
     std::vector<core::Vec3> closestPoints = findClosest5Points(point, points);

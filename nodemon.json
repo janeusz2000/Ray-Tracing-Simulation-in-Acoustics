@@ -1,0 +1,4 @@
+{
+  "ignore": ["server/data/*", "server/dist/*"],
+  "delay": 2500
+}

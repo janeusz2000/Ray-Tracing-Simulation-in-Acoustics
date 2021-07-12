@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
       frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
   SimulationProperties properties(&energyCollectionRules, basicProperties);
 
-  GeometricDomeCollectorBuilder collectorBuilder;
+  DoubleAxisCollectorBuilder collectorBuilder;
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
   std::unordered_map<float, Collectors> mapOfCollectors =

@@ -84,6 +84,7 @@ def createLineRaportFile(name: str) -> str:
 
 def createSurfaceRaportFile(name: str) -> str:
     path = f"./ValidationResults/rayTraced/surface/{name}.json"
+    print(f"Created raport file at: {path}")
     executeCommand("rm " + path)
     executeCommand("touch " + path)
     return path
@@ -98,13 +99,14 @@ def getSurfaceReferencePath(name: str) -> str:
 
 
 if __name__ == "__main__":
+    buildBinaries()
     logger = setUpLogger()
 
     logger.info("Starting validation")
     simulationProperties = SimulationProperties(
         sourcePower=1000,
         numOfCollectors=33,
-        numOfRaysSquared=5,
+        numOfRaysSquared=100,
         maxTracking=15)
 
     logger.info(f"Configuration:")

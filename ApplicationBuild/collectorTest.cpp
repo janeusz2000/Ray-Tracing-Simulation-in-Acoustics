@@ -7,6 +7,7 @@
 #include "obj/generators.h"
 
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -29,7 +30,7 @@ const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
 float kDefaultModelSize = 1.0;
 
 std::string_view modelPath =
-    "./validationDiffusors/1D_1m_modulo23_500Hz_46n_30stopni_5potega.obj";
+    "./validationDiffusors/2D_1m_200Hz_modulo7_30stopni_6n.obj";
 
 std::string_view serverDataPath = "./server/data";
 
@@ -39,7 +40,7 @@ std::string_view serverDataPath = "./server/data";
 int main(int argc, char *argv[]) {
 
   trackers::startSimulation();
-  const std::vector<float> frequencies = {std::stof(argv[1])};
+  //   const std::vector<float> frequencies = {std::stof(argv[1])};
   trackers::DataExporter dataExporter;
 
   std::cout << "Starting tracking for the model at:\n\t" << modelPath << "\n"
@@ -59,7 +60,7 @@ int main(int argc, char *argv[]) {
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker);
 
-  XAxisCollectorBuilder collectorBuilder;
+  GeometricDomeCollectorBuilder collectorBuilder;
   std::unordered_map<float, Collectors> mapOfCollectors =
       manager.run(&collectorBuilder);
 
@@ -80,6 +81,23 @@ int main(int argc, char *argv[]) {
       referenceManager.run(&collectorBuilder);
   dataExporter.saveModelToJson(serverDataPath, referenceModel.get(),
                                /*referenceModel=*/true);
+
+  WaveObjectFactory waveFactory(kSampleRate);
+
+  std::vector<ResultInterface *> acousticParameters;
+
+  DiffusionCoefficient diffusion(&waveFactory);
+  acousticParameters.push_back(&diffusion);
+
+  trackers::ResultTracker resultTracker;
+  for (ResultInterface *result : acousticParameters) {
+    std::map<float, float> resultPerFrequency =
+        result->getResults(mapOfCollectors);
+    for (auto it = resultPerFrequency.begin(); it != resultPerFrequency.end();
+         ++it) {
+      std::cout << it->first << " : " << it->second << std::endl;
+    }
+  }
 
   trackers::endSimulation();
 }
