@@ -378,6 +378,19 @@ const float getSphereWallRadius(const ModelInterface &model) {
                   4 * std::max(model.height(), model.sideSize()));
 }
 
+void ReflectionEngineInterface::printItself(std::ostream &os) const noexcept {
+  os << "Reflection Engine Interface\n";
+}
+
+void FakeReflectionEngine::printItself(std::ostream &os) const noexcept {
+  os << "Fake Reflection Engine Interface\n";
+}
+
+std::vector<core::Ray> FakeReflectionEngine::modelReflectedSoundWave(
+    const core::Ray &reflected) const {
+  return {reflected};
+}
+
 void Simulator::printItself(std::ostream &os) const noexcept {
   os << "SIMULATOR\n"
      << "Ray tracer: " << *tracer_ << "\n"
@@ -415,7 +428,7 @@ void Simulator::run(float frequency, Collectors *collectors,
       if (currentTracking > maxTracking) {
         rayTracingFinished = true;
       }
-    };
+    }
 
     if (!rayTracingFinished &&
         sphereWall.hitObject(currentRay, frequency, &hitData)) {
@@ -426,4 +439,34 @@ void Simulator::run(float frequency, Collectors *collectors,
 
     positionTracker_->endCurrentTracking();
   }
+}
+
+void Simulator::runRayTracing(float frequency, Collectors *collectors,
+                              const int maxTracking) const {
+  objects::SphereWall sphereWall(getSphereWallRadius(*model_));
+
+  core::Ray currentRay;
+  while (source_->genRay(&currentRay)) {
+    positionTracker_->initializeNewTracking();
+    performRayTracing(frequency, currentRay);
+    positionTracker_->endCurrentTracking();
+  }
+}
+
+void Simulator::performRayTracing(float frequency,
+                                  const core::Ray &currentRay) const {
+  RayTracer::TraceResult hitResult = RayTracer::TraceResult::HIT_TRIANGLE;
+  core::RayHitData hitData;
+  hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
+  if (hitResult == RayTracer::TraceResult::HIT_TRIANGLE) {
+    positionTracker_->addNewPositionToCurrentTracking(hitData);
+    core::Ray reflected = tracer_->getReflected(&hitData);
+    std::vector<core::Ray> reflection =
+        reflectionEngine_->modelReflectedSoundWave(reflected);
+    for (const core::Ray &reflected : reflection) {
+      performRayTracing(frequency, reflected);
+    }
+    return;
+  }
+  // TODO:
 }

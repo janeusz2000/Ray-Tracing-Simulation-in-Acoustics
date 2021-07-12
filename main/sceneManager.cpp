@@ -61,10 +61,12 @@ void SimulationProperties::printItself(std::ostream &os) const noexcept {
 SceneManager::SceneManager(
     Model *model, const SimulationProperties &simulationProperties,
     trackers::PositionTrackerInterface *positionTracker,
-    trackers::CollectorsTrackerInterface *collectorTracker)
+    trackers::CollectorsTrackerInterface *collectorTracker,
+    ReflectionEngineInterface *reflectionEngineInterface)
     : model_(model), simulationProperties_(simulationProperties),
       raytracer_(model), positionTracker_(positionTracker),
-      collectorsTracker_(collectorTracker) {
+      collectorsTracker_(collectorTracker),
+      reflectionEngine_(reflectionEngineInterface) {
   offseter_ = std::make_unique<generators::FakeOffseter>();
 }
 
@@ -94,9 +96,9 @@ SceneManager::run(const CollectorBuilderInterface *collectorBuilder) {
         simulationProperties_.basicSimulationProperties().numOfRaysSquared,
         simulationProperties_.basicSimulationProperties().sourcePower, model_);
 
-    Simulator simulator(&raytracer_, model_, &pointSpeaker, offseter_.get(),
-                        positionTracker_,
-                        simulationProperties_.energyCollectionRules());
+    Simulator simulator(
+        &raytracer_, model_, &pointSpeaker, offseter_.get(), positionTracker_,
+        simulationProperties_.energyCollectionRules(), reflectionEngine_);
 
     Collectors collectors = collectorBuilder->buildCollectors(
         model_,

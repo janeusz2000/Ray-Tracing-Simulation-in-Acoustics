@@ -57,8 +57,11 @@ int main(int argc, char *argv[]) {
       frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
 
   SimulationProperties properties(&energyCollectionRules, basicProperties);
+
+  FakeReflectionEngine reflectionEngine;
+
   SceneManager manager(model.get(), properties, &positionTracker,
-                       &collectorsTracker);
+                       &collectorsTracker, &reflectionEngine);
 
   GeometricDomeCollectorBuilder collectorBuilder;
   std::unordered_map<float, Collectors> mapOfCollectors =
@@ -75,7 +78,8 @@ int main(int argc, char *argv[]) {
       Model::NewReferenceModel(model->sideSize());
 
   SceneManager referenceManager(referenceModel.get(), properties,
-                                &positionTracker, &collectorsTracker);
+                                &positionTracker, &collectorsTracker,
+                                &reflectionEngine);
 
   std::unordered_map<float, Collectors> mapOfReferenceCollectors =
       referenceManager.run(&collectorBuilder);

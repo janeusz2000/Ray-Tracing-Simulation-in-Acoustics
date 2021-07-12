@@ -80,10 +80,11 @@ public:
   // represent frequency of the simulation.
   using EnergiesPerFrequency = std::unordered_map<float, Energies>;
 
-  explicit SceneManager(
-      Model *model, const SimulationProperties &simulationProperties,
-      trackers::PositionTrackerInterface *positionTracker,
-      trackers::CollectorsTrackerInterface *collectorsTracker);
+  explicit SceneManager(Model *model,
+                        const SimulationProperties &simulationProperties,
+                        trackers::PositionTrackerInterface *positionTracker,
+                        trackers::CollectorsTrackerInterface *collectorsTracker,
+                        ReflectionEngineInterface *reflectionEngineInterface);
 
   // Runs simulation and retruns map of collectors with acquired energy per
   // frequency
@@ -98,7 +99,7 @@ private:
   RayTracer raytracer_;
   trackers::PositionTrackerInterface *positionTracker_;
   trackers::CollectorsTrackerInterface *collectorsTracker_;
-
+  ReflectionEngineInterface *reflectionEngine_;
   std::unique_ptr<generators::RandomRayOffseter> offseter_;
 };
 

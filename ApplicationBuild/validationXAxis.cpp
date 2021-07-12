@@ -52,8 +52,9 @@ int main(int argc, char *argv[]) {
   SimulationProperties properties(&energyCollectionRules, basicProperties);
 
   XAxisCollectorBuilder collectorBuilder;
+  FakeReflectionEngine reflectionEngine;
   SceneManager manager(model.get(), properties, &positionTracker,
-                       &collectorsTracker);
+                       &collectorsTracker, &reflectionEngine);
   std::unordered_map<float, Collectors> mapOfCollectors =
       manager.run(&collectorBuilder);
 

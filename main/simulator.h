@@ -140,6 +140,19 @@ void exportCollectorsToJson(const Collectors &energyCollectors,
 // object.
 const float getSphereWallRadius(const ModelInterface &model);
 
+// Defines how sound is reflecting from the structure
+struct ReflectionEngineInterface : public Printable {
+  virtual std::vector<core::Ray>
+  modelReflectedSoundWave(const core::Ray &reflected) const = 0;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
+struct FakeReflectionEngine : public ReflectionEngineInterface {
+  std::vector<core::Ray>
+  modelReflectedSoundWave(const core::Ray &reflected) const override;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
 // Performs ray-tracing simulation on given model.
 class Simulator : public Printable {
 public:
@@ -147,17 +160,22 @@ public:
             generators::RayFactory *source,
             generators::RandomRayOffseter *offsetter,
             trackers::PositionTrackerInterface *positionTracker,
-            collectionRules::CollectEnergyInterface *energyCollectionRules)
+            collectionRules::CollectEnergyInterface *energyCollectionRules,
+            ReflectionEngineInterface *reflectionEngine)
       : tracer_(tracer), model_(model), source_(source), offsetter_(offsetter),
         positionTracker_(positionTracker),
-        energyCollectionRules_(energyCollectionRules){};
+        energyCollectionRules_(energyCollectionRules),
+        reflectionEngine_(reflectionEngine){};
 
   // Runs the simulation by modifying given collectors
   void run(float frequency, Collectors *collectors, const int maxTracking);
+  void runRayTracing(float frequency, Collectors *collectors,
+                     const int maxTracking) const;
 
   void printItself(std::ostream &os) const noexcept override;
 
 private:
+  void performRayTracing(float frequency, const core::Ray &currentRay) const;
   RayTracer *tracer_;
   ModelInterface *model_;
   generators::RayFactory *source_;
@@ -165,6 +183,8 @@ private:
 
   trackers::PositionTrackerInterface *positionTracker_;
   collectionRules::CollectEnergyInterface *energyCollectionRules_;
+
+  ReflectionEngineInterface *reflectionEngine_;
 };
 
 #endif

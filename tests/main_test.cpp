@@ -38,8 +38,10 @@ TEST_F(MainTest, buildingSimulation) {
   collectionRules::LinearEnergyCollection energyCollectionRules;
 
   FakeOffseter rayOffseter;
+  FakeReflectionEngine reflectionEngine;
   Simulator simulator(&rayTracer, model_.get(), &pointSpeaker, &rayOffseter,
-                      &positionTracker, &energyCollectionRules);
+                      &positionTracker, &energyCollectionRules,
+                      &reflectionEngine);
   DoubleAxisCollectorBuilder collectorBuilder;
   std::vector<std::unique_ptr<objects::EnergyCollector>> collectors =
       collectorBuilder.buildCollectors(model_.get(), numOfCollectors_);
