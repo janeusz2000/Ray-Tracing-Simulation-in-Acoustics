@@ -408,7 +408,6 @@ void Simulator::run(float frequency, Collectors *collectors,
   objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
   core::Ray currentRay;
-
   while (source_->genRay(&currentRay)) {
     bool rayTracingFinished = false;
     positionTracker_->initializeNewTracking();
@@ -443,30 +442,45 @@ void Simulator::run(float frequency, Collectors *collectors,
 
 void Simulator::runRayTracing(float frequency, Collectors *collectors,
                               const int maxTracking) const {
-  objects::SphereWall sphereWall(getSphereWallRadius(*model_));
 
   core::Ray currentRay;
   while (source_->genRay(&currentRay)) {
     positionTracker_->initializeNewTracking();
-    performRayTracing(frequency, currentRay);
+    int currentTracking = 0;
+    performRayTracing(collectors, frequency, &currentRay, maxTracking,
+                      &currentTracking);
     positionTracker_->endCurrentTracking();
   }
 }
 
-void Simulator::performRayTracing(float frequency,
-                                  const core::Ray &currentRay) const {
+void Simulator::performRayTracing(Collectors *collectors, float frequency,
+                                  core::Ray *currentRay, int maxTracking,
+                                  int *currentTracking) const {
+  // Ends tracking when current ray tracking reaches maximum number.
+  if (*currentTracking >= maxTracking) {
+    return;
+  }
   RayTracer::TraceResult hitResult = RayTracer::TraceResult::HIT_TRIANGLE;
   core::RayHitData hitData;
-  hitResult = tracer_->rayTrace(currentRay, frequency, &hitData);
+  hitResult = tracer_->rayTrace(*currentRay, frequency, &hitData);
+
   if (hitResult == RayTracer::TraceResult::HIT_TRIANGLE) {
+
+    ++*currentTracking;
+
     positionTracker_->addNewPositionToCurrentTracking(hitData);
     core::Ray reflected = tracer_->getReflected(&hitData);
     std::vector<core::Ray> reflection =
         reflectionEngine_->modelReflectedSoundWave(reflected);
-    for (const core::Ray &reflected : reflection) {
-      performRayTracing(frequency, reflected);
+    for (core::Ray &reflected : reflection) {
+      performRayTracing(collectors, frequency, &reflected, maxTracking,
+                        currentTracking);
     }
-    return;
   }
-  // TODO:
+  if (hitResult == RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE &&
+      sphereWall_.hitObject(*currentRay, frequency, &hitData)) {
+    positionTracker_->addNewPositionToCurrentTracking(hitData);
+    hitData.accumulatedTime += hitData.time / constants::kSoundSpeed;
+    energyCollectionRules_->collectEnergy(*collectors, &hitData);
+  }
 }

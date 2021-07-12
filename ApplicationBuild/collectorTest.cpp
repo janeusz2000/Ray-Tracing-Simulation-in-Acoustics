@@ -20,8 +20,8 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 const int kSampleRate = 96e3;
 const float sourcePower = 500; // [W]
 const int numOfCollectors = 21;
-const int numOfRaysSquared = 10;
-const int numOfVisibleRaysSquared = 10;
+const int numOfRaysSquared = 1;
+const int numOfVisibleRaysSquared = 1;
 const int maxTracking = 15;
 const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
                                         2000, 2500,  3150,  4000, 5000, 6300,

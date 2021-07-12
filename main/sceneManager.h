@@ -80,6 +80,7 @@ public:
   // represent frequency of the simulation.
   using EnergiesPerFrequency = std::unordered_map<float, Energies>;
 
+  // TODO: pack this constructro into porperties class to simplify it
   explicit SceneManager(Model *model,
                         const SimulationProperties &simulationProperties,
                         trackers::PositionTrackerInterface *positionTracker,
@@ -90,6 +91,9 @@ public:
   // frequency
   std::unordered_map<float, Collectors>
   run(const CollectorBuilderInterface *collectorBuilder);
+
+  std::unordered_map<float, Collectors>
+  newRun(const CollectorBuilderInterface *collectorBuilder);
 
   void printItself(std::ostream &os) const noexcept override;
 

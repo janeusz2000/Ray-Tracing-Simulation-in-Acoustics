@@ -77,7 +77,8 @@ void SceneManager::printItself(std::ostream &os) const noexcept {
      << "Ray Tracer: " << raytracer_ << "\n"
      << "Position Tracker: " << *(positionTracker_) << "\n"
      << "Collectors Tracker: " << *(collectorsTracker_) << "\n"
-     << "Offseter: " << *(offseter_);
+     << "Offseter: " << *(offseter_) << "\n"
+     << "Reflection engine: " << *(reflectionEngine_);
 }
 
 std::unordered_map<float, Collectors>
@@ -91,7 +92,6 @@ SceneManager::run(const CollectorBuilderInterface *collectorBuilder) {
 
     // Initialize frequency in visual reporesentation of the simulation
     positionTracker_->initializeNewFrequency(freq);
-
     generators::PointSpeakerRayFactory pointSpeaker(
         simulationProperties_.basicSimulationProperties().numOfRaysSquared,
         simulationProperties_.basicSimulationProperties().sourcePower, model_);
@@ -109,7 +109,47 @@ SceneManager::run(const CollectorBuilderInterface *collectorBuilder) {
 
     int maxTracking =
         simulationProperties_.basicSimulationProperties().maxTracking;
+
     simulator.run(freq, &collectors, maxTracking);
+
+    collectorsPerFrequencies.insert(
+        std::make_pair(freq, std::move(collectors)));
+    positionTracker_->endCurrentFrequency();
+  }
+  positionTracker_->save();
+  return collectorsPerFrequencies;
+}
+
+std::unordered_map<float, Collectors>
+SceneManager::newRun(const CollectorBuilderInterface *collectorBuilder) {
+  std::vector<float> frequencies =
+      simulationProperties_.basicSimulationProperties().frequencies;
+
+  std::unordered_map<float, Collectors> collectorsPerFrequencies;
+
+  for (float freq : frequencies) {
+
+    // Initialize frequency in visual reporesentation of the simulation
+    positionTracker_->initializeNewFrequency(freq);
+    generators::PointSpeakerRayFactory pointSpeaker(
+        simulationProperties_.basicSimulationProperties().numOfRaysSquared,
+        simulationProperties_.basicSimulationProperties().sourcePower, model_);
+
+    Simulator simulator(
+        &raytracer_, model_, &pointSpeaker, offseter_.get(), positionTracker_,
+        simulationProperties_.energyCollectionRules(), reflectionEngine_);
+
+    Collectors collectors = collectorBuilder->buildCollectors(
+        model_,
+        simulationProperties_.basicSimulationProperties().numOfCollectors);
+
+    // Save collectors for the visual representation
+    collectorsTracker_->save(collectors, "./server/data");
+
+    int maxTracking =
+        simulationProperties_.basicSimulationProperties().maxTracking;
+
+    simulator.runRayTracing(freq, &collectors, maxTracking);
 
     collectorsPerFrequencies.insert(
         std::make_pair(freq, std::move(collectors)));

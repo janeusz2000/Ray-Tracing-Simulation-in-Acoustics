@@ -22,7 +22,7 @@ public:
   virtual ~Object(){};
   virtual core::Vec3 normal(const core::Vec3 &surfacePoint) const = 0;
   virtual bool hitObject(const core::Ray &ray, float freq,
-                         core::RayHitData *hitData) = 0;
+                         core::RayHitData *hitData) const = 0;
 
   void setOrigin(const core::Vec3 &origin);
   core::Vec3 getOrigin() const;
@@ -38,7 +38,7 @@ public:
   virtual ~Sphere(){};
   core::Vec3 normal(const core::Vec3 &surfacePoint) const override;
   [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
-                               core::RayHitData *hitData) override;
+                               core::RayHitData *hitData) const override;
   bool isVecInside(const core::Vec3 &vec) const;
   float getRadius() const;
   void setRadius(float rad);
@@ -102,7 +102,7 @@ public:
   core::Vec3
   normal(const core::Vec3 &surfacePoint = core::Vec3()) const override;
   [[nodiscard]] bool hitObject(const core::Ray &ray, float freq,
-                               core::RayHitData *hitData) override;
+                               core::RayHitData *hitData) const override;
 
   float area() const;
   void refreshAttributes();

@@ -357,7 +357,11 @@ JsonSampledPositionTracker::JsonSampledPositionTracker(
     errorStream << "Number of Rays squared cannot be less than 1\n";
   }
   if (numOfVisibleRaysSquared_ < 1) {
-    errorStream << "Number of Visible Rays squared cannot be less than 1";
+    errorStream << "Number of Visible Rays squared cannot be less than 1\n";
+  }
+  if (numOfVisibleRaysSquared_ > numOfRaysSquared_) {
+    errorStream << "Number of visible Rays squared cannot be greater then "
+                   "number of rays squared\n";
   }
 
   std::string errorMsg = errorStream.str();

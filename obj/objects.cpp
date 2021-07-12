@@ -19,7 +19,7 @@ Sphere::Sphere(const core::Vec3 &origin, float rad) {
 }
 
 bool Sphere::hitObject(const core::Ray &ray, float freq,
-                       core::RayHitData *hitData) {
+                       core::RayHitData *hitData) const {
 
   core::Vec3 rVec3 = ray.origin() - this->getOrigin();
 
@@ -179,7 +179,7 @@ core::Vec3 TriangleObj::normal(const core::Vec3 &surfacePoint) const {
 }
 
 bool TriangleObj::hitObject(const core::Ray &ray, float freq,
-                            core::RayHitData *hitData) {
+                            core::RayHitData *hitData) const {
   // if ray direction is parpedicular to normal, there is no hit. It can be
   // translated into checking if scalarProduct of the ray.direction and normal
   // is close or equal to zero.

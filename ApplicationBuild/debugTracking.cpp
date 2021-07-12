@@ -18,8 +18,8 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 const int kSampleRate = 96e3;
 const float sourcePower = 500; // [W]
 const int numOfCollectors = 37;
-const int numOfRaysSquared = 10;
-const int numOfVisibleRaysSquared = 10;
+const int numOfRaysSquared = 1;
+const int numOfVisibleRaysSquared = 1;
 const int maxTracking = 15;
 const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
                                         2000, 2500,  3150,  4000, 5000, 6300,
@@ -37,14 +37,11 @@ std::string_view serverDataPath = "./server/data";
 int main(int argc, char *argv[]) {
 
   trackers::startSimulation();
-  const std::vector<float> frequencies = {std::stof(argv[1])};
+  //   const std::vector<float> frequencies = {std::stof(argv[1])};
   trackers::DataExporter dataExporter;
 
-  std::cout << "Starting tracking for the model at:\n\t" << modelPath << "\n"
-            << "\nfor frequency: " << frequencies[0] << " Hz" << std::endl;
-
-  std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
-
+  //   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
+  std::unique_ptr<Model> model = Model::NewReferenceModel(2.0f);
   trackers::JsonSampledPositionTracker positionTracker(
       serverDataPath, numOfRaysSquared, numOfVisibleRaysSquared);
   trackers::CollectorsTrackerToJson collectorsTracker;
