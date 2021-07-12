@@ -1,6 +1,5 @@
 import json
 import numpy as np
-from numpy.core.fromnumeric import mean
 from validationTools.loggingStatistics import insert_statistic_Values
 
 # flags should be:
@@ -30,7 +29,7 @@ def prepareParamterMap(parameterMap):
 def meanErrorDifference(array1, array2) -> float:
     result = np.array(array1)
     reference = np.array(array2)
-    return np.sum(np.abs(result - reference)) / np.mean(reference)
+    return np.sum(np.abs(result - reference)) / reference.size
 
 
 def standardDeviationError(array1, array2):
@@ -104,7 +103,6 @@ def executeComparisonAndSaveToDatabase(referencePath: str, resultsPath: str):
                 value = str(float_value)
                 outputMessage += f"\t{name} : {value}\n"
                 outputValues.append(float_value)
-            print(outputMessage)
             insert_statistic_Values(
                 parameterName=parameter_name,
                 meanError=outputValues[0],

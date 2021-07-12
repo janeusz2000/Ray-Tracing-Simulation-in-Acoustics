@@ -75,9 +75,19 @@ function getData(parameterName, statisticValues) {
     "0, 0, 0,",
     "132, 0, 255,",
   ];
+  sampleName = [
+    "1D Modulo23^5 500Hz 46n 30' LINE",
+    "1D Modulo13^5 250Hz 9n  15' LINE",
+    "2D Modulo7 ^2 200Hz 6n  30' LINE",
+    "2D Modulo7 ^5 200Hz 6n  15' LINE",
+    "1D Modulo23^5 500Hz 46n 30' SURFACE",
+    "1D Modulo13^5 250Hz 9n  15' SURFACE",
+    "2D Modulo7 ^2 200Hz 6n  30' SURFACE",
+    "2D Modulo7 ^5 200Hz 6n  15' SURFACE",
+  ];
   for (var sample = 0; sample < statisticValues.length; sample++) {
     const currentData = {};
-    currentData.label = "SAMPLE" + (sample + 1);
+    currentData.label = sampleName[sample];
     currentData.data = statisticValues[sample].map(
       (table) => table[parameterName]
     );
