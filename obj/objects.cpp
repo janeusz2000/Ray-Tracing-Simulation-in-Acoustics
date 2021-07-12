@@ -245,7 +245,7 @@ bool TriangleObj::arePointsValid() {
   recalculateArea();
   if (area() < constants::kAccuracy) {
     std::stringstream ss;
-    ss << "Area of triangle" << *this << " is too small: " << area();
+    ss << "Area of the triangle" << *this << " is too small: " << area();
     throw std::invalid_argument(ss.str());
   }
   return true;

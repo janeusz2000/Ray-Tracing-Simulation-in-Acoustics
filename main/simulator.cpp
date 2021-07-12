@@ -476,9 +476,9 @@ void Simulator::performRayTracing(Collectors *collectors, float frequency,
       performRayTracing(collectors, frequency, &reflected, maxTracking,
                         currentTracking);
     }
-  }
-  if (hitResult == RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE &&
-      sphereWall_.hitObject(*currentRay, frequency, &hitData)) {
+  } else if (hitResult ==
+                 RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE &&
+             sphereWall_.hitObject(*currentRay, frequency, &hitData)) {
     positionTracker_->addNewPositionToCurrentTracking(hitData);
     hitData.accumulatedTime += hitData.time / constants::kSoundSpeed;
     energyCollectionRules_->collectEnergy(*collectors, &hitData);
