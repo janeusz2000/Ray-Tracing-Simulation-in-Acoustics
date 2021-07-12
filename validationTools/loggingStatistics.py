@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import MySQLConnection, Error
 import numpy as np
-from ipConfig import local_ip
+from validationTools.ipConfig import local_ip
 
 import logging
 

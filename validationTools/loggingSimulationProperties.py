@@ -1,45 +1,24 @@
 import mysql.connector
 from mysql.connector import MySQLConnection, Error
 import numpy as np
-from numpy.lib.function_base import insert
-from numpy.lib.utils import source
-from absl import app, flags
-from ipConfig import local_ip
-
-import logging
-
-logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
+import validationTools.ipConfig as ip
 
 
-def insert_SimulationProperties(sourcePower: float, numOfCollectors: int, numOfRaysSquared: int):
+def logSimulationProperties(simulationProperties):
     try:
         conn = mysql.connector.connect(
-            host=local_ip, database='Validations', user='Brad', password='')
+            host=ip.local_ip, database='Validations', user='Brad', password='')
 
         if conn.is_connected():
-            query = f'INSERT INTO SIMULATION_PROPERTIES(SOURCE_POWER, NUM_OF_COLLECTORS, TOTAL_NUMBER_OF_RAYS) VALUES ({sourcePower},{numOfCollectors}, {np.square(numOfRaysSquared)});'
+            query = f'INSERT INTO SIMULATION_PROPERTIES(SOURCE_POWER, NUM_OF_COLLECTORS, TOTAL_NUMBER_OF_RAYS, MAX_TRACKING) VALUES ({simulationProperties.sourcePower},{simulationProperties.numOfCollectors}, {np.square(simulationProperties.numOfRaysSquared)}, {simulationProperties.maxTracking});'
             cursor = conn.cursor()
             cursor.execute(query)
             conn.commit()
             print(
-                f"Data acquired in database: source power: {sourcePower} [W], number of collectors: {numOfCollectors}, Total number of Rays: {np.square(numOfRaysSquared)}")
+                f"Data acquired in database: source power: {simulationProperties.sourcePower} [W], number of collectors: {simulationProperties.numOfCollectors}, Total number of Rays: {np.square(simulationProperties.numOfRaysSquared)}")
     except Error as e:
         print(e)
 
     finally:
         if conn is not None and conn.is_connected():
             conn.close()
-
-
-def main(argv):
-    sourcePower = float(argv[1])
-    numOfCollectors = int(argv[2])
-    numOfRaysSquared = int(argv[3])
-    insert_SimulationProperties(sourcePower=sourcePower,
-                                numOfCollectors=numOfCollectors,
-                                numOfRaysSquared=numOfRaysSquared)
-    logging.info("==== SIMULATION PROPERTIES INFO SAVED IN DATABASE ====")
-
-
-if __name__ == '__main__':
-    app.run(main)

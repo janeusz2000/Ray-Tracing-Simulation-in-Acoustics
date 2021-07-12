@@ -1,12 +1,10 @@
 import mysql.connector
 from mysql.connector import MySQLConnection, Error
-import numpy as np
-from ipConfig import local_ip
+from validationTools.ipConfig import local_ip
 import logging
 import json
-from absl import app, flags
 
-from compareResutlsToReference import prepareParamterMap
+from validationTools.compareResultsToReference import prepareParamterMap
 
 logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
 
@@ -24,7 +22,7 @@ def getResponse(conn: mysql.connector.MySQLConnection):
         myCursor = conn.cursor()
         query = f"SELECT * FROM STATISTIC_VALUES WHERE " \
             f"STATISTIC_VALUES.PARAMETER_NAME='{parameterName}' " \
-            f"ORDER BY STATISTIC_VALUES_ID DESC LIMIT 16; "
+            f"ORDER BY STATISTIC_VALUES_ID DESC LIMIT 8; "
         myCursor.execute(query)
         yield (parameterName, myCursor.fetchall())
 
@@ -43,21 +41,18 @@ def prepareQuery(parameterName: str,
                  validationDesc: str):
 
     queryHeader = "INSERT INTO VALIDATION_DATA(PARAMETER_NAME, " \
-        "SIMULATION_PROPERTIES_ID, SAMPLE1, SAMPLE2, SAMPLE3, SAMPLE4," \
+        "SIMULATION_PROPERTIES_ID, SAMPLE1, SAMPLE2, SAMPLE3, SAMPLE4, SAMPLE5, SAMPLE6, SAMPLE7, SAMPLE8, " \
         "VALIDATION_DESC) "
 
     queryValues = f"VALUES ('{parameterName}', {lastSimulationID}, " \
         f"{sampleIndexList[0]}, {sampleIndexList[1]}, {sampleIndexList[2]}, " \
-        f"{sampleIndexList[3]}, '{validationDesc}');"
+        f"{sampleIndexList[3]}, {sampleIndexList[4]}, {sampleIndexList[5]}, "\
+        f"{sampleIndexList[6]}, {sampleIndexList[7]}, '{validationDesc}');"
 
     return queryHeader + queryValues
 
 
-def execute(argv):
-    desc = ""
-    for i in range(1, len(argv)):
-        desc += argv[i] + " "
-    print(desc)
+def performLogging(desc: str):
 
     try:
         conn = mysql.connector.connect(
@@ -73,20 +68,15 @@ def execute(argv):
                 sampleSurfaceIndex = sampleIndexList[1::2]
                 print("line: {}".format(sampleLineIndex))
                 print("surface: {}".format(sampleSurfaceIndex))
+                resultSampleIndexList = sampleLineIndex + sampleSurfaceIndex
                 simulationID = getCurrentSimulationProperties(conn)
-                LineQuery = prepareQuery(parameterName=parameterName,
-                                         sampleIndexList=sampleLineIndex,
-                                         lastSimulationID=simulationID,
-                                         validationDesc=desc)
+                query = prepareQuery(parameterName=parameterName,
+                                     sampleIndexList=resultSampleIndexList,
+                                     lastSimulationID=simulationID,
+                                     validationDesc=desc)
                 myCursor = conn.cursor()
-                myCursor.execute(LineQuery)
+                myCursor.execute(query)
 
-                SurfaceQuery = prepareQuery(parameterName=parameterName,
-                                            sampleIndexList=sampleSurfaceIndex,
-                                            lastSimulationID=simulationID,
-                                            validationDesc=desc)
-                myCursor = conn.cursor()
-                myCursor.execute(SurfaceQuery)
                 conn.commit()
                 logging.info("==== VALIDATION SAVED IN DATABASE ==== ")
 
@@ -96,7 +86,3 @@ def execute(argv):
     finally:
         if conn is not None and conn.is_connected():
             conn.close()
-
-
-if __name__ == "__main__":
-    app.run(execute)

@@ -3,6 +3,9 @@ import json
 import os
 import logging
 from dataclasses import dataclass
+from validationTools.logValidation import performLogging
+import validationTools.compareResultsToReference as compTool
+from validationTools.loggingSimulationProperties import logSimulationProperties
 
 
 @dataclass
@@ -106,8 +109,10 @@ if __name__ == "__main__":
     simulationProperties = SimulationProperties(
         sourcePower=1000,
         numOfCollectors=33,
-        numOfRaysSquared=100,
+        numOfRaysSquared=10,
         maxTracking=15)
+
+    logSimulationProperties(simulationProperties=simulationProperties)
 
     logger.info(f"Configuration:")
     logger.info(f"\tSource Power {simulationProperties.sourcePower} [W]")
@@ -122,9 +127,19 @@ if __name__ == "__main__":
                               simulationProperties=simulationProperties,
                               raportPath=lineRaportPath)
         lineReferencePath = getLineReferencePath(diffusor.name)
+        compTool.executeComparisonAndSaveToDatabase(
+            lineReferencePath, lineRaportPath)
 
         surfaceRaportPath = createSurfaceRaportFile(diffusor.name)
         executeSurfaceValidation(diffusorProperty=diffusor,
                                  simulationProperties=simulationProperties,
                                  raportPath=surfaceRaportPath)
         surfaceReferencePath = getSurfaceReferencePath(diffusor.name)
+        compTool.executeComparisonAndSaveToDatabase(
+            surfaceReferencePath, surfaceRaportPath
+        )
+
+    description = input("Write short description of the validation:\n\t")
+    description = "test"
+    performLogging(description)
+    logger.info("Validation finished!")

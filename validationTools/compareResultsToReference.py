@@ -1,16 +1,11 @@
 import json
-import logging
 import numpy as np
 from numpy.core.fromnumeric import mean
-from loggingStatistics import insert_statistic_Values
-
-from absl import app, flags
+from validationTools.loggingStatistics import insert_statistic_Values
 
 # flags should be:
 # 1. path to json file that contains reference result
 # 2. path to json file that contains acquired results invalidation process
-
-logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
 
 
 def ElementsAreArray(array1, array2):
@@ -68,12 +63,7 @@ def minError(array1, array2) -> float:
     return np.min(np.abs(result - reference)) / result.size
 
 
-def main(argv):
-    referencePath = argv[1]
-    resultsPath = argv[2]
-    validationType = argv[3]
-
-    logging.info(f"VALIDATION OF: {resultsPath}")
+def executeComparisonAndSaveToDatabase(referencePath: str, resultsPath: str):
 
     with open(referencePath) as jsonFile:
         reference = json.load(jsonFile)
@@ -114,8 +104,7 @@ def main(argv):
                 value = str(float_value)
                 outputMessage += f"\t{name} : {value}\n"
                 outputValues.append(float_value)
-            logging.info(outputMessage)
-
+            print(outputMessage)
             insert_statistic_Values(
                 parameterName=parameter_name,
                 meanError=outputValues[0],
@@ -126,7 +115,3 @@ def main(argv):
                 medianError=outputValues[5])
 
     return len(referenceMap.keys())
-
-
-if __name__ == "__main__":
-    app.run(main)
