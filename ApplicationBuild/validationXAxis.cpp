@@ -52,11 +52,11 @@ int main(int argc, char *argv[]) {
   SimulationProperties properties(&energyCollectionRules, basicProperties);
 
   XAxisCollectorBuilder collectorBuilder;
-  FakeReflectionEngine reflectionEngine;
+  SimpleFourSidedReflectionEngine reflectionEngine;
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker, &reflectionEngine);
   std::unordered_map<float, Collectors> mapOfCollectors =
-      manager.run(&collectorBuilder);
+      manager.newRun(&collectorBuilder);
 
   WaveObjectFactory waveFactory(kSampleRate);
 

@@ -6,7 +6,7 @@ import os
 
 path = os.getcwd()
 path = os.path.join(path, "validationTools")
-path = os.path.join(path, "MESresults")
+path = os.path.join(path, "newReferenceCalculations")
 
 print(path)
 
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         diffusionCoefficient = calculateDiffusionCoefficient(valueMap)
         referencePath = os.path.join(os.path.join(
             os.getcwd(), 'validationResults'), "Reference")
-        if "linia" in filename:
+        if "line" in filename:
             referencePath = os.path.join(referencePath, 'line')
         else:
             referencePath = os.path.join(referencePath, 'surface')

@@ -386,9 +386,35 @@ void FakeReflectionEngine::printItself(std::ostream &os) const noexcept {
   os << "Fake Reflection Engine Interface\n";
 }
 
-std::vector<core::Ray> FakeReflectionEngine::modelReflectedSoundWave(
-    const core::Ray &reflected) const {
+void SimpleFourSidedReflectionEngine::printItself(
+    std::ostream &os) const noexcept {
+  os << "Simple Four Sided Reflection Engine\n";
+}
+
+std::vector<core::Ray>
+FakeReflectionEngine::modelReflectedSoundWave(core::Ray &reflected,
+                                              float reflection) const {
   return {reflected};
+}
+
+std::vector<core::Ray> SimpleFourSidedReflectionEngine::modelReflectedSoundWave(
+    core::Ray &reflected, float frequency) const {
+
+  float amplitude = 100 / (frequency * std::log10(frequency));
+  std::vector<core::Vec3> offsets = {
+      amplitude * core::Vec3::kX, amplitude * core::Vec3::kY,
+      -amplitude * core::Vec3::kX, -amplitude * core::Vec3::kY};
+
+  std::vector<core::Ray> output;
+  for (const core::Vec3 &offset : offsets) {
+    output.push_back(
+        core::Ray(reflected.origin(), reflected.direction() + offset,
+                  reflected.energy() / 5, reflected.accumulatedTime()));
+  }
+  output.push_back(core::Ray(reflected.origin(), reflected.direction(),
+                             reflected.energy() / 5,
+                             reflected.accumulatedTime()));
+  return output;
 }
 
 void Simulator::printItself(std::ostream &os) const noexcept {
@@ -471,7 +497,7 @@ void Simulator::performRayTracing(Collectors *collectors, float frequency,
     positionTracker_->addNewPositionToCurrentTracking(hitData);
     core::Ray reflected = tracer_->getReflected(&hitData);
     std::vector<core::Ray> reflection =
-        reflectionEngine_->modelReflectedSoundWave(reflected);
+        reflectionEngine_->modelReflectedSoundWave(reflected, frequency);
     for (core::Ray &reflected : reflection) {
       performRayTracing(collectors, frequency, &reflected, maxTracking,
                         currentTracking);

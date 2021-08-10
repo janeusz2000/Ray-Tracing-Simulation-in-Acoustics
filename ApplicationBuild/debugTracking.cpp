@@ -21,9 +21,9 @@ const int numOfCollectors = 37;
 const int numOfRaysSquared = 1;
 const int numOfVisibleRaysSquared = 1;
 const int maxTracking = 15;
-const std::vector<float> frequencies = {500,  630,   800,   1000, 1250, 1600,
-                                        2000, 2500,  3150,  4000, 5000, 6300,
-                                        8000, 10000, 12500, 16000};
+const std::vector<float> frequencies = {
+    100,  200,  300,  400,  500,  630,  800,  1000,  1250,  1600,
+    2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000};
 
 float kDefaultModelSize = 1.0;
 
@@ -40,8 +40,8 @@ int main(int argc, char *argv[]) {
   //   const std::vector<float> frequencies = {std::stof(argv[1])};
   trackers::DataExporter dataExporter;
 
-  //   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
-  std::unique_ptr<Model> model = Model::NewReferenceModel(2.0f);
+  std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
+  //   std::unique_ptr<Model> model = Model::NewReferenceModel(1.0f);
   trackers::JsonSampledPositionTracker positionTracker(
       serverDataPath, numOfRaysSquared, numOfVisibleRaysSquared);
   trackers::CollectorsTrackerToJson collectorsTracker;
@@ -51,13 +51,13 @@ int main(int argc, char *argv[]) {
       frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
 
   SimulationProperties properties(&energyCollectionRules, basicProperties);
-  FakeReflectionEngine reflectionEngine;
+  SimpleFourSidedReflectionEngine reflectionEngine;
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker, &reflectionEngine);
 
   DoubleAxisCollectorBuilder collectorBuilder;
   std::unordered_map<float, Collectors> mapOfCollectors =
-      manager.run(&collectorBuilder);
+      manager.newRun(&collectorBuilder);
 
   std::cout << "Ray tracing of the object at: \n\t" << modelPath
             << "\nhas finishied!" << std::endl;

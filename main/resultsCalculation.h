@@ -6,6 +6,10 @@
 
 #include <cmath>
 #include <map>
+#include <numeric>
+#include <sstream>
+#include <unordered_map>
+
 
 using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 
@@ -50,18 +54,18 @@ private:
 std::vector<float>
 calculateSoundPressureLevels(const std::vector<WaveObject> &waveObjectVector);
 
+using parameterPerFrequency = std::map<float, float>;
 // Interface struct for acoustic parameter calculation from function sequence of
 // sound level pressure acquired in simulation.
-struct ResultInterface : public Printable {
+class ResultInterface : public Printable {
+public:
   explicit ResultInterface(WaveObjectFactory *waveObjectFactory)
       : waveFactory_(waveObjectFactory){};
   virtual ~ResultInterface(){};
 
-  // Calculates desired acoustic parameter in frequency function. Key of the
-  // std::unordered_map represents frequency and element value represent
-  // value of the calculated acoustic parameter.
-  std::map<float, float> getResults(const std::unordered_map<float, Collectors>
-                                        &energyCollectorsPerFrequency) const;
+  virtual parameterPerFrequency getResults(
+      const std::unordered_map<float, Collectors> &energyCollectorsPerFrequency)
+      const;
 
   virtual std::string_view getName() const noexcept;
 
@@ -81,7 +85,8 @@ protected:
 // a representative sample of sources is given in 6.2.2 (source). The lack of
 // a subscript for d indicates random incidence." ~Comes from (source): ISO
 // 17497-2:2012
-struct DiffusionCoefficient : public ResultInterface {
+class DiffusionCoefficient : public ResultInterface {
+public:
   explicit DiffusionCoefficient(WaveObjectFactory *waveFactory)
       : ResultInterface(waveFactory){};
 
@@ -96,6 +101,28 @@ private:
   // Calculates parameter from given vector of pressures defined in [dB]
   float calculateDiffusionCoefficient(
       const std::vector<float> &soundPressureLevels) const;
+};
+
+class NormalizedDiffusionCoefficient : public ResultInterface {
+public:
+  explicit NormalizedDiffusionCoefficient(
+      WaveObjectFactory *waveFactory,
+      const std::unordered_map<float, Collectors>
+          &referenceResultCollectorsPerFrequency);
+
+  std::string_view getName() const noexcept override;
+
+  parameterPerFrequency getResults(
+      const std::unordered_map<float, Collectors> &energyCollectorsPerFrequency)
+      const override;
+
+protected:
+  // This is not used in this class [only God can judge me].
+  float calculateParameter(const Collectors &collectors) const override;
+
+private:
+  WaveObjectFactory *waveFactory_;
+  parameterPerFrequency referenceResult_;
 };
 
 #endif

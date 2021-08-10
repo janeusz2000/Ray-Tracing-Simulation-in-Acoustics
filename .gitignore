@@ -4,6 +4,7 @@
 /validationLog
 server/data
 /validationResults
+/validationTools/newReferenceCalculations
 # compiled output
 /dist
 /tmp

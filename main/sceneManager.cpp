@@ -134,7 +134,7 @@ SceneManager::newRun(const CollectorBuilderInterface *collectorBuilder) {
     generators::PointSpeakerRayFactory pointSpeaker(
         simulationProperties_.basicSimulationProperties().numOfRaysSquared,
         simulationProperties_.basicSimulationProperties().sourcePower, model_);
-    // TODO: Simplyfy this constructor
+    // TODO: Simplify this constructor
     Simulator simulator(
         &raytracer_, model_, &pointSpeaker, offseter_.get(), positionTracker_,
         simulationProperties_.energyCollectionRules(), reflectionEngine_);

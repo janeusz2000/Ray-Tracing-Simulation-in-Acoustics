@@ -52,11 +52,11 @@ int main(int argc, char *argv[]) {
   SimulationProperties properties(&energyCollectionRules, basicProperties);
 
   DoubleAxisCollectorBuilder collectorBuilder;
-  FakeReflectionEngine reflectionEngine;
+  SimpleFourSidedReflectionEngine reflectionEngine;
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker, &reflectionEngine);
   std::unordered_map<float, Collectors> mapOfCollectors =
-      manager.run(&collectorBuilder);
+      manager.newRun(&collectorBuilder);
 
   WaveObjectFactory waveFactory(kSampleRate);
 
@@ -64,8 +64,12 @@ int main(int argc, char *argv[]) {
   // to involve it in simulation
   std::vector<ResultInterface *> acousticParameters;
 
+  // #1 Diffusion Coefficient
   DiffusionCoefficient diffusion(&waveFactory);
   acousticParameters.push_back(&diffusion);
+
+  // #2 Normalized Diffusion Coefficient
+  DiffusionCoefficient referenceDiffusion(&waveFactory);
 
   trackers::ResultTracker resultTracker;
 

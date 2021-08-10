@@ -88,12 +88,12 @@ std::vector<WaveObject> WaveObjectFactory::createWaveObjectsFromCollectors(
   return output;
 }
 
-std::map<float, float> ResultInterface::getResults(
+parameterPerFrequency ResultInterface::getResults(
     const std::unordered_map<float, Collectors> &energyCollectorsPerFrequency)
     const {
-  std::map<float, float> calculatedParameterVectorInTime;
-  for (auto it = std::cbegin(energyCollectorsPerFrequency);
-       it != std::cend(energyCollectorsPerFrequency); ++it) {
+  parameterPerFrequency calculatedParameterVectorInTime;
+  for (auto it = energyCollectorsPerFrequency.cbegin();
+       it != energyCollectorsPerFrequency.cend(); ++it) {
 
     float frequency = it->first;
     calculatedParameterVectorInTime.insert(
@@ -145,4 +145,64 @@ std::string_view DiffusionCoefficient::getName() const noexcept {
 
 void DiffusionCoefficient::printItself(std::ostream &os) const noexcept {
   os << getName();
+}
+
+std::string_view NormalizedDiffusionCoefficient::getName() const noexcept {
+  return "Normalized Acoustic Diffusion Coefficient";
+}
+
+NormalizedDiffusionCoefficient::NormalizedDiffusionCoefficient(
+    WaveObjectFactory *waveFactory, const std::unordered_map<float, Collectors>
+                                        &referenceResultCollectorsPerFrequency)
+    : ResultInterface(waveFactory), waveFactory_(waveFactory) {
+
+  DiffusionCoefficient referenceDiffusion(waveFactory_);
+  referenceResult_ =
+      referenceDiffusion.getResults(referenceResultCollectorsPerFrequency);
+}
+
+parameterPerFrequency NormalizedDiffusionCoefficient::getResults(
+    const std::unordered_map<float, Collectors> &energyCollectors) const {
+
+  DiffusionCoefficient actualDiffusionCoefficient(waveFactory_);
+  parameterPerFrequency result =
+      actualDiffusionCoefficient.getResults(energyCollectors);
+
+  if (referenceResult_.size() != result.size()) {
+    std::stringstream ss;
+    ss << "Error in NormalizedDiffusionCoefficient::getResults()\n"
+       << "Reference ParameterPerFrequency::size(): " << referenceResult_.size()
+       << " should be the same as actual ParameterPerFrequency::size(): "
+       << result.size();
+    throw std::invalid_argument(ss.str());
+  }
+
+  parameterPerFrequency output;
+  for (auto [itReference, itActual] =
+           std::tuple{referenceResult_.cbegin(), result.cbegin()};
+       itReference != referenceResult_.cend() || itActual != result.cend();
+       itReference++, itActual++) {
+
+    if (itActual->first != itReference->first) {
+      std::stringstream ss;
+      ss << "Error in NormalizedDiffusionCoefficient::getResults()\n"
+         << "Frequencies from reference: " << itReference->first
+         << " and from sample: " << itActual->first << "\n"
+         << "are not the same!";
+      throw std::invalid_argument(ss.str());
+    }
+
+    float parameterValue =
+        (itActual->second - itReference->second) / (1 - itReference->second);
+    float frequency = itActual->first;
+
+    output.insert(std::make_pair(frequency, parameterValue));
+  }
+  return output;
+}
+
+float NormalizedDiffusionCoefficient::calculateParameter(
+    const Collectors &collectors) const {
+  // TODO: Delete this becasue its silly :P
+  return 0;
 }

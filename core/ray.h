@@ -34,7 +34,7 @@ public:
   Vec3 direction() const;
   void setEnergy(float num);
   float energy() const;
-
+  float accumulatedTime() const { return accumulatedTime_; }
   void printItself(std::ostream &os) const noexcept override;
 
 private:

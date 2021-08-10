@@ -143,13 +143,21 @@ const float getSphereWallRadius(const ModelInterface &model);
 // Defines how sound is reflecting from the structure
 struct ReflectionEngineInterface : public Printable {
   virtual std::vector<core::Ray>
-  modelReflectedSoundWave(const core::Ray &reflected) const = 0;
+  modelReflectedSoundWave(core::Ray &reflected, float frequency) const = 0;
   void printItself(std::ostream &os) const noexcept override;
 };
 
 struct FakeReflectionEngine : public ReflectionEngineInterface {
   std::vector<core::Ray>
-  modelReflectedSoundWave(const core::Ray &reflected) const override;
+  modelReflectedSoundWave(core::Ray &reflected, float frequency) const override;
+  void printItself(std::ostream &os) const noexcept override;
+};
+
+// returns 4 offside reflection ot every axis on both directions.
+//
+struct SimpleFourSidedReflectionEngine : public ReflectionEngineInterface {
+  std::vector<core::Ray>
+  modelReflectedSoundWave(core::Ray &reflected, float frequency) const override;
   void printItself(std::ostream &os) const noexcept override;
 };
 
@@ -174,7 +182,6 @@ public:
                      const int maxTracking) const;
 
   void printItself(std::ostream &os) const noexcept override;
-
 private:
   void performRayTracing(Collectors *collectors, float frequency,
                          core::Ray *currentRay, int maxTracking,
