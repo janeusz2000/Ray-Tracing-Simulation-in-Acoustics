@@ -3,7 +3,7 @@
 /models
 /validationLog
 server/data
-
+/validationResults
 # compiled output
 /dist
 /tmp
