@@ -5,6 +5,8 @@
 server/data
 /validationResults
 /validationTools/newReferenceCalculations
+/validationResults
+
 # compiled output
 /dist
 /tmp
