@@ -58,6 +58,14 @@ int main(int argc, char *argv[]) {
   std::unordered_map<float, Collectors> mapOfCollectors =
       manager.newRun(&collectorBuilder);
 
+  std::unique_ptr<Model> referenceModel =
+      Model::NewReferenceModel(model->sideSize());
+  SceneManager referenceModelManager(referenceModel.get(), properties,
+                                     &positionTracker, &collectorsTracker,
+                                     &reflectionEngine);
+  std::unordered_map<float, Collectors> referenceMapOfCollectors =
+      referenceModelManager.newRun(&collectorBuilder);
+
   WaveObjectFactory waveFactory(kSampleRate);
 
   // ACOUSTIC PARAMETERS: declare and  append to |acousticParameters|
@@ -69,10 +77,11 @@ int main(int argc, char *argv[]) {
   acousticParameters.push_back(&diffusion);
 
   // #2 Normalized Diffusion Coefficient
-  DiffusionCoefficient referenceDiffusion(&waveFactory);
+  NormalizedDiffusionCoefficient normalizedDiffusion(&waveFactory,
+                                                     referenceMapOfCollectors);
+  acousticParameters.push_back(&normalizedDiffusion);
 
   trackers::ResultTracker resultTracker;
-
   for (ResultInterface *result : acousticParameters) {
     std::map<float, float> resultPerFrequency =
         result->getResults(mapOfCollectors);
