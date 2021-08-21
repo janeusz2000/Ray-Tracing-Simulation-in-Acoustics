@@ -34,8 +34,11 @@ float Ray::phaseAt(float freq, float time) const {
 }
 
 void Ray::printItself(std::ostream &os) const noexcept {
-  os << "RAY origin: " << origin_ << ", direction: " << direction_
-     << ", energy: " << energy_;
+  os << "RAY\n"
+     << "\torigin: " << origin_ << '\n'
+     << "\tdirection: " << direction_ << '\n'
+     << "\tenergy: " << energy_ << '\n'
+     << "\ttime: " << accumulatedTime_ << '\n';
 }
 
 bool Ray::operator==(const Ray &other) const {

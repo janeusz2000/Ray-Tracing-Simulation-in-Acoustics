@@ -27,8 +27,8 @@ const std::vector<float> frequencies = {
 
 float kDefaultModelSize = 1.0;
 
-std::string_view modelPath =
-    "./validationDiffusors/2D_2m_6n_modulo7_200Hz_15stopni_5potega.obj";
+// std::string_view modelPath =
+//     "./validationDiffusors/2D_2m_6n_modulo7_200Hz_15stopni_5potega.obj";
 std::string_view serverDataPath = "./server/data";
 
 // ARGS MUST CONTAIN:
@@ -40,8 +40,8 @@ int main(int argc, char *argv[]) {
   //   const std::vector<float> frequencies = {std::stof(argv[1])};
   trackers::DataExporter dataExporter;
 
-  std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
-  //   std::unique_ptr<Model> model = Model::NewReferenceModel(1.0f);
+  //   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
+  std::unique_ptr<Model> model = Model::NewReferenceModel(1.0f);
   trackers::JsonSampledPositionTracker positionTracker(
       serverDataPath, numOfRaysSquared, numOfVisibleRaysSquared);
   trackers::CollectorsTrackerToJson collectorsTracker;
@@ -58,9 +58,6 @@ int main(int argc, char *argv[]) {
   DoubleAxisCollectorBuilder collectorBuilder;
   std::unordered_map<float, Collectors> mapOfCollectors =
       manager.newRun(&collectorBuilder);
-
-  std::cout << "Ray tracing of the object at: \n\t" << modelPath
-            << "\nhas finishied!" << std::endl;
 
   dataExporter.saveModelToJson(serverDataPath, model.get(),
                                /*referenceModel=*/false);

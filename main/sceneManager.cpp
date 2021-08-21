@@ -72,13 +72,13 @@ SceneManager::SceneManager(
 
 void SceneManager::printItself(std::ostream &os) const noexcept {
   os << "SCENE MANAGER\n"
-     << "Model: " << *(model_) << "\n"
-     << "Simulation properties: " << simulationProperties_ << "\n"
-     << "Ray Tracer: " << raytracer_ << "\n"
-     << "Position Tracker: " << *(positionTracker_) << "\n"
-     << "Collectors Tracker: " << *(collectorsTracker_) << "\n"
-     << "Offseter: " << *(offseter_) << "\n"
-     << "Reflection engine: " << *(reflectionEngine_);
+     << "\tModel: " << *(model_) << "\n"
+     << "\tSimulation properties: " << simulationProperties_ << "\n"
+     << "\tRay Tracer: " << raytracer_ << "\n"
+     << "\tPosition Tracker: " << *(positionTracker_) << "\n"
+     << "\tCollectors Tracker: " << *(collectorsTracker_) << "\n"
+     << "\tOffseter: " << *(offseter_) << "\n"
+     << "\tReflection engine: " << *(reflectionEngine_);
 }
 
 std::unordered_map<float, Collectors>
@@ -131,6 +131,7 @@ SceneManager::newRun(const CollectorBuilderInterface *collectorBuilder) {
 
     // Initialize frequency in visual reporesentation of the simulation
     positionTracker_->initializeNewFrequency(freq);
+
     generators::PointSpeakerRayFactory pointSpeaker(
         simulationProperties_.basicSimulationProperties().numOfRaysSquared,
         simulationProperties_.basicSimulationProperties().sourcePower, model_);
