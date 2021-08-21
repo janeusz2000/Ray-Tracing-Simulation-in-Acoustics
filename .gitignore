@@ -5,7 +5,7 @@
 server/data
 /validationResults
 /validationTools/newReferenceCalculations
-/validationResults
+/validationResults/
 
 # compiled output
 /dist
