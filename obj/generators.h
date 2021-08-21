@@ -40,8 +40,6 @@ public:
   virtual bool genRay(core::Ray *ray) = 0;
   virtual core::Vec3 origin() const = 0;
   void printItself(std::ostream &os) const noexcept override;
-
-private:
 };
 
 // Generates rays aimed at given model from predetermined |origin| of the
@@ -60,6 +58,8 @@ public:
 
   core::Vec3 origin() const override { return origin_; }
   void printItself(std::ostream &os) const noexcept override;
+
+  void setOrigin(const core::Vec3 &newPosition) { origin_ = newPosition; }
 
 private:
   core::Vec3 getDirection(int currentRayIndex) const;

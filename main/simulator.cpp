@@ -487,6 +487,7 @@ void Simulator::performRayTracing(Collectors *collectors, float frequency,
   if (*currentTracking >= maxTracking) {
     return;
   }
+  ++*currentTracking;
 
   RayTracer::TraceResult hitResult =
       RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
@@ -495,13 +496,13 @@ void Simulator::performRayTracing(Collectors *collectors, float frequency,
   hitResult = tracer_->rayTrace(*currentRay, frequency, &hitData);
 
   if (hitResult == RayTracer::TraceResult::HIT_TRIANGLE) {
-    ++*currentTracking;
     positionTracker_->addNewPositionToCurrentTracking(hitData);
     core::Ray reflected = tracer_->getReflected(&hitData);
     std::vector<core::Ray> reflection =
         reflectionEngine_->modelReflectedSoundWave(reflected, frequency);
 
     for (core::Ray &reflected : reflection) {
+      std::cout << reflected << std::endl;
       int temporaryTracking = *currentTracking;
       performRayTracing(collectors, frequency, &reflected, maxTracking,
                         &temporaryTracking);
