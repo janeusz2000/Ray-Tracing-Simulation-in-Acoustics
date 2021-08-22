@@ -9,9 +9,11 @@
 #include "obj/objects.h"
 
 #include <fstream>
+#include <optional>
 #include <sstream>
 #include <string_view>
 #include <unordered_map>
+
 
 // Contains objects and functions that are responsible for exporting calculated
 // data, objects and ray trajectories in simulation to different files. They
@@ -235,6 +237,28 @@ private:
   int numOfRaysSquared_;
   int numOfVisibleRaysSquared_;
   int currentNumberOfTracking_;
+};
+
+class SimplePositionTracker : public PositionTrackerInterface {
+public:
+  void
+  addNewPositionToCurrentTracking(const core::RayHitData &hitData) override;
+  void printItself(std::ostream &os) const noexcept override;
+
+  std::optional<core::RayHitData> getLastReachedPosition() const;
+  size_t getNumberOfAcquiredTrackings() const;
+
+private:
+  std::vector<core::RayHitData> reachedPositions_;
+
+public:
+  // not important
+  void initializeNewFrequency(float frequency) override{};
+  void initializeNewTracking() override{};
+  void endCurrentFrequency() override{};
+  void endCurrentTracking() override{};
+  void save() override{};
+  void switchToReferenceModel() override{};
 };
 
 // Saves all current collectors arrangement into file.

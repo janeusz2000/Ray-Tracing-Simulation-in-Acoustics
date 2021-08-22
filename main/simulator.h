@@ -176,8 +176,6 @@ public:
         reflectionEngine_(reflectionEngine),
         sphereWall_(getSphereWallRadius(*model)){};
 
-  // Runs the simulation by modifying given collectors
-
   [[deprecated("Replaced by runRayTracing()")]] void
   run(float frequency, Collectors *collectors, const int maxTracking);
 
@@ -186,8 +184,9 @@ public:
 
   void performRayTracing(Collectors *collectors, float frequency,
                          core::Ray *currentRay, int maxTracking,
-                         int *currentTracking) const;
+                         int *currentTracking, float accumulatedTime = 0) const;
   void printItself(std::ostream &os) const noexcept override;
+  void setSphereWall(const objects::SphereWall &sphereWall);
 
 private:
   RayTracer *tracer_;

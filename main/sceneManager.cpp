@@ -159,3 +159,41 @@ SceneManager::newRun(const CollectorBuilderInterface *collectorBuilder) {
   positionTracker_->save();
   return collectorsPerFrequencies;
 }
+
+std::unordered_map<float, Collectors> SceneManager::runWithCustomSource(
+    const CollectorBuilderInterface *collectorBuilder,
+    generators::RayFactory *source) {
+  std::vector<float> frequencies =
+      simulationProperties_.basicSimulationProperties().frequencies;
+
+  std::unordered_map<float, Collectors> collectorsPerFrequencies;
+
+  for (float freq : frequencies) {
+
+    // Initialize frequency in visual reporesentation of the simulation
+    positionTracker_->initializeNewFrequency(freq);
+
+    // TODO: Simplify this constructor
+    Simulator simulator(
+        &raytracer_, model_, source, offseter_.get(), positionTracker_,
+        simulationProperties_.energyCollectionRules(), reflectionEngine_);
+
+    Collectors collectors = collectorBuilder->buildCollectors(
+        model_,
+        simulationProperties_.basicSimulationProperties().numOfCollectors);
+
+    // Save collectors for the visual representation
+    collectorsTracker_->save(collectors, "./server/data");
+
+    int maxTracking =
+        simulationProperties_.basicSimulationProperties().maxTracking;
+
+    simulator.runRayTracing(freq, &collectors, maxTracking);
+
+    collectorsPerFrequencies.insert(
+        std::make_pair(freq, std::move(collectors)));
+    positionTracker_->endCurrentFrequency();
+  }
+  positionTracker_->save();
+  return collectorsPerFrequencies;
+}

@@ -95,6 +95,10 @@ public:
   std::unordered_map<float, Collectors>
   newRun(const CollectorBuilderInterface *collectorBuilder);
 
+  std::unordered_map<float, Collectors>
+  runWithCustomSource(const CollectorBuilderInterface *collectorBuilder,
+                      generators::RayFactory *source);
+
   void printItself(std::ostream &os) const noexcept override;
 
 private:

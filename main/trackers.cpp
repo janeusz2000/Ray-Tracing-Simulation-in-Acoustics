@@ -424,6 +424,31 @@ bool JsonSampledPositionTracker::isSampling() const {
   }
   return false;
 }
+
+void SimplePositionTracker::addNewPositionToCurrentTracking(
+    const core::RayHitData &hitData) {
+  reachedPositions_.push_back(hitData);
+}
+
+void SimplePositionTracker::printItself(std::ostream &os) const noexcept {
+  os << "Test Position tracker\n"
+     << "\tReached positions:\n";
+  for (const core::RayHitData &hitData : reachedPositions_) {
+    os << hitData;
+  };
+}
+
+std::optional<core::RayHitData>
+SimplePositionTracker::getLastReachedPosition() const {
+  return reachedPositions_.size() > 0
+             ? std::make_optional(reachedPositions_.back())
+             : std::nullopt;
+}
+
+size_t SimplePositionTracker::getNumberOfAcquiredTrackings() const {
+  return reachedPositions_.size();
+}
+
 // exports |energyCollectors| as string representation to |path|
 void CollectorsTrackerToJson::save(const Collectors &energyCollectors,
                                    std::string_view path) {

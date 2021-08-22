@@ -85,11 +85,28 @@ bool PointSpeakerRayFactory::isRayAvailable() const {
 
 void PointSpeakerRayFactory::printItself(std::ostream &os) const noexcept {
   os << "POINT SPEAKER RAY FACTORY\n"
-     << "Model: " << *(model_) << "\n"
-     << "Origin: " << origin_ << "\n"
-     << "Num Of Rays Along Each Axis: " << numOfRaysAlongEachAxis_ << "\n"
-     << "Current Ray Index: " << currentRayIndex_ << "\n"
-     << "Energy Per Ray: " << energyPerRay_ << "\n"
-     << "Target Reference Direction: " << targetReferenceDirection_;
+     << "\tOrigin: " << origin_ << "\n"
+     << "\tNum Of Rays Along Each Axis: " << numOfRaysAlongEachAxis_ << "\n"
+     << "\tCurrent Ray Index: " << currentRayIndex_ << "\n"
+     << "\tEnergy Per Ray: " << energyPerRay_ << "\n"
+     << "\tTarget Reference Direction: " << targetReferenceDirection_;
+}
+
+bool CustomPointRayFactory::genRay(core::Ray *ray) {
+  if (!wasUsed_) {
+    *ray = core::Ray(origin_, direction_, energy_);
+    wasUsed_ = true;
+    return true;
+  }
+  return false;
+}
+
+core::Vec3 CustomPointRayFactory::origin() const { return origin_; }
+
+void CustomPointRayFactory::printItself(std::ostream &os) const noexcept {
+  os << "TEST RAY FACTORY\n\trendering rays with: \n\torigin: " << origin_
+     << '\n'
+     << "\tdirection: " << direction_ << '\n'
+     << "\tenergy: " << energy_;
 }
 } // namespace generators

@@ -1,7 +1,7 @@
 #include "main/rayTracer.h"
 
 void RayTracer::printItself(std::ostream &os) const noexcept {
-  os << "Ray Tracer class with model: \n" << *(model_);
+  os << "Ray Tracer class with model: \n\t" << *(model_);
 }
 
 RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
@@ -9,6 +9,7 @@ RayTracer::TraceResult RayTracer::rayTrace(const core::Ray &ray,
                                            core::RayHitData *hitData) {
   bool hit = false;
   float accumulatedTime = hitData->accumulatedTime;
+  std::cout << "Accumulated time: " << accumulatedTime << std::endl;
   core::RayHitData closestHitData;
   for (objects::TriangleObj triangle : model_->triangles()) {
     if (triangle.hitObject(ray, frequency, hitData)) {

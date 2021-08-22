@@ -73,6 +73,22 @@ private:
   core::Vec3 targetReferenceDirection_;
 };
 
+class CustomPointRayFactory : public generators::RayFactory {
+public:
+  explicit CustomPointRayFactory(const core::Vec3 &origin,
+                                 const core::Vec3 &direction, float energy)
+      : origin_(origin), direction_(direction), energy_(energy),
+        wasUsed_(false){};
+  bool genRay(core::Ray *ray) override;
+  core::Vec3 origin() const override;
+  void printItself(std::ostream &os) const noexcept override;
+
+private:
+  core::Vec3 origin_, direction_;
+  float energy_;
+  bool wasUsed_;
+};
+
 } // namespace generators
 
 #endif

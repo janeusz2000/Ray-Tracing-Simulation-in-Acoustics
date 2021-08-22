@@ -14,7 +14,6 @@
 #include <string_view>
 #include <vector>
 
-
 // Holds all Triangle Objects that together represent model
 // and holds all shape properties.
 class ModelInterface : public Printable {
@@ -51,6 +50,8 @@ public:
   void setSideSize(const float sideSize) { sideSize_ = sideSize; }
   float sideSize() const { return sideSize_; }
   void printItself(std::ostream &os) const noexcept override;
+
+  void printTriangles() const;
 
 private:
   // Iterates over every triangle in the model and find minimum x, y

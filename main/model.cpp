@@ -129,7 +129,15 @@ float Model::getMaxHeight(const std::vector<core::Vec3> &points) const {
 }
 void Model::printItself(std::ostream &os) const noexcept {
   os << "Model: \n"
-     << "Triangles in the model: " << triangles_.size() << "\n"
-     << "Model height: " << height_ << "\n"
-     << "Model side size: " << sideSize_ << "\n";
+     << "\tTriangles in the model: " << triangles_.size() << "\n"
+     << "\tModel height: " << height_ << "\n"
+     << "\tModel side size: " << sideSize_ << "\n";
+}
+
+void Model::printTriangles() const {
+  std::cout << *this << "PRINTING TRIANGLES:\n";
+  for (const objects::TriangleObj &triangle : triangles_) {
+    std::cout << '\t' << triangle << '\n';
+  }
+  std::cout << std::endl;
 }

@@ -69,10 +69,14 @@ bool RayHitData::operator==(const RayHitData &other) const {
 }
 
 void RayHitData::printItself(std::ostream &os) const noexcept {
-  os << "Collision point: " << collisionPoint()
-     << ", incoming ray direction: " << direction() << ", normal: " << normal()
-     << ", time: " << time << ", energy: " << energy() << ", phase " << phase()
-     << " [radians]";
+  os << "RAY_HIT_DATA\n"
+     << "\tCollision point: " << collisionPoint() << '\n'
+     << "\tincoming ray direction: " << direction() << '\n'
+     << "\tnormal: " << normal() << '\n'
+     << "\ttime: " << time << '\n'
+     << "\tenergy: " << energy() << '\n'
+     << "\tphase " << phase() << " [radians]\n"
+     << "\taccumulated time: " << accumulatedTime << '\n';
 }
 
 } // namespace core

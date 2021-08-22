@@ -56,8 +56,10 @@ bool Sphere::hitObject(const core::Ray &ray, float freq,
   // sphere).
   float collisionTime = timeLow > 0 ? timeLow : timeHigh;
   core::Vec3 collision = ray.at(collisionTime);
-  *hitData = core::RayHitData(collisionTime, normal(collision), ray, freq,
-                              hitData->accumulatedTime);
+  float eventTime =
+      hitData->accumulatedTime + collisionTime / constants::kSoundSpeed;
+  *hitData =
+      core::RayHitData(collisionTime, normal(collision), ray, freq, eventTime);
   return true;
 }
 

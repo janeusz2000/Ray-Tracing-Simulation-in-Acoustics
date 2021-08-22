@@ -73,9 +73,9 @@ void NonLinearEnergyCollection::collectEnergy(const Collectors &collectors,
 void NonLinearEnergyCollection::printItself(std::ostream &os) const noexcept {
   os << "Non Linear energy Collection based on: "
      << "\n"
-     << "Optimizing diffusive surface topology through "
+     << "\tOptimizing diffusive surface topology through "
      << "\n"
-     << "a performance-based design approach";
+     << "\ta performance-based design approach";
 }
 } // namespace collectionRules
 
@@ -420,11 +420,11 @@ std::vector<core::Ray> SimpleFourSidedReflectionEngine::modelReflectedSoundWave(
 void Simulator::printItself(std::ostream &os) const noexcept {
   os << "SIMULATOR\n"
      << "Ray tracer: " << *tracer_ << "\n"
-     << "Model: " << *model_ << "\n"
      << "Source: " << *source_ << "\n"
      << "Ray Offseter: " << *offsetter_ << "\n"
      << "Position Tracker: " << *positionTracker_ << "\n"
-     << "Energy Collection Rules: " << *energyCollectionRules_ << "\n";
+     << "Energy Collection Rules: " << *energyCollectionRules_ << "\n"
+     << "Sphere Wall: " << sphereWall_ << '\n';
 }
 
 void Simulator::run(float frequency, Collectors *collectors,
@@ -481,7 +481,8 @@ void Simulator::runRayTracing(float frequency, Collectors *collectors,
 
 void Simulator::performRayTracing(Collectors *collectors, float frequency,
                                   core::Ray *currentRay, int maxTracking,
-                                  int *currentTracking) const {
+                                  int *currentTracking,
+                                  float accumulatedTime) const {
 
   // Ends tracking when current ray tracking reaches maximum number.
   if (*currentTracking >= maxTracking) {
@@ -493,8 +494,8 @@ void Simulator::performRayTracing(Collectors *collectors, float frequency,
       RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE;
 
   core::RayHitData hitData;
+  hitData.accumulatedTime = accumulatedTime;
   hitResult = tracer_->rayTrace(*currentRay, frequency, &hitData);
-
   if (hitResult == RayTracer::TraceResult::HIT_TRIANGLE) {
     positionTracker_->addNewPositionToCurrentTracking(hitData);
     core::Ray reflected = tracer_->getReflected(&hitData);
@@ -502,17 +503,20 @@ void Simulator::performRayTracing(Collectors *collectors, float frequency,
         reflectionEngine_->modelReflectedSoundWave(reflected, frequency);
 
     for (core::Ray &reflected : reflection) {
-      std::cout << reflected << std::endl;
       int temporaryTracking = *currentTracking;
       performRayTracing(collectors, frequency, &reflected, maxTracking,
-                        &temporaryTracking);
+                        &temporaryTracking, hitData.accumulatedTime);
     }
 
   } else if (hitResult ==
                  RayTracer::TraceResult::WENT_OUTSIDE_OF_SIMULATION_SPACE &&
              sphereWall_.hitObject(*currentRay, frequency, &hitData)) {
+
     positionTracker_->addNewPositionToCurrentTracking(hitData);
     hitData.accumulatedTime += hitData.time / constants::kSoundSpeed;
     energyCollectionRules_->collectEnergy(*collectors, &hitData);
   }
+}
+void Simulator::setSphereWall(const objects::SphereWall &sphereWall) {
+  sphereWall_ = sphereWall;
 }

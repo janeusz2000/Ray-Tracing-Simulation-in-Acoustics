@@ -31,11 +31,11 @@ float convertDistanceIntoTravelTime(float distance) {
 
 std::unique_ptr<Model>
 getInfiniteLoopRayTracingModel(float distanceBetweenPlates, float size) {
-  auto getClockWiseOrigins = [&](int size) -> std::vector<core::Vec3> {
+  auto getClockWiseOrigins = [&](float size) -> std::vector<core::Vec3> {
     return {core::Vec3(-size, size, 0), core::Vec3(size, size, 0),
             core::Vec3(size, -size, 0), core::Vec3(-size, -size, 0)};
   };
-  auto getTriangles = [&](std::vector<core::Vec3> clockWiseOrigins)
+  auto getTriangles = [&](std::vector<core::Vec3> &clockWiseOrigins)
       -> std::vector<objects::TriangleObj> {
     return {objects::TriangleObj(clockWiseOrigins[1], clockWiseOrigins[2],
                                  clockWiseOrigins[3]),
@@ -49,9 +49,10 @@ getInfiniteLoopRayTracingModel(float distanceBetweenPlates, float size) {
 
   std::vector<core::Vec3> secondLayer = getClockWiseOrigins(size);
   std::for_each(secondLayer.begin(), secondLayer.end(),
-                [&](core::Vec3 position) {
+                [&](core::Vec3 &position) {
                   position += distanceBetweenPlates * core::Vec3::kZ;
                 });
+
   std::vector<objects::TriangleObj> secondLayerTriangles =
       getTriangles(secondLayer);
 
@@ -115,7 +116,7 @@ public:
                         /*sourcePower=*/500,
                         /*numOfCollectors=*/37,
                         /*numOfRaysSquared=*/1,
-                        /*maxTracking=*/1),
+                        /*maxTracking=*/15),
         properties(&energyCollectionRules, basicProperties),
         rayTracer(simplePlainSquareModel.get()),
         rayFactory(basicProperties.numOfRaysSquared,
@@ -158,13 +159,6 @@ Simulator BasicSimulationTest::getBasicSimulator() {
                    &reflectionEngine);
 }
 
-Simulator BasicSimulationTest::getBasicSimulatorWithCustomRayFactory(
-    generators::PointSpeakerRayFactory *customRayFactory) {
-  positionTracker = TestPositionTracker();
-  return Simulator(&rayTracer, simplePlainSquareModel.get(), customRayFactory,
-                   &rayOffseter, &positionTracker, &energyCollectionRules,
-                   &reflectionEngine);
-}
 Collectors BasicSimulationTest::buildCollectorsAroundModel() const {
   return collectorBuilder.buildCollectors(simplePlainSquareModel.get(),
                                           basicProperties.numOfCollectors);
@@ -177,7 +171,6 @@ void BasicSimulationTest::performRayTracing(Simulator *simulator,
     int currentTracking = 0;
     core::Ray singleRay;
     while (rayFactory.genRay(&singleRay)) {
-      std::cout << singleRay << std::endl;
       simulator->performRayTracing(collectors, frequency, &singleRay,
                                    maxTracking, &currentTracking);
     }
@@ -190,38 +183,46 @@ TEST_F(BasicSimulationTest, AccumulatedTimeSingleRay) {
 
   performRayTracing(&basicSimulator, &collectors, basicProperties.maxTracking);
 
-  int expectedRayTrackings = 1;
-  //! TODO: expectedRayTrackings should be 2
+  int expectedRayTrackings = 2;
   ASSERT_EQ(expectedRayTrackings,
             positionTracker.getNumberOfAcquiredTrackings());
 
   std::optional<core::RayHitData> lastHitData =
       positionTracker.getLastReachedPosition();
   ASSERT_OPTIONAL_NOT_EMPTY(lastHitData);
-  float traveledDistance =
-      expectedRayTrackings * rayFactory.origin().magnitude();
+  float traveledDistance = 1.5 * rayFactory.origin().magnitude();
   float expectedTravelTime = convertDistanceIntoTravelTime(traveledDistance);
   ASSERT_FLOAT_EQ(expectedTravelTime, lastHitData->accumulatedTime);
 }
 
 TEST_F(BasicSimulationTest, InfiniteLoopAccumulatedTimeTest) {
-  Collectors collectors = buildCollectorsAroundModel();
-  const float distanceBetweenTwoPlates = 4; // [m]
-  const float size = 1;
-  simplePlainSquareModel =
-      getInfiniteLoopRayTracingModel(distanceBetweenTwoPlates, size);
+  // Collectors collectors = buildCollectorsAroundModel();
+  // const float distanceBetweenTwoPlates = 2; // [m]
+  // const float size = 1;
+  // std::unique_ptr<Model> model =
+  //     getInfiniteLoopRayTracingModel(distanceBetweenTwoPlates, size);
 
-  generators::PointSpeakerRayFactory customRayFactory(
-      basicProperties.numOfRaysSquared, basicProperties.sourcePower,
-      simplePlainSquareModel.get());
-  customRayFactory.setOrigin(0.5 * distanceBetweenTwoPlates * core::Vec3::kZ);
+  // generators::CustomPointRayFactory customRayFactory(
+  //     /*origin=*/core::Vec3(0, 0, 2),
+  //     /*direction=*/core::Vec3(0, 0, -1),
+  //     /*energy=*/500);
 
-  Simulator basicSimulator =
-      getBasicSimulatorWithCustomRayFactory(&customRayFactory);
+  // RayTracer customRayTracer(model.get());
+  // positionTracker = TestPositionTracker();
+  // Simulator simulator(&customRayTracer, model.get(), &customRayFactory,
+  //                     &rayOffseter, &positionTracker, &energyCollectionRules,
+  //                     &reflectionEngine);
+  // objects::SphereWall sphereWall(/*radius=*/32);
+  // simulator.setSphereWall(sphereWall);
 
   // int maxTracking = 4;
+  // performRayTracing(&simulator, &collectors, maxTracking);
+  // model->printTriangles();
+  // std::cout << simulator << std::endl;
+  // FAIL() << "THIS TEST WAS SUPPOSED TO FAIL";
+  // int maxTracking = 8;
   // performRayTracing(&basicSimulator, &collectors, maxTracking);
-  // int expectedTrackings = 2;
+  // int expectedTrackings = 4;
   // ASSERT_EQ(expectedTrackings,
-  // positionTracker.getNumberOfAcquiredTrackings());
+  //           positionTracker.getNumberOfAcquiredTrackings()); //
 }
