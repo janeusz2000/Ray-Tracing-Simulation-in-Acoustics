@@ -20,7 +20,8 @@ void LinearEnergyCollection::collectEnergy(
       // energyCollector collects.
       float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
       energyCollector->addEnergy(hitData->accumulatedTime,
-                                 energyRatio * hitData->energy());
+                                 energyRatio * hitData->energy() /
+                                     energyCollector->volume());
     };
   }
 }
@@ -44,7 +45,8 @@ void LinearEnergyCollectionWithPhaseImpact::collectEnergy(
       float energyRatio = 1 - distanceToOrigin / energyCollector->getRadius();
       energyCollector->addEnergy(hitData->accumulatedTime,
                                  energyRatio * hitData->energy() *
-                                     std::cos(hitData->phase()));
+                                     std::cos(hitData->phase()) /
+                                     energyCollector->volume());
     };
   }
 }

@@ -1,8 +1,8 @@
 const THREE = require("three");
 
 export function prepareScene(scene, renderer, camera, controls) {
-  scene.background = new THREE.Color(0x666666);
-  // scene.background = new THREE.Color(0xffffff);
+  // scene.background = new THREE.Color(0xFFFFFF);
+  scene.background = new THREE.Color(0xffffff);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
