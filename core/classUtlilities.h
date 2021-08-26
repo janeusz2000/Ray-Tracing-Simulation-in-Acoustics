@@ -5,7 +5,10 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <limits>
 #include <random>
+#include <sstream>
+
 
 class Printable {
 public:
@@ -21,6 +24,7 @@ inline std::ostream &operator<<(std::ostream &os, const Printable &printable) {
 struct RandomEngine : public Printable, private boost::noncopyable {
   explicit RandomEngine();
   float getRandomFloat() const;
+  int getRandomIntInRange(int min, int max) const;
   void printItself(std::ostream &os) const noexcept override;
 };
 

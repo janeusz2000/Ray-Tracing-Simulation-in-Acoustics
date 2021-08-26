@@ -18,17 +18,17 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 const int kSampleRate = 96e3;
 const float sourcePower = 500; // [W]
 const int numOfCollectors = 37;
-const int numOfRaysSquared = 100;
+const int numOfRaysSquared = 10;
 const int numOfVisibleRaysSquared = 4;
 const int maxTracking = 3;
-// const std::vector<float> frequencies = {
-//     100,  200,  300,  400,  500,  630,  800,  1000,  1250,  1600,
-//     2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000};
-const std::vector<float> frequencies = {1000};
+const std::vector<float> frequencies = {
+    100,  200,  300,  400,  500,  630,  800,  1000,  1250,  1600,
+    2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000};
+// const std::vector<float> frequencies = {1000};
 float kDefaultModelSize = 1.0;
 
-// std::string_view modelPath =
-//     "./validationDiffusors/2D_2m_6n_modulo7_200Hz_15stopni_5potega.obj";
+std::string_view modelPath =
+    "./validationDiffusors/2D_2m_6n_modulo7_200Hz_15stopni_5potega.obj";
 std::string_view serverDataPath = "./server/data";
 
 // ARGS MUST CONTAIN:
@@ -72,10 +72,10 @@ int main(int argc, char *argv[]) {
   //   const std::vector<float> frequencies = {std::stof(argv[1])};
   trackers::DataExporter dataExporter;
 
-  //   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
+  std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(modelPath);
   // std::unique_ptr<Model> model =
   //     getInfiniteLoopRayTracingModel(/*distanceBetween=*/8, /*size=*/0.3);
-  std::unique_ptr<Model> model = Model::NewReferenceModel(1.0f);
+  // std::unique_ptr<Model> model = Model::NewReferenceModel(1.0f);
   // generators::CustomPointRayFactory customRayFactory(
   //     /*origin=*/core::Vec3(0, 0, 2),
   //     /*direction=*/core::Vec3(0, 0, -1),
@@ -91,15 +91,15 @@ int main(int argc, char *argv[]) {
       frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
 
   SimulationProperties properties(&energyCollectionRules, basicProperties);
-  // SimpleFourSidedReflectionEngine reflectionEngine;
-  FakeReflectionEngine reflectionEngine;
+  SimpleFourSidedReflectionEngine reflectionEngine;
+  // FakeReflectionEngine reflectionEngine;
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker, &reflectionEngine);
 
-  // XAxisCollectorBuilder collectorBuilder;
+  XAxisCollectorBuilder collectorBuilder;
   // YAxisCollectorBuilder collectorBuilder;
   // DoubleAxisCollectorBuilder collectorBuilder;
-  GeometricDomeCollectorBuilder collectorBuilder;
+  // GeometricDomeCollectorBuilder collectorBuilder;
   std::unordered_map<float, Collectors> mapOfCollectors =
       manager.newRun(&collectorBuilder);
 
