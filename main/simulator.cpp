@@ -403,17 +403,25 @@ std::optional<core::Vec3>
 SimpleFourSidedReflectionEngine::getRandomParpendicularVec3ToReflected(
     const core::Ray &reflected) const {
 
+  // to get random vector which is parpendicular to reflected Ray direction we
+  // need to obtain two random values.
   float A1, A2;
   do {
     A1 = randomEngine_.getRandomFloat();
     A2 = randomEngine_.getRandomFloat();
   } while (A1 == 0 && A2 == 0);
 
+  // Calculate 3rd dimension to make new Vec3 direction parpendicular to
+  // reflected ray direction. Formula was obtained from the requirement that
+  // scalar_product() of two Vec3s must be equal to 0.
   auto calcThirdDimension = [&](float dimension1, float dimension2,
                                 float reflectedVectorDimension) -> float {
     return (A1 * dimension1 + A2 * dimension2) / reflectedVectorDimension;
   };
+
   core::Vec3 direction = reflected.direction();
+  // Because we are doing division operation in calcThirdDimension(), we are
+  // searching for non-zero dimension of relfected ray direction;
   return direction.x() != 0
              ? core::Vec3(calcThirdDimension(A1, A2, direction.x()), A1, A2)
                    .normalize()
