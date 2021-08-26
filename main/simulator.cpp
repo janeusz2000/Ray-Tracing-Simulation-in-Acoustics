@@ -394,18 +394,68 @@ void SimpleFourSidedReflectionEngine::printItself(
 }
 
 std::vector<core::Ray>
-FakeReflectionEngine::modelReflectedSoundWave(core::Ray &reflected,
+FakeReflectionEngine::modelReflectedSoundWave(const core::Ray &reflected,
                                               float reflection) const {
   return {reflected};
 }
 
-std::vector<core::Ray> SimpleFourSidedReflectionEngine::modelReflectedSoundWave(
-    core::Ray &reflected, float frequency) const {
+std::optional<core::Vec3>
+SimpleFourSidedReflectionEngine::getRandomParpendicularVec3ToReflected(
+    const core::Ray &reflected) const {
 
-  float amplitude = 100 / (frequency * std::log10(frequency));
+  float A1, A2;
+  do {
+    A1 = randomEngine_.getRandomFloat();
+    A2 = randomEngine_.getRandomFloat();
+  } while (A1 == 0 && A2 == 0);
+
+  auto calcThirdDimension = [&](float dimension1, float dimension2,
+                                float reflectedVectorDimension) -> float {
+    return (A1 * dimension1 + A2 * dimension2) / reflectedVectorDimension;
+  };
+  core::Vec3 direction = reflected.direction();
+  return direction.x() != 0
+             ? core::Vec3(calcThirdDimension(A1, A2, direction.x()), A1, A2)
+                   .normalize()
+         : direction.y() != 0
+             ? core::Vec3(A1, calcThirdDimension(A1, A2, direction.y()), A2)
+                   .normalize()
+         : direction.z() != 0 ? core::Vec3(A1, A2, 0).normalize()
+                              : std::optional<core::Vec3>{};
+}
+
+core::Vec3
+SimpleFourSidedReflectionEngine::getParpendicularVec3ToRandomAndReflected(
+    const core::Vec3 &random, const core::Ray &reflected) const {
+  return reflected.direction().crossProduct(random).normalize();
+}
+
+std::vector<core::Ray> SimpleFourSidedReflectionEngine::modelReflectedSoundWave(
+    const core::Ray &reflected, float frequency) const {
+
+  float directionOffset = 100 / (frequency * std::log10(frequency));
+
+  std::optional<core::Vec3> parpendicularRandomVec3ToReflected =
+      getRandomParpendicularVec3ToReflected(reflected);
+
+  if (!parpendicularRandomVec3ToReflected) {
+    std::stringstream ss;
+    ss << "Error caught in "
+          "SimpleFourSidedReflectionEngine::modelReflectedSoundWave() !\n"
+       << "invalid reflected Ray: " << reflected << '\n'
+       << *this << '\n';
+    throw std::invalid_argument(ss.str());
+  }
+
+  core::Vec3 parpendicularVec3ToRandomAndReflected =
+      getParpendicularVec3ToRandomAndReflected(
+          *parpendicularRandomVec3ToReflected, reflected);
+
   std::vector<core::Vec3> offsets = {
-      amplitude * core::Vec3::kX, amplitude * core::Vec3::kY,
-      -amplitude * core::Vec3::kX, -amplitude * core::Vec3::kY};
+      directionOffset * *parpendicularRandomVec3ToReflected,
+      -directionOffset * *parpendicularRandomVec3ToReflected,
+      directionOffset * parpendicularVec3ToRandomAndReflected,
+      -directionOffset * parpendicularVec3ToRandomAndReflected};
 
   std::vector<core::Ray> output;
   for (const core::Vec3 &offset : offsets) {
@@ -416,6 +466,7 @@ std::vector<core::Ray> SimpleFourSidedReflectionEngine::modelReflectedSoundWave(
   output.push_back(core::Ray(reflected.origin(), reflected.direction(),
                              reflected.energy() / 5,
                              reflected.accumulatedTime()));
+
   return output;
 }
 

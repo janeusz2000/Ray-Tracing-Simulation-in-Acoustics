@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <optional>
 #include <sstream>
 #include <string_view>
 #include <unordered_map>
@@ -143,22 +144,34 @@ const float getSphereWallRadius(const ModelInterface &model);
 // Defines how sound is reflecting from the structure
 struct ReflectionEngineInterface : public Printable {
   virtual std::vector<core::Ray>
-  modelReflectedSoundWave(core::Ray &reflected, float frequency) const = 0;
+  modelReflectedSoundWave(const core::Ray &reflected,
+                          float frequency) const = 0;
   void printItself(std::ostream &os) const noexcept override;
 };
 
 struct FakeReflectionEngine : public ReflectionEngineInterface {
   std::vector<core::Ray>
-  modelReflectedSoundWave(core::Ray &reflected, float frequency) const override;
+  modelReflectedSoundWave(const core::Ray &reflected,
+                          float frequency) const override;
   void printItself(std::ostream &os) const noexcept override;
 };
 
-// returns 4 offside reflection ot every axis on both directions.
-//
+// returns 4 offside reflection ot every axis on both parpendicular directions
+// to the reflected Ray
 struct SimpleFourSidedReflectionEngine : public ReflectionEngineInterface {
   std::vector<core::Ray>
-  modelReflectedSoundWave(core::Ray &reflected, float frequency) const override;
+  modelReflectedSoundWave(const core::Ray &reflected,
+                          float frequency) const override;
   void printItself(std::ostream &os) const noexcept override;
+
+private:
+  std::optional<core::Vec3>
+  getRandomParpendicularVec3ToReflected(const core::Ray &reflected) const;
+  core::Vec3
+  getParpendicularVec3ToRandomAndReflected(const core::Vec3 &random,
+                                           const core::Ray &reflected) const;
+
+  RandomEngine randomEngine_;
 };
 
 // Performs ray-tracing simulation on given model.

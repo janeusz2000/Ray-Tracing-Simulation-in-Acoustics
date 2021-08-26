@@ -1,63 +1,8 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 
-cc_binary(
-    name = "validationGeoDome",
-    srcs = [
-        "ApplicationBuild/validationGeoDome.cpp",
-    ],
-    linkopts = ["-lpthread"],
-    deps = [
-        ":utils",
-    ],
-)
-
-cc_binary(
-    name = "validationBothAxis",
-    srcs = [
-        "ApplicationBuild/validationBothAxis.cpp",
-    ],
-    linkopts = ["-lpthread"],
-    deps = [
-        ":utils",
-    ],
-)
-
-cc_binary(
-    name = "validationXAxis",
-    srcs = [
-        "ApplicationBuild/validationXAxis.cpp",
-    ],
-    linkopts = ["-lpthread"],
-    deps = [
-        ":utils",
-    ],
-)
-
-cc_binary(
-    name = "collectorTest",
-    srcs = [
-        "ApplicationBuild/collectorTest.cpp",
-    ],
-    linkopts = ["-lpthread"],
-    deps = [
-        ":utils",
-    ],
-)
-
-cc_binary(
-    name = "debugTracking",
-    srcs = [
-        "ApplicationBuild/debugTracking.cpp",
-    ],
-    linkopts = ["-lpthread"],
-    deps = [
-        ":utils",
-    ],
-)
-
 cc_library(
-    name = "utils",
+    name = "projectLibrary",
     srcs = glob([
         "main/*.cpp",
         "core/*.cpp",
@@ -69,7 +14,89 @@ cc_library(
         "obj/*.h",
     ]),
     deps = [
+        ":boost",
+        ":thirdParty",
+    ],
+)
+
+cc_library(
+    name = "boost",
+    deps = [
+        "@boost//:core",
+    ],
+)
+
+cc_library(
+    name = "thirdParty",
+    deps = [
         "@github_nlohmann_json//:json",
+    ],
+)
+
+cc_library(
+    name = "thirdParty_test",
+    deps = [
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "validationGeoDome",
+    srcs = [
+        "ApplicationBuild/validationGeoDome.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":projectLibrary",
+        ":thirdParty",
+    ],
+)
+
+cc_binary(
+    name = "validationBothAxis",
+    srcs = [
+        "ApplicationBuild/validationBothAxis.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":projectLibrary",
+        ":thirdParty",
+    ],
+)
+
+cc_binary(
+    name = "validationXAxis",
+    srcs = [
+        "ApplicationBuild/validationXAxis.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":projectLibrary",
+        ":thirdParty",
+    ],
+)
+
+cc_binary(
+    name = "collectorTest",
+    srcs = [
+        "ApplicationBuild/collectorTest.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":projectLibrary",
+        ":thirdParty",
+    ],
+)
+
+cc_binary(
+    name = "debugTracking",
+    srcs = [
+        "ApplicationBuild/debugTracking.cpp",
+    ],
+    linkopts = ["-lpthread"],
+    deps = [
+        ":projectLibrary",
+        ":thirdParty",
     ],
 )
 
@@ -80,8 +107,8 @@ cc_test(
         "tests/sceneManager_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -91,8 +118,8 @@ cc_test(
         "tests/test_timeTracking.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -103,8 +130,8 @@ cc_test(
         "tests/trackers_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -115,19 +142,19 @@ cc_test(
         "tests/simulator_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
 cc_test(
-    name = "object_utils_test",
+    name = "energyColector_test",
     srcs = [
-        "tests/object_utils_test.cpp",
+        "tests/energyCollector_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -137,8 +164,8 @@ cc_test(
         "tests/resultsCalculation_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -148,8 +175,8 @@ cc_test(
         "tests/sphere_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -159,8 +186,8 @@ cc_test(
         "tests/main_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -170,8 +197,8 @@ cc_test(
         "tests/rayTracer_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
 
@@ -181,7 +208,7 @@ cc_test(
         "tests/generator_test.cpp",
     ],
     deps = [
-        ":utils",
-        "@com_google_googletest//:gtest_main",
+        ":projectLibrary",
+        ":thirdParty_test",
     ],
 )
