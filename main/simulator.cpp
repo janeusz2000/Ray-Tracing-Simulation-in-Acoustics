@@ -467,12 +467,13 @@ std::vector<core::Ray> SimpleFourSidedReflectionEngine::modelReflectedSoundWave(
 
   std::vector<core::Ray> output;
   for (const core::Vec3 &offset : offsets) {
-    output.push_back(
-        core::Ray(reflected.origin(), reflected.direction() + offset,
-                  reflected.energy() / 5, reflected.accumulatedTime()));
+    output.push_back(core::Ray(reflected.origin(),
+                               reflected.direction() + offset,
+                               reflected.energy() / (offsets.size() + 1),
+                               reflected.accumulatedTime()));
   }
   output.push_back(core::Ray(reflected.origin(), reflected.direction(),
-                             reflected.energy() / 5,
+                             reflected.energy() / (offsets.size() + 1),
                              reflected.accumulatedTime()));
 
   return output;
