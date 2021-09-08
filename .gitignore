@@ -5,6 +5,7 @@
 server/data
 /validationResults
 /validationTools/newReferenceCalculations
+validationTools/diffusionReferenceGraphs/
 /validationResults/
 
 # compiled output
