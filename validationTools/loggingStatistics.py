@@ -10,6 +10,7 @@ logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
 
 def insert_statistic_Values(
         parameterName: str,
+        modelName: str,
         meanError: float,
         standardDeviation: float,
         rmse: float,
@@ -22,7 +23,7 @@ def insert_statistic_Values(
             host=local_ip, database='Validations', user='Brad', password='')
 
         if conn.is_connected():
-            query = f"INSERT INTO STATISTIC_VALUES(PARAMETER_NAME, MEAN_ERROR, STANDARD_DEVIATION_ERROR, RMSE, MAX_ERROR, MIN_ERROR, MEDIAN_ERROR) VALUES ('{parameterName}', {meanError}, {standardDeviation}, {rmse}, {maxError}, {minError}, {medianError})"
+            query = f"INSERT INTO STATISTIC_VALUES(PARAMETER_NAME, MODEL, MEAN_ERROR, STANDARD_DEVIATION_ERROR, RMSE, MAX_ERROR, MIN_ERROR, MEDIAN_ERROR) VALUES ('{parameterName}', '{modelName}', {meanError}, {standardDeviation}, {rmse}, {maxError}, {minError}, {medianError})"
             logging.info(query)
             cursor = conn.cursor()
             cursor.execute(query)

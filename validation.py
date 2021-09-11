@@ -110,7 +110,7 @@ if __name__ == "__main__":
         sourcePower=1000,
         numOfCollectors=33,
         numOfRaysSquared=10,
-        maxTracking=15)
+        maxTracking=2)
 
     logSimulationProperties(simulationProperties=simulationProperties)
 

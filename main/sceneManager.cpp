@@ -129,6 +129,9 @@ SceneManager::newRun(const CollectorBuilderInterface *collectorBuilder) {
 
   for (float freq : frequencies) {
 
+    std::cout << "Performing simulation for frequency: " << freq << " Hz "
+              << std::endl;
+
     // Initialize frequency in visual reporesentation of the simulation
     positionTracker_->initializeNewFrequency(freq);
 

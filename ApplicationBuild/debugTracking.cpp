@@ -18,17 +18,17 @@ using Collectors = std::vector<std::unique_ptr<objects::EnergyCollector>>;
 const int kSampleRate = 96e3;
 const float sourcePower = 500; // [W]
 const int numOfCollectors = 37;
-const int numOfRaysSquared = 20;
-const int numOfVisibleRaysSquared = 20;
-const int maxTracking = 3;
-// const std::vector<float> frequencies = {
-//     100,  200,  300,  400,  500,  630,  800,  1000,  1250,  1600,
-//     2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000};
-const std::vector<float> frequencies = {300};
+const int numOfRaysSquared = 10;
+const int numOfVisibleRaysSquared = 10;
+const int maxTracking = 5;
+const std::vector<float> frequencies = {
+    100,  200,  300,  400,  500,  630,  800,  1000,  1250,  1600,
+    2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000};
+// const std::vector<float> frequencies = {300};
 float kDefaultModelSize = 1.0;
 
 std::string_view modelPath =
-    "./validationDiffusors/2D_2m_6n_modulo7_200Hz_15stopni_5potega.obj";
+    "./validationDiffusors/1D_1m_modulo23_500Hz_46n_30stopni_5potega.obj";
 std::string_view serverDataPath = "./server/data";
 
 // ARGS MUST CONTAIN:
