@@ -101,17 +101,11 @@ def getSurfaceReferencePath(name: str) -> str:
     return f"./validationResults/Reference/surface/{name}.json"
 
 
-if __name__ == "__main__":
+def executeValidation(simulationProperties, description: str):
+
     buildBinaries()
     logger = setUpLogger()
-
     logger.info("Starting validation")
-    simulationProperties = SimulationProperties(
-        sourcePower=1000,
-        numOfCollectors=33,
-        numOfRaysSquared=10,
-        maxTracking=2)
-
     logSimulationProperties(simulationProperties=simulationProperties)
 
     logger.info(f"Configuration:")
@@ -139,7 +133,19 @@ if __name__ == "__main__":
             surfaceReferencePath, surfaceRaportPath
         )
 
-    description = input("Write short description of the validation:\n\t")
-    description = "test"
     performLogging(description)
     logger.info("Validation finished!")
+
+
+if __name__ == "__main__":
+
+    simulationPropertiesList = [SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=4),
+                                SimulationProperties(
+                                    sourcePower=1000, numOfCollectors=33, numOfRaysSquared=40, maxTracking=4),
+                                SimulationProperties(
+                                    sourcePower=1000, numOfCollectors=33, numOfRaysSquared=60, maxTracking=4),
+                                SimulationProperties(
+                                    sourcePower=1000, numOfCollectors=33, numOfRaysSquared=80, maxTracking=4),
+                                SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=100, maxTracking=4)]
+    for simulationProperties in simulationPropertiesList:
+        executeValidation(simulationProperties, "rayNumberTest")

@@ -67,7 +67,8 @@ def extractNameFromPath(path: str):
                        "1D_2m_modulo13_250Hz_9n_15stopni_5potega.json": "Model B",
                        "2D_1m_200Hz_modulo7_30stopni_6n.json": "Model D",
                        "2D_2m_6n_modulo7_200Hz_15stopni_5potega.json": "Model C"}
-    return modelDictionary[path[path.rfind('/')+1:]]
+    simulationType = "line" if "line" in path else "surface"
+    return f"{simulationType} {modelDictionary[path[path.rfind('/')+1:]]}"
 
 
 def executeComparisonAndSaveToDatabase(referencePath: str, resultsPath: str):

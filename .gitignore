@@ -8,6 +8,8 @@ server/data
 validationTools/diffusionReferenceGraphs/
 /validationResults/
 
+.drawio
+
 # compiled output
 /dist
 /tmp
