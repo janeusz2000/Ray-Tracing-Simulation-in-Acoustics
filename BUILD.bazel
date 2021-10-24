@@ -1,6 +1,9 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 
+
+# Project Libraries
+# = = = = = = = = = = = = = = = = = = = = 
 cc_library(
     name = "projectLibrary",
     srcs = glob([
@@ -39,6 +42,9 @@ cc_library(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+# Executables
+# = = = = = = = = = = = = = 
 
 cc_binary(
     name = "buildTest",
@@ -108,6 +114,23 @@ cc_binary(
         ":thirdParty",
     ],
 )
+
+# generate compile commands database
+# = = = = = = = = = = = = = = = = = =  
+
+load("@com_grail_bazel_compdb//:defs.bzl", "compilation_database")
+load("@com_grail_bazel_output_base_util//:defs.bzl", "OUTPUT_BASE")
+
+compilation_database(
+    name = "generateCompileCommands",
+    targets = [
+        "//:projectLibrary"
+    ],
+    output_base = OUTPUT_BASE,
+)
+
+# Test libraries
+# = = = = = = = = = = = = = = = = = = 
 
 cc_test(
     name = "sceneManager_test",

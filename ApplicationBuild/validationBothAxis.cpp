@@ -47,12 +47,16 @@ int main(int argc, char *argv[]) {
   trackers::FakeCollectorsTracker collectorsTracker;
 
   collectionRules::NonLinearEnergyCollection energyCollectionRules;
+  //   collectionRules::LinearEnergyCollection energyCollectionRules;
+  //   collectionRules::LinearEnergyCollectionWithPhaseImpact
+  //   energyCollectionRules;
   BasicSimulationProperties basicProperties(
       frequencies, sourcePower, numOfCollectors, numOfRaysSquared, maxTracking);
   SimulationProperties properties(&energyCollectionRules, basicProperties);
 
   DoubleAxisCollectorBuilder collectorBuilder;
   SimpleFourSidedReflectionEngine reflectionEngine;
+  //   FakeReflectionEngine reflectionEngine;
   SceneManager manager(model.get(), properties, &positionTracker,
                        &collectorsTracker, &reflectionEngine);
   std::unordered_map<float, Collectors> mapOfCollectors =

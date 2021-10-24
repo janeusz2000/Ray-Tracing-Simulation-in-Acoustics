@@ -261,3 +261,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+compile_commands.json
+sketch.drawio
+

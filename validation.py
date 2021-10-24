@@ -3,6 +3,8 @@ import json
 import os
 import logging
 from dataclasses import dataclass
+
+from numpy.lib.utils import source
 from validationTools.logValidation import performLogging
 import validationTools.compareResultsToReference as compTool
 from validationTools.loggingSimulationProperties import logSimulationProperties
@@ -139,13 +141,36 @@ def executeValidation(simulationProperties, description: str):
 
 if __name__ == "__main__":
 
-    simulationPropertiesList = [SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=4),
-                                SimulationProperties(
-                                    sourcePower=1000, numOfCollectors=33, numOfRaysSquared=40, maxTracking=4),
-                                SimulationProperties(
-                                    sourcePower=1000, numOfCollectors=33, numOfRaysSquared=60, maxTracking=4),
-                                SimulationProperties(
-                                    sourcePower=1000, numOfCollectors=33, numOfRaysSquared=80, maxTracking=4),
-                                SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=100, maxTracking=4)]
+    # simulationPropertiesList = [SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=4),
+    #                             SimulationProperties(
+    #                                 sourcePower=1000, numOfCollectors=33, numOfRaysSquared=40, maxTracking=4),
+    #                             SimulationProperties(
+    #                                 sourcePower=1000, numOfCollectors=33, numOfRaysSquared=60, maxTracking=4),
+    #                             SimulationProperties(
+    #                                 sourcePower=1000, numOfCollectors=33, numOfRaysSquared=80, maxTracking=4),
+    #                             SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=100, maxTracking=4)]
+
+    # simulationPropertiesList = [SimulationProperties(
+    #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=2), SimulationProperties(
+    #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=3), SimulationProperties(
+    #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=4), SimulationProperties(
+    #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=5)]
+
+    simulationPropertiesList = [
+        SimulationProperties(sourcePower=1000, numOfCollectors=21,
+                             numOfRaysSquared=20, maxTracking=2),
+        SimulationProperties(sourcePower=1000, numOfCollectors=25,
+                             numOfRaysSquared=20, maxTracking=2),
+        SimulationProperties(sourcePower=1000, numOfCollectors=29,
+                             numOfRaysSquared=20, maxTracking=2),
+        SimulationProperties(sourcePower=1000, numOfCollectors=33,
+                             numOfRaysSquared=20, maxTracking=2),
+        SimulationProperties(sourcePower=1000, numOfCollectors=37,
+                             numOfRaysSquared=20, maxTracking=2)
+    ]
+
+    # simulationPropertiesList = [SimulationProperties(
+    #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=3)]
+
     for simulationProperties in simulationPropertiesList:
-        executeValidation(simulationProperties, "rayNumberTest")
+        executeValidation(simulationProperties, "energyCollectorTest")

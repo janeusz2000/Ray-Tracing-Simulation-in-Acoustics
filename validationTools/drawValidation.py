@@ -152,7 +152,7 @@ ORDER BY VALIDATION_ID ASC, MODEL ASC
 
 
 if __name__ == "__main__":
-    parameter = "Acoustic Diffusion Coefficient"
-    restriction = "rayNumberTest"
+    parameter = "Normalized Acoustic Diffusion Coefficient"
+    restriction = "energyCollectorTest"
     plotData(parameter, restriction)
     getTable(parameter, restriction)

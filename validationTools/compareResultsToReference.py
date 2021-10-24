@@ -53,7 +53,7 @@ def maxError(array1, array2) -> float:
 def medianError(array1, array2) -> float:
     result = np.array(array1)
     reference = np.array(array2)
-    return np.median(np.abs(result - reference)) / result.size
+    return np.median(np.abs(result - reference))
 
 
 def minError(array1, array2) -> float:

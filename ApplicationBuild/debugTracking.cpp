@@ -19,7 +19,7 @@ const int kSampleRate = 96e3;
 const float sourcePower = 500; // [W]
 const int numOfCollectors = 37;
 const int numOfRaysSquared = 10;
-const int numOfVisibleRaysSquared = 10;
+const int numOfVisibleRaysSquared = 5;
 const int maxTracking = 5;
 const std::vector<float> frequencies = {
     100,  200,  300,  400,  500,  630,  800,  1000,  1250,  1600,
