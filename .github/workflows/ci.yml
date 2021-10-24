@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Bazel
-        uses: abhinavsingh/setup-bazel@v3
-      - name: Run all tests
-        run: bazel test --config=_gcc --collect_code_coverage  :all
+    - uses: actions/checkout@v2
+    - uses: bazelbuild/setup-bazelisk@v1
+    - name: Mount bazel cache  # Optional
+      uses: actions/cache@v2
+      with:
+        path: "~/.cache/bazel"
+        key: bazel
+    - run: bazel test --config=_gcc --collect_code_coverage  :all
 
