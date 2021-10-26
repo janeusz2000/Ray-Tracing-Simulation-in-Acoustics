@@ -24,7 +24,7 @@ public:
                float accumulatedTime = 0);
 
   Vec3 at(float time) const;
-  float phaseAt(float freq, float time) const;
+  static float phaseAt(float freq, float time);
 
   bool operator==(const Ray &other) const;
 
@@ -58,7 +58,7 @@ struct RayHitData : public Printable {
   Vec3 direction() const { return ray_.direction(); }
   Vec3 origin() const { return ray_.origin(); }
   float energy() const { return ray_.energy(); }
-  float phase() const { return ray_.phaseAt(frequency, time); }
+  float phase() const { return Ray::phaseAt(frequency, accumulatedTime); }
   float time, frequency, accumulatedTime;
 
 private:

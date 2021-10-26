@@ -124,7 +124,10 @@ load("@com_grail_bazel_output_base_util//:defs.bzl", "OUTPUT_BASE")
 compilation_database(
     name = "generateCompileCommands",
     targets = [
-        "//:projectLibrary"
+        "//:projectLibrary",
+        "//:thirdParty",
+        "//:boost",
+        "//:thirdParty_test"
     ],
     output_base = OUTPUT_BASE,
 )
@@ -242,5 +245,16 @@ cc_test(
     deps = [
         ":projectLibrary",
         ":thirdParty_test",
+    ],
+)
+
+cc_test(
+    name = "phasePropagation_test",
+    srcs = [
+        "tests/phasePropagation_test.cpp"
+    ],
+    deps = [
+        ":projectLibrary",
+        ":thirdParty_test"
     ],
 )

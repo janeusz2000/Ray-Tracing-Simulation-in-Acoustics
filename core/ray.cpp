@@ -21,7 +21,7 @@ Ray::Ray(const Vec3 &origin, const Vec3 &direction, float energy,
 
 Vec3 Ray::at(float time) const { return origin_ + time * direction_; }
 
-float Ray::phaseAt(float freq, float time) const {
+float Ray::phaseAt(float freq, float time) {
   if (freq <= constants::kAccuracy || time <= constants::kAccuracy) {
     std::stringstream ss;
     ss << "Could not calculate phase at, because input "
@@ -29,8 +29,9 @@ float Ray::phaseAt(float freq, float time) const {
        << freq << ", time: " << time;
     throw std::invalid_argument(ss.str());
   }
+  float traveledDistance = time * constants::kSoundSpeed;
   float waveLength = constants::kSoundSpeed / freq;
-  return time / waveLength * 2 * constants::kPi;
+  return traveledDistance / waveLength * 2 * constants::kPi;
 }
 
 void Ray::printItself(std::ostream &os) const noexcept {
