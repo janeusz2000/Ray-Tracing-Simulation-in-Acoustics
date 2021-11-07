@@ -22,7 +22,7 @@ def getResponse(conn: mysql.connector.MySQLConnection):
         myCursor = conn.cursor()
         query = f"SELECT * FROM STATISTIC_VALUES WHERE " \
             f"STATISTIC_VALUES.PARAMETER_NAME='{parameterName}' " \
-            f"ORDER BY STATISTIC_VALUES_ID DESC LIMIT 8; "
+            f"ORDER BY STATISTIC_VALUES_ID DESC LIMIT 10; "
         myCursor.execute(query)
         yield (parameterName, myCursor.fetchall())
 
@@ -41,13 +41,15 @@ def prepareQuery(parameterName: str,
                  validationDesc: str):
 
     queryHeader = "INSERT INTO VALIDATION_DATA(PARAMETER_NAME, " \
-        "SIMULATION_PROPERTIES_ID, SAMPLE1, SAMPLE2, SAMPLE3, SAMPLE4, SAMPLE5, SAMPLE6, SAMPLE7, SAMPLE8, " \
-        "VALIDATION_DESC) "
+            "SIMULATION_PROPERTIES_ID, SAMPLE1, SAMPLE2, SAMPLE3, SAMPLE4, " \
+            "SAMPLE5, SAMPLE6, SAMPLE7, SAMPLE8, SAMPLE9, SAMPLE10," \
+            "VALIDATION_DESC) "
 
     queryValues = f"VALUES ('{parameterName}', {lastSimulationID}, " \
         f"{sampleIndexList[0]}, {sampleIndexList[1]}, {sampleIndexList[2]}, " \
-        f"{sampleIndexList[3]}, {sampleIndexList[4]}, {sampleIndexList[5]}, "\
-        f"{sampleIndexList[6]}, {sampleIndexList[7]}, '{validationDesc}');"
+        f"{sampleIndexList[3]}, {sampleIndexList[4]}, {sampleIndexList[5]}, " \
+        f"{sampleIndexList[6]}, {sampleIndexList[7]}, {sampleIndexList[8]}, " \
+        f"{sampleIndexList[9]}, \'{validationDesc}\');"
 
     return queryHeader + queryValues
 
@@ -74,6 +76,7 @@ def performLogging(desc: str):
                                      sampleIndexList=resultSampleIndexList,
                                      lastSimulationID=simulationID,
                                      validationDesc=desc)
+                print(query)
                 myCursor = conn.cursor()
                 myCursor.execute(query)
 

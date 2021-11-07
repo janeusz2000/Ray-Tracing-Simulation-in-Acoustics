@@ -1,29 +1,12 @@
-import pprint
-import json
-import os
-import logging
 from dataclasses import dataclass
+import json
+import logging
+import os
+import pprint
 
-from numpy.lib.utils import source
-from validationTools.logValidation import performLogging
 import validationTools.compareResultsToReference as compTool
+from validationTools.logValidation import performLogging
 from validationTools.loggingSimulationProperties import logSimulationProperties
-
-
-@dataclass
-class DiffusorProperty:
-    name: str
-    path: str
-    type: str
-
-
-@dataclass
-class SimulationProperties:
-    sourcePower: float
-    numOfCollectors: int
-    numOfRaysSquared: int
-    maxTracking: int
-
 
 def setUpLogger() -> logging.Logger:
     logger = logging.getLogger('Validaton Logger')
@@ -39,6 +22,21 @@ def setUpLogger() -> logging.Logger:
     logger.addHandler(channel)
     return logger
 
+logger = setUpLogger()
+
+@dataclass
+class DiffusorProperty:
+    name: str
+    path: str
+    type: str
+
+
+@dataclass
+class SimulationProperties:
+    sourcePower: float
+    numOfCollectors: int
+    numOfRaysSquared: int
+    maxTracking: int
 
 def executeCommand(command: str) -> None:
     os.system(command)
@@ -94,19 +92,25 @@ def createSurfaceRaportFile(name: str) -> str:
     executeCommand("touch " + path)
     return path
 
+def getAnalyticalReferencePath(name: str) -> str:
+    return f"./ValidationResults/Reference/analitical/{name}.json"
 
 def getLineReferencePath(name: str) -> str:
     return f"./validationResults/Reference/line/{name}.json"
 
-
 def getSurfaceReferencePath(name: str) -> str:
     return f"./validationResults/Reference/surface/{name}.json"
 
+def executeLineValidationWithAnalyticalTools(
+        lineRaportPath: str,
+        name: str):
+    analyticalPath = getAnalyticalReferencePath(name=name)
+    compTool.executeComparisonAndSaveToDatabase(analyticalPath, lineRaportPath, analytical=True)
+    
 
 def executeValidation(simulationProperties, description: str):
 
     buildBinaries()
-    logger = setUpLogger()
     logger.info("Starting validation")
     logSimulationProperties(simulationProperties=simulationProperties)
 
@@ -125,6 +129,11 @@ def executeValidation(simulationProperties, description: str):
         lineReferencePath = getLineReferencePath(diffusor.name)
         compTool.executeComparisonAndSaveToDatabase(
             lineReferencePath, lineRaportPath)
+        
+        if "1D" in diffusor.name:
+            executeLineValidationWithAnalyticalTools(
+                    lineRaportPath,
+                    name=diffusor.name)
 
         surfaceRaportPath = createSurfaceRaportFile(diffusor.name)
         executeSurfaceValidation(diffusorProperty=diffusor,
@@ -141,6 +150,11 @@ def executeValidation(simulationProperties, description: str):
 
 if __name__ == "__main__":
 
+    # simulationPropertiesList = [SimulationProperties(sourcePower=1000, numOfCollectors=33,
+    #                          numOfRaysSquared=20, maxTracking=2)]
+    # for simulationProperties in simulationPropertiesList:
+    #     executeValidation(simulationProperties, "numOfCollectors2")
+
     # simulationPropertiesList = [SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=4),
     #                             SimulationProperties(
     #                                 sourcePower=1000, numOfCollectors=33, numOfRaysSquared=40, maxTracking=4),
@@ -150,27 +164,34 @@ if __name__ == "__main__":
     #                                 sourcePower=1000, numOfCollectors=33, numOfRaysSquared=80, maxTracking=4),
     #                             SimulationProperties(sourcePower=1000, numOfCollectors=33, numOfRaysSquared=100, maxTracking=4)]
 
+    # for simulationProperties in simulationPropertiesList:
+    #     executeValidation(simulationProperties, "numOfRays")
+
     # simulationPropertiesList = [SimulationProperties(
     #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=2), SimulationProperties(
     #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=3), SimulationProperties(
     #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=4), SimulationProperties(
     #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=5)]
 
+    # for simulationProperties in simulationPropertiesList:
+    #     executeValidation(simulationProperties, "maxTracking")
+
     simulationPropertiesList = [
         SimulationProperties(sourcePower=1000, numOfCollectors=21,
-                             numOfRaysSquared=20, maxTracking=2),
+                             numOfRaysSquared=20, maxTracking=3),
         SimulationProperties(sourcePower=1000, numOfCollectors=25,
-                             numOfRaysSquared=20, maxTracking=2),
+                             numOfRaysSquared=20, maxTracking=3),
         SimulationProperties(sourcePower=1000, numOfCollectors=29,
-                             numOfRaysSquared=20, maxTracking=2),
+                             numOfRaysSquared=20, maxTracking=3),
         SimulationProperties(sourcePower=1000, numOfCollectors=33,
-                             numOfRaysSquared=20, maxTracking=2),
+                             numOfRaysSquared=20, maxTracking=3),
         SimulationProperties(sourcePower=1000, numOfCollectors=37,
-                             numOfRaysSquared=20, maxTracking=2)
+                             numOfRaysSquared=20, maxTracking=3)
     ]
-
-    # simulationPropertiesList = [SimulationProperties(
-    #     sourcePower=1000, numOfCollectors=33, numOfRaysSquared=20, maxTracking=3)]
-
     for simulationProperties in simulationPropertiesList:
-        executeValidation(simulationProperties, "energyCollectorTest")
+        executeValidation(simulationProperties, "numOfCollectors2")
+
+    # for simulationProperties in simulationPropertiesList:
+    #     executeValidation(simulationProperties, "numOfCollectors")
+
+

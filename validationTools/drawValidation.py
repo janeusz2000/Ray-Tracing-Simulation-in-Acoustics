@@ -6,7 +6,7 @@ import logging
 import numpy as np
 
 logging.basicConfig(filename="./validationRaport.log", level=logging.INFO)
-
+ADDITIONAL_LABELS=[21, 25, 29, 33, 37]
 
 def getValueFromDecimal(value):
     return float(value)
@@ -25,7 +25,8 @@ LEFT JOIN STATISTIC_VALUES ON SAMPLE1 = STATISTIC_VALUES_ID
 OR SAMPLE2 = STATISTIC_VALUES_ID OR SAMPLE3 = STATISTIC_VALUES_ID
 OR SAMPLE4 = STATISTIC_VALUES_ID OR SAMPLE5 = STATISTIC_VALUES_ID
 OR SAMPLE6 = STATISTIC_VALUES_ID OR SAMPLE7 = STATISTIC_VALUES_ID
-OR SAMPLE8 = STATISTIC_VALUES_ID
+OR SAMPLE8 = STATISTIC_VALUES_ID OR SAMPLE9 = STATISTIC_VALUES_ID
+OR SAMPLE10 = STATISTIC_VALUES_ID
 WHERE STATISTIC_VALUES.PARAMETER_NAME='{parameter}' AND VALIDATION_DESC='{restriction}'
 ORDER BY VALIDATION_ID ASC, MODEL ASC
 """
@@ -56,15 +57,15 @@ ORDER BY VALIDATION_ID ASC, MODEL ASC
 
 def drawSinglePlot(data: list, ax, graphIndex):
     labels = [key for key in data[0]]
-    name = data[0]["line Model A"]["parameterName"]
-    statisticParameter = data[0]["line Model A"]["statisticParameter"]
+    name = data[0]["Analytical line Model A"]["parameterName"]
+    statisticParameter = data[0]["Analytical line Model A"]["statisticParameter"]
     values = list()
     for label in labels:
         values.append([data[index][label]['value']
                        for index in range(len(data))])
 
     x = np.arange(len(values[0]))  # Label locations
-    width = 0.2  # width of the bars
+    width = 0.18  # width of the bars
 
     graphs = list()
     for index, label in enumerate(labels):
@@ -74,9 +75,9 @@ def drawSinglePlot(data: list, ax, graphIndex):
 
     ax[graphIndex].set_ylabel(f"{name} [-]", fontsize=16)
     ax[graphIndex].set_title(statisticParameter, fontsize=18)
-    ax[graphIndex].set_xticks(x+(len(labels)/2*width)/2)
+    ax[graphIndex].set_xticks(x+(len(labels)/2*width)/2 - width/4)
     ax[graphIndex].set_xticklabels(
-        [f"Validation Nr {index}" for index in x], fontsize=16)
+            [f"Validation Nr {index}\nNum Of Collectors: {ADDITIONAL_LABELS[index]}" for index in x], fontsize=16)
     ax[graphIndex].tick_params(axis='y', labelsize=16)
     ax[graphIndex].legend()
     ax[graphIndex].yaxis.grid(linestyle='--')
@@ -84,8 +85,8 @@ def drawSinglePlot(data: list, ax, graphIndex):
 
 def plotData(acousticParameter: str, description: str):
     parameterList = ["MEAN_ERROR",
-                     "STANDARD_DEVIATION_ERROR", "RMSE", "MEDIAN_ERROR"]
-    fig, ax = plt.subplots(len(parameterList), figsize=(20, 32))
+                     "STANDARD_DEVIATION_ERROR", "RMSE"]
+    fig, ax = plt.subplots(len(parameterList), figsize=(20, 24))
     for index, name in enumerate(parameterList):
         result = getData(name, acousticParameter, restriction=description)
         drawSinglePlot(result, ax, index)
@@ -108,7 +109,8 @@ LEFT JOIN STATISTIC_VALUES ON SAMPLE1 = STATISTIC_VALUES_ID
 OR SAMPLE2 = STATISTIC_VALUES_ID OR SAMPLE3 = STATISTIC_VALUES_ID
 OR SAMPLE4 = STATISTIC_VALUES_ID OR SAMPLE5 = STATISTIC_VALUES_ID
 OR SAMPLE6 = STATISTIC_VALUES_ID OR SAMPLE7 = STATISTIC_VALUES_ID
-OR SAMPLE8 = STATISTIC_VALUES_ID
+OR SAMPLE8 = STATISTIC_VALUES_ID OR SAMPLE9 = STATISTIC_VALUES_ID
+OR SAMPLE10 = STATISTIC_VALUES_ID
 WHERE STATISTIC_VALUES.PARAMETER_NAME='{acousticParameter}' AND VALIDATION_DESC='{restriction}'
 ORDER BY VALIDATION_ID ASC, MODEL ASC
 """
@@ -153,6 +155,6 @@ ORDER BY VALIDATION_ID ASC, MODEL ASC
 
 if __name__ == "__main__":
     parameter = "Normalized Acoustic Diffusion Coefficient"
-    restriction = "energyCollectorTest"
+    restriction = "numOfCollectors2"
     plotData(parameter, restriction)
     getTable(parameter, restriction)

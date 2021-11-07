@@ -192,9 +192,11 @@ parameterPerFrequency NormalizedDiffusionCoefficient::getResults(
       throw std::invalid_argument(ss.str());
     }
 
-    float parameterValue =
+    float tempValue =
         (itActual->second - itReference->second) / (1 - itReference->second);
+    float parameterValue = tempValue > 0 ? tempValue : 0;
     float frequency = itActual->first;
+    
 
     output.insert(std::make_pair(frequency, parameterValue));
   }

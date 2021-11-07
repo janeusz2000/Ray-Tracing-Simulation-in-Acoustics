@@ -10,6 +10,11 @@ diffusionReferenceDestination = os.path.join(
     validationToolsPath, 'diffusionReferenceGraphs')
 
 validationResults = os.path.join(PATH, 'validationResults')
+
+rayTracedResults = os.path.join(validationResults, "rayTraced")
+lineRayTraced = os.path.join(rayTracedResults, "line")
+surfaceRayTraced = os.path.join(rayTracedResults, "surface")
+
 reference = os.path.join(validationResults, 'Reference')
 lineReference = os.path.join(reference, 'line')
 surfaceReference = os.path.join(reference, 'surface')
@@ -31,13 +36,13 @@ def readJson(file):
         return json.loads(f.read())
 
 
-def drawDiffusionCoefficient(ax, frequencies, values):
-    plot, = ax.semilogx(frequencies, values)
+def drawDiffusionCoefficient(ax, frequencies, values, plotType):
+    plot, = ax.semilogx(frequencies, values, plotType)
     return plot
 
 
 def setUpAx(ax):
-    ax.set_title('MES Acoustic Diffusion Coefficient', fontsize=20)
+    ax.set_title('Acoustic Diffusion Coefficient', fontsize=20)
     ax.set_xlabel('Frequency [Hz]', fontsize=18)
     ax.set_ylabel('Diffusion Coefficient [-]', fontsize=18)
 
@@ -51,7 +56,8 @@ def walkThroughAllReferenceDiffusors(paths, desiredName):
     plots = list()
     setUpAx(ax)
     frequencies = list()
-    for path in paths:
+    lineTypeList = ['-', '--']
+    for pathIndex, path in enumerate(paths):
         for filename in os.listdir(path):
             if filename.endswith('.json'):
                 currentFile = readJson(os.path.join(path, filename))
@@ -62,7 +68,7 @@ def walkThroughAllReferenceDiffusors(paths, desiredName):
                         name = f"line {modelLegend[filename]} {acousticParameter['name']}" if "line" in path else f"surface {modelLegend[filename]} {acousticParameter['name']}"
                         legend.append(name)
                         plots.append(drawDiffusionCoefficient(ax,
-                                                              frequencies=frequencies, values=values))
+                                                              frequencies=frequencies, values=values, plotType=lineTypeList[pathIndex]))
                         print(f"Model name: {name}")
                         print(
                             f"Values: {str([round(value, 2) for value in values])[1:-1]}")
@@ -79,4 +85,4 @@ def walkThroughAllReferenceDiffusors(paths, desiredName):
 
 if __name__ == "__main__":
     walkThroughAllReferenceDiffusors(
-        [surfaceReference],  'Normalized Acoustic Diffusion Coefficient')
+        [lineRayTraced,lineReference],  'Acoustic Diffusion Coefficient')

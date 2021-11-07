@@ -1,3 +1,4 @@
+import os
 import json
 import numpy as np
 from validationTools.loggingStatistics import insert_statistic_Values
@@ -70,9 +71,10 @@ def extractNameFromPath(path: str):
     simulationType = "line" if "line" in path else "surface"
     return f"{simulationType} {modelDictionary[path[path.rfind('/')+1:]]}"
 
+def executeCommand(command: str) -> None:
+    os.system(command)
 
-def executeComparisonAndSaveToDatabase(referencePath: str, resultsPath: str):
-
+def executeComparisonAndSaveToDatabase(referencePath: str, resultsPath: str, analytical=False):
     with open(referencePath) as jsonFile:
         reference = json.load(jsonFile)
     with open(resultsPath) as jsonFile:
@@ -112,9 +114,12 @@ def executeComparisonAndSaveToDatabase(referencePath: str, resultsPath: str):
                 value = str(float_value)
                 outputMessage += f"\t{name} : {value}\n"
                 outputValues.append(float_value)
+
+            modelName = f"MES {extractNameFromPath(resultsPath)}" if not analytical else f"Analytical {extractNameFromPath(resultsPath)}"
+
             insert_statistic_Values(
                 parameterName=parameter_name,
-                modelName=extractNameFromPath(resultsPath),
+                modelName=modelName,
                 meanError=outputValues[0],
                 standardDeviation=outputValues[1],
                 rmse=outputValues[2],
