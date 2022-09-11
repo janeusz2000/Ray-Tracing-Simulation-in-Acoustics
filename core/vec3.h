@@ -9,7 +9,6 @@
 #include <sstream>
 
 namespace core {
-
 class Vec3 : public Printable {
 public:
   static const Vec3 kZero;
@@ -59,6 +58,9 @@ public:
 private:
   float x_, y_, z_;
 };
+
+
+
 
 } // namespace core
 #endif

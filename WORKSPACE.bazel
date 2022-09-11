@@ -1,6 +1,18 @@
 workspace(name = "D_coefficient_Ray_Tracing")
-
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# compile_commands.json clang
+http_archive(
+    name = "hedron_compile_commands",
+
+    # Replace the commit hash in both places (below) with the latest, rather than using the stale one here.
+    # Even better, set up Renovate and let it do the work for you (see "Suggestion: Updates" in the README).
+    url = "https://github.com/hedronvision/bazel-compile-commands-extractor/archive/refs/heads/main.zip",
+    strip_prefix = "bazel-compile-commands-extractor-main",
+    # When you first run this tool, it'll recommend a sha256 hash to put here with a message like: "DEBUG: Rule 'hedron_compile_commands' indicated that a canonical reproducible form can be obtained by modifying arguments sha256 = ..."
+)
+load("@hedron_compile_commands//:workspace_setup.bzl", "hedron_compile_commands_setup")
+hedron_compile_commands_setup()
 
 http_archive(
     name = "github_nlohmann_json",
@@ -12,8 +24,8 @@ http_archive(
 
 http_archive(
     name = "com_google_googletest",
-    strip_prefix = "googletest-master",
-    url = "https://github.com/google/googletest/archive/master.zip",
+    strip_prefix = "googletest-main",
+    url = "https://github.com/google/googletest/archive/main.zip",
 )
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
@@ -28,12 +40,3 @@ git_repository(
 load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
 
 boost_deps()
-
-http_archive(
-    name = "com_grail_bazel_compdb",
-    strip_prefix = "bazel-compilation-database-0.5.2",
-    urls = ["https://github.com/grailbio/bazel-compilation-database/archive/0.5.2.tar.gz"],
-)
-
-load("@com_grail_bazel_compdb//:deps.bzl", "bazel_compdb_deps")
-bazel_compdb_deps()

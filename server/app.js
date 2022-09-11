@@ -104,7 +104,7 @@ class DatabaseConnection {
 
   #getIPConfigFile() {
     return fs.readFileSync(
-      "/run/resolvconf/resolv.conf",
+      "/etc/resolv.conf",
       "utf-8",
       (error, data) => {
         if (error) throw error;

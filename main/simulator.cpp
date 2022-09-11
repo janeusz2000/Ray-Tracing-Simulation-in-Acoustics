@@ -489,7 +489,7 @@ void Simulator::printItself(std::ostream &os) const noexcept {
      << "Sphere Wall: " << sphereWall_ << '\n';
 }
 
-void Simulator::run(float frequency, Collectors *collectors,
+[[deprecated]] void Simulator::run(float frequency, Collectors *collectors,
                     const int maxTracking) {
 
   // Determines spacial limits of the simulation

@@ -1,10 +1,10 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "constants.h"
 #include "core/vec3.h"
+#include "core/constants.h"
+#include "core/classUtlilities.h"
 
-#include "classUtlilities.h"
 #include <iostream>
 #include <limits>
 #include <sstream>

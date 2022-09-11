@@ -41,14 +41,14 @@ public:
   static std::unique_ptr<Model> NewReferenceModel(float sideSize);
 
   Model(const std::vector<objects::TriangleObj> &triangles);
-  const std::vector<objects::TriangleObj> &triangles() const;
+  const std::vector<objects::TriangleObj> &triangles() const override;
 
   bool empty() const override;
-  void setHeight(const float height) { height_ = height_; }
-  float height() const { return height_; }
+  void setHeight(const float height) { height_ = height; }
+  float height() const override { return height_; }
 
   void setSideSize(const float sideSize) { sideSize_ = sideSize; }
-  float sideSize() const { return sideSize_; }
+  float sideSize() const override { return sideSize_; }
   void printItself(std::ostream &os) const noexcept override;
 
   void printTriangles() const;
