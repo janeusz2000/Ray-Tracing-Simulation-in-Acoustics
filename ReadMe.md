@@ -79,6 +79,6 @@ In the console, run the simulation via:
 bazel build --config=_gcc build_name
 bazel-bin/build.v1.1
 ```
-9. On the browser, you should see an image similar to the one below the title.
+On the browser, you should see an image similar to the one below the title.
 For more information and details about the project, please email me: 
 mateusz.krzysztof.janik@gmail.com
