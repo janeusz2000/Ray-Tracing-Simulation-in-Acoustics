@@ -2,7 +2,7 @@
 
 ![Ray Tracing Simulation in Acoustics](https://i.imgur.com/TXBQoQc.jpg)
 
-This project simulates the diffusion of energy from structures, specifically calculating the simulated diffusion coefficient and normalized diffusion coefficient for diffusers. The core of the project is a ray-tracing engine written in C++ that is controlled from the console. The method is developed for cheaper and faster execution with similar results to the finite elements method.
+This project simulates the diffusion of energy from structures, specifically calculating the simulated diffusion coefficient and normalized diffusion coefficient for diffusers. The core of the project is a ray-tracing engine written in C++ that is controlled from the console. The method is developed for a more cost-effective and faster execution with similar results to the finite elements method.
 
 ## Overview
 
@@ -24,7 +24,7 @@ To use this project, you will need to follow a few steps:
    - [ThreeJS](https://threejs.org/)
    - [NodeMon](https://www.npmjs.com/package/nodemon)
 
-2. Make sure that the middle of your model is positioned at the middle of the simulation [x, y, z] = (0, 0, 0).
+2. Ensure that the center of your model is positioned at the middle of the simulation [x, y, z] = (0, 0, 0).
 
 3. Run a local frontend server in your browser with `nodemon app.js` in *./server/gui/app.js*.
 
@@ -51,8 +51,7 @@ int main() {
   manager.run();
 }
 ```
-
-5. Add build instructions in the BUILD.bazel file.
+5. Add build instructions in the BUILD.bazel file
 ```bazel
 cc_binary(
     name = "build_name",
@@ -65,13 +64,11 @@ cc_binary(
     ],
 )
 ```
-
 6. In the console, run the simulation via:
 ```bash
 bazel build --config=_gcc build_name
 bazel-bin/build.v1.1
 ```
-
 7. On the browser, you should see an image similar to the one below the title.
-For more information and details about the project, please email me: mateusz.krzysztof.janik@gmail.com
-
+For more information and details about the project, please email me: 
+mateusz.krzysztof.janik@gmail.com
