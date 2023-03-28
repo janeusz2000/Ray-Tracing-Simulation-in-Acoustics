@@ -61,7 +61,7 @@ int main() {
   manager.run();
 }
 ```
-7. Add build instructions in the BUILD.bazel file
+Then Add build instructions in the BUILD.bazel file
 ```bazel
 cc_binary(
     name = "build_name",
@@ -74,7 +74,7 @@ cc_binary(
     ],
 )
 ```
-8. In the console, run the simulation via:
+In the console, run the simulation via:
 ```bash
 bazel build --config=_gcc build_name
 bazel-bin/build.v1.1
