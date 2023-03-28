@@ -27,15 +27,17 @@ To use this project, you will need to follow a few steps:
    - [ThreeJS](https://threejs.org/)
    - [NodeMon](https://www.npmjs.com/package/nodemon)
 
-2. Ensure that the center of your model is positioned at the middle of the simulation [x, y, z] = (0, 0, 0).
+2. Ensure that the center of your model is positioned at the middle in .obj file - [x, y, z] = (0, 0, 0).
 
 3. Configure a MySQL database with the name "VALIDATIONS." Modify the local_ip, user, and password in the Python script `clearDatabase.py` located at `./validationTools/clearDatabase.py` and execute it.
 
 4. Run a local frontend server in your browser with `nodemon app.js` in *./server/gui/app.js*.
 
-5. (Optional) To schedule multiple simulations for different models, run the Python script `./validation.py`.
+Then you will have couple of options:
 
-6. Create a .cpp file for building the binary, with specified properties of the simulation. It should look like this:
+1. You can schedule multiple simulations for different models via Python scipt: `./validation.py`.
+
+2. You can perform single custom simulation. In order to do that, create a .cpp file for building the binary, with specified properties of the simulation. It should look like this:
 
 ```cpp
 #include "main/model.h"
@@ -44,9 +46,10 @@ To use this project, you will need to follow a few steps:
 #include "main/simulator.h"
 #include "obj/generators.h"
 #include <algorithm>
-#include <string>
+#include <string_view>
+
 int main() {
-  std::string_view path = "./models/simpleCube.obj";
+  std::string_view path = "./models/simpleCube.obj"; // This projects supports diffusors given in .obj file only
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
   trackers::saveModelToJson("./data", model.get());
   trackers::JsonPositionTracker tracker("./data");
