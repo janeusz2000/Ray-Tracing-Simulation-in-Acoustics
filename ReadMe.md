@@ -46,7 +46,7 @@ To use this project, you will need to follow a few steps:
 #include <algorithm>
 #include <string>
 int main() {
-  std::string path = "./models/simpleCube.obj";
+  std::string_view path = "./models/simpleCube.obj";
   std::unique_ptr<Model> model = Model::NewLoadFromObjectFile(path.data());
   trackers::saveModelToJson("./data", model.get());
   trackers::JsonPositionTracker tracker("./data");
